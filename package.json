@@ -15,6 +15,7 @@
   "dependencies": {
     "@remotion/cli": "4.0.518",
     "gray-matter": "^4.0.3",
+    "lucide-react": "^1.38.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "remotion": "4.0.518"

@@ -1,6 +1,6 @@
 import React from 'react';
 import {colors} from './tokens';
-import {WhatsAppIcon, ArrowRight} from './icons';
+import {IconChat, IconArrowRight} from './icons';
 
 type CtaBandProps = {
   /** Texto de acao curto, direto — nunca generico ("comenta aqui" etc). */
@@ -33,7 +33,7 @@ export const CtaBand: React.FC<CtaBandProps> = ({
       }}
     >
       <div style={{display: 'flex', alignItems: 'center', gap: 18}}>
-        <WhatsAppIcon size={44} color={colors.white} />
+        <IconChat size={44} color={colors.white} />
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <span style={{fontSize: 30, fontWeight: 700, color: colors.white, lineHeight: 1.05}}>
             {label}
@@ -51,7 +51,7 @@ export const CtaBand: React.FC<CtaBandProps> = ({
           </span>
         </div>
       </div>
-      <ArrowRight size={30} color={colors.white} />
+      <IconArrowRight size={30} color={colors.white} />
     </div>
   );
 };

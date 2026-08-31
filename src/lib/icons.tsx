@@ -1,41 +1,84 @@
 import React from 'react';
+import {
+  Check,
+  TrendingUp,
+  AlertTriangle,
+  MessageCircle,
+  BarChart3,
+  RefreshCw,
+  ArrowRight as LucideArrowRight,
+} from 'lucide-react';
 
-/** Icone de WhatsApp desenhado em SVG puro — sem dependencia externa, sem CDN. */
-export const WhatsAppIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 40,
-  color = '#ffffff',
-}) => (
-  <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M16.02 3C9.4 3 4 8.4 4 15.02c0 2.22.6 4.3 1.65 6.1L4 29l8.06-1.6a12.9 12.9 0 0 0 3.96.63C22.6 28.03 28 22.63 28 16.02 28 9.4 22.64 3 16.02 3Z"
-      fill={color}
-      fillOpacity={0.14}
-    />
-    <path
-      d="M16 4.6C9.7 4.6 4.6 9.7 4.6 16c0 2.1.57 4.1 1.65 5.86L4.9 27l5.3-1.32A11.35 11.35 0 0 0 16 27.4c6.3 0 11.4-5.1 11.4-11.4S22.3 4.6 16 4.6Z"
-      stroke={color}
-      strokeWidth={1.4}
-      fill="none"
-    />
-    <path
-      d="M11.6 10.4c.28-.02.55-.02.79.01.28.03.6-.02.9.66.32.72 1.08 2.5 1.18 2.68.1.18.16.4.03.65-.13.24-.2.4-.4.6-.2.22-.4.48-.58.65-.2.18-.4.38-.18.76.23.38 1.02 1.7 2.2 2.76 1.5 1.35 2.78 1.78 3.16 1.98.38.2.6.17.82-.1.22-.28.94-1.1 1.2-1.48.25-.37.5-.3.83-.18.34.12 2.15 1.02 2.52 1.2.37.18.62.28.7.44.1.16.1.94-.22 1.85-.32.9-1.87 1.76-2.57 1.86-.7.1-1.28.42-4.3-.9C14.6 22 12 19.35 10.8 17.4c-.98-1.58-1.02-2.83-.94-3.2.08-.38.5-1.9 1.74-4.2Z"
-      fill={color}
-    />
-  </svg>
-);
+/**
+ * Wrapper central de ícones — todo componente que precisa de um ÍCONE REAL
+ * (não forma SVG desenhada à mão) importa DAQUI, nunca direto de
+ * 'lucide-react'. Trocar de biblioteca no futuro vira mudança de 1 arquivo,
+ * não busca-e-substitui pelo repo inteiro.
+ *
+ * BIBLIOTECA ESCOLHIDA: Lucide (`lucide-react`, npm, v1.38.0 instalada em
+ * 2026-08-31). Licença confirmada na FONTE PRIMÁRIA
+ * (github.com/lucide-icons/lucide/blob/main/LICENSE, 2026-08-31): dual
+ * **ISC** (ícones próprios da Lucide) + **MIT** (ícones herdados do fork
+ * original Feather, de Cole Bemis) — ambas permitem uso comercial,
+ * modificação e distribuição livres, exigindo só manter o aviso de
+ * copyright. Zero custo, zero chave de API, zero CDN: o pacote é resolvido
+ * em build-time pelo bundler do Remotion, os ícones são componentes React
+ * SVG puros — mesmo critério já aplicado às fontes em `fonts.ts` (nada
+ * carregado de fora em tempo de render, senão o render fica
+ * não-determinístico).
+ *
+ * Por que Lucide e não Heroicons/Tabler Icons/Phosphor (as 3 também MIT,
+ * comercial-livre, confirmadas na mesma checagem de licença 2026-08-31):
+ * pacote React mais leve e maduro pra consumo tree-shakeable, cobre todos
+ * os casos semânticos que a Norte precisa hoje (check, seta, alerta, chat,
+ * gráfico, ciclo) com traço uniforme (stroke, não preenchimento sólido) —
+ * combina com a linguagem gráfica já estabelecida em GhostGraphics.tsx.
+ * Reavaliar só se faltar um ícone específico que nenhuma delas cubra.
+ *
+ * REGRA DE MARCA DE TERCEIRO: nunca usar o glifo oficial do WhatsApp/Meta
+ * (marca registrada) — por isso o CTA usa `IconChat` (bolha de mensagem
+ * genérica, `MessageCircle`), não um ícone de marca. O `WhatsAppIcon`
+ * desenhado à mão que existia antes (removido nesta revisão) na prática
+ * recriava o contorno do logo oficial — mais um motivo pra troca, não só
+ * "ícone melhor".
+ */
 
-/** Seta simples de CTA — reforca direcao pro link/DM, sem depender de icon set. */
-export const ArrowRight: React.FC<{size?: number; color?: string}> = ({
-  size = 28,
-  color = '#ffffff',
-}) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path
-      d="M4 12h15M13 6l6 6-6 6"
-      stroke={color}
-      strokeWidth={2.4}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+type IconProps = {
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+};
+
+type LucideComponent = React.ComponentType<{
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}>;
+
+function wrapIcon(Lucide: LucideComponent, defaultSize: number, defaultStrokeWidth: number): React.FC<IconProps> {
+  const Wrapped: React.FC<IconProps> = ({size = defaultSize, color = '#ffffff', strokeWidth = defaultStrokeWidth}) => (
+    <Lucide size={size} color={color} strokeWidth={strokeWidth} />
+  );
+  return Wrapped;
+}
+
+/** Check/validação — estado resolvido, feature confirmada, "depois" que deu certo. */
+export const IconCheck = wrapIcon(Check, 28, 3);
+
+/** Seta de crescimento — métrica melhorou, resultado positivo (não decorativo: usar junto de um número real). */
+export const IconGrowth = wrapIcon(TrendingUp, 28, 2.4);
+
+/** Alerta — achismo/risco/estado "antes" ainda não resolvido. */
+export const IconAlert = wrapIcon(AlertTriangle, 28, 2.2);
+
+/** Chat/mensagem genérico — CTA de WhatsApp. NUNCA o glifo oficial da marca. */
+export const IconChat = wrapIcon(MessageCircle, 40, 2);
+
+/** Gráfico de dados — reforça "Dado" (em oposição a achismo). */
+export const IconChart = wrapIcon(BarChart3, 28, 2.4);
+
+/** Ciclo/repetição — metodologia contínua (PDCA/Lean, "se repete até virar rotina"). */
+export const IconCycle = wrapIcon(RefreshCw, 36, 2.6);
+
+/** Seta de CTA — reforça direção pro link/DM. */
+export const IconArrowRight = wrapIcon(LucideArrowRight, 28, 2.4);

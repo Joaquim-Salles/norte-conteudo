@@ -1,5 +1,5 @@
 import React from 'react';
-import {Still} from 'remotion';
+import {Still, Composition} from 'remotion';
 import {formats} from './lib/tokens';
 import {DadoVsAchismo, dadoVsAchismoDefaultProps} from './templates/DadoVsAchismo';
 import {DicaPratica, dicaPraticaDefaultProps} from './templates/DicaPratica';
@@ -10,6 +10,16 @@ import {
   metodologiaDefaultProps,
 } from './templates/MetodologiaSemEnrolacao';
 import {CoverFotoReal, coverFotoRealDefaultProps} from './templates/CoverFotoReal';
+import {
+  DadoVsAchismoReel,
+  dadoVsAchismoReelDefaultProps,
+  dadoVsAchismoReelDurationInFrames,
+} from './templates/DadoVsAchismoReel';
+import {
+  MetodologiaReel,
+  metodologiaReelDefaultProps,
+  metodologiaReelDurationInFrames,
+} from './templates/MetodologiaReel';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -64,6 +74,33 @@ export const RemotionRoot: React.FC = () => {
         width={formats.post.width}
         height={formats.post.height}
         defaultProps={coverFotoRealDefaultProps}
+      />
+
+      {/*
+        Reels (Composition, animado de verdade — useCurrentFrame/interpolate,
+        nao Still). Pedido do fundador 2026-08-31 ("quero animacoes nos
+        posts"). Formato 1080x1920/30fps (ver constraints-plataforma.md).
+        Escolhidos os 2 tipos que ja tinham estrutura de sequencia/carrossel
+        no Still (Dado vs. Achismo, Metodologia sem Enrolacao) — mais faceis
+        de "esticar no tempo" com fidelidade ao conteudo original.
+      */}
+      <Composition
+        id="DadoVsAchismoReel"
+        component={DadoVsAchismoReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={dadoVsAchismoReelDurationInFrames}
+        defaultProps={dadoVsAchismoReelDefaultProps}
+      />
+      <Composition
+        id="MetodologiaReel"
+        component={MetodologiaReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={metodologiaReelDurationInFrames(metodologiaReelDefaultProps.passos.length)}
+        defaultProps={metodologiaReelDefaultProps}
       />
     </>
   );

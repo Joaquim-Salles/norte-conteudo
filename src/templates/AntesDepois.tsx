@@ -4,6 +4,7 @@ import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
 import {GhostArrowUp} from '../lib/GhostGraphics';
+import {IconAlert, IconCheck, IconGrowth} from '../lib/icons';
 import type {AntesDepoisData} from '../lib/types';
 
 /**
@@ -43,17 +44,20 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             textAlign: 'center',
           }}
         >
-          <span
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: 'rgba(255,255,255,0.5)',
-              textTransform: 'uppercase',
-            }}
-          >
-            {antesLabel}
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+            <IconAlert size={20} color="rgba(255,255,255,0.5)" strokeWidth={2.4} />
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: 'rgba(255,255,255,0.5)',
+                textTransform: 'uppercase',
+              }}
+            >
+              {antesLabel}
+            </span>
+          </div>
           <p
             style={{
               fontSize: 30,
@@ -76,34 +80,39 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
                 alignItems: 'center',
               }}
             >
-              <span
-                style={{
-                  fontSize: 158,
-                  fontWeight: 700,
-                  color: colors.accent,
-                  lineHeight: 0.92,
-                  letterSpacing: -4,
-                  textShadow: '0 20px 50px rgba(244,63,94,0.35)',
-                }}
-              >
-                {metrica}
-              </span>
+              <div style={{display: 'flex', alignItems: 'center', gap: 18}}>
+                <IconGrowth size={68} color={colors.accent} strokeWidth={2} />
+                <span
+                  style={{
+                    fontSize: 158,
+                    fontWeight: 700,
+                    color: colors.accent,
+                    lineHeight: 0.92,
+                    letterSpacing: -4,
+                    textShadow: '0 20px 50px rgba(244,63,94,0.35)',
+                  }}
+                >
+                  {metrica}
+                </span>
+              </div>
               <div style={{marginTop: 22, height: 5, width: 140, background: colors.accent, borderRadius: 999}} />
             </div>
           ) : null}
 
-          <span
-            style={{
-              marginTop: 56,
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: colors.white,
-              textTransform: 'uppercase',
-            }}
-          >
-            {depoisLabel}
-          </span>
+          <div style={{marginTop: 56, display: 'flex', alignItems: 'center', gap: 10}}>
+            <IconCheck size={22} color={colors.white} strokeWidth={3} />
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: colors.white,
+                textTransform: 'uppercase',
+              }}
+            >
+              {depoisLabel}
+            </span>
+          </div>
           <p
             style={{
               fontSize: 36,
@@ -144,17 +153,20 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             padding: '100px 40px 0 64px',
           }}
         >
-          <span
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: '#6c6c80',
-              textTransform: 'uppercase',
-            }}
-          >
-            {antesLabel}
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+            <IconAlert size={18} color="#6c6c80" strokeWidth={2.4} />
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: '#6c6c80',
+                textTransform: 'uppercase',
+              }}
+            >
+              {antesLabel}
+            </span>
+          </div>
           <p
             style={{
               fontSize: 34,
@@ -183,17 +195,20 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             padding: '100px 56px 0 48px',
           }}
         >
-          <span
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: colors.accent,
-              textTransform: 'uppercase',
-            }}
-          >
-            {depoisLabel}
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+            <IconCheck size={18} color={colors.accent} strokeWidth={3} />
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: colors.accent,
+                textTransform: 'uppercase',
+              }}
+            >
+              {depoisLabel}
+            </span>
+          </div>
           <p
             style={{
               fontSize: 38,
@@ -210,12 +225,15 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               style={{
                 marginTop: 26,
                 display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
                 background: 'rgba(255,255,255,0.14)',
                 borderRadius: 16,
                 padding: '14px 22px',
                 boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
               }}
             >
+              <IconGrowth size={26} color={colors.white} strokeWidth={2.6} />
               <span style={{fontSize: 36, fontWeight: 700, color: colors.white}}>{metrica}</span>
             </div>
           ) : null}
@@ -266,17 +284,20 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           padding: '80px 64px 0',
         }}
       >
-        <span
-          style={{
-            fontSize: 24,
-            fontWeight: 700,
-            letterSpacing: 2,
-            color: '#6c6c80',
-            textTransform: 'uppercase',
-          }}
-        >
-          {antesLabel}
-        </span>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <IconAlert size={20} color="#6c6c80" strokeWidth={2.4} />
+          <span
+            style={{
+              fontSize: 24,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: '#6c6c80',
+              textTransform: 'uppercase',
+            }}
+          >
+            {antesLabel}
+          </span>
+        </div>
         <p
           style={{
             fontSize: 40,
@@ -306,17 +327,20 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           padding: '72px 64px 0',
         }}
       >
-        <span
-          style={{
-            fontSize: 24,
-            fontWeight: 700,
-            letterSpacing: 2,
-            color: colors.accent,
-            textTransform: 'uppercase',
-          }}
-        >
-          {depoisLabel}
-        </span>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <IconCheck size={20} color={colors.accent} strokeWidth={3} />
+          <span
+            style={{
+              fontSize: 24,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: colors.accent,
+              textTransform: 'uppercase',
+            }}
+          >
+            {depoisLabel}
+          </span>
+        </div>
         <p
           style={{
             fontSize: 44,
@@ -342,6 +366,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.18)',
             }}
           >
+            <IconGrowth size={32} color={colors.white} strokeWidth={2.6} />
             <span style={{fontSize: 46, fontWeight: 700, color: colors.white}}>{metrica}</span>
           </div>
         ) : null}

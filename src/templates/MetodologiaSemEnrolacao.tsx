@@ -2,7 +2,8 @@ import React from 'react';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
-import {GhostBars, GhostQuote, GhostCycle} from '../lib/GhostGraphics';
+import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
+import {IconCycle} from '../lib/icons';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import type {MetodologiaSlide} from '../lib/types';
@@ -82,7 +83,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
                     boxShadow: '0 12px 26px -10px rgba(0,0,0,0.55)',
                   }}
                 >
-                  <GhostCycle color={colors.white} opacity={1} size={36} />
+                  <IconCycle color={colors.white} size={34} strokeWidth={2.6} />
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: 4}}>
                   <span style={{fontSize: 24, fontWeight: 700, color: colors.white}}>Melhoria contínua</span>

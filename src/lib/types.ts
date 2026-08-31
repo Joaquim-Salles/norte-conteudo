@@ -121,6 +121,34 @@ export type MetodologiaData = {
  * um dos "5 tipos de post" da Fase 0 — e uma exploracao pontual pedida pelo
  * fundador ("bora explorar" fotos reais), documentada a parte no CATALOGO.md.
  */
+/**
+ * Reel (Composition, não Still) — versão animada do template 1, ver
+ * src/templates/DadoVsAchismoReel.tsx. `percentual` é numérico (não string)
+ * porque o Reel faz "count-up" de verdade (0 até o valor) — não dá pra
+ * animar contagem de um texto livre como no Still.
+ */
+export type DadoVsAchismoReelData = {
+  achismo: string;
+  percentual: number;
+  dadoTexto: string;
+  fonteDado?: string;
+  theme?: ThemeName;
+};
+
+/**
+ * Reel (Composition) — versão animada do template 5, ver
+ * src/templates/MetodologiaReel.tsx. `passos` populam o tracker de
+ * progresso animado (mesmo papel do carrossel Still, comprimido num único
+ * vídeo com transição entre etapas).
+ */
+export type MetodologiaReelStep = {titulo: string; descricao: string};
+
+export type MetodologiaReelData = {
+  metodo?: string;
+  titulo: string;
+  passos: MetodologiaReelStep[];
+};
+
 export type CoverFotoRealData = {
   titulo: string;
   tagNumero?: string;

@@ -1,6 +1,12 @@
 # Catálogo de templates e variações
 
-Atualizado em 2026-08-31 (2ª rodada, mesmo dia — fotografia real de
+Atualizado em 2026-08-31 (3ª rodada, mesmo dia — sistema de ícones real +
+2 Reels animados). Pedido literal do fundador: *"quero MAISSS E MAISS
+PESQUISE USE AS SKILLS MAIS SIMBOLOS COISAS ATE ANIMACOES NOS POSSTS um
+catálogo completo"*. Ver seções **"Sistema de ícones (2026-08-31)"** e
+**"Reels animados (2026-08-31)"** logo abaixo.
+
+Atualização anterior, mesmo dia (2ª rodada — fotografia real de
 restaurante/comida). Pedido do fundador: *"tá ficando muito bom porém quero
 mais opções com fotos reais às vezes do restaurante, exemplo de carrosséis,
 bora explorar"*. Ver seção **"Fotografia real (2026-08-31)"** logo abaixo pra
@@ -32,6 +38,111 @@ Como testar:
   cobre os 5 tipos de post/variações de layout.
 - `npm run qa:temas` gera a matriz tema × variante em `out/qa/temas/` (ver
   `scripts/qa-theme-batch.mjs`) — prova o sistema de temas descrito na §0.
+
+---
+
+## Sistema de ícones (2026-08-31)
+
+Pedido do fundador ("mais símbolos") — os elementos gráficos improvisados
+(formas SVG desenhadas à mão pra check/seta/etc.) foram substituídos por uma
+biblioteca de ícones real onde fazia sentido semântico.
+
+**Biblioteca escolhida: [Lucide](https://lucide.dev) (`lucide-react`, npm,
+v1.38.0).** Licença confirmada na **fonte primária**
+(`github.com/lucide-icons/lucide/blob/main/LICENSE`, checado em 2026-08-31):
+dual **ISC** (ícones próprios) + **MIT** (ícones herdados do fork original
+Feather) — ambas de uso comercial livre, sem custo, sem chave de API. Mesma
+checagem de licença feita também pra Heroicons (MIT) e Tabler Icons (MIT) —
+as três serviriam; Lucide venceu pelo pacote React mais leve/maduro
+(tree-shakeable) e por um traço (stroke-based) que já combina com a
+linguagem gráfica de `GhostGraphics.tsx`. Zero CDN: o pacote é resolvido no
+bundle do Remotion, mesmo critério já usado pras fontes.
+
+**Wrapper central: `src/lib/icons.tsx`.** Todo componente que precisa de um
+ícone real importa daqui — nunca direto de `lucide-react` — pra trocar de
+biblioteca no futuro ser mudança de 1 arquivo. Ícones expostos: `IconCheck`
+(validação/estado resolvido), `IconGrowth` (seta de crescimento),
+`IconAlert` (risco/achismo/estado "antes"), `IconChat` (mensagem genérica —
+ver nota de marca abaixo), `IconChart` (gráfico de dados), `IconCycle`
+(ciclo/repetição), `IconArrowRight` (seta de CTA).
+
+**Nota de marca registrada:** o `WhatsAppIcon` desenhado à mão que existia
+antes recriava, na prática, o contorno do logo oficial do WhatsApp/Meta —
+risco real de uso indevido de marca de terceiro. Substituído por `IconChat`
+(`MessageCircle`, bolha de mensagem genérica) em `CtaBand.tsx` — nenhuma
+peça usa glifo de marca de terceiro.
+
+**Onde os ícones entraram (uso funcional, não decorativo):**
+
+| Ícone | Onde | Por quê |
+|---|---|---|
+| `IconChat` + `IconArrowRight` | `CtaBand` (toda peça) | Substitui o ícone de marca de risco; é o elemento mais repetido do catálogo inteiro. |
+| `IconAlert` | Label "Achismo" (`DadoVsAchismo`, 3 variantes) e "Antes" (`AntesDepois`, 3 variantes) | Reforça "isso é risco/não confiável" — mesma gramática visual reaproveitada nos 2 templates. |
+| `IconChart` | Label "Dado"/"Dado real" (`DadoVsAchismo`, 3 variantes) | Reforça "isso é dado real", em oposição ao achismo. |
+| `IconCheck` | Label "Depois" (`AntesDepois`, 3 variantes) | Fecha o par com `IconAlert`: Antes = alerta, Depois = resolvido. |
+| `IconGrowth` | Junto da métrica (`AntesDepois`, 3 variantes) | Não decorativo — sempre ao lado de um número real de resultado. |
+| `IconCycle` | Selo "Melhoria contínua" do cover (`MetodologiaSemEnrolacao`) | Substitui o `GhostCycle` desenhado à mão que era usado em opacidade 100% (uso funcional, não atmosfera de fundo) — literalmente o ícone de ciclo/repetição pedido. |
+
+**O que NÃO foi trocado:** `GhostBars`/`GhostQuote`/`GhostArrowUp` em
+`GhostGraphics.tsx` continuam desenhados à mão — são elementos de
+**atmosfera de fundo** (opacidade 5-22%, bleed parcial pra fora do quadro),
+não ícones funcionais, e já correspondiam ao padrão de qualidade aprovado
+pelo fundador. Só o uso do `GhostCycle` em opacidade 100% dentro de um selo
+circular (uso literal de ícone, não atmosfera) foi migrado pra `IconCycle`.
+
+---
+
+## Reels animados (2026-08-31)
+
+Pedido do fundador ("animações nos posts") — até aqui o catálogo inteiro
+usava `<Still>` (frame único). As 2 peças abaixo são as primeiras
+`<Composition>` de verdade do repo: vídeo real, 1080x1920, 30fps, H.264,
+animado com `useCurrentFrame()`/`interpolate()`/`spring()` — não é preview
+de frame único, é vídeo renderizado (`out/qa/reels/*.mp4`).
+
+**Por que essas 2:** `DadoVsAchismo` e `MetodologiaSemEnrolacao` já tinham
+estrutura de sequência/carrossel no Still (achismo→dado, cover→passos→cta) —
+mais fácil "esticar no tempo" com fidelidade ao conteúdo original do que
+inventar um formato novo do zero.
+
+**Helper reutilizável: `src/lib/motion.ts`** — cada função documentada com o
+TERMO correto de vocabulário de motion design (não "efeito genérico"):
+`slideFadeIn` (slide + fade), `staggerWords` (stagger word reveal —
+kinetic typography, 2-3 frames de defasagem por palavra), `countUp`
+(contagem numérica com easing ease-out, não linear), `popIn` (pop/overshoot
+via spring), `wipeProgress` (wipe transition), `progressFill` (barra de
+progresso). Timing/easing seguem a pesquisa de tendência 2026 aplicada
+(ver relato ao fundador): nunca linear, hold mínimo de leitura, overshoot
+só em elementos pequenos.
+
+### `DadoVsAchismoReel.tsx` (7,07s, 212 frames)
+
+4 `<Sequence>`: **Achismo** (stagger word reveal da frase + "mask reveal" —
+um traço de riscado cresce da esquerda pra direita sobre a frase inteira,
+depois que ela termina de aparecer) → **Wipe** (a mesma "costura diagonal"
+de accent que já existe nos Stills cresce de tarja fina até virar um flash
+cheio de tela — transição real de corte, não fade genérico) → **Dado**
+(número faz **count-up de 0 até o percentual real** — não aparece pronto —
+com barras de fundo crescendo em stagger) → **CTA** (`CtaBand` sobe com
+slide+fade). Props: `achismo`, `percentual` (numérico — o count-up precisa
+de número, não string livre), `dadoTexto`, `fonteDado`, `theme`.
+
+### `MetodologiaReel.tsx` (8,67s, 260 frames p/ 3 passos)
+
+`<Sequence>` **Cover** (título em stagger word reveal, selo do `IconCycle`
+girando continuamente — rotação amarrada ao frame, reforça literalmente
+"isso é um ciclo que roda") → 1 `<Sequence>` **por passo** (número com pop
+via spring, tracker de progresso animado no topo — o dot atual "chega" com
+pop e a linha até o anterior desenha) → **CTA**. Props: `metodo`, `titulo`,
+`passos[]` (array — funciona pra qualquer quantidade de etapas, não só 3).
+
+**Limitação real, documentada sem maquiagem:** os 2 Reels acima são peças
+**de exemplo/prova de conceito** da técnica, não um reel de produção
+completo com narração — isso é Fase 3 (Bark TTS), ainda não implementada
+(ver `references/constraints-plataforma.md`). O render em si foi rápido
+nesta sessão (~10s por vídeo, Chromium headless local) — não houve limitação
+de tempo de máquina; a limitação é de ESCOPO (2 peças, sem áudio), não de
+performance de render.
 
 ---
 

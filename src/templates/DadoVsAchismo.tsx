@@ -4,6 +4,7 @@ import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
 import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
+import {IconAlert, IconChart} from '../lib/icons';
 import {Badge} from '../lib/Badge';
 import type {DadoVsAchismoData} from '../lib/types';
 
@@ -45,17 +46,20 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             borderBottom: '1px solid rgba(255,255,255,0.09)',
           }}
         >
-          <span
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: 'rgba(255,255,255,0.45)',
-              textTransform: 'uppercase',
-            }}
-          >
-            Achismo
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+            <IconAlert size={18} color="rgba(255,255,255,0.45)" strokeWidth={2.4} />
+            <span
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: 'rgba(255,255,255,0.45)',
+                textTransform: 'uppercase',
+              }}
+            >
+              Achismo
+            </span>
+          </div>
           <p
             style={{
               fontSize: 26,
@@ -87,7 +91,10 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             justifyContent: 'center',
           }}
         >
-          <Badge>Dado real</Badge>
+          <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+            <IconChart size={26} color={colors.accent} strokeWidth={2.6} />
+            <Badge>Dado real</Badge>
+          </div>
           <p
             style={{
               fontSize: 92,
@@ -134,17 +141,20 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             flexDirection: 'column',
           }}
         >
-          <span
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: '#8a8a99',
-              textTransform: 'uppercase',
-            }}
-          >
-            Achismo
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+            <IconAlert size={18} color="#8a8a99" strokeWidth={2.4} />
+            <span
+              style={{
+                fontSize: 20,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: '#8a8a99',
+                textTransform: 'uppercase',
+              }}
+            >
+              Achismo
+            </span>
+          </div>
           <p
             style={{
               fontSize: 32,
@@ -179,17 +189,20 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             flexDirection: 'column',
           }}
         >
-          <span
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: colors.accent,
-              textTransform: 'uppercase',
-            }}
-          >
-            Dado
-          </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+            <IconChart size={20} color={colors.accent} strokeWidth={2.6} />
+            <span
+              style={{
+                fontSize: 20,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: colors.accent,
+                textTransform: 'uppercase',
+              }}
+            >
+              Dado
+            </span>
+          </div>
           <p
             style={{
               fontSize: 52,
@@ -251,17 +264,20 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           justifyContent: 'center',
         }}
       >
-        <span
-          style={{
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: 2,
-            color: '#8a8a99',
-            textTransform: 'uppercase',
-          }}
-        >
-          Achismo
-        </span>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <IconAlert size={20} color="#8a8a99" strokeWidth={2.4} />
+          <span
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: '#8a8a99',
+              textTransform: 'uppercase',
+            }}
+          >
+            Achismo
+          </span>
+        </div>
         <p
           style={{
             fontSize: 44,
@@ -297,17 +313,20 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           justifyContent: 'flex-start',
         }}
       >
-        <span
-          style={{
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: 2,
-            color: colors.accent,
-            textTransform: 'uppercase',
-          }}
-        >
-          Dado
-        </span>
+        <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <IconChart size={22} color={colors.accent} strokeWidth={2.6} />
+          <span
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: colors.accent,
+              textTransform: 'uppercase',
+            }}
+          >
+            Dado
+          </span>
+        </div>
         <p
           style={{
             fontSize: 68,
