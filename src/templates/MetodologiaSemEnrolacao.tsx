@@ -41,7 +41,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           <h1
             style={{
               fontSize: 72,
-              fontWeight: 800,
+              fontWeight: 700,
               color: colors.white,
               lineHeight: 1.05,
               letterSpacing: -1.5,
@@ -76,7 +76,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
             <span
               style={{
                 fontSize: 140,
-                fontWeight: 800,
+                fontWeight: 700,
                 color: colors.black,
                 lineHeight: 0.82,
                 letterSpacing: -6,
@@ -88,7 +88,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
               <h2
                 style={{
                   fontSize: 42,
-                  fontWeight: 800,
+                  fontWeight: 700,
                   color: colors.black,
                   lineHeight: 1.12,
                   margin: 0,
@@ -96,7 +96,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
               >
                 {slide.titulo}
               </h2>
-              <p style={{fontSize: 27, fontWeight: 500, color: '#43434f', lineHeight: 1.42, margin: 0}}>
+              <p style={{fontSize: 27, fontWeight: 400, color: '#43434f', lineHeight: 1.42, margin: 0}}>
                 {slide.descricao}
               </p>
             </div>
@@ -139,7 +139,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
         <h2
           style={{
             fontSize: 58,
-            fontWeight: 800,
+            fontWeight: 700,
             color: colors.white,
             lineHeight: 1.1,
             letterSpacing: -1,

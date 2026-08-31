@@ -9,20 +9,23 @@ import {continueRender, delayRender, staticFile} from 'remotion';
  * com @font-face nao e suficiente (fetch e assincrono mesmo servindo local, entao
  * sem esse gate o primeiro frame pode capturar a fonte de fallback do sistema).
  *
- * Nota tecnica p/ o fundador: a familia classica "Atkinson Hyperlegible" so existe em
- * pesos 400/700. Os pesos documentados em design-tokens.md (400-800) batem com a familia
- * sucessora "Atkinson Hyperlegible Next" (mesmo design, mais pesos), entao usamos os
- * arquivos da Next e mantemos o nome de familia "Atkinson Hyperlegible" no CSS pra nao
- * acoplar o codigo a essa escolha. Confirmar com o fundador se e essa a intencao.
+ * CORRIGIDO em 2026-08-30: a raspagem inicial do site apontou pesos 400-800, o que
+ * levou a usar a familia sucessora "Atkinson Hyperlegible Next" (mesmo design, mais
+ * pesos). O fundador confirmou visualmente e checou o <link> de fontes do HTML/JS de
+ * producao ao vivo: o site so carrega a familia CLASSICA "Atkinson Hyperlegible", nos
+ * pesos 400 e 700, normal e italico (ital,wght@0,400;0,700;1,400;1,700). Nao existe
+ * 500/600/800/900 no site real. Arquivos abaixo vem do pacote oficial
+ * @fontsource/atkinson-hyperlegible (subset "latin", que cobre os caracteres do
+ * portugues — ã, õ, ç, á, é etc.), copiados pra public/fonts/ pra manter a fonte
+ * embutida no projeto.
  */
 let loaded = false;
 
-const WEIGHT_FILES: Array<[number, string]> = [
-  [400, 'AtkinsonHyperlegibleNext-400.ttf'],
-  [500, 'AtkinsonHyperlegibleNext-500.ttf'],
-  [600, 'AtkinsonHyperlegibleNext-600.ttf'],
-  [700, 'AtkinsonHyperlegibleNext-700.ttf'],
-  [800, 'AtkinsonHyperlegibleNext-800.ttf'],
+const FONT_FILES: Array<[number, 'normal' | 'italic', string]> = [
+  [400, 'normal', 'AtkinsonHyperlegible-400.woff2'],
+  [400, 'italic', 'AtkinsonHyperlegible-400-italic.woff2'],
+  [700, 'normal', 'AtkinsonHyperlegible-700.woff2'],
+  [700, 'italic', 'AtkinsonHyperlegible-700-italic.woff2'],
 ];
 
 export const ensureBrandFontLoaded = (): void => {
@@ -32,10 +35,10 @@ export const ensureBrandFontLoaded = (): void => {
 
   const handle = delayRender('Carregando fonte da marca (Atkinson Hyperlegible)');
 
-  const loadPromises = WEIGHT_FILES.map(([weight, file]) => {
+  const loadPromises = FONT_FILES.map(([weight, style, file]) => {
     const face = new FontFace('Atkinson Hyperlegible', `url("${staticFile(`fonts/${file}`)}")`, {
       weight: String(weight),
-      style: 'normal',
+      style,
     });
     document.fonts.add(face);
     return face.load();

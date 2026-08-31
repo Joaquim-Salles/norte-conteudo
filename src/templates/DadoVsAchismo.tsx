@@ -43,7 +43,8 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({achismo, dado, fonte
         <p
           style={{
             fontSize: 44,
-            fontWeight: 600,
+            fontWeight: 400,
+            fontStyle: 'italic',
             color: '#9a9aab',
             lineHeight: 1.18,
             margin: '14px 0 0',
@@ -77,7 +78,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({achismo, dado, fonte
         <span
           style={{
             fontSize: 22,
-            fontWeight: 800,
+            fontWeight: 700,
             letterSpacing: 2,
             color: colors.accent,
             textTransform: 'uppercase',
@@ -88,7 +89,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({achismo, dado, fonte
         <p
           style={{
             fontSize: 68,
-            fontWeight: 800,
+            fontWeight: 700,
             color: colors.white,
             lineHeight: 1.08,
             margin: '18px 0 0',

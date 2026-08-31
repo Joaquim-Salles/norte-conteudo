@@ -76,7 +76,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         <h1
           style={{
             fontSize: 60,
-            fontWeight: 800,
+            fontWeight: 700,
             color: colors.white,
             lineHeight: 1.08,
             letterSpacing: -1,
@@ -129,13 +129,13 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 18,
-                fontWeight: 800,
+                fontWeight: 700,
                 color: colors.white,
               }}
             >
               {i + 1}
             </div>
-            <span style={{fontSize: 28, fontWeight: 500, color: colors.white}}>{f}</span>
+            <span style={{fontSize: 28, fontWeight: 400, color: colors.white}}>{f}</span>
           </div>
         ))}
       </div>

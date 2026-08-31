@@ -23,16 +23,18 @@ export const colors = {
 } as const;
 
 export const fontFamily = {
-  brand: 'Atkinson Hyperlegible', // alias local -> arquivos Atkinson Hyperlegible Next (ver src/lib/fonts.ts)
+  brand: 'Atkinson Hyperlegible', // familia classica, pesos 400/700 (ver src/lib/fonts.ts)
   fallback: 'ui-sans-serif, system-ui, sans-serif',
 } as const;
 
+/**
+ * A fonte real (Atkinson Hyperlegible classica) so tem 400 e 700, normal e italico.
+ * Nao existe peso intermediario — para enfase, usar fontStyle: 'italic', tamanho,
+ * cor ou letter-spacing, nunca um fontWeight fora desses dois valores.
+ */
 export const fontWeight = {
   regular: 400,
-  medium: 500,
-  semibold: 600,
   bold: 700,
-  extrabold: 800,
 } as const;
 
 export const brand = {

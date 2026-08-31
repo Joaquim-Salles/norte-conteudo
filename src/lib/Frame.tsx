@@ -55,8 +55,9 @@ export const Frame: React.FC<FrameProps> = ({
           <span
             style={{
               fontSize: 22,
-              fontWeight: 600,
-              letterSpacing: 0.5,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              letterSpacing: 0.8,
               color: wordmarkColor,
               opacity: 0.72,
             }}

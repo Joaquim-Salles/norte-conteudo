@@ -33,7 +33,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
                 background: colors.accent,
                 color: colors.white,
                 fontSize: 26,
-                fontWeight: 800,
+                fontWeight: 700,
                 padding: '10px 22px',
                 borderRadius: 999,
                 marginBottom: 32,
@@ -45,7 +45,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           <h1
             style={{
               fontSize: 76,
-              fontWeight: 800,
+              fontWeight: 700,
               color: colors.white,
               lineHeight: 1.04,
               letterSpacing: -1.5,
@@ -54,7 +54,15 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           >
             {slide.titulo}
           </h1>
-          <span style={{marginTop: 40, fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,0.75)'}}>
+          <span
+            style={{
+              marginTop: 40,
+              fontSize: 24,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.75)',
+            }}
+          >
             Arrasta pro lado →
           </span>
           <div style={{position: 'absolute', right: -40, bottom: 260}}>
@@ -80,16 +88,16 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           }}
         >
           <div style={{display: 'flex', alignItems: 'baseline', gap: 14}}>
-            <span style={{fontSize: 120, fontWeight: 800, color: colors.accent, letterSpacing: -4}}>
+            <span style={{fontSize: 120, fontWeight: 700, color: colors.accent, letterSpacing: -4}}>
               {String(slide.numero).padStart(2, '0')}
             </span>
-            <span style={{fontSize: 28, fontWeight: 600, color: '#9a9aab'}}>/ {slide.total}</span>
+            <span style={{fontSize: 28, fontWeight: 400, color: '#9a9aab'}}>/ {slide.total}</span>
           </div>
           <div style={{height: 5, width: 90, background: colors.primaryDark, opacity: 0.15}} />
           <h2
             style={{
               fontSize: 58,
-              fontWeight: 800,
+              fontWeight: 700,
               color: colors.primaryDark,
               lineHeight: 1.1,
               letterSpacing: -1,
@@ -98,7 +106,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           >
             {slide.titulo}
           </h2>
-          <p style={{fontSize: 34, fontWeight: 500, color: '#3c3c46', lineHeight: 1.45, margin: 0}}>
+          <p style={{fontSize: 34, fontWeight: 400, color: '#3c3c46', lineHeight: 1.45, margin: 0}}>
             {slide.corpo}
           </p>
         </div>
@@ -126,7 +134,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
         <h2
           style={{
             fontSize: 60,
-            fontWeight: 800,
+            fontWeight: 700,
             color: colors.white,
             lineHeight: 1.1,
             letterSpacing: -1,

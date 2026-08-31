@@ -35,7 +35,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         <span
           style={{
             fontSize: 24,
-            fontWeight: 800,
+            fontWeight: 700,
             letterSpacing: 2,
             color: '#6c6c80',
             textTransform: 'uppercase',
@@ -46,7 +46,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         <p
           style={{
             fontSize: 40,
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#54546a',
             lineHeight: 1.22,
             margin: '18px 0 0',
@@ -75,7 +75,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         <span
           style={{
             fontSize: 24,
-            fontWeight: 800,
+            fontWeight: 700,
             letterSpacing: 2,
             color: colors.accent,
             textTransform: 'uppercase',
@@ -107,7 +107,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               padding: '14px 24px',
             }}
           >
-            <span style={{fontSize: 46, fontWeight: 800, color: colors.white}}>{metrica}</span>
+            <span style={{fontSize: 46, fontWeight: 700, color: colors.white}}>{metrica}</span>
           </div>
         ) : null}
         <div style={{position: 'absolute', right: 10, bottom: 250}}>
@@ -124,7 +124,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           transform: 'translateX(-50%)',
           background: colors.accent,
           color: colors.white,
-          fontWeight: 800,
+          fontWeight: 700,
           fontSize: 22,
           padding: '12px 26px',
           borderRadius: 999,

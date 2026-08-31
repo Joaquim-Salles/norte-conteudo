@@ -35,13 +35,13 @@ export const CtaBand: React.FC<CtaBandProps> = ({
       <div style={{display: 'flex', alignItems: 'center', gap: 18}}>
         <WhatsAppIcon size={44} color={colors.white} />
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <span style={{fontSize: 30, fontWeight: 800, color: colors.white, lineHeight: 1.05}}>
+          <span style={{fontSize: 30, fontWeight: 700, color: colors.white, lineHeight: 1.05}}>
             {label}
           </span>
           <span
             style={{
               fontSize: 20,
-              fontWeight: 500,
+              fontWeight: 400,
               color: colors.white,
               opacity: 0.85,
               marginTop: 2,
