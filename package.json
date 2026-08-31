@@ -9,6 +9,7 @@
     "render": "node scripts/render.mjs",
     "build:brief": "node scripts/parse-brief.mjs",
     "qa:preview": "node scripts/qa-preview.mjs",
+    "qa:temas": "node scripts/qa-theme-batch.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

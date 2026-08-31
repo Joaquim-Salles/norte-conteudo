@@ -1,7 +1,10 @@
 # Catálogo de templates e variações
 
-Atualizado em 2026-08-30 (2ª rodada de elevação visual — fundador revisou a
-galeria completa e apontou que o carrossel Metodologia inteiro e 2 slides do
+Atualizado em 2026-08-31 (sistema de temas + guia de cores + prints reais —
+pedido do fundador por "milhares de variações" com cor por sistema e prints
+do sistema). Ver seção 0 abaixo pra como isso funciona. Atualização anterior
+em 2026-08-30 (2ª rodada de elevação visual — fundador revisou a galeria
+completa e apontou que o carrossel Metodologia inteiro e 2 slides do
 DicaPratica ainda estavam mais rasos que o resto; ver nota no §5 e nas
 variações `DicaPratica-bridge`/`cover-quote`). Cada um dos 5 tipos de post da
 Fase 0 agora tem 2-3 variações de composição — mesmo princípio editorial,
@@ -17,8 +20,45 @@ Todas as variações:
   casca + núcleo com highlight) pra cards com mais peso visual, no lugar de
   caixas flat de opacidade única.
 
-Como testar: `npm run qa:preview` gera 1 PNG por estado em `out/qa/` (ver
-`scripts/qa-preview.mjs` pra lista completa e props de exemplo de cada um).
+Como testar:
+- `npm run qa:preview` gera 1 PNG por estado em `out/qa/` (ver
+  `scripts/qa-preview.mjs` pra lista completa e props de exemplo de cada um) —
+  cobre os 5 tipos de post/variações de layout.
+- `npm run qa:temas` gera a matriz tema × variante em `out/qa/temas/` (ver
+  `scripts/qa-theme-batch.mjs`) — prova o sistema de temas descrito na §0.
+
+---
+
+## 0. Sistema de temas (2026-08-31)
+
+Pra "milhares de variações" não virar arquivo-por-arquivo manual, existe um
+sistema de **temas** paramétrico — o mesmo componente `.tsx` produz saídas
+visuais diferentes trocando só uma prop.
+
+- **`src/lib/colorGuide.ts`** — fonte de verdade das cores por sistema/produto,
+  confirmadas direto no repo real de cada um (não só no site institucional).
+  Versão legível com swatches: [`GUIA-DE-CORES.md`](./GUIA-DE-CORES.md).
+- **`src/lib/themes.ts`** — empacota paleta + densidade de textura + estilo de
+  card (`'bezel'` double-bezel vs `'flat'` caixa reta) num `Theme`. 4 temas:
+  `marca` (institucional), `estoque`, `vendas`, `avalia`.
+- Templates recebem `theme?: ThemeName` (default `'marca'` — sem a prop, o
+  visual é o institucional de sempre). Refatorados até agora: `DadoVsAchismo`,
+  `AntesDepois`. Exemplo: `<DadoVsAchismo variant="impacto" theme="estoque" />`
+  vs `theme="vendas"` são a MESMA composição, 2 saídas visuais diferentes.
+- **`VitrineProduto` não recebe `theme` manualmente** — o tema é sempre
+  derivado automaticamente do campo `produto` (`getThemeForProduct`), porque
+  uma vitrine sempre anuncia o produto certo, nunca uma escolha livre.
+
+## Vitrine de Produto — variante `print` (nova, 2026-08-31)
+
+Além de `padrao`/`hero`/`grid` (ícone+texto), a variante `print` mostra um
+**screenshot real do sistema** dentro de uma moldura de device
+(`src/lib/DeviceFrame.tsx` — `PhoneFrame`/`BrowserFrame`), com sombra e leve
+inclinação, não a imagem crua colada. Screenshots reais em
+`public/screenshots/` (NTB Estoque: 4 telas do repo real; NTB Vendas: 2
+capturas ao vivo de `testvendase.norteparanegocios.com.br`). Prop
+`screenshotAspect` evita que `objectFit: cover` corte conteúdo real da UI
+quando o screenshot tem proporção atípica (achado real de QA, corrigido).
 
 ---
 
@@ -57,6 +97,10 @@ Post único (1 imagem). Prop `variant`.
 | `ladoALado` | Split vertical esquerda (antes)/direita (depois), selo "Com a Norte" na costura central. Usar quando antes/depois têm textos de tamanho parecido (o split vertical equilibra melhor que o horizontal nesse caso). |
 | `metricaHero` | A métrica vira o elemento gigante central da peça (até 158px), antes/depois encolhem pra legendas curtas acima/abaixo. Usar quando o número de resultado é forte o bastante pra carregar a peça sozinho — pedido explícito do fundador por "número grande". |
 
+Recebe `theme?: ThemeName` (default `'marca'`) — ver §0. Troca o gradiente do
+bloco DEPOIS pelo sistema anunciado (ex: `theme="estoque"` pra um antes/depois
+específico do NTB Estoque).
+
 ## 4. Vitrine de Produto (`VitrineProduto.tsx`)
 
 Post único (1 imagem). Prop `variant`.
@@ -66,6 +110,10 @@ Post único (1 imagem). Prop `variant`.
 | `padrao` (default) | Identidade no topo + lista vertical de features em cards double-bezel. Uso geral, até 4 features. |
 | `hero` | Identidade/headline centralizadas e grandes, features viram pílulas horizontais. Mais "poster de lançamento" — usar pra anúncio de feature nova ou quando a headline é o principal gancho (menos "ficha técnica"). |
 | `grid` | Features em grade 2×2 (bento), cards com mais profundidade (double-bezel + número em selo). Usar quando as 4 features têm peso parecido entre si e vale destacar todas com o mesmo nível de atenção. |
+| `print` (novo, 2026-08-31) | Screenshot real do sistema numa moldura de device (`screenshot`, `device: 'phone'\|'browser'`), com sombra/inclinação — "prova visual" em vez de ícone+texto. Usar quando existe um print real bom o bastante pra carregar a peça sozinho (painel, tela de produto, etc). |
+
+Tema (`padrao`/`hero`/`grid`/`print`) é sempre derivado automaticamente do
+`produto` — ver §0.
 
 ## 5. Metodologia sem Enrolação (`MetodologiaSemEnrolacao.tsx`)
 

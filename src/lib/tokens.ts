@@ -2,23 +2,29 @@
  * Tokens de marca — Norte Para Negocios
  * Fonte: .claude/brand/design-tokens.md (extraidos do CSS de producao do site, 2026-08-30)
  * NUNCA hardcodar cor solta num template — importar sempre daqui.
+ *
+ * ATUALIZADO 2026-08-31: as cores por produto agora vem de `colorGuide.ts`
+ * (fonte de verdade, confirmada nos repos reais de cada sistema — ver esse
+ * arquivo para rastreabilidade). `colors.product` continua existindo aqui só
+ * por compatibilidade; nenhum valor e mais hardcoded duas vezes.
  */
+import {brandPalette, systemColors} from './colorGuide';
 
 export const colors = {
   // Marca
-  primary: '#6b71f2',
-  primaryLight: '#6366f1',
-  primaryDark: '#1e1b4b',
-  accent: '#f43f5e',
-  accentHover: '#e11d48',
-  black: '#000000',
-  white: '#ffffff',
+  primary: brandPalette.primary,
+  primaryLight: brandPalette.primaryLight,
+  primaryDark: brandPalette.primaryDark,
+  accent: brandPalette.accent,
+  accentHover: brandPalette.accentHover,
+  black: brandPalette.black,
+  white: brandPalette.white,
 
-  // Por produto (usado em Vitrine de Produto)
+  // Por produto (usado em Vitrine de Produto) — ver src/lib/colorGuide.ts e themes.ts
   product: {
-    ntbEstoque: {base: '#00d6d6', dark: '#00d6d6', light: '#00d6d6'},
-    ntbVendas: {base: '#6b71f2', dark: '#1e1b4b', light: '#6366f1'}, // sem cor propria no site -> usa primaria
-    norteAvalia: {base: '#7e22ce', dark: '#581c87', light: '#a855f7'},
+    ntbEstoque: systemColors.ntbEstoque,
+    ntbVendas: systemColors.ntbVendas,
+    norteAvalia: systemColors.norteAvalia,
   },
 } as const;
 

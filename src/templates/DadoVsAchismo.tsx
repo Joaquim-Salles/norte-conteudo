@@ -2,6 +2,7 @@ import React from 'react';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
+import {getTheme} from '../lib/themes';
 import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
 import type {DadoVsAchismoData} from '../lib/types';
@@ -14,16 +15,23 @@ import type {DadoVsAchismoData} from '../lib/types';
  *  - impacto: achismo vira so uma tarja fina, o numero do dado ocupa quase a tela toda.
  *  - ladoALado: split vertical esquerda/direita, leitura mais editorial/revista.
  * CTA sempre aponta a decisao certa pro WhatsApp.
+ *
+ * `theme` (default 'marca') troca a paleta de fundo/glow pelo sistema anunciado
+ * (ver src/lib/themes.ts) — o accent vermelho de CTA/badge fica fixo em todos os
+ * temas de proposito (reconhecimento de marca + urgencia do lead-gen).
  */
 export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   achismo,
   dado,
   fonteDado,
   variant = 'padrao',
+  theme = 'marca',
 }) => {
+  const t = getTheme(theme);
+
   if (variant === 'impacto') {
     return (
-      <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
+      <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={true}>
         {/* Achismo — tarja fina, quase apagada */}
         <div
           style={{
@@ -98,7 +106,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             </span>
           ) : null}
           <div style={{position: 'absolute', right: -20, bottom: 220}}>
-            <GhostBars color={colors.accent} opacity={0.16} width={340} />
+            <GhostBars color={t.colors.light} opacity={0.22} width={340} />
           </div>
         </div>
 
@@ -165,7 +173,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             left: 400,
             right: 0,
             bottom: 260,
-            background: colors.primaryDark,
+            background: t.colors.dark,
             padding: '100px 56px 0 48px',
             display: 'flex',
             flexDirection: 'column',
@@ -200,7 +208,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             </span>
           ) : null}
           <div style={{position: 'absolute', right: 6, bottom: 24}}>
-            <GhostBars color={colors.white} opacity={0.08} width={210} />
+            <GhostBars color={t.colors.light} opacity={0.16} width={210} />
           </div>
         </div>
 
@@ -282,7 +290,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           left: 0,
           right: 0,
           bottom: 0,
-          background: colors.primaryDark,
+          background: t.colors.dark,
           padding: '56px 64px 200px',
           display: 'flex',
           flexDirection: 'column',
@@ -318,7 +326,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           </span>
         ) : null}
         <div style={{position: 'absolute', right: 20, bottom: 210}}>
-          <GhostBars color={colors.white} opacity={0.06} width={300} />
+          <GhostBars color={t.colors.light} opacity={0.12} width={300} />
         </div>
       </div>
 

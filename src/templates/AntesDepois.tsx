@@ -2,6 +2,7 @@ import React from 'react';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
+import {getTheme} from '../lib/themes';
 import {GhostArrowUp} from '../lib/GhostGraphics';
 import type {AntesDepoisData} from '../lib/types';
 
@@ -12,6 +13,10 @@ import type {AntesDepoisData} from '../lib/types';
  *  - metricaHero: a metrica vira o elemento gigante central da peca, antes/depois
  *    encolhem pra legendas curtas acima/abaixo — pedido do fundador por "numero grande".
  * Em todas, a prova concreta (metrica) sustenta o CTA.
+ *
+ * `theme` (default 'marca') troca o gradiente do bloco DEPOIS pelo sistema
+ * anunciado (ver src/lib/themes.ts) — accent/selo "Com a Norte" ficam fixos
+ * (identidade de marca e CTA nao mudam por tema).
  */
 export const AntesDepois: React.FC<AntesDepoisData> = ({
   antesLabel = 'Antes',
@@ -20,10 +25,13 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   depoisTexto,
   metrica,
   variant = 'padrao',
+  theme = 'marca',
 }) => {
+  const t = getTheme(theme);
+
   if (variant === 'metricaHero') {
     return (
-      <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
+      <Frame background={t.colors.dark} wordmarkColor={colors.white}>
         <div
           style={{
             position: 'absolute',
@@ -171,7 +179,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             left: 460,
             right: 0,
             bottom: 260,
-            background: `linear-gradient(160deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
+            background: `linear-gradient(160deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`,
             padding: '100px 56px 0 48px',
           }}
         >
@@ -294,7 +302,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           left: 0,
           right: 0,
           bottom: 0,
-          background: `linear-gradient(150deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
+          background: `linear-gradient(150deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`,
           padding: '72px 64px 0',
         }}
       >

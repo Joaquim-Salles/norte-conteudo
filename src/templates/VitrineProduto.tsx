@@ -3,8 +3,10 @@ import {Img, staticFile} from 'remotion';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
+import {getThemeForProduct} from '../lib/themes';
 import {GhostCheck} from '../lib/GhostGraphics';
 import {SurfaceCard} from '../lib/SurfaceCard';
+import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import type {VitrineProdutoData} from '../lib/types';
 
 const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
@@ -14,13 +16,18 @@ const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
 };
 
 /**
- * Template 4 — Vitrine de produto, em 3 variacoes:
+ * Template 4 — Vitrine de produto, em 4 variacoes:
  *  - padrao: identidade no topo + lista vertical de features (cards compactos).
  *  - hero: identidade/headline grandes e centralizadas, features viram pilulas
  *    horizontais — mais "poster de lancamento", menos "ficha tecnica".
  *  - grid: features em grade 2x2 (bento), cards com double-bezel — mais denso
  *    e "produto maduro" quando ha 4 features fortes pra mostrar de uma vez.
+ *  - print: screenshot REAL do sistema numa moldura de device (celular/browser)
+ *    com sombra e leve perspectiva — "prova visual", nao icone+texto.
  * CTA sempre comercial direto (nao so informativo).
+ *
+ * Tema (paleta + cardStyle) e SEMPRE derivado do produto anunciado — nao e
+ * escolha manual (ver src/lib/themes.ts, getThemeForProduct).
  */
 export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   produto,
@@ -29,8 +36,13 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   features,
   ctaLabel,
   variant = 'padrao',
+  screenshot,
+  device = 'phone',
+  screenshotAspect,
 }) => {
-  const productColor = colors.product[produto];
+  const theme = getThemeForProduct(produto);
+  const productColor = theme.colors;
+  const cardStyle = theme.cardStyle;
   const logo = productLogo[produto];
 
   if (variant === 'hero') {
@@ -202,7 +214,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           }}
         >
           {features.slice(0, 4).map((f, i) => (
-            <SurfaceCard key={i} shellColor="rgba(255,255,255,0.05)" coreColor="rgba(255,255,255,0.1)">
+            <SurfaceCard
+              key={i}
+              variant={cardStyle}
+              shellColor="rgba(255,255,255,0.05)"
+              coreColor="rgba(255,255,255,0.1)"
+            >
               <div style={{padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 14, minHeight: 190}}>
                 <div
                   style={{
@@ -232,6 +249,109 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         </div>
 
         <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
+          <CtaBand label={ctaLabel ?? 'Quero isso na minha loja'} sub="fala com a gente — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  if (variant === 'print') {
+    const screenshotSrc = screenshot ?? 'screenshots/home-desktop.png';
+    return (
+      <Frame background={productColor.dark} wordmarkColor={colors.white}>
+        {/* Faixa superior de identidade — mais compacta que as outras variantes,
+            pra sobrar espaco de verdade pro device frame ser o protagonista */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 300,
+            background: `linear-gradient(160deg, ${productColor.base} 0%, ${productColor.dark} 100%)`,
+            padding: '76px 64px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            zIndex: 0,
+          }}
+        >
+          <div style={{display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16}}>
+            {logo ? (
+              <div
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 16,
+                  background: 'rgba(255,255,255,0.14)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 10,
+                }}
+              >
+                <Img src={staticFile(logo)} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+              </div>
+            ) : null}
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                color: 'rgba(255,255,255,0.85)',
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+              }}
+            >
+              {nomeProduto}
+            </span>
+          </div>
+          <h1
+            style={{
+              fontSize: 42,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.14,
+              letterSpacing: -0.6,
+              margin: 0,
+              maxWidth: 880,
+            }}
+          >
+            {headline}
+          </h1>
+        </div>
+
+        <div style={{position: 'absolute', left: -60, bottom: 150, zIndex: 0}}>
+          <GhostCheck color={colors.white} opacity={0.05} size={320} />
+        </div>
+
+        {/* Print real do sistema dentro da moldura de device — elemento central,
+            com sombra e leve inclinacao (nao e imagem crua colada na peca) */}
+        <div
+          style={{
+            position: 'absolute',
+            top: device === 'phone' ? 340 : 400,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1,
+          }}
+        >
+          {device === 'phone' ? (
+            <PhoneFrame
+              src={screenshotSrc}
+              width={330}
+              rotate={-5}
+              {...(screenshotAspect ? {aspectRatio: screenshotAspect} : {})}
+            />
+          ) : (
+            <BrowserFrame
+              src={screenshotSrc}
+              width={860}
+              rotate={2.5}
+              {...(screenshotAspect ? {aspectRatio: screenshotAspect} : {})}
+            />
+          )}
+        </div>
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130, zIndex: 2}}>
           <CtaBand label={ctaLabel ?? 'Quero isso na minha loja'} sub="fala com a gente — link na bio" />
         </div>
       </Frame>
@@ -317,7 +437,13 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         }}
       >
         {features.slice(0, 4).map((f, i) => (
-          <SurfaceCard key={i} shellColor="rgba(255,255,255,0.04)" coreColor="rgba(255,255,255,0.08)" radius={20}>
+          <SurfaceCard
+            key={i}
+            variant={cardStyle}
+            shellColor="rgba(255,255,255,0.04)"
+            coreColor="rgba(255,255,255,0.08)"
+            radius={20}
+          >
             <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '22px 22px'}}>
               <div
                 style={{

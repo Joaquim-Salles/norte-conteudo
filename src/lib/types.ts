@@ -1,5 +1,7 @@
 /** Tipos de dado dos 5 templates — populados pelo parser do brief mensal (scripts/parse-brief.mjs). */
 
+import type {ThemeName} from './themes';
+
 export type ProductKey = 'ntbEstoque' | 'ntbVendas' | 'norteAvalia' | null;
 
 export type DadoVsAchismoVariant = 'padrao' | 'impacto' | 'ladoALado';
@@ -14,6 +16,8 @@ export type DadoVsAchismoData = {
    * ladoALado: split vertical esquerda (achismo) / direita (dado), leitura mais editorial.
    */
   variant?: DadoVsAchismoVariant;
+  /** Tema de paleta (sistema/produto ou marca geral). Default: 'marca'. */
+  theme?: ThemeName;
 };
 
 export type DicaPraticaSlide =
@@ -41,9 +45,11 @@ export type AntesDepoisData = {
    * metricaHero: a metrica vira o elemento gigante central, antes/depois viram legendas curtas.
    */
   variant?: AntesDepoisVariant;
+  /** Tema de paleta (sistema/produto ou marca geral). Default: 'marca'. */
+  theme?: ThemeName;
 };
 
-export type VitrineProdutoVariant = 'padrao' | 'hero' | 'grid';
+export type VitrineProdutoVariant = 'padrao' | 'hero' | 'grid' | 'print';
 
 export type VitrineProdutoData = {
   produto: Exclude<ProductKey, null>;
@@ -55,8 +61,21 @@ export type VitrineProdutoData = {
    * padrao: identidade no topo + lista vertical de features (cards compactos).
    * hero: identidade/headline centralizadas e grandes, features viram pilulas horizontais.
    * grid: features em grade 2x2 (bento), cards com mais profundidade (double-bezel).
+   * print: screenshot real do sistema dentro de uma moldura de device (celular ou
+   * browser), com sombra/perspectiva sutil — "prova visual" em vez de so icone+texto.
    */
   variant?: VitrineProdutoVariant;
+  /** Usado so na variant 'print' — arquivo em public/screenshots/ (ver staticFile). */
+  screenshot?: string;
+  /** Usado so na variant 'print'. 'phone' = moldura de celular, 'browser' = moldura de navegador. */
+  device?: 'phone' | 'browser';
+  /**
+   * Usado so na variant 'print'. Proporcao (largura/altura) real do arquivo em
+   * `screenshot` (phone) ou da moldura desejada (browser) — evita `objectFit:
+   * cover` cortar conteudo real da UI quando o screenshot tem proporcao atipica.
+   * Ver src/lib/DeviceFrame.tsx.
+   */
+  screenshotAspect?: number;
 };
 
 export type MetodologiaSlide =
