@@ -61,6 +61,18 @@ const QA_MATRIX = [
   },
   {
     compositionId: 'DicaPratica',
+    outName: 'DicaPratica-cover-foto',
+    props: {
+      slide: {
+        kind: 'cover-foto',
+        titulo: 'O que muda quando o cliente vê o cardápio no celular',
+        tagNumero: 'CARDÁPIO DIGITAL',
+        foto: 'photos/restaurante-ambiente-noturno.jpg',
+      },
+    },
+  },
+  {
+    compositionId: 'DicaPratica',
     outName: 'DicaPratica-bridge',
     props: {
       slide: {
@@ -87,6 +99,17 @@ const QA_MATRIX = [
   {compositionId: 'VitrineProduto', outName: 'VitrineProduto-padrao', props: {variant: 'padrao'}},
   {compositionId: 'VitrineProduto', outName: 'VitrineProduto-hero', props: {variant: 'hero'}},
   {compositionId: 'VitrineProduto', outName: 'VitrineProduto-grid', props: {variant: 'grid'}},
+  {
+    compositionId: 'VitrineProduto',
+    outName: 'VitrineProduto-contexto',
+    props: {
+      produto: 'ntbVendas',
+      nomeProduto: 'NTB Vendas',
+      headline: 'O cardápio que seu cliente vê antes de sentar na mesa.',
+      features: [],
+      variant: 'contexto',
+    },
+  },
 
   // --- Template 5: Metodologia sem Enrolação (carrossel — todos os covers + passo + cta) ---
   {
@@ -135,6 +158,9 @@ const QA_MATRIX = [
     outName: 'MetodologiaSemEnrolacao-cta',
     props: {slide: {kind: 'cta'}},
   },
+
+  // --- Peça exploratória: CoverFotoReal (foto real, "prova social"/abertura) ---
+  {compositionId: 'CoverFotoReal', outName: 'CoverFotoReal-vendas'},
 ];
 
 for (const {compositionId, outName, props} of QA_MATRIX) {

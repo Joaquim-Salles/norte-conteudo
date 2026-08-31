@@ -1,6 +1,12 @@
 # Catálogo de templates e variações
 
-Atualizado em 2026-08-31 (sistema de temas + guia de cores + prints reais —
+Atualizado em 2026-08-31 (2ª rodada, mesmo dia — fotografia real de
+restaurante/comida). Pedido do fundador: *"tá ficando muito bom porém quero
+mais opções com fotos reais às vezes do restaurante, exemplo de carrosséis,
+bora explorar"*. Ver seção **"Fotografia real (2026-08-31)"** logo abaixo pra
+onde as fotos vêm, como foram baixadas e as 3 peças novas.
+
+Atualização anterior, mesmo dia (sistema de temas + guia de cores + prints reais —
 pedido do fundador por "milhares de variações" com cor por sistema e prints
 do sistema). Ver seção 0 abaixo pra como isso funciona. Atualização anterior
 em 2026-08-30 (2ª rodada de elevação visual — fundador revisou a galeria
@@ -26,6 +32,53 @@ Como testar:
   cobre os 5 tipos de post/variações de layout.
 - `npm run qa:temas` gera a matriz tema × variante em `out/qa/temas/` (ver
   `scripts/qa-theme-batch.mjs`) — prova o sistema de temas descrito na §0.
+
+---
+
+## Fotografia real (2026-08-31)
+
+Pedido explícito do fundador — "mais opções com fotos reais do restaurante,
+bora explorar". Regra que continua valendo: **zero IA generativa** (fotos
+geradas por IA seriam a solução mais fácil e foram deliberadamente descartadas
+— o pedido é fotografia de verdade, tirada por fotógrafo).
+
+**Fonte das fotos:** Pexels (licença comercial livre, sem atribuição
+obrigatória — https://www.pexels.com/license/). **Limitação real encontrada:**
+não havia MCP/skill de automação de banco de imagem conectada nesta sessão (a
+skill `pexels-automation` depende de Rube MCP, que não está disponível aqui;
+as APIs oficiais REST do Pexels e do Unsplash retornam 401 sem chave de API, e
+não havia chave configurada no ambiente). Contorno usado: `WebFetch` nas
+páginas de busca públicas do Pexels (`pexels.com/search/...`) pra localizar
+URLs diretas do CDN (`images.pexels.com/photos/<id>/pexels-photo-<id>.jpeg`),
+que **funcionam sem autenticação** — o site de busca do Unsplash bloqueou via
+challenge anti-bot (Anubis), por isso todas as 3 fotos vieram do Pexels. Cada
+foto foi baixada localmente (`curl`) pra `public/photos/` — Remotion renderiza
+offline, não pode depender de URL externa em runtime. Créditos completos com
+link de origem: [`public/photos/CREDITOS.md`](../../public/photos/CREDITOS.md).
+
+**3 composições novas** (nenhuma delas é um dos "5 tipos" da Fase 0 — são
+extensões/variações exploratórias, ver cada template pra detalhe):
+
+| Peça | O que é | Foto usada |
+|---|---|---|
+| `DicaPratica` — slide `cover-foto` | Cover editorial/lifestyle: foto real em tela cheia + overlay de gradiente escuro (`src/lib/PhotoBackground.tsx`), texto ancorado embaixo. Mais "revista/lifestyle" que os covers de cor sólida. | `restaurante-ambiente-noturno.jpg` (Pexels #776538) |
+| `VitrineProduto` — variante `contexto` | Foto real de ambiente/comida + mockup do celular com print REAL do NTB Vendas sobreposto, como se estivesse pousado na mesa — foto real + produto real na mesma peça. Pensada especificamente pra NTB Vendas (Cardápio Digital). | `prato-gourmet-mesa-madeira.jpg` (Pexels #5865434) |
+| `CoverFotoReal.tsx` (template novo) | Peça simples de "prova social"/contexto — foto de movimento de salão em tela cheia, serve de abertura/cover pra um carrossel sobre Cardápio Digital. Badge usa a cor do tema do produto (`getTheme`). | `salao-moderno-movimento.jpg` (Pexels #2387675) |
+
+**Contraste de texto sobre foto — achado real de QA:** a 1ª versão da
+variante `contexto` do Vitrine usava um degradê `topAndBottom` que desvanecia
+rápido demais (transparente já a partir de 26% da altura) — a 2ª linha do
+headline caía fora da zona escura e ficava com contraste fraco sobre a madeira
+clara da foto. Corrigido alongando o platô de opacidade forte do degradê
+(`src/lib/PhotoBackground.tsx`, ver comentário `FIX 2026-08-31` no código) —
+regra prática pra qualquer peça nova com foto: sempre validar que o texto cai
+DENTRO da zona de opacidade máxima do gradiente, não só perto da borda.
+
+**Peça nova em `src/lib/`:**
+- **`PhotoBackground.tsx`** — foto real em tela cheia (`objectFit: cover` +
+  `objectPosition` configurável) com overlay de gradiente escuro parametrizado
+  (`'bottom' | 'top' | 'topAndBottom' | 'full' | 'none'`) pra legibilidade de
+  texto. Usado pelas 3 peças acima; reutilizável em templates futuros.
 
 ---
 
@@ -82,6 +135,7 @@ Carrossel — 1 `<Still>` por slide, `slide.kind` decide o layout. Slides
 | `cover` (default) | Título + badge numérico + "Arrasta pro lado →". Uso geral. |
 | `cover-grid` | Cover já mostra uma prévia em lista dos itens (até 4) antes do swipe — "prova de conteúdo". Usar quando os itens são curtos o bastante pra caber num preview de 1 linha cada. |
 | `cover-quote` (elevado 2026-08-30) | Cover editorial, citação/provocação grande sobre fundo preto. Ganhou aspas gráficas grandes (abertura + fechamento espelhado, bleed parcial pra fora do quadro) e o título deixou de ser um `h2` solto — agora vive num `SurfaceCard` de assinatura/atribuição, com marcador de accent. Usar quando a dica nasce de uma frase forte (do fundador, de um cliente, ou uma dor comum bem resumida numa frase). |
+| `cover-foto` (novo, 2026-08-31) | Cover editorial/lifestyle: foto REAL de restaurante/comida em tela cheia (`foto`, `public/photos/` — zero IA generativa) com overlay de gradiente escuro (`PhotoBackground`, `overlay="bottom"`) pra legibilidade, texto ancorado embaixo. Usar quando a dica tem gancho num contexto físico real de restaurante/bar/lanchonete (bom pra NTB Vendas). |
 
 Slides funcionais (não têm variação de layout, só de conteúdo):
 - `bridge` (elevado 2026-08-30) — 1 ideia numerada por slide. O número ganhou um card double-bezel (`SurfaceCard`) em vez de ficar solto no ar, com rótulo "IDEIA n de total"; ganhou também tracker de progresso no topo (mesma linguagem do `passo` do Metodologia) e um `GhostCheck` grande de apoio no fundo.
@@ -111,9 +165,10 @@ Post único (1 imagem). Prop `variant`.
 | `hero` | Identidade/headline centralizadas e grandes, features viram pílulas horizontais. Mais "poster de lançamento" — usar pra anúncio de feature nova ou quando a headline é o principal gancho (menos "ficha técnica"). |
 | `grid` | Features em grade 2×2 (bento), cards com mais profundidade (double-bezel + número em selo). Usar quando as 4 features têm peso parecido entre si e vale destacar todas com o mesmo nível de atenção. |
 | `print` (novo, 2026-08-31) | Screenshot real do sistema numa moldura de device (`screenshot`, `device: 'phone'\|'browser'`), com sombra/inclinação — "prova visual" em vez de ícone+texto. Usar quando existe um print real bom o bastante pra carregar a peça sozinho (painel, tela de produto, etc). |
+| `contexto` (novo, 2026-08-31) | Foto REAL de ambiente/comida do restaurante em tela cheia (`foto`, `public/photos/`) + mockup do celular com o `screenshot` real do sistema sobreposto, como se estivesse pousado na mesa — foto real + produto real na mesma peça. Pensada pra NTB Vendas (Cardápio Digital), reforça "isso resolve um problema de restaurante de verdade". Ver nota de contraste de texto abaixo da seção "Fotografia real". |
 
-Tema (`padrao`/`hero`/`grid`/`print`) é sempre derivado automaticamente do
-`produto` — ver §0.
+Tema (`padrao`/`hero`/`grid`/`print`/`contexto`) é sempre derivado
+automaticamente do `produto` — ver §0.
 
 ## 5. Metodologia sem Enrolação (`MetodologiaSemEnrolacao.tsx`)
 
@@ -151,6 +206,18 @@ Slides funcionais:
 - `cta` (elevado 2026-08-30) — ganhou `Badge` "Metodologia" acima do headline
   (dá o mesmo ritmo eyebrow→título→CTA das outras peças) e `GhostBars` maior/
   mais visível ao fundo. Headline + `CtaBand`.
+
+---
+
+## 6. CoverFotoReal (`CoverFotoReal.tsx`) — exploratório, 2026-08-31
+
+Post único, fora da numeração "5 tipos" da Fase 0 (é uma peça pontual pedida
+pelo fundador, não um tipo novo formal do calendário). Foto real em tela
+cheia (`foto`) com overlay `bottom`, badge/eyebrow (`tagNumero`) na cor do
+`theme` (produto anunciado ou `'marca'`), título grande e "Arrasta pro lado →"
+— pensada pra abrir/servir de cover de um carrossel sobre Cardápio Digital,
+mas genérica o bastante pra qualquer produto (basta trocar `theme`/`foto`).
+Ver seção "Fotografia real" acima pra fonte da foto padrão.
 
 ---
 

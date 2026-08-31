@@ -9,6 +9,7 @@ import {
   MetodologiaSemEnrolacao,
   metodologiaDefaultProps,
 } from './templates/MetodologiaSemEnrolacao';
+import {CoverFotoReal, coverFotoRealDefaultProps} from './templates/CoverFotoReal';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -54,6 +55,15 @@ export const RemotionRoot: React.FC = () => {
         width={formats.post.width}
         height={formats.post.height}
         defaultProps={metodologiaDefaultProps}
+      />
+      {/* Peca exploratoria (2026-08-31, fora dos "5 tipos" da Fase 0) — cover
+          de foto real, ver src/templates/CoverFotoReal.tsx */}
+      <Still
+        id="CoverFotoReal"
+        component={CoverFotoReal}
+        width={formats.post.width}
+        height={formats.post.height}
+        defaultProps={coverFotoRealDefaultProps}
       />
     </>
   );

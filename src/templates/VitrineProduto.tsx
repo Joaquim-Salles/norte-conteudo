@@ -7,6 +7,7 @@ import {getThemeForProduct} from '../lib/themes';
 import {GhostCheck} from '../lib/GhostGraphics';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
+import {PhotoBackground} from '../lib/PhotoBackground';
 import type {VitrineProdutoData} from '../lib/types';
 
 const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
@@ -24,6 +25,10 @@ const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
  *    e "produto maduro" quando ha 4 features fortes pra mostrar de uma vez.
  *  - print: screenshot REAL do sistema numa moldura de device (celular/browser)
  *    com sombra e leve perspectiva — "prova visual", nao icone+texto.
+ *  - contexto (novo, 2026-08-31): foto REAL de ambiente/comida do restaurante
+ *    em tela cheia (public/photos/) + mockup do celular com o screenshot real
+ *    do sistema sobreposto, como se estivesse pousado na mesa — foto real +
+ *    produto real na mesma peca, pra NTB Vendas (Cardapio Digital).
  * CTA sempre comercial direto (nao so informativo).
  *
  * Tema (paleta + cardStyle) e SEMPRE derivado do produto anunciado — nao e
@@ -39,6 +44,8 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   screenshot,
   device = 'phone',
   screenshotAspect,
+  foto,
+  fotoPosition,
 }) => {
   const theme = getThemeForProduct(produto);
   const productColor = theme.colors;
@@ -346,6 +353,102 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               src={screenshotSrc}
               width={860}
               rotate={2.5}
+              {...(screenshotAspect ? {aspectRatio: screenshotAspect} : {})}
+            />
+          )}
+        </div>
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130, zIndex: 2}}>
+          <CtaBand label={ctaLabel ?? 'Quero isso na minha loja'} sub="fala com a gente — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  if (variant === 'contexto') {
+    const fotoSrc = foto ?? 'photos/prato-gourmet-mesa-madeira.jpg';
+    const screenshotSrc = screenshot ?? 'screenshots/vendas-mobile.png';
+    return (
+      <Frame background={productColor.dark} wordmarkColor={colors.white} texture={false}>
+        {/* Foto real de ambiente/comida em tela cheia — identidade sobre o
+            degrade escuro superior, CTA sobre o degrade escuro inferior,
+            meio da foto respira livre pra dar espaco ao mockup do celular. */}
+        <PhotoBackground src={fotoSrc} position={fotoPosition ?? 'center 22%'} overlay="topAndBottom" strength={0.85} />
+
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            padding: '96px 64px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            zIndex: 1,
+          }}
+        >
+          <div style={{display: 'flex', alignItems: 'center', gap: 18, marginBottom: 20}}>
+            {logo ? (
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: 18,
+                  background: 'rgba(255,255,255,0.16)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 12,
+                  boxShadow: '0 14px 30px -10px rgba(0,0,0,0.5)',
+                }}
+              >
+                <Img src={staticFile(logo)} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+              </div>
+            ) : null}
+            <span
+              style={{
+                fontSize: 24,
+                fontWeight: 700,
+                color: 'rgba(255,255,255,0.9)',
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                textShadow: '0 4px 16px rgba(0,0,0,0.5)',
+              }}
+            >
+              {nomeProduto}
+            </span>
+          </div>
+          <h1
+            style={{
+              fontSize: 50,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.1,
+              letterSpacing: -1,
+              margin: 0,
+              maxWidth: 820,
+              textShadow: '0 8px 28px rgba(0,0,0,0.55)',
+            }}
+          >
+            {headline}
+          </h1>
+        </div>
+
+        {/* Mockup do celular "pousado na mesa" — sobreposto a foto real, no
+            meio da peca (nem colado na identidade, nem no CTA). */}
+        <div style={{position: 'absolute', top: 560, left: '50%', transform: 'translateX(-50%)', zIndex: 1}}>
+          {device === 'phone' ? (
+            <PhoneFrame
+              src={screenshotSrc}
+              width={300}
+              rotate={-4}
+              {...(screenshotAspect ? {aspectRatio: screenshotAspect} : {})}
+            />
+          ) : (
+            <BrowserFrame
+              src={screenshotSrc}
+              width={760}
+              rotate={2}
               {...(screenshotAspect ? {aspectRatio: screenshotAspect} : {})}
             />
           )}

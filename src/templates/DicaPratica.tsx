@@ -5,6 +5,7 @@ import {colors} from '../lib/tokens';
 import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
+import {PhotoBackground} from '../lib/PhotoBackground';
 import type {DicaPraticaSlide} from '../lib/types';
 
 /**
@@ -15,6 +16,10 @@ import type {DicaPraticaSlide} from '../lib/types';
  *    (mais "prova de conteudo" antes do swipe, bom quando os itens sao curtos).
  *  - cover-quote: variacao de cover editorial, citacao/provocacao grande — bom
  *    pra dica que nasce de uma frase forte do fundador/cliente.
+ *  - cover-foto (novo, 2026-08-31): cover editorial/lifestyle com FOTO REAL de
+ *    restaurante/comida em tela cheia (public/photos/, zero IA generativa) +
+ *    overlay de gradiente escuro pra legibilidade — bom pra dica ligada a um
+ *    contexto fisico de restaurante/bar/lanchonete (ex: NTB Vendas).
  *  - bridge: 1 ideia por slide, numerada, nunca mais de ~2 frases (retencao).
  *  - cta: slide dedicado, 100% focado em levar pro WhatsApp — nao divide atencao.
  */
@@ -197,6 +202,50 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
               </div>
             </SurfaceCard>
           </div>
+        </div>
+      </Frame>
+    );
+  }
+
+  if (slide.kind === 'cover-foto') {
+    return (
+      <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
+        <PhotoBackground src={slide.foto} position={slide.fotoPosition ?? 'center 15%'} overlay="bottom" />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '140px 72px 220px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
+          <h1
+            style={{
+              fontSize: 72,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.05,
+              letterSpacing: -1.5,
+              margin: '28px 0 0',
+              textShadow: '0 10px 34px rgba(0,0,0,0.55)',
+            }}
+          >
+            {slide.titulo}
+          </h1>
+          <span
+            style={{
+              marginTop: 32,
+              fontSize: 24,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.82)',
+            }}
+          >
+            Arrasta pro lado →
+          </span>
         </div>
       </Frame>
     );
