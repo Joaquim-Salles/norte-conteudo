@@ -2,8 +2,9 @@ import React from 'react';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
-import {GhostBars} from '../lib/GhostGraphics';
+import {GhostBars, GhostQuote, GhostCycle} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
+import {SurfaceCard} from '../lib/SurfaceCard';
 import type {MetodologiaSlide} from '../lib/types';
 
 /**
@@ -63,8 +64,38 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           >
             Passo a passo, sem enrolação — arrasta pro lado →
           </span>
-          <div style={{position: 'absolute', right: -30, bottom: 240}}>
-            <GhostBars color={colors.white} opacity={0.09} width={380} />
+
+          {/* Selo de metodo — da peso visual real ao cover em vez de so texto solto */}
+          <div style={{marginTop: 64}}>
+            <SurfaceCard shellColor="rgba(255,255,255,0.05)" coreColor="rgba(255,255,255,0.09)" radius={24}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 24, padding: '28px 32px', maxWidth: 640}}>
+                <div
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 999,
+                    background: colors.accent,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    boxShadow: '0 12px 26px -10px rgba(0,0,0,0.55)',
+                  }}
+                >
+                  <GhostCycle color={colors.white} opacity={1} size={36} />
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', gap: 4}}>
+                  <span style={{fontSize: 24, fontWeight: 700, color: colors.white}}>Melhoria contínua</span>
+                  <span style={{fontSize: 20, fontWeight: 400, color: 'rgba(255,255,255,0.6)'}}>
+                    Repete até virar rotina — não é teoria solta.
+                  </span>
+                </div>
+              </div>
+            </SurfaceCard>
+          </div>
+
+          <div style={{position: 'absolute', right: -70, bottom: 60}}>
+            <GhostBars color={colors.white} opacity={0.1} width={480} />
           </div>
         </div>
       </Frame>
@@ -97,44 +128,42 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
             {slide.titulo}
           </h1>
 
-          {/* Mini-roadmap das etapas — previa do metodo antes do swipe */}
-          <div
-            style={{
-              marginTop: 48,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-            }}
-          >
-            {slide.etapas.map((etapa, i) => (
-              <div key={i} style={{display: 'flex', alignItems: 'stretch', gap: 20}}>
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20}}>
-                  <div
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 999,
-                      background: colors.accent,
-                      flexShrink: 0,
-                      boxShadow: '0 0 0 6px rgba(244,63,94,0.16)',
-                    }}
-                  />
-                  {i < slide.etapas.length - 1 ? (
-                    <div style={{width: 2, flex: 1, background: 'rgba(255,255,255,0.16)', minHeight: 34}} />
-                  ) : null}
-                </div>
-                <span
-                  style={{
-                    fontSize: 26,
-                    fontWeight: 400,
-                    color: 'rgba(255,255,255,0.85)',
-                    paddingBottom: i < slide.etapas.length - 1 ? 26 : 0,
-                  }}
-                >
-                  {etapa}
-                </span>
+          {/* Mini-roadmap das etapas — previa do metodo antes do swipe, num card
+              double-bezel em vez de bullets soltos flutuando no fundo preto */}
+          <div style={{marginTop: 48}}>
+            <SurfaceCard shellColor="rgba(255,255,255,0.04)" coreColor="rgba(255,255,255,0.07)" radius={26}>
+              <div style={{display: 'flex', flexDirection: 'column', gap: 0, padding: '32px 34px 26px'}}>
+                {slide.etapas.map((etapa, i) => (
+                  <div key={i} style={{display: 'flex', alignItems: 'stretch', gap: 20}}>
+                    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: 20}}>
+                      <div
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 999,
+                          background: colors.accent,
+                          flexShrink: 0,
+                          boxShadow: '0 0 0 6px rgba(244,63,94,0.16)',
+                        }}
+                      />
+                      {i < slide.etapas.length - 1 ? (
+                        <div style={{width: 2, flex: 1, background: 'rgba(255,255,255,0.16)', minHeight: 34}} />
+                      ) : null}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 26,
+                        fontWeight: 400,
+                        color: 'rgba(255,255,255,0.85)',
+                        paddingBottom: i < slide.etapas.length - 1 ? 26 : 0,
+                      }}
+                    >
+                      {etapa}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </SurfaceCard>
           </div>
 
           <span
@@ -156,49 +185,60 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
   if (slide.kind === 'cover-editorial') {
     return (
       <Frame background={colors.white} wordmarkColor={colors.black}>
-        <div style={{position: 'absolute', right: -20, top: -20}}>
-          <GhostBars color={colors.primaryDark} opacity={0.05} width={340} />
+        {/* Aspas graficas grandes reforcam o tom "quote-like" pedido no design —
+            no lugar das barras de crescimento (que combinam mais com dado/resultado
+            do que com um cover editorial). Bleed parcial pra fora do quadro. */}
+        <div style={{position: 'absolute', right: -60, top: -70}}>
+          <GhostQuote color={colors.primaryDark} opacity={0.06} size={480} />
+        </div>
+        <div style={{position: 'absolute', left: 30, bottom: 40, transform: 'rotate(180deg)'}}>
+          <GhostQuote color={colors.primaryDark} opacity={0.045} size={260} />
         </div>
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            padding: '220px 72px 220px',
+            padding: '220px 96px 220px',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            alignItems: 'stretch',
             justifyContent: 'center',
           }}
         >
-          <span
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: 3,
-              color: colors.accent,
-              textTransform: 'uppercase',
-            }}
-          >
-            Metodologia
-          </span>
-          <h1
-            style={{
-              fontSize: 78,
-              fontWeight: 700,
-              fontStyle: 'italic',
-              color: colors.primaryDark,
-              lineHeight: 1.05,
-              letterSpacing: -1.5,
-              margin: '22px 0 0',
-            }}
-          >
-            {slide.titulo}
-          </h1>
-          {slide.subtitulo ? (
-            <p style={{fontSize: 30, fontWeight: 400, color: '#54546a', lineHeight: 1.4, margin: '28px 0 0', maxWidth: 820}}>
-              {slide.subtitulo}
-            </p>
-          ) : null}
-          <div style={{marginTop: 44, height: 6, width: 120, background: colors.accent}} />
+          {/* Barra vertical tipo "pull-quote" — da moldura de apoio ao bloco de
+              texto, que antes ficava so com titulo + linha fina flutuando */}
+          <div style={{width: 6, background: colors.accent, borderRadius: 999, flexShrink: 0, marginRight: 40}} />
+          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+            <span
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: 3,
+                color: colors.accent,
+                textTransform: 'uppercase',
+              }}
+            >
+              Metodologia
+            </span>
+            <h1
+              style={{
+                fontSize: 78,
+                fontWeight: 700,
+                fontStyle: 'italic',
+                color: colors.primaryDark,
+                lineHeight: 1.05,
+                letterSpacing: -1.5,
+                margin: '22px 0 0',
+              }}
+            >
+              {slide.titulo}
+            </h1>
+            {slide.subtitulo ? (
+              <p style={{fontSize: 30, fontWeight: 400, color: '#54546a', lineHeight: 1.4, margin: '28px 0 0', maxWidth: 780}}>
+                {slide.subtitulo}
+              </p>
+            ) : null}
+          </div>
         </div>
       </Frame>
     );
@@ -234,18 +274,34 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           </div>
 
           <div style={{display: 'flex', alignItems: 'flex-start', gap: 28}}>
-            <span
-              style={{
-                fontSize: 140,
-                fontWeight: 700,
-                color: colors.black,
-                lineHeight: 0.82,
-                letterSpacing: -6,
-                textShadow: '0 16px 34px rgba(0,0,0,0.14)',
-              }}
-            >
-              {String(slide.numero).padStart(2, '0')}
-            </span>
+            {/* Selo/anel decorativo atras do numero — da peso de "checkpoint",
+                nao so um numero solto no ar */}
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <div
+                style={{
+                  position: 'absolute',
+                  width: 172,
+                  height: 172,
+                  left: -20,
+                  top: -20,
+                  borderRadius: '50%',
+                  border: `3px dashed ${colors.accent}`,
+                  opacity: 0.28,
+                }}
+              />
+              <span
+                style={{
+                  fontSize: 140,
+                  fontWeight: 700,
+                  color: colors.black,
+                  lineHeight: 0.82,
+                  letterSpacing: -6,
+                  textShadow: '0 16px 34px rgba(0,0,0,0.14)',
+                }}
+              >
+                {String(slide.numero).padStart(2, '0')}
+              </span>
+            </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: 14, paddingTop: 18}}>
               <h2
                 style={{
@@ -263,6 +319,55 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
               </p>
             </div>
           </div>
+
+          {/* Mini-diagrama do ciclo — mostra as `total` etapas com a atual
+              destacada, em vez de deixar so texto solto preenchendo o resto
+              do quadro (pedido explicito do fundador) */}
+          <div style={{marginTop: 64}}>
+            <SurfaceCard shellColor="rgba(0,0,0,0.035)" coreColor="rgba(0,0,0,0.02)" radius={22}>
+              <div style={{display: 'flex', alignItems: 'center', padding: '26px 30px'}}>
+                {Array.from({length: slide.total}).map((_, i) => {
+                  const stepNum = i + 1;
+                  const isActive = stepNum === slide.numero;
+                  const isDone = stepNum < slide.numero;
+                  return (
+                    <React.Fragment key={i}>
+                      <div
+                        style={{
+                          width: isActive ? 52 : 38,
+                          height: isActive ? 52 : 38,
+                          borderRadius: 999,
+                          flexShrink: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: isActive ? 22 : 17,
+                          fontWeight: 700,
+                          background: isActive ? colors.accent : isDone ? colors.primaryDark : '#e4e4ec',
+                          color: isActive || isDone ? colors.white : '#9a9aab',
+                          boxShadow: isActive ? '0 12px 22px -8px rgba(244,63,94,0.55)' : 'none',
+                        }}
+                      >
+                        {stepNum}
+                      </div>
+                      {i < slide.total - 1 ? (
+                        <div
+                          style={{
+                            flex: 1,
+                            height: 2,
+                            margin: '0 12px',
+                            background: stepNum < slide.numero ? colors.primaryDark : '#e4e4ec',
+                            opacity: stepNum < slide.numero ? 0.4 : 1,
+                          }}
+                        />
+                      ) : null}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            </SurfaceCard>
+          </div>
+
           <span
             style={{
               position: 'absolute',
@@ -284,8 +389,8 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
   // slide.kind === 'cta'
   return (
     <Frame background={colors.black} wordmarkColor={colors.white}>
-      <div style={{position: 'absolute', right: -40, bottom: -30}}>
-        <GhostBars color={colors.white} opacity={0.08} width={440} />
+      <div style={{position: 'absolute', right: -80, bottom: -60}}>
+        <GhostBars color={colors.white} opacity={0.11} width={520} />
       </div>
       <div
         style={{
@@ -295,9 +400,10 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 48,
+          gap: 32,
         }}
       >
+        <Badge>Metodologia</Badge>
         <h2
           style={{
             fontSize: 58,

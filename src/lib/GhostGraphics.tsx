@@ -76,3 +76,25 @@ export const GhostArrowUp: React.FC<{color?: string; opacity?: number; size?: nu
     <path d="M66 22 L90 24 L88 48" stroke={color} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" fill="none" />
   </svg>
 );
+
+/**
+ * Loop de melhoria continua — seta circular unica (estilo "refresh"), desenhada
+ * pra ficar legivel mesmo pequena (selo/badge de ~34-40px). Usada no Metodologia
+ * sem Enrolacao pra reforcar o tema PDCA/Lean (ciclo que se repete).
+ */
+export const GhostCycle: React.FC<{color?: string; opacity?: number; size?: number}> = ({
+  color = '#ffffff',
+  opacity = 0.08,
+  size = 340,
+}) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" style={{opacity}}>
+    <path
+      d="M84 50a34 34 0 1 1 -10-24.3"
+      stroke={color}
+      strokeWidth={9}
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path d="M85 8l1 20-20-3z" fill={color} />
+  </svg>
+);

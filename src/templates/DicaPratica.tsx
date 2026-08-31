@@ -4,6 +4,7 @@ import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
+import {SurfaceCard} from '../lib/SurfaceCard';
 import type {DicaPraticaSlide} from '../lib/types';
 
 /**
@@ -152,8 +153,13 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   if (slide.kind === 'cover-quote') {
     return (
       <Frame background={colors.black} wordmarkColor={colors.white}>
-        <div style={{position: 'absolute', left: 40, top: 60}}>
-          <GhostQuote color={colors.white} opacity={0.08} size={220} />
+        {/* Aspas graficas grandes (aberta + fechada espelhada) — a citacao
+            passa a ter uma moldura visual de verdade, nao so aspas de texto */}
+        <div style={{position: 'absolute', left: 10, top: -60}}>
+          <GhostQuote color={colors.white} opacity={0.1} size={400} />
+        </div>
+        <div style={{position: 'absolute', right: 0, bottom: 160, transform: 'rotate(180deg)'}}>
+          <GhostQuote color={colors.white} opacity={0.05} size={260} />
         </div>
         <div
           style={{
@@ -178,18 +184,19 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           >
             "{slide.citacao}"
           </h1>
-          <div style={{marginTop: 40, height: 6, width: 120, background: colors.accent}} />
-          <h2
-            style={{
-              fontSize: 34,
-              fontWeight: 700,
-              color: 'rgba(255,255,255,0.85)',
-              lineHeight: 1.2,
-              margin: '28px 0 0',
-            }}
-          >
-            {slide.titulo}
-          </h2>
+
+          {/* Assinatura/atribuicao em card, no lugar de um h2 solto — da peso
+              de "selo de fonte" a citacao */}
+          <div style={{marginTop: 44}}>
+            <SurfaceCard shellColor="rgba(255,255,255,0.05)" coreColor="rgba(255,255,255,0.09)" radius={20}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '22px 28px'}}>
+                <div style={{width: 8, height: 8, borderRadius: 999, background: colors.accent, flexShrink: 0}} />
+                <span style={{fontSize: 28, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.2}}>
+                  {slide.titulo}
+                </span>
+              </div>
+            </SurfaceCard>
+          </div>
         </div>
       </Frame>
     );
@@ -198,6 +205,26 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   if (slide.kind === 'bridge') {
     return (
       <Frame background={colors.white} wordmarkColor={colors.black}>
+        {/* Tracker de progresso no topo — mesma linguagem do "passo" do
+            Metodologia, da continuidade visual entre os 2 carrosseis */}
+        <div style={{position: 'absolute', top: 140, left: 72, display: 'flex', gap: 10}}>
+          {Array.from({length: slide.total}).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                width: i + 1 === slide.numero ? 28 : 10,
+                height: 10,
+                borderRadius: 999,
+                background: i + 1 <= slide.numero ? colors.accent : '#e4e4ec',
+              }}
+            />
+          ))}
+        </div>
+
+        <div style={{position: 'absolute', right: -70, bottom: -50}}>
+          <GhostCheck color={colors.primaryDark} opacity={0.05} size={420} />
+        </div>
+
         <div
           style={{
             position: 'absolute',
@@ -206,24 +233,36 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: 28,
+            gap: 32,
           }}
         >
-          <div style={{display: 'flex', alignItems: 'baseline', gap: 14}}>
-            <span
-              style={{
-                fontSize: 120,
-                fontWeight: 700,
-                color: colors.accent,
-                letterSpacing: -4,
-                textShadow: '0 12px 30px rgba(244,63,94,0.25)',
-              }}
-            >
-              {String(slide.numero).padStart(2, '0')}
-            </span>
-            <span style={{fontSize: 28, fontWeight: 400, color: '#9a9aab'}}>/ {slide.total}</span>
+          {/* Numero da ideia agora vive num card double-bezel — nao e mais um
+              numero solto flutuando no espaco em branco */}
+          <div style={{display: 'flex', alignItems: 'center', gap: 24}}>
+            <SurfaceCard shellColor="rgba(244,63,94,0.08)" coreColor="rgba(244,63,94,0.13)" radius={28}>
+              <div style={{width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <span
+                  style={{
+                    fontSize: 92,
+                    fontWeight: 700,
+                    color: colors.accent,
+                    letterSpacing: -4,
+                    textShadow: '0 10px 24px rgba(244,63,94,0.25)',
+                  }}
+                >
+                  {String(slide.numero).padStart(2, '0')}
+                </span>
+              </div>
+            </SurfaceCard>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+              <span style={{fontSize: 20, fontWeight: 700, color: '#9a9aab', letterSpacing: 2, textTransform: 'uppercase'}}>
+                Ideia
+              </span>
+              <span style={{fontSize: 30, fontWeight: 400, color: '#9a9aab'}}>
+                {slide.numero} de {slide.total}
+              </span>
+            </div>
           </div>
-          <div style={{height: 5, width: 90, background: colors.primaryDark, opacity: 0.15}} />
           <h2
             style={{
               fontSize: 58,
