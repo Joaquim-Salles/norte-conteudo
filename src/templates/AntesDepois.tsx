@@ -6,10 +6,12 @@ import {GhostArrowUp} from '../lib/GhostGraphics';
 import type {AntesDepoisData} from '../lib/types';
 
 /**
- * Template 3 — Antes/Depois
- * Split horizontal 50/50: ANTES em tom apagado (problema), DEPOIS em cor viva
- * (transformacao) — a metrica de resultado vira o elemento de maior peso visual,
- * ancorando a prova concreta que sustenta o CTA.
+ * Template 3 — Antes/Depois, em 3 variacoes:
+ *  - padrao: split horizontal 50/50, metrica como badge no bloco DEPOIS.
+ *  - ladoALado: split vertical esquerda (antes) / direita (depois), selo na costura.
+ *  - metricaHero: a metrica vira o elemento gigante central da peca, antes/depois
+ *    encolhem pra legendas curtas acima/abaixo — pedido do fundador por "numero grande".
+ * Em todas, a prova concreta (metrica) sustenta o CTA.
  */
 export const AntesDepois: React.FC<AntesDepoisData> = ({
   antesLabel = 'Antes',
@@ -17,7 +19,231 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   depoisLabel = 'Depois',
   depoisTexto,
   metrica,
+  variant = 'padrao',
 }) => {
+  if (variant === 'metricaHero') {
+    return (
+      <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '150px 64px 220px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: 'rgba(255,255,255,0.5)',
+              textTransform: 'uppercase',
+            }}
+          >
+            {antesLabel}
+          </span>
+          <p
+            style={{
+              fontSize: 30,
+              fontWeight: 400,
+              color: 'rgba(255,255,255,0.65)',
+              lineHeight: 1.35,
+              margin: '10px 0 0',
+              maxWidth: 760,
+            }}
+          >
+            {antesTexto}
+          </p>
+
+          {metrica ? (
+            <div
+              style={{
+                marginTop: 56,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 158,
+                  fontWeight: 700,
+                  color: colors.accent,
+                  lineHeight: 0.92,
+                  letterSpacing: -4,
+                  textShadow: '0 20px 50px rgba(244,63,94,0.35)',
+                }}
+              >
+                {metrica}
+              </span>
+              <div style={{marginTop: 22, height: 5, width: 140, background: colors.accent, borderRadius: 999}} />
+            </div>
+          ) : null}
+
+          <span
+            style={{
+              marginTop: 56,
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: colors.white,
+              textTransform: 'uppercase',
+            }}
+          >
+            {depoisLabel}
+          </span>
+          <p
+            style={{
+              fontSize: 36,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.22,
+              margin: '10px 0 0',
+              maxWidth: 800,
+            }}
+          >
+            {depoisTexto}
+          </p>
+
+          <div style={{position: 'absolute', right: -10, top: 60}}>
+            <GhostArrowUp color={colors.white} opacity={0.08} size={200} />
+          </div>
+        </div>
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
+          <CtaBand label="Quero isso" sub="fala com a gente no WhatsApp — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  if (variant === 'ladoALado') {
+    return (
+      <Frame background={colors.white} wordmarkColor={colors.black}>
+        {/* ANTES — coluna esquerda, apagada */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 260,
+            width: 460,
+            background: '#dcdce6',
+            padding: '100px 40px 0 64px',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: '#6c6c80',
+              textTransform: 'uppercase',
+            }}
+          >
+            {antesLabel}
+          </span>
+          <p
+            style={{
+              fontSize: 34,
+              fontWeight: 400,
+              color: '#54546a',
+              lineHeight: 1.3,
+              margin: '18px 0 0',
+            }}
+          >
+            {antesTexto}
+          </p>
+          <div style={{position: 'absolute', left: 20, bottom: 30}}>
+            <GhostArrowUp color="#54546a" opacity={0.09} size={140} />
+          </div>
+        </div>
+
+        {/* DEPOIS — coluna direita, viva */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 460,
+            right: 0,
+            bottom: 260,
+            background: `linear-gradient(160deg, ${colors.primary} 0%, ${colors.primaryDark} 100%)`,
+            padding: '100px 56px 0 48px',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: colors.accent,
+              textTransform: 'uppercase',
+            }}
+          >
+            {depoisLabel}
+          </span>
+          <p
+            style={{
+              fontSize: 38,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.28,
+              margin: '18px 0 0',
+            }}
+          >
+            {depoisTexto}
+          </p>
+          {metrica ? (
+            <div
+              style={{
+                marginTop: 26,
+                display: 'inline-flex',
+                background: 'rgba(255,255,255,0.14)',
+                borderRadius: 16,
+                padding: '14px 22px',
+                boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
+              }}
+            >
+              <span style={{fontSize: 36, fontWeight: 700, color: colors.white}}>{metrica}</span>
+            </div>
+          ) : null}
+          <div style={{position: 'absolute', right: 4, bottom: 20}}>
+            <GhostArrowUp color={colors.white} opacity={0.1} size={160} />
+          </div>
+        </div>
+
+        {/* Selo na costura vertical */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: 460,
+            transform: 'translate(-50%, -50%)',
+            background: colors.accent,
+            color: colors.white,
+            fontWeight: 700,
+            fontSize: 20,
+            padding: '12px 22px',
+            borderRadius: 999,
+            boxShadow: '0 14px 30px -8px rgba(0,0,0,0.45)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Com a Norte
+        </div>
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
+          <CtaBand label="Quero isso" sub="fala com a gente no WhatsApp — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  // variant === 'padrao'
   return (
     <Frame background={colors.white} wordmarkColor={colors.white}>
       {/* ANTES — metade superior, tom apagado */}
@@ -105,6 +331,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               background: 'rgba(255,255,255,0.12)',
               borderRadius: 16,
               padding: '14px 24px',
+              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.18)',
             }}
           >
             <span style={{fontSize: 46, fontWeight: 700, color: colors.white}}>{metrica}</span>

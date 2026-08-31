@@ -2,15 +2,20 @@ import React from 'react';
 import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
-import {GhostCheck} from '../lib/GhostGraphics';
+import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
+import {Badge} from '../lib/Badge';
 import type {DicaPraticaSlide} from '../lib/types';
 
 /**
  * Template 2 — Dica pratica / carrossel, estrutura Cover/Bridge/CTA.
  * Cada slide tem papel funcional (nao e so "slide bonito"):
- *  - cover: prende o swipe, promete algo concreto e contavel (numero de itens)
- *  - bridge: 1 ideia por slide, numerada, nunca mais de ~2 frases (retencao)
- *  - cta: slide dedicado, 100% focado em levar pro WhatsApp — nao divide atencao
+ *  - cover: prende o swipe, promete algo concreto e contavel (numero de itens).
+ *  - cover-grid: variacao de cover que ja mostra uma previa em grade dos itens
+ *    (mais "prova de conteudo" antes do swipe, bom quando os itens sao curtos).
+ *  - cover-quote: variacao de cover editorial, citacao/provocacao grande — bom
+ *    pra dica que nasce de uma frase forte do fundador/cliente.
+ *  - bridge: 1 ideia por slide, numerada, nunca mais de ~2 frases (retencao).
+ *  - cta: slide dedicado, 100% focado em levar pro WhatsApp — nao divide atencao.
  */
 export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   if (slide.kind === 'cover') {
@@ -26,22 +31,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
             justifyContent: 'flex-start',
           }}
         >
-          {slide.tagNumero ? (
-            <div
-              style={{
-                alignSelf: 'flex-start',
-                background: colors.accent,
-                color: colors.white,
-                fontSize: 26,
-                fontWeight: 700,
-                padding: '10px 22px',
-                borderRadius: 999,
-                marginBottom: 32,
-              }}
-            >
-              {slide.tagNumero}
-            </div>
-          ) : null}
+          {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
           <h1
             style={{
               fontSize: 76,
@@ -49,7 +39,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
               color: colors.white,
               lineHeight: 1.04,
               letterSpacing: -1.5,
-              margin: 0,
+              margin: '32px 0 0',
             }}
           >
             {slide.titulo}
@@ -73,6 +63,138 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
     );
   }
 
+  if (slide.kind === 'cover-grid') {
+    return (
+      <Frame background={colors.primary} wordmarkColor={colors.white}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '120px 72px 220px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
+          <h1
+            style={{
+              fontSize: 62,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.06,
+              letterSpacing: -1.3,
+              margin: '28px 0 0',
+            }}
+          >
+            {slide.titulo}
+          </h1>
+
+          {/* Previa em grade dos itens — "prova de conteudo" antes do swipe */}
+          <div
+            style={{
+              marginTop: 44,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 14,
+            }}
+          >
+            {slide.itens.slice(0, 4).map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16,
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  borderRadius: 16,
+                  padding: '18px 22px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: colors.white,
+                    background: colors.accent,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <span style={{fontSize: 24, fontWeight: 400, color: colors.white}}>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          <span
+            style={{
+              marginTop: 28,
+              fontSize: 22,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.7)',
+            }}
+          >
+            Arrasta pro lado pra ver na pratica →
+          </span>
+        </div>
+      </Frame>
+    );
+  }
+
+  if (slide.kind === 'cover-quote') {
+    return (
+      <Frame background={colors.black} wordmarkColor={colors.white}>
+        <div style={{position: 'absolute', left: 40, top: 60}}>
+          <GhostQuote color={colors.white} opacity={0.08} size={220} />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '260px 72px 220px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <h1
+            style={{
+              fontSize: 66,
+              fontWeight: 700,
+              fontStyle: 'italic',
+              color: colors.white,
+              lineHeight: 1.14,
+              letterSpacing: -1,
+              margin: 0,
+            }}
+          >
+            "{slide.citacao}"
+          </h1>
+          <div style={{marginTop: 40, height: 6, width: 120, background: colors.accent}} />
+          <h2
+            style={{
+              fontSize: 34,
+              fontWeight: 700,
+              color: 'rgba(255,255,255,0.85)',
+              lineHeight: 1.2,
+              margin: '28px 0 0',
+            }}
+          >
+            {slide.titulo}
+          </h2>
+        </div>
+      </Frame>
+    );
+  }
+
   if (slide.kind === 'bridge') {
     return (
       <Frame background={colors.white} wordmarkColor={colors.black}>
@@ -88,7 +210,15 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           }}
         >
           <div style={{display: 'flex', alignItems: 'baseline', gap: 14}}>
-            <span style={{fontSize: 120, fontWeight: 700, color: colors.accent, letterSpacing: -4}}>
+            <span
+              style={{
+                fontSize: 120,
+                fontWeight: 700,
+                color: colors.accent,
+                letterSpacing: -4,
+                textShadow: '0 12px 30px rgba(244,63,94,0.25)',
+              }}
+            >
               {String(slide.numero).padStart(2, '0')}
             </span>
             <span style={{fontSize: 28, fontWeight: 400, color: '#9a9aab'}}>/ {slide.total}</span>

@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {colors, fontFamily} from './tokens';
 import {ensureBrandFontLoaded} from './fonts';
+import {GrainOverlay} from './Texture';
 
 ensureBrandFontLoaded();
 
@@ -11,6 +12,8 @@ type FrameProps = {
   /** Mostra a marca-dagua discreta "Norte Para Negocios" no rodape. Default: true. */
   showWordmark?: boolean;
   wordmarkColor?: string;
+  /** Grain sutil de superficie (ver lib/Texture.tsx). Default: true — desligar so em caso pontual. */
+  texture?: boolean;
 };
 
 /**
@@ -23,6 +26,7 @@ export const Frame: React.FC<FrameProps> = ({
   background = colors.white,
   showWordmark = true,
   wordmarkColor = colors.black,
+  texture = true,
 }) => {
   return (
     <AbsoluteFill
@@ -66,6 +70,7 @@ export const Frame: React.FC<FrameProps> = ({
           </span>
         </div>
       ) : null}
+      {texture ? <GrainOverlay opacity={0.045} /> : null}
     </AbsoluteFill>
   );
 };

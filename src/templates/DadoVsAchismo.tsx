@@ -3,15 +3,229 @@ import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
+import {Badge} from '../lib/Badge';
 import type {DadoVsAchismoData} from '../lib/types';
 
 /**
  * Template 1 — Dado vs. Achismo
  * Bordao central da marca ("nao trabalhamos com achismos") virou o proprio
- * mecanismo visual: split assimetrico, achismo apagado/riscado em cima,
- * dado vivo e grande embaixo. CTA aponta a decisao certa pro WhatsApp.
+ * mecanismo visual em 3 variacoes (mesmo principio, composicao diferente):
+ *  - padrao: split horizontal, achismo comprimido em cima, dado dominante embaixo.
+ *  - impacto: achismo vira so uma tarja fina, o numero do dado ocupa quase a tela toda.
+ *  - ladoALado: split vertical esquerda/direita, leitura mais editorial/revista.
+ * CTA sempre aponta a decisao certa pro WhatsApp.
  */
-export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({achismo, dado, fonteDado}) => {
+export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
+  achismo,
+  dado,
+  fonteDado,
+  variant = 'padrao',
+}) => {
+  if (variant === 'impacto') {
+    return (
+      <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
+        {/* Achismo — tarja fina, quase apagada */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 200,
+            background: 'rgba(255,255,255,0.06)',
+            padding: '52px 64px 0',
+            borderBottom: '1px solid rgba(255,255,255,0.09)',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: 'rgba(255,255,255,0.45)',
+              textTransform: 'uppercase',
+            }}
+          >
+            Achismo
+          </span>
+          <p
+            style={{
+              fontSize: 26,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: 'rgba(255,255,255,0.5)',
+              lineHeight: 1.3,
+              margin: '8px 0 0',
+              textDecoration: 'line-through',
+              textDecorationColor: 'rgba(255,255,255,0.3)',
+              maxWidth: 900,
+            }}
+          >
+            {achismo}
+          </p>
+        </div>
+
+        {/* Dado — domina o resto do quadro, numero gigante */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 200,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            padding: '64px 64px 210px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <Badge>Dado real</Badge>
+          <p
+            style={{
+              fontSize: 92,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 0.98,
+              margin: '30px 0 0',
+              letterSpacing: -2.8,
+            }}
+          >
+            {dado}
+          </p>
+          {fonteDado ? (
+            <span style={{fontSize: 19, color: 'rgba(255,255,255,0.5)', marginTop: 28}}>
+              Fonte: {fonteDado}
+            </span>
+          ) : null}
+          <div style={{position: 'absolute', right: -20, bottom: 220}}>
+            <GhostBars color={colors.accent} opacity={0.16} width={340} />
+          </div>
+        </div>
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
+          <CtaBand label="Chama no WhatsApp" sub="decisao com dado, nao achismo — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  if (variant === 'ladoALado') {
+    return (
+      <Frame background={colors.white} wordmarkColor={colors.black}>
+        {/* Coluna ACHISMO — esquerda, comprimida */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 260,
+            width: 400,
+            background: '#e7e7ee',
+            padding: '100px 40px 0 64px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 20,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: '#8a8a99',
+              textTransform: 'uppercase',
+            }}
+          >
+            Achismo
+          </span>
+          <p
+            style={{
+              fontSize: 32,
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: '#9a9aab',
+              lineHeight: 1.3,
+              margin: '18px 0 0',
+              textDecoration: 'line-through',
+              textDecorationColor: '#b4b4c4',
+              textDecorationThickness: 2,
+            }}
+          >
+            {achismo}
+          </p>
+          <div style={{position: 'absolute', left: 26, bottom: 36}}>
+            <GhostQuote color="#54546a" opacity={0.12} size={110} />
+          </div>
+        </div>
+
+        {/* Coluna DADO — direita, dominante */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 400,
+            right: 0,
+            bottom: 260,
+            background: colors.primaryDark,
+            padding: '100px 56px 0 48px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 20,
+              fontWeight: 700,
+              letterSpacing: 2,
+              color: colors.accent,
+              textTransform: 'uppercase',
+            }}
+          >
+            Dado
+          </span>
+          <p
+            style={{
+              fontSize: 52,
+              fontWeight: 700,
+              color: colors.white,
+              lineHeight: 1.14,
+              margin: '20px 0 0',
+              letterSpacing: -1,
+            }}
+          >
+            {dado}
+          </p>
+          {fonteDado ? (
+            <span style={{fontSize: 17, color: 'rgba(255,255,255,0.55)', marginTop: 22}}>
+              Fonte: {fonteDado}
+            </span>
+          ) : null}
+          <div style={{position: 'absolute', right: 6, bottom: 24}}>
+            <GhostBars color={colors.white} opacity={0.08} width={210} />
+          </div>
+        </div>
+
+        {/* Costura vertical entre as colunas — reforca a "virada" achismo -> dado */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 260,
+            left: 386,
+            width: 30,
+            background: colors.accent,
+            transform: 'skewX(-4deg)',
+            boxShadow: '0 0 40px 4px rgba(244,63,94,0.35)',
+          }}
+        />
+
+        <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
+          <CtaBand label="Chama no WhatsApp" sub="decisao com dado, nao achismo — link na bio" />
+        </div>
+      </Frame>
+    );
+  }
+
+  // variant === 'padrao'
   return (
     <Frame background={colors.white} wordmarkColor={colors.white}>
       {/* Bloco ACHISMO — comprimido, cinza, riscado: visualmente "errado" */}
