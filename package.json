@@ -1,0 +1,29 @@
+{
+  "name": "norte-conteudo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gerador de posts/reels da Norte Para Negocios via Remotion (zero IA generativa)",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "render": "node scripts/render.mjs",
+    "build:brief": "node scripts/parse-brief.mjs",
+    "qa:preview": "node scripts/qa-preview.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.518",
+    "gray-matter": "^4.0.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "4.0.518"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.5",
+    "typescript": "^5"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
+}
