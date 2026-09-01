@@ -1,6 +1,15 @@
-# Catálogo de templates e variações
+# Catálogo de templates e variações — 8 tipos de post
 
-Atualizado em 2026-08-31 (3ª rodada, mesmo dia — sistema de ícones real +
+Atualizado em 2026-09-01 — **3 tipos NOVOS de post** (Depoimento/Prova
+Social, Comparativo Direto, Bastidores/Como Trabalhamos), além dos 5
+originais da Fase 0. Pedido literal do fundador: *"mais modelos mais
+tipos"* — explicitamente NÃO mais variação dos 5 já existentes (Dado vs.
+Achismo, Dica Prática, Antes/Depois, Vitrine de Produto, Metodologia sem
+Enrolação), e sim tipos conceitualmente diferentes. Ver seção **"6-8. Tipos
+novos (2026-09-01)"** logo abaixo do CoverFotoReal pra detalhe completo,
+incluindo a pesquisa de mercado que embasou a escolha dos 3.
+
+Atualização anterior em 2026-08-31 (3ª rodada, mesmo dia — sistema de ícones real +
 2 Reels animados). Pedido literal do fundador: *"quero MAISSS E MAISS
 PESQUISE USE AS SKILLS MAIS SIMBOLOS COISAS ATE ANIMACOES NOS POSSTS um
 catálogo completo"*. Ver seções **"Sistema de ícones (2026-08-31)"** e
@@ -25,7 +34,11 @@ marca (`.claude/brand/design-tokens.md`).
 
 Todas as variações:
 - usam só os tokens de `src/lib/tokens.ts` (cores, fonte Atkinson Hyperlegible 400/700);
-- têm CTA de WhatsApp/link na bio (`CtaBand`) sempre que a peça é o "fim" da leitura;
+- têm CTA de WhatsApp/link na bio (`CtaBand`) sempre que a peça é o "fim" da
+  leitura — **exceção única e documentada: Bastidores** (tipo 8, ver seção
+  própria), que usa link discreto em texto em vez de `CtaBand`, decisão
+  deliberada por ser um formato de confiança/humanização, não de conversão
+  direta;
 - rodam com grain sutil de superfície (`src/lib/Texture.tsx`, via `Frame`) — dá
   profundidade física sem quebrar cor de marca;
 - usam `Badge` (pílula) pra eyebrow/rótulo de topo e `SurfaceCard` (double-bezel:
@@ -332,6 +345,144 @@ Ver seção "Fotografia real" acima pra fonte da foto padrão.
 
 ---
 
+## 6-8. Tipos NOVOS (2026-09-01) — pesquisa de mercado e escolha
+
+Pedido do fundador: *"mais modelos mais tipos"* — deixou explícito que NÃO
+queria mais variação dos 5 tipos já existentes (isso já estava bem coberto),
+e sim **formatos de post conceitualmente diferentes**, que ainda não existem
+no catálogo.
+
+**Pesquisa feita** (Perplexity, web, 2026-09-01) sobre formatos B2B/consultoria
+que convertem em lead/DM no Instagram em 2026, cruzada com `.claude/brand/`
+(ICP de PME em crescimento, tom "não trabalhamos com achismos", meta de
+lead via WhatsApp/link na bio — não só alcance). Achados que embasaram a
+escolha:
+
+| Formato pesquisado | Por que converte (2026) | Virou tipo no catálogo? |
+|---|---|---|
+| Depoimento/prova social (cliente real, não métrica nossa) | Confiança + salvamento (dwell time alto num carrossel de case) | **Sim — Depoimento** |
+| Comparativo direto (nós x concorrência / opção A x B) | Capta "intenção de fase de pesquisa" (quem já está decidindo) | **Sim — Comparativo** |
+| Bastidores/cultura (processo interno, não venda direta) | Humanização — reach/confiança de fundo de funil, watch time por autenticidade | **Sim — Bastidores** |
+| Enquete/pergunta ao público | Formato nativo de **Stories** (sticker de enquete interativo) — fora do domínio de render do Rafael (Remotion produz Stills/Composições de feed, não Stories interativas do app) | Não implementado nesta rodada — ver nota abaixo |
+| Anúncio/novidade de feature | Estruturalmente já coberto pela variante `hero` de Vitrine de Produto ("poster de lançamento") | Não — seria variação do tipo 4, não tipo novo |
+
+**Nota sobre Enquete:** decisão consciente de não forçar um formato de
+engajamento nativo de Stories dentro de um Still de feed — um "post de
+pergunta" estático sem a interação real do sticker de enquete seria um
+substituto fraco, não o formato de verdade. Se a Norte quiser esse formato,
+o caminho certo é nativo do app (Stories), fora do escopo de render do
+Rafael — registrado como gap, não implementado por enquanto.
+
+Todos os 3 tipos novos seguem as mesmas regras dos 5 originais: tokens de
+`src/lib/tokens.ts`/`colorGuide.ts`, ícones reais de `src/lib/icons.tsx`
+(nunca forma desenhada à mão fingindo ser ícone de marca), grain de
+`Texture.tsx` via `Frame`, e — com uma exceção documentada abaixo
+(Bastidores) — `CtaBand` de WhatsApp/link na bio como núcleo de lead-gen.
+
+### 6. Depoimento / Prova Social (`Depoimento.tsx`)
+
+Carrossel — 1 `<Still>` por slide, `slide.kind` decide o layout. Diferença
+conceitual do tipo mais parecido dos 5 originais (Antes/Depois): lá a prova
+é uma MÉTRICA nossa; aqui é a VOZ do cliente, citação real em primeira
+pessoa — pesquisa 2026 aponta esse como o formato de maior conversão por
+confiança/salvamento no B2B.
+
+| Cover | Quando usar |
+|---|---|
+| `capa` (default) | Citação grande em destaque + card de atribuição (iniciais em selo colorido + nome + empresa) — a citação é o gancho. Usar quando a frase do cliente já é forte por si só. |
+| `capa-metrica` | Abre pelo número (resultado) antes da citação — mesma energia do `metricaHero` do Antes/Depois. Usar quando o resultado numérico é o gancho mais forte que a frase em si. |
+
+Slides funcionais:
+- `contexto` — o "antes", nas palavras do próprio cliente (não nossa reformulação).
+- `resultado` — o "depois", com metrica opcional e badge do produto usado (`produto`, cor derivada automaticamente se informado).
+- `cta` (headline + `CtaBand`).
+
+**Regra de escopo (importante):** `citacao`/`corpo` sempre vêm do brief, com
+aspas reais de cliente real — Rafael nunca inventa depoimento de produção
+(mesma regra do Checklist #7: brief pronto, só formata). Sem foto de
+"cliente": não existe asset de retrato real disponível, e usar foto de
+banco de imagem genérica fingindo ser o cliente seria enganoso — mesma
+lógica que já veta usar IA generativa pra simular pessoa real. Atribuição
+usa iniciais num selo colorido em vez de rosto.
+
+**Achado real de QA (2026-09-01):** a 1ª versão dos covers (`capa` e
+`capa-metrica`) deixava um vão vazio grande entre a citação e o
+card/atribuição, abaixo do padrão visual do resto do catálogo — corrigido
+centralizando o bloco de conteúdo verticalmente (em vez de ancorado no
+topo) e adicionando um segundo `GhostQuote` espelhado como contrapeso, mesma
+técnica já usada no `cover-quote` do DicaPratica. O slide `contexto` tinha o
+mesmo problema (card de citação sozinho, muito espaço morto abaixo) —
+corrigido com um `GhostQuote` grande de fundo, mesmo tratamento do `bridge`
+do DicaPratica.
+
+### 7. Comparativo Direto (`Comparativo.tsx`)
+
+Post único (1 imagem). Prop `variant`. Diferença conceitual de Dado vs.
+Achismo (o mais parecido dos 5 originais): lá se opõe uma CRENÇA a um DADO —
+1 par único, o gancho é o número. Aqui se comparam duas OPÇÕES concretas
+(jeito antigo x com a Norte, planilha x sistema) em VÁRIOS atributos — o
+gancho é a decisão, não um número isolado. Pesquisa 2026: comparativos
+diretos captam intenção de "fase de pesquisa" (quem está decidindo entre
+alternativas).
+
+| Variante | Quando usar |
+|---|---|
+| `colunas` (default) | Split vertical esquerda (opção A, apagada, ícone `IconX`)/direita (opção B, cor do tema, `IconCheck`) — leitura rápida, até 4 itens. |
+| `tabela` | Linhas horizontais com 2 colunas de valor (label + valor A + valor B) dentro de `SurfaceCard` — melhor pra mais itens/comparação mais granular (até 5). |
+
+Se `produto` for informado, o tema (cor do lado "vencedor") vem automático
+de `getThemeForProduct` — mesmo princípio da Vitrine de Produto. Sem
+`produto`, usa `theme` (default `'marca'`) — comparativo genérico, sem
+produto específico (ex: "achismo" x "método", sem citar um sistema).
+
+**Bug real corrigido no QA (2026-09-01):** a variante `colunas` estava com
+`wordmarkColor={colors.white}`, mas as colunas param em `bottom: 260` (mesmo
+padrão do `ladoALado` de Antes/Depois) — sobra uma faixa branca (fundo
+padrão do `Frame`) embaixo, onde o wordmark fica. Texto branco sobre fundo
+branco ficava **invisível** (só o losango de accent aparecia). Corrigido
+pra `wordmarkColor={colors.black}`, igual ao `ladoALado` do Antes/Depois que
+tem a mesma estrutura.
+
+### 8. Bastidores / Como Trabalhamos (`Bastidores.tsx`)
+
+Post único (1 imagem). Prop `variant`. Diferença conceitual dos outros 7
+tipos: nenhum deles fala sobre a PRÓPRIA Norte por dentro — todos vendem pro
+cliente ou provam com voz do cliente/comparativo. Bastidores é sobre o RIGOR
+INTERNO — "não trabalhamos com achismos" como prática real, não só slogan.
+Pesquisa 2026: esse formato converte por humanização/confiança de fundo de
+funil, não por push direto.
+
+| Variante | Quando usar |
+|---|---|
+| `manifesto` (default) | Afirmação/princípio central em destaque + até 3 princípios curtos que o sustentam (lista com `IconCheck`). Usar quando o gancho é uma frase de posicionamento forte. |
+| `regraDaCasa` | Uma única regra numerada ("Regra 01") dentro de um `SurfaceCard`, com explicação curta. Usar quando o gancho é uma prática específica e concreta, não um princípio geral. |
+
+Ícone-selo: `IconCompass` (bússola) — trocadilho deliberado com o nome
+"Norte" (temos direção, não achismo).
+
+**Limitação real documentada:** não existe asset de foto real do
+time/escritório da Norte disponível nesta sessão — usar foto de banco de
+imagem genérica fingindo ser "o time" seria enganoso (mesma lógica que já
+veta usar IA generativa pra simular pessoa/lugar real). Por isso este tipo é
+100% tipográfico/gráfico (sem foto), focado no PROCESSO/PRINCÍPIO, não em
+rosto. Se a Norte tiver fotografia real de bastidores no futuro, cabe
+evoluir pra uma variante com `PhotoBackground`.
+
+**Decisão de CTA (documentada, pedido explícito da tarefa — julgar caso a
+caso):** este é o ÚNICO tipo do catálogo inteiro SEM `CtaBand` cheio. A
+pesquisa de mercado e a lógica do próprio formato concordam nisso —
+bastidores constrói confiança de fundo de funil; forçar CTA agressivo aqui
+contradiz o gênero (autenticidade em primeiro lugar, venda depois). O link
+da bio aparece só como linha discreta de texto, não como banda de destaque.
+
+**Achado real de QA (2026-09-01):** as duas variantes tinham vão vazio
+grande entre o texto e o rodapé — corrigido centralizando o conteúdo
+verticalmente (em vez de ancorado no topo) e reforçando os elementos
+`GhostBars`/`GhostCheck` de fundo (maiores, em 2 cantos opostos) pra dar
+equilíbrio de composição sem competir com o texto.
+
+---
+
 ## Peças novas em `src/lib/`
 
 - **`Badge.tsx`** — pílula de eyebrow/rótulo (substitui texto plano solto).
@@ -344,3 +495,10 @@ Ver seção "Fotografia real" acima pra fonte da foto padrão.
   (selo/badge de ~34-40px, ao contrário de `GhostBars`/`GhostQuote`/`GhostCheck`
   que são pensados pra tamanho grande de fundo). Usada no Metodologia sem
   Enrolação pra simbolizar o ciclo de melhoria contínua (PDCA/Lean).
+- **`icons.tsx` → `IconX`** (novo, 2026-09-01) — X/negativo, par funcional de
+  `IconCheck` do lado "perdedor" de um comparativo (Comparativo.tsx).
+- **`icons.tsx` → `IconQuote`** (novo, 2026-09-01) — aspas, marca de
+  atribuição de depoimento real (Depoimento.tsx).
+- **`icons.tsx` → `IconCompass`** (novo, 2026-09-01) — bússola, selo "como
+  pensamos" de Bastidores.tsx — trocadilho deliberado com o nome "Norte"
+  (direção, não achismo).

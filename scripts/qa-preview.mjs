@@ -161,6 +161,97 @@ const QA_MATRIX = [
 
   // --- Peça exploratória: CoverFotoReal (foto real, "prova social"/abertura) ---
   {compositionId: 'CoverFotoReal', outName: 'CoverFotoReal-vendas'},
+
+  // --- Template NOVO 6: Depoimento / Prova Social (carrossel — capa em 2 variações + contexto + resultado + cta) ---
+  {
+    compositionId: 'Depoimento',
+    outName: 'Depoimento-capa',
+    props: {
+      slide: {
+        kind: 'capa',
+        citacao:
+          'Antes eu só descobria a divergência no fim do mês. Hoje eu vejo o estoque batendo com o sistema todo dia.',
+        cliente: 'Marcos Andrade',
+        empresa: 'Distribuidora Bom Ponto',
+      },
+      theme: 'estoque',
+    },
+  },
+  {
+    compositionId: 'Depoimento',
+    outName: 'Depoimento-capa-metrica',
+    props: {
+      slide: {
+        kind: 'capa-metrica',
+        metrica: '-40%',
+        metricaLabel: 'tempo de fila no salão',
+        citacaoCurta: 'O cliente pede pelo celular e a cozinha já recebe — ninguém mais espera garçom pra anotar.',
+        cliente: 'Renata Souza',
+        empresa: 'Empório Bom Prato',
+      },
+      theme: 'vendas',
+    },
+  },
+  {
+    compositionId: 'Depoimento',
+    outName: 'Depoimento-contexto',
+    props: {
+      slide: {
+        kind: 'contexto',
+        corpo: 'A gente fechava o mês e nunca sabia se a divergência era furto, erro de lançamento ou produto vencido esquecido no fundo do estoque.',
+      },
+    },
+  },
+  {
+    compositionId: 'Depoimento',
+    outName: 'Depoimento-resultado',
+    props: {
+      slide: {
+        kind: 'resultado',
+        corpo: 'Hoje eu sei exatamente onde cada lote está e quando vence — o inventário virou rotina, não apagar incêndio.',
+        metrica: '-92%',
+        produto: 'ntbEstoque',
+      },
+      theme: 'estoque',
+    },
+  },
+  {
+    compositionId: 'Depoimento',
+    outName: 'Depoimento-cta',
+    props: {slide: {kind: 'cta'}},
+  },
+
+  // --- Template NOVO 7: Comparativo Direto (post único, 2 variações) ---
+  {compositionId: 'Comparativo', outName: 'Comparativo-colunas'},
+  {
+    compositionId: 'Comparativo',
+    outName: 'Comparativo-tabela',
+    props: {
+      variant: 'tabela',
+      tituloA: 'Cardápio de papel',
+      tituloB: 'Com NTB Vendas',
+      produto: 'ntbVendas',
+      itens: [
+        {label: 'Pedido', a: 'Garçom anota na mão', b: 'Cliente pede pelo celular'},
+        {label: 'Cozinha', a: 'Comanda de papel, atraso', b: 'Pedido chega em tempo real'},
+        {label: 'Conta', a: 'Soma na calculadora', b: 'Divisão automática'},
+        {label: 'Fotos do prato', a: 'Não existem', b: 'Cliente vê antes de pedir'},
+      ],
+    },
+  },
+
+  // --- Template NOVO 8: Bastidores / Como Trabalhamos (post único, 2 variações, SEM CtaBand cheio — ver types.ts) ---
+  {compositionId: 'Bastidores', outName: 'Bastidores-manifesto'},
+  {
+    compositionId: 'Bastidores',
+    outName: 'Bastidores-regraDaCasa',
+    props: {
+      variant: 'regraDaCasa',
+      numero: 'Regra 01',
+      titulo: 'Diagnóstico antes de proposta.',
+      corpo: 'Nunca sugerimos ferramenta ou processo novo sem antes medir o que já existe — achismo não entra nem na primeira reunião.',
+    },
+  },
 ];
 
 for (const {compositionId, outName, props} of QA_MATRIX) {

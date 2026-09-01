@@ -159,3 +159,86 @@ export type CoverFotoRealData = {
   /** Tema de paleta (sistema/produto ou marca geral) — define a cor do badge/eyebrow. Default: 'marca'. */
   theme?: ThemeName;
 };
+
+/**
+ * Template novo (2026-09-01) — Depoimento / Prova Social. Diferente de
+ * Antes/Depois: ali a prova e uma METRICA nossa; aqui e a VOZ do cliente
+ * (citacao real, em primeira pessoa) — pesquisa de mercado 2026 aponta esse
+ * formato como o de maior converasao por confianca/salvamento (ver
+ * CATALOGO.md, secao 6). IMPORTANTE: `citacao`/`corpo` DEVEM vir do brief
+ * (cliente real, aspas reais) — Rafael nunca inventa depoimento de producao;
+ * os defaultProps abaixo sao so placeholder ilustrativo de QA.
+ */
+export type DepoimentoSlide =
+  | {kind: 'capa'; citacao: string; cliente: string; empresa?: string}
+  | {
+      /** Variante que abre pelo numero (metrica) antes da citacao — pro caso em que o resultado e o gancho mais forte. */
+      kind: 'capa-metrica';
+      metrica: string;
+      metricaLabel: string;
+      citacaoCurta: string;
+      cliente: string;
+      empresa?: string;
+    }
+  | {kind: 'contexto'; corpo: string}
+  | {kind: 'resultado'; corpo: string; metrica?: string; produto?: ProductKey}
+  | {kind: 'cta'; headline?: string};
+
+export type DepoimentoData = {
+  slides: DepoimentoSlide[];
+  /** Tema de paleta — default 'marca'. Ver src/lib/themes.ts. */
+  theme?: ThemeName;
+};
+
+/**
+ * Template novo (2026-09-01) — Comparativo Direto (X vs Y). Diferente de
+ * Dado vs. Achismo: ali se opoe uma CRENCA a um DADO (1 unico par); aqui se
+ * comparam duas OPCOES concretas em varios atributos (jeito antigo x com a
+ * Norte, planilha x sistema, generico x especifico) — pesquisa de mercado
+ * 2026 aponta esse formato como o que melhor capta intencao de "fase de
+ * pesquisa" (usuario decidindo entre alternativas).
+ */
+export type ComparativoItem = {label: string; a: string; b: string};
+
+export type ComparativoVariant = 'colunas' | 'tabela';
+
+export type ComparativoData = {
+  tituloA: string;
+  tituloB: string;
+  /** Ate 4-5 linhas de comparacao (label + valor de cada lado) — mais que isso nao cabe com legibilidade. */
+  itens: ComparativoItem[];
+  /**
+   * colunas: split vertical esquerda (A, apagado) / direita (B, cor do tema) — leitura rapida, poucos itens.
+   * tabela: linhas horizontais com 2 colunas de valor — melhor pra mais itens/comparacao mais granular.
+   */
+  variant?: ComparativoVariant;
+  /** Se a opcao B e um produto Norte, o tema vem automaticamente dele (ver getThemeForProduct). */
+  produto?: ProductKey;
+  /** Usado so quando `produto` NAO e informado (comparativo generico, sem produto especifico). Default 'marca'. */
+  theme?: ThemeName;
+};
+
+/**
+ * Template novo (2026-09-01) — Bastidores / Como Trabalhamos. Formato de
+ * humanizacao/confianca (pesquisa 2026: reels/posts de bastidores convertem
+ * por autenticidade, nao por push direto de venda) — aqui NAO e sobre o
+ * cliente nem sobre um produto, e sobre o RIGOR INTERNO da Norte por tras de
+ * qualquer recomendacao ("nao trabalhamos com achismos" como pratica, nao so
+ * slogan). Decisao documentada (ver CATALOGO.md): CTA sempre suave/discreto
+ * aqui, nunca o CtaBand cheio das outras pecas — o objetivo do formato e
+ * confianca, nao conversao direta.
+ */
+export type BastidoresVariant = 'manifesto' | 'regraDaCasa';
+
+export type BastidoresData = {
+  eyebrow?: string;
+  /** Afirmacao/principio central. */
+  titulo: string;
+  /** Usado so na variant 'manifesto' — 2-3 principios curtos que sustentam o titulo. */
+  principios?: string[];
+  /** Usado so na variant 'regraDaCasa' — ex: "Regra 01". */
+  numero?: string;
+  /** Usado so na variant 'regraDaCasa' — explicacao curta da regra. */
+  corpo?: string;
+  variant?: BastidoresVariant;
+};

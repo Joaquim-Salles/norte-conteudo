@@ -7,6 +7,9 @@ import {
   BarChart3,
   RefreshCw,
   ArrowRight as LucideArrowRight,
+  X as LucideX,
+  Quote as LucideQuote,
+  Compass as LucideCompass,
 } from 'lucide-react';
 
 /**
@@ -82,3 +85,20 @@ export const IconCycle = wrapIcon(RefreshCw, 36, 2.6);
 
 /** Seta de CTA — reforça direção pro link/DM. */
 export const IconArrowRight = wrapIcon(LucideArrowRight, 28, 2.4);
+
+/**
+ * X/negativo — item que NÃO acontece no lado "antigo"/perdedor de um
+ * comparativo direto (Comparativo.tsx, 2026-09-01). Par funcional de
+ * `IconCheck` do outro lado da comparação — não é o mesmo uso de `IconAlert`
+ * (que é "risco"), aqui é "isso aqui não tem".
+ */
+export const IconX = wrapIcon(LucideX, 24, 3);
+
+/** Aspas — marca de atribuição de depoimento real (Depoimento.tsx, 2026-09-01). */
+export const IconQuote = wrapIcon(LucideQuote, 30, 2);
+
+/**
+ * Bússola — "temos direção, não achismo" (trocadilho deliberado com o nome
+ * Norte). Usado em Bastidores.tsx (2026-09-01) pro selo "como pensamos".
+ */
+export const IconCompass = wrapIcon(LucideCompass, 36, 2.2);

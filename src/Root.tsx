@@ -10,6 +10,9 @@ import {
   metodologiaDefaultProps,
 } from './templates/MetodologiaSemEnrolacao';
 import {CoverFotoReal, coverFotoRealDefaultProps} from './templates/CoverFotoReal';
+import {Depoimento, depoimentoDefaultProps} from './templates/Depoimento';
+import {Comparativo, comparativoDefaultProps} from './templates/Comparativo';
+import {Bastidores, bastidoresDefaultProps} from './templates/Bastidores';
 import {
   DadoVsAchismoReel,
   dadoVsAchismoReelDefaultProps,
@@ -74,6 +77,34 @@ export const RemotionRoot: React.FC = () => {
         width={formats.post.width}
         height={formats.post.height}
         defaultProps={coverFotoRealDefaultProps}
+      />
+
+      {/*
+        3 tipos NOVOS (2026-09-01, pedido do fundador "mais modelos mais
+        tipos" — nao mais variacao dos 5 originais, tipos conceitualmente
+        diferentes). Ver src/templates/CATALOGO.md secao 6-8 pra detalhe e
+        fonte de pesquisa de cada um.
+      */}
+      <Still
+        id="Depoimento"
+        component={Depoimento}
+        width={formats.post.width}
+        height={formats.post.height}
+        defaultProps={depoimentoDefaultProps}
+      />
+      <Still
+        id="Comparativo"
+        component={Comparativo}
+        width={formats.post.width}
+        height={formats.post.height}
+        defaultProps={comparativoDefaultProps}
+      />
+      <Still
+        id="Bastidores"
+        component={Bastidores}
+        width={formats.post.width}
+        height={formats.post.height}
+        defaultProps={bastidoresDefaultProps}
       />
 
       {/*
