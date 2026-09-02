@@ -1,5 +1,33 @@
 # Plano — Catálogo em escala (50 estilos de vídeo, 100+ de post)
 
+## Status final (Round E — consolidação, 2026-09-01/02)
+
+**Rounds A-E concluídos.** Números reais, auditados fisicamente em disco no
+Round E (não arredondado, não somado só de documentação):
+
+- **172 posts (PNG)** — 8 tipos de conteúdo × 4 temas × 5 estilos visuais
+  (`visualStyle`), combinações que fazem sentido semântico (nem toda
+  combinação matematicamente possível foi renderizada — ver critério em
+  `src/templates/CATALOGO.md` §0.1.1/§0.3).
+- **30 vídeos (MP4)** — 6 tipos de Reel × 7 estilos de motion
+  (`motionStyle`), mesma lógica de exclusão semântica.
+- **Total: 202 peças reais.**
+- **Auditoria de amostragem (Round E)**: 17 peças (12 PNGs + 5 clipes de
+  vídeo) revisadas manualmente cruzando todos os rounds — zero regressões,
+  zero correções necessárias nesta rodada final.
+- **5 bugs/achados reais corrigidos ao longo do processo** (detalhe completo
+  no sumário executivo de `src/templates/CATALOGO.md`): risco de marca do
+  ícone WhatsApp, cor errada do NTB Estoque, fonte Atkinson errada
+  (Next → clássica), contraste fraco de texto sobre foto, 2 bugs de motion
+  (highlight `flash` e `scalePop`).
+- **O que fica pra depois**: escolha do "kit de lançamento" (quais peças vão
+  ao ar primeiro) é decisão do fundador, não do Rafael — ver T9/T10/T11 em
+  `.claude/agent-memory/rafael/first-tasks.md` no repo `norte-para-negocios`
+  (login Instagram real, teste de Bark com Reels reais, curadoria de
+  lançamento). Trabalho autônomo pausa aqui até revisão do fundador.
+
+---
+
 Decidido 2026-09-01, execução autônoma overnight (fundador dormindo, "só faz").
 
 ## Por que combinatório, não artesanal
@@ -150,8 +178,10 @@ precisamos de mais UMA dimensão combinável em cada lado:
    split-screen-reveal, zoom-punch, stopmotion-cut). Aplicar em 2-3 tipos já animados.
 4. **Round D — CONCLUÍDO — escalar vídeo**: mais tipos ganham versão Reel, combinar com
    motionStyle. Meta original 15-25 vídeos; real: 19 novos (30 acumulado) — ver detalhe acima.
-5. **Round E — consolidação**: atualizar CATALOGO.md com a contagem final real (não
-   arredondar pra 50/100 se não bateu — reportar o número real), gerar galeria.
+5. **Round E — CONCLUÍDO — consolidação**: contagem física real auditada (172 PNGs +
+   30 MP4s = 202, ver "Status final" no topo deste arquivo), sumário executivo
+   reescrito no topo de `CATALOGO.md`, auditoria de qualidade por amostragem (17
+   peças, zero regressões), `first-tasks.md` atualizado com T9/T10/T11 pós-catálogo.
 
 ## Regras inegociáveis (não mudam à noite)
 - Regra Inviolável #1: qualidade visual > volume. Nunca aprovar peça abaixo do padrão

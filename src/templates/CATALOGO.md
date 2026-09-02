@@ -1,12 +1,72 @@
 # Catálogo de templates e variações — 8 tipos de post
 
-**Contagem total do catálogo (real, 2026-09-01 — ver "Contagem total" no
-fim deste arquivo): 172 peças** (62 baseline pré-`visualStyle` + 40 Round A +
-70 Round B).
+## Sumário executivo (Round E — consolidação final, 2026-09-01/02)
 
-**Catálogo de VÍDEO (Reels): 6 tipos de conteúdo animável, 30 MP4s reais
-renderizados no total** (11 do Round C + 19 do Round D — ver §0.2/§0.3 pra
-detalhe de cada rodada).
+**O catálogo fechou em 172 posts (PNG) + 30 vídeos (MP4) = 202 peças reais**,
+número auditado fisicamente em disco no Round E (não é soma de documentação
+de rounds anteriores — `find out -iname "*.png" | wc -l` e `find out -iname
+"*.mp4" | wc -l` rodados de fato; o lote de 31 renders da matriz tema×variante
+havia sido limpo do disco entre sessões — convenção do projeto de não deixar
+`out/` acumulando lixo — e foi re-gerado nesta rodada pra confirmar o número
+sem depender só de registro escrito).
+
+| Dimensão | Quantidade |
+|---|---|
+| Tipos de post | **8** (Dado vs. Achismo, Dica Prática, Antes/Depois, Vitrine de Produto, Metodologia sem Enrolação, Depoimento, Comparativo, Bastidores) |
+| Temas/sistemas | **4** (marca, NTB Estoque, NTB Vendas, Norte Avalia) |
+| Estilos visuais (`visualStyle`) | **5** (minimalista, dadoEmDestaque, editorial, boldTipografico, corporateClean) — combinam com os 8 de 8 tipos de post |
+| Tipos de vídeo (Reel) | **6** (DadoVsAchismo, Metodologia, Comparativo, Depoimento, Bastidores, Antes/Depois) |
+| Estilos de motion (`motionStyle`) | **7** (kineticForte, minimalFade, zoomPunch, typewriter, splitReveal, whipPanCut, matchCut) |
+| **Total de peças** | **172 PNGs + 30 MP4s = 202** |
+
+**Principais achados/bugs corrigidos ao longo do processo** (todos com
+detalhe completo no corpo deste arquivo, referenciados por seção):
+
+1. **Risco de marca — ícone do WhatsApp**: o `WhatsAppIcon` desenhado à mão
+   recriava, na prática, o contorno do logo oficial do WhatsApp/Meta (uso
+   indevido de marca de terceiro). Substituído por `IconChat` (bolha de
+   mensagem genérica, Lucide) em todo o `CtaBand` — ver "Sistema de ícones
+   (2026-08-31)".
+2. **Cor errada do NTB Estoque**: o site institucional (desatualizado) dizia
+   `#00d6d6`; o código real do app usa `#2eb5c3`. Corrigido em
+   `colorGuide.ts` lendo o repo do produto, não só o site — ver "Sistema de
+   temas por cor" (commit `dbb30b9`).
+3. **Fonte errada (Atkinson Hyperlegible Next em vez da clássica)**: a
+   raspagem inicial do site registrou pesos 400-800, levando ao uso da
+   família sucessora "Next". O fundador confirmou visualmente contra o site
+   de produção: o site real só carrega a família **clássica**, pesos 400/700.
+   Corrigido em `src/lib/fonts.ts`/`tokens.ts`, todas as peças
+   re-renderizadas e re-aprovadas — ver T3.1 em
+   `.claude/agent-memory/rafael/first-tasks.md` (repo `norte-para-negocios`).
+4. **Contraste fraco de texto sobre foto**: o degradê de `PhotoBackground`
+   (variante `contexto` do Vitrine) desvanecia cedo demais (transparente já
+   aos 26% da altura), deixando a 2ª linha do headline com contraste fraco
+   sobre madeira clara. Corrigido alongando o platô de opacidade forte do
+   gradiente — ver "Contraste de texto sobre foto — achado real de QA".
+5. **Bugs de motion (2, achados em vídeo real, não em preview estático)**:
+   (a) o highlight `flash` renderizava uma caixa cinza esfumaçada
+   (blur+borderRadius) atrás do número em vez de um brilho — trocado por
+   `radial-gradient` (Round C); (b) o highlight `scalePop` escalava a
+   palavra-chave a partir do centro, invadindo a palavra anterior em títulos
+   longos — corrigido pra `transformOrigin: 'left center'` em `KineticText`,
+   componente compartilhado, então o fix valeu pra todos os Reels que usam
+   esse highlight (Round D).
+
+**Auditoria de qualidade por amostragem (Round E)**: 12 PNGs + 5 clipes de
+vídeo (com sub-frames extraídos nos pontos de transição) revisados
+manualmente, cobrindo baseline pré-`visualStyle`, Round A, Round B e Round
+C/D — cruzando tipos, estilos e temas diferentes, não só as peças mais
+recentes. **Zero regressões encontradas.** Nenhuma correção foi necessária
+nesta rodada final.
+
+**O que fica pra depois (decisão do fundador, não do Rafael)**: com 172+30
+peças no catálogo, falta decidir quais entram no "kit de lançamento" real —
+isso é calendário editorial/estratégia, fora do domínio operacional do
+Rafael. Ver `.claude/agent-memory/rafael/first-tasks.md` (T9/T10/T11) no
+repo `norte-para-negocios` pra essa e outras pendências pós-catálogo (login
+Instagram, teste real de Bark).
+
+---
 
 Atualizado em 2026-09-01, execução autônoma overnight (Round B do plano de
 catálogo em escala — ver `docs/plano-catalogo-em-escala.md`) — os 5 tipos que
