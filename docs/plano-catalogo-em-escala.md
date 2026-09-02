@@ -14,6 +14,23 @@ precisamos de mais UMA dimensão combinável em cada lado:
 - **Vídeos:** `tipo de conteúdo animável` × **`estilo de motion` (novo, alvo ~6-8 presets)**
   × tema → alvo 50+ combinações reais.
 
+## Status
+
+- **Round A — CONCLUÍDO (2026-09-01)**: `src/lib/visualStyles.ts` criado com 5
+  presets (minimalista, dadoEmDestaque, editorial, boldTipografico,
+  corporateClean), calibrados com pesquisa rápida de mercado antes de
+  definir. 3 templates refatorados pra aceitar `visualStyle` combinável com
+  `theme`: `DadoVsAchismo`, `Comparativo`, `Depoimento` — os outros 5 tipos
+  ainda NÃO foram tocados (fica pro Round B). 40 PNGs reais renderizados e
+  revisados em `out/qa/estilos/` (script `scripts/qa-visual-styles.mjs`,
+  `npm run qa:estilos`), 1 achado real de QA corrigido (headline de coluna do
+  Comparativo quebrando linha nos estilos de fonte maior). Detalhe completo
+  em `src/templates/CATALOGO.md` §0.1. Commit `8cd3c04`, push feito.
+  **Próximo passo (Round B)**: aplicar `visualStyle` aos 5 tipos restantes
+  (DicaPratica, AntesDepois, VitrineProduto, MetodologiaSemEnrolacao,
+  Bastidores — CoverFotoReal é exploratório, avaliar se entra) e escalar o
+  render em lote pra mirar 60-100 peças cumulativas.
+
 ## Rounds de execução (cada um = 1 dispatch do Rafael, sequencial)
 
 1. **Round A — infraestrutura de `visualStyle`**: `src/lib/visualStyles.ts`, 4-5 presets
