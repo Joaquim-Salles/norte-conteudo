@@ -7,7 +7,10 @@ import {colors} from '../lib/tokens';
 import {getTheme, type Theme} from '../lib/themes';
 import {IconAlert, IconChart} from '../lib/icons';
 import {GhostBars} from '../lib/GhostGraphics';
-import {staggerWords, countUp, popIn, slideFadeIn, EASE_OUT_STRONG, wipeProgress} from '../lib/motion';
+import {countUp, popIn, slideFadeIn} from '../lib/motion';
+import {KineticText} from '../lib/KineticText';
+import {MotionTransition} from '../lib/MotionTransition';
+import {getMotionStyle, getEasingFn, resolveHighlight, scalePace, type MotionStyleName, type MotionStyle} from '../lib/motionStyles';
 import type {DadoVsAchismoReelData} from '../lib/types';
 
 /**
@@ -16,40 +19,51 @@ import type {DadoVsAchismoReelData} from '../lib/types';
  * riscado → dado dominante → CTA), mas contado no tempo em vez de composto
  * numa imagem só — kinetic typography de verdade, não slide com música.
  *
- * Estrutura em 4 `<Sequence>` (frame local reinicia em 0 dentro de cada uma):
- *  1. ACHISMO (0-71) — stagger word reveal da frase, depois um traço de
- *     "mask reveal" cresce da esquerda pra riscar a frase inteira (reforça
- *     "isso está errado" no tempo, não só visualmente estático).
- *  2. WIPE (72-85) — barra de accent (a mesma "costura diagonal" que já
- *     existe nas 3 variantes Still) cresce de tarja fina até cobrir a tela
- *     inteira — um "flash cut" de accent que corta pro Dado. Técnica de
- *     transição real de edição de Reels, não fade genérico.
- *  3. DADO (86-169) — número faz count-up de 0 até o percentual real (não
- *     aparece pronto), barras de fundo crescem em stagger reforçando "dado
- *     real", texto entra em stagger word reveal.
- *  4. CTA (170-209) — CtaBand sobe com slide+fade, badge com pop.
+ * REFATORADO (Round C, 2026-09-01, docs/plano-catalogo-em-escala.md) pra
+ * aceitar `motionStyle?: MotionStyleName` (src/lib/motionStyles.ts) — a
+ * lógica de motion que antes estava hardcoded (stagger word, wipe, spring)
+ * agora é resolvida a partir do preset. Omitir `motionStyle` = `kineticForte`,
+ * que É essa mesma aparência original (compatibilidade garantida).
+ *
+ * Estrutura em 5 `<Sequence>` (frame local reinicia em 0 dentro de cada uma):
+ *  1. ACHISMO — entrada de texto conforme `ms.textEntry`, mask reveal de
+ *     "riscado" no fim (reforça "isso está errado" no tempo).
+ *  2. TRANSIÇÃO 1 — `MotionTransition` conforme `ms.transition`.
+ *  3. DADO — número faz count-up (curva fixa — é uma contagem, não uma
+ *     entrada de texto), escala de CHEGADA conforme `ms.highlight`.
+ *  4. TRANSIÇÃO 2 — mesma transição, mais curta, antes do CTA.
+ *  5. CTA — CtaBand sobe, badge com pop (spring do preset).
  */
 
-const ACHISMO_DURATION = 72;
-const WIPE_DURATION = 14;
-const DADO_DURATION = 84;
-const CTA_DURATION = 42;
+function computeDurations(ms: MotionStyle) {
+  const achismo = scalePace(ms, 72);
+  const transition1 = ms.transition === 'cutSeco' ? 2 : scalePace(ms, 14, {min: 6});
+  const dado = scalePace(ms, 84);
+  const transition2 = ms.transition === 'cutSeco' ? 2 : scalePace(ms, 9, {min: 4});
+  const cta = scalePace(ms, 42);
+  return {achismo, transition1, dado, transition2, cta, total: achismo + transition1 + dado + transition2 + cta};
+}
 
-export const dadoVsAchismoReelDurationInFrames = ACHISMO_DURATION + WIPE_DURATION + DADO_DURATION + CTA_DURATION;
+export function dadoVsAchismoReelDurationInFrames(motionStyle?: MotionStyleName): number {
+  return computeDurations(getMotionStyle(motionStyle)).total;
+}
 
-const AchismoSegment: React.FC<{achismo: string}> = ({achismo}) => {
+const AchismoSegment: React.FC<{achismo: string; ms: MotionStyle}> = ({achismo, ms}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const words = staggerWords(achismo, frame, fps, 12, {staggerFrames: 3, durationInFrames: 14, distance: 26});
-  const labelAnim = slideFadeIn(frame, fps, 2, {distance: 20});
-  const iconScale = popIn(frame, fps, 0);
+  const easing = getEasingFn(ms.easing);
+  const labelAnim = slideFadeIn(frame, fps, 2, {distance: 20, easing});
+  const iconScale = popIn(frame, fps, 0, ms.spring);
   // "Mask reveal": o traço de riscado cresce da esquerda pra direita sobre a
   // frase inteira, depois que todas as palavras já apareceram — reforça no
   // TEMPO a mesma ideia que o Still faz só visualmente (achismo = errado).
-  const strikeProgress = interpolate(frame, [46, 64], [0, 1], {
+  // O ponto de início escala com o pace do preset (frase mais lenta = risco
+  // mais tarde, minimalFade/typewriter não "riscam" antes do texto acabar).
+  const strikeStart = ms.textEntry === 'typewriter' ? 58 : 46;
+  const strikeProgress = interpolate(frame, [strikeStart, strikeStart + 18], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
-    easing: EASE_OUT_STRONG,
+    easing,
   });
 
   return (
@@ -67,14 +81,14 @@ const AchismoSegment: React.FC<{achismo: string}> = ({achismo}) => {
 
       <div style={{position: 'relative', marginTop: 44}}>
         <p style={{fontSize: 60, fontWeight: 400, fontStyle: 'italic', color: '#54546a', lineHeight: 1.34, margin: 0}}>
-          {words.map((w, i) => (
-            <span
-              key={i}
-              style={{display: 'inline-block', opacity: w.opacity, transform: w.transform, marginRight: 16}}
-            >
-              {w.word}
-            </span>
-          ))}
+          <KineticText
+            text={achismo}
+            ms={ms}
+            startFrame={12}
+            side="left"
+            distance={26}
+            style={{fontSize: 60, fontWeight: 400, fontStyle: 'italic', color: '#54546a'}}
+          />
         </p>
         <div
           style={{
@@ -94,47 +108,20 @@ const AchismoSegment: React.FC<{achismo: string}> = ({achismo}) => {
   );
 };
 
-const WipeSegment: React.FC = () => {
-  const frame = useCurrentFrame();
-  const progress = wipeProgress(frame, 0, WIPE_DURATION);
-  const barHeight = interpolate(progress, [0, 1], [70, 1940]);
-  const skew = interpolate(progress, [0, 1], [-2.2, 0]);
-  return (
-    <AbsoluteFill style={{background: '#e7e7ee'}}>
-      <div
-        style={{
-          position: 'absolute',
-          left: -40,
-          right: -40,
-          top: '50%',
-          height: barHeight,
-          marginTop: -barHeight / 2,
-          background: colors.accent,
-          transform: `skewY(${skew}deg)`,
-          boxShadow: '0 0 60px 10px rgba(244,63,94,0.35)',
-        }}
-      />
-    </AbsoluteFill>
-  );
-};
-
-const DadoSegment: React.FC<{percentual: number; dadoTexto: string; fonteDado?: string; theme: Theme}> = ({
+const DadoSegment: React.FC<{percentual: number; dadoTexto: string; fonteDado?: string; theme: Theme; ms: MotionStyle}> = ({
   percentual,
   dadoTexto,
   fonteDado,
   theme,
+  ms,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const labelAnim = slideFadeIn(frame, fps, 4, {distance: 20});
-  const iconScale = popIn(frame, fps, 2);
+  const easing = getEasingFn(ms.easing);
+  const labelAnim = slideFadeIn(frame, fps, 4, {distance: 20, easing});
+  const iconScale = popIn(frame, fps, 2, ms.spring);
   const count = countUp(frame, fps, 12, percentual, 34);
-  const numberPop = interpolate(frame, [12, 20, 46], [0.88, 1.05, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing: EASE_OUT_STRONG,
-  });
-  const textWords = staggerWords(dadoTexto, frame, fps, 52, {staggerFrames: 2, durationInFrames: 12, distance: 18});
+  const {scale: numberScale, flashOpacity} = resolveHighlight(ms, frame, 12, 34);
   const fonteOpacity = interpolate(frame, [70, 80], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   // Barras de fundo — crescem em stagger, reforcam "dado real" (nao decorativo
@@ -157,7 +144,7 @@ const DadoSegment: React.FC<{percentual: number; dadoTexto: string; fonteDado?: 
           const p = interpolate(frame, [barStarts[i], barStarts[i] + 18], [0, 1], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
-            easing: EASE_OUT_STRONG,
+            easing,
           });
           return <div key={i} style={{width: 48, height: h * p, background: theme.colors.light, borderRadius: 8}} />;
         })}
@@ -172,18 +159,40 @@ const DadoSegment: React.FC<{percentual: number; dadoTexto: string; fonteDado?: 
         </span>
       </div>
 
-      <div style={{marginTop: 26, transform: `scale(${numberPop})`, transformOrigin: 'left center'}}>
-        <span style={{fontSize: 176, fontWeight: 700, color: colors.white, letterSpacing: -5, lineHeight: 0.95}}>
-          {count}%
-        </span>
+      <div style={{position: 'relative', marginTop: 26}}>
+        {flashOpacity > 0 ? (
+          // Clarao suave (gradiente radial, nao caixa com blur) — achado real
+          // de QA visual (Regra Inviolavel #1, Round C): a versao anterior
+          // (caixa com borderRadius+blur) deixava um retangulo cinza visivel
+          // atras do numero em vez de um "flash" de verdade. Gradiente radial
+          // sem borda dura resolve.
+          <div
+            style={{
+              position: 'absolute',
+              inset: -70,
+              background: `radial-gradient(closest-side, rgba(255,255,255,${flashOpacity}) 0%, rgba(255,255,255,0) 72%)`,
+              pointerEvents: 'none',
+            }}
+          />
+        ) : null}
+        <div style={{transform: `scale(${numberScale})`, transformOrigin: 'left center'}}>
+          <span style={{fontSize: 176, fontWeight: 700, color: colors.white, letterSpacing: -5, lineHeight: 0.95}}>
+            {count}%
+          </span>
+        </div>
       </div>
 
       <p style={{marginTop: 30, fontSize: 42, fontWeight: 700, color: colors.white, lineHeight: 1.28, maxWidth: 900, margin: '30px 0 0'}}>
-        {textWords.map((w, i) => (
-          <span key={i} style={{display: 'inline-block', opacity: w.opacity, transform: w.transform, marginRight: 14}}>
-            {w.word}
-          </span>
-        ))}
+        <KineticText
+          text={dadoTexto}
+          ms={ms}
+          startFrame={52}
+          side="right"
+          durationInFrames={12}
+          distance={18}
+          wordGap={14}
+          style={{fontSize: 42, fontWeight: 700, color: colors.white}}
+        />
       </p>
 
       {fonteDado ? (
@@ -195,12 +204,13 @@ const DadoSegment: React.FC<{percentual: number; dadoTexto: string; fonteDado?: 
   );
 };
 
-const CtaSegment: React.FC = () => {
+const CtaSegment: React.FC<{ms: MotionStyle}> = ({ms}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const titleAnim = slideFadeIn(frame, fps, 0, {distance: 50, durationInFrames: 18});
-  const ctaAnim = slideFadeIn(frame, fps, 8, {distance: 60, durationInFrames: 20});
-  const badgeScale = popIn(frame, fps, 0);
+  const easing = getEasingFn(ms.easing);
+  const titleAnim = slideFadeIn(frame, fps, 0, {distance: 50, durationInFrames: 18, easing});
+  const ctaAnim = slideFadeIn(frame, fps, 8, {distance: 60, durationInFrames: 20, easing});
+  const badgeScale = popIn(frame, fps, 0, ms.spring);
 
   return (
     <AbsoluteFill style={{background: colors.black}}>
@@ -230,21 +240,34 @@ export const DadoVsAchismoReel: React.FC<DadoVsAchismoReelData> = ({
   dadoTexto,
   fonteDado,
   theme = 'marca',
+  motionStyle,
 }) => {
   const t = getTheme(theme);
+  const ms = getMotionStyle(motionStyle);
+  const d = computeDurations(ms);
+
   return (
     <Frame background={colors.black} wordmarkColor={colors.white}>
-      <Sequence from={0} durationInFrames={ACHISMO_DURATION}>
-        <AchismoSegment achismo={achismo} />
+      <Sequence from={0} durationInFrames={d.achismo}>
+        <AchismoSegment achismo={achismo} ms={ms} />
       </Sequence>
-      <Sequence from={ACHISMO_DURATION} durationInFrames={WIPE_DURATION}>
-        <WipeSegment />
+      <Sequence from={d.achismo} durationInFrames={d.transition1}>
+        <MotionTransition motionStyle={ms} durationInFrames={d.transition1} accentColor={colors.accent} veilColor="#e7e7ee" />
       </Sequence>
-      <Sequence from={ACHISMO_DURATION + WIPE_DURATION} durationInFrames={DADO_DURATION}>
-        <DadoSegment percentual={percentual} dadoTexto={dadoTexto} fonteDado={fonteDado} theme={t} />
+      <Sequence from={d.achismo + d.transition1} durationInFrames={d.dado}>
+        <DadoSegment percentual={percentual} dadoTexto={dadoTexto} fonteDado={fonteDado} theme={t} ms={ms} />
       </Sequence>
-      <Sequence from={ACHISMO_DURATION + WIPE_DURATION + DADO_DURATION} durationInFrames={CTA_DURATION}>
-        <CtaSegment />
+      <Sequence from={d.achismo + d.transition1 + d.dado} durationInFrames={d.transition2}>
+        <MotionTransition
+          motionStyle={ms}
+          durationInFrames={d.transition2}
+          accentColor={colors.accent}
+          veilColor={t.colors.dark}
+          glowColor="rgba(0,0,0,0.85)"
+        />
+      </Sequence>
+      <Sequence from={d.achismo + d.transition1 + d.dado + d.transition2} durationInFrames={d.cta}>
+        <CtaSegment ms={ms} />
       </Sequence>
     </Frame>
   );

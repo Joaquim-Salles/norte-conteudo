@@ -11,6 +11,7 @@
     "qa:preview": "node scripts/qa-preview.mjs",
     "qa:temas": "node scripts/qa-theme-batch.mjs",
     "qa:estilos": "node scripts/qa-visual-styles.mjs",
+    "qa:motion": "node scripts/qa-motion-styles.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

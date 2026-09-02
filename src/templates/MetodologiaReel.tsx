@@ -6,7 +6,10 @@ import {Badge} from '../lib/Badge';
 import {colors} from '../lib/tokens';
 import {IconCycle} from '../lib/icons';
 import {GhostBars} from '../lib/GhostGraphics';
-import {staggerWords, popIn, slideFadeIn, progressFill} from '../lib/motion';
+import {popIn, slideFadeIn, progressFill} from '../lib/motion';
+import {KineticText} from '../lib/KineticText';
+import {MotionTransition} from '../lib/MotionTransition';
+import {getMotionStyle, getEasingFn, resolveHighlight, scalePace, type MotionStyleName, type MotionStyle} from '../lib/motionStyles';
 import type {MetodologiaReelData} from '../lib/types';
 
 /**
@@ -15,28 +18,50 @@ import type {MetodologiaReelData} from '../lib/types';
  * única timeline, com o tracker de progresso ANIMADO (não só presente) —
  * cada etapa "chega" com pop + a linha até o checkpoint anterior desenha.
  *
+ * REFATORADO (Round C, 2026-09-01) pra aceitar `motionStyle?: MotionStyleName`
+ * (src/lib/motionStyles.ts) — omitido = `kineticForte` (aparência original).
+ * Diferente do `DadoVsAchismoReel`: aqui a transição ENTRE PASSOS continua
+ * sendo o tracker de progresso (é o mecanismo de transição próprio desse
+ * template, deliberadamente preservado — trocá-lo por `MotionTransition` a
+ * cada passo destruiria a leitura de "processo contínuo" que é o ponto do
+ * template). `MotionTransition` entra só nas 2 bordas que ANTES eram corte
+ * seco sem nenhum efeito: Cover→Passo 1 e último Passo→CTA.
+ *
  * `IconCycle` do cover gira continuamente (rotação amarrada ao frame, não
  * decorativa parada) — reforça literalmente o conceito de "ciclo que se
  * repete" (PDCA/Lean) que o nome do template já carrega.
  */
 
-const COVER_DURATION = 58;
-const stepDuration = (n: number) => 52 + (n > 6 ? 0 : 0); // 52f (~1.73s) por etapa
-const CTA_DURATION = 46;
-
-export function metodologiaReelDurationInFrames(totalPassos: number): number {
-  return COVER_DURATION + stepDuration(0) * totalPassos + CTA_DURATION;
+function computeDurations(ms: MotionStyle, totalPassos: number) {
+  const cover = scalePace(ms, 58);
+  const transitionIn = ms.transition === 'cutSeco' ? 2 : scalePace(ms, 12, {min: 6});
+  const stepDur = scalePace(ms, 52);
+  const transitionOut = ms.transition === 'cutSeco' ? 2 : scalePace(ms, 12, {min: 6});
+  const cta = scalePace(ms, 46);
+  return {
+    cover,
+    transitionIn,
+    stepDur,
+    transitionOut,
+    cta,
+    total: cover + transitionIn + stepDur * totalPassos + transitionOut + cta,
+  };
 }
 
-const CoverSegment: React.FC<{metodo?: string; titulo: string}> = ({metodo, titulo}) => {
+export function metodologiaReelDurationInFrames(totalPassos: number, motionStyle?: MotionStyleName): number {
+  return computeDurations(getMotionStyle(motionStyle), totalPassos).total;
+}
+
+const CoverSegment: React.FC<{metodo?: string; titulo: string; ms: MotionStyle}> = ({metodo, titulo, ms}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const badgeScale = popIn(frame, fps, 0);
-  const titleWords = staggerWords(titulo, frame, fps, 8, {staggerFrames: 3, durationInFrames: 16, distance: 30});
-  const hintAnim = slideFadeIn(frame, fps, 34, {distance: 16});
+  const easing = getEasingFn(ms.easing);
+  const badgeScale = popIn(frame, fps, 0, ms.spring);
+  const hintAnim = slideFadeIn(frame, fps, 34, {distance: 16, easing});
   // Rotacao continua do ciclo — gira devagar a peca inteira do cover, reforca
-  // "isso e um processo que roda", nao um icone parado.
-  const rotation = frame * 3.4;
+  // "isso e um processo que roda", nao um icone parado. Velocidade acompanha
+  // o pace do preset (minimalFade gira mais devagar, zoomPunch mais rapido).
+  const rotation = frame * (3.4 / ms.paceScale);
 
   return (
     <AbsoluteFill style={{background: colors.black, padding: '160px 76px 0', display: 'flex', flexDirection: 'column'}}>
@@ -44,11 +69,7 @@ const CoverSegment: React.FC<{metodo?: string; titulo: string}> = ({metodo, titu
         <Badge>{metodo ?? 'Metodologia'}</Badge>
       </div>
       <h1 style={{fontSize: 70, fontWeight: 700, color: colors.white, lineHeight: 1.08, letterSpacing: -1.5, margin: '34px 0 0'}}>
-        {titleWords.map((w, i) => (
-          <span key={i} style={{display: 'inline-block', opacity: w.opacity, transform: w.transform, marginRight: 18}}>
-            {w.word}
-          </span>
-        ))}
+        <KineticText text={titulo} ms={ms} startFrame={8} side="left" distance={30} durationInFrames={16} wordGap={18} style={{}} />
       </h1>
       <div style={{marginTop: 44, height: 6, width: 120, background: colors.accent, borderRadius: 999}} />
       <div style={{marginTop: 40, opacity: hintAnim.opacity, transform: hintAnim.transform}}>
@@ -81,8 +102,14 @@ const CoverSegment: React.FC<{metodo?: string; titulo: string}> = ({metodo, titu
 };
 
 /** Tracker de progresso animado — dot atual "chega" com pop, linha até o anterior desenha. */
-const ProgressTracker: React.FC<{total: number; atual: number; frame: number; fps: number}> = ({total, atual, frame, fps}) => {
-  const dotPop = popIn(frame, fps, 6);
+const ProgressTracker: React.FC<{total: number; atual: number; frame: number; fps: number; ms: MotionStyle}> = ({
+  total,
+  atual,
+  frame,
+  fps,
+  ms,
+}) => {
+  const {scale: dotPop} = resolveHighlight(ms, frame, 6, 14);
   const linePop = progressFill(frame, 10, 16);
   return (
     <div style={{position: 'absolute', top: 130, left: 76, right: 76, display: 'flex', alignItems: 'center'}}>
@@ -132,44 +159,67 @@ const ProgressTracker: React.FC<{total: number; atual: number; frame: number; fp
   );
 };
 
-const StepSegment: React.FC<{numero: number; total: number; titulo: string; descricao: string}> = ({
+const StepSegment: React.FC<{numero: number; total: number; titulo: string; descricao: string; ms: MotionStyle}> = ({
   numero,
   total,
   titulo,
   descricao,
+  ms,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const numberScale = popIn(frame, fps, 0);
-  const titleWords = staggerWords(titulo, frame, fps, 10, {staggerFrames: 2, durationInFrames: 12, distance: 20});
-  const descAnim = slideFadeIn(frame, fps, 20, {distance: 18});
+  const easing = getEasingFn(ms.easing);
+  const {scale: numberScale, flashOpacity} = resolveHighlight(ms, frame, 0, 16);
+  const descAnim = slideFadeIn(frame, fps, 20, {distance: 18, easing});
 
   return (
     <AbsoluteFill style={{background: colors.white, padding: '0 76px'}}>
-      <ProgressTracker total={total} atual={numero} frame={frame} fps={fps} />
+      <ProgressTracker total={total} atual={numero} frame={frame} fps={fps} ms={ms} />
 
       <div style={{position: 'absolute', top: 260, left: 76, right: 76}}>
         <div style={{display: 'flex', alignItems: 'flex-start', gap: 26}}>
-          <span
-            style={{
-              fontSize: 128,
-              fontWeight: 700,
-              color: colors.black,
-              lineHeight: 0.82,
-              letterSpacing: -6,
-              transform: `scale(${numberScale})`,
-              transformOrigin: 'left top',
-            }}
-          >
-            {String(numero).padStart(2, '0')}
-          </span>
+          <div style={{position: 'relative'}}>
+            {flashOpacity > 0 ? (
+              // Mesmo clarao (gradiente radial) do highlight `flash` do
+              // DadoVsAchismoReel — consistencia entre Reels pro preset
+              // `matchCut` (ver src/lib/motionStyles.ts).
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: -50,
+                  background: `radial-gradient(closest-side, rgba(0,0,0,${flashOpacity * 0.5}) 0%, rgba(0,0,0,0) 72%)`,
+                  pointerEvents: 'none',
+                }}
+              />
+            ) : null}
+            <span
+              style={{
+                position: 'relative',
+                fontSize: 128,
+                fontWeight: 700,
+                color: colors.black,
+                lineHeight: 0.82,
+                letterSpacing: -6,
+                transform: `scale(${numberScale})`,
+                transformOrigin: 'left top',
+                display: 'inline-block',
+              }}
+            >
+              {String(numero).padStart(2, '0')}
+            </span>
+          </div>
           <div style={{display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 14}}>
             <h2 style={{fontSize: 46, fontWeight: 700, color: colors.black, lineHeight: 1.14, margin: 0}}>
-              {titleWords.map((w, i) => (
-                <span key={i} style={{display: 'inline-block', opacity: w.opacity, transform: w.transform, marginRight: 12}}>
-                  {w.word}
-                </span>
-              ))}
+              <KineticText
+                text={titulo}
+                ms={ms}
+                startFrame={10}
+                side="right"
+                distance={20}
+                durationInFrames={12}
+                wordGap={12}
+                style={{}}
+              />
             </h2>
             <p
               style={{
@@ -195,12 +245,13 @@ const StepSegment: React.FC<{numero: number; total: number; titulo: string; desc
   );
 };
 
-const CtaSegment: React.FC = () => {
+const CtaSegment: React.FC<{ms: MotionStyle}> = ({ms}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const titleAnim = slideFadeIn(frame, fps, 0, {distance: 50, durationInFrames: 18});
-  const ctaAnim = slideFadeIn(frame, fps, 8, {distance: 60, durationInFrames: 20});
-  const badgeScale = popIn(frame, fps, 0);
+  const easing = getEasingFn(ms.easing);
+  const titleAnim = slideFadeIn(frame, fps, 0, {distance: 50, durationInFrames: 18, easing});
+  const ctaAnim = slideFadeIn(frame, fps, 8, {distance: 60, durationInFrames: 20, easing});
+  const badgeScale = popIn(frame, fps, 0, ms.spring);
 
   return (
     <AbsoluteFill style={{background: colors.black}}>
@@ -224,28 +275,45 @@ const CtaSegment: React.FC = () => {
   );
 };
 
-export const MetodologiaReel: React.FC<MetodologiaReelData> = ({metodo, titulo, passos}) => {
+export const MetodologiaReel: React.FC<MetodologiaReelData> = ({metodo, titulo, passos, motionStyle}) => {
   const total = passos.length;
-  let cursor = COVER_DURATION;
+  const ms = getMotionStyle(motionStyle);
+  const d = computeDurations(ms, total);
+
+  let cursor = d.cover + d.transitionIn;
 
   return (
     <Frame background={colors.black} wordmarkColor={colors.white}>
-      <Sequence from={0} durationInFrames={COVER_DURATION}>
-        <CoverSegment metodo={metodo} titulo={titulo} />
+      <Sequence from={0} durationInFrames={d.cover}>
+        <CoverSegment metodo={metodo} titulo={titulo} ms={ms} />
+      </Sequence>
+
+      <Sequence from={d.cover} durationInFrames={d.transitionIn}>
+        <MotionTransition motionStyle={ms} durationInFrames={d.transitionIn} accentColor={colors.accent} veilColor={colors.white} />
       </Sequence>
 
       {passos.map((passo, i) => {
         const from = cursor;
-        cursor += stepDuration(i);
+        cursor += d.stepDur;
         return (
-          <Sequence key={i} from={from} durationInFrames={stepDuration(i)}>
-            <StepSegment numero={i + 1} total={total} titulo={passo.titulo} descricao={passo.descricao} />
+          <Sequence key={i} from={from} durationInFrames={d.stepDur}>
+            <StepSegment numero={i + 1} total={total} titulo={passo.titulo} descricao={passo.descricao} ms={ms} />
           </Sequence>
         );
       })}
 
-      <Sequence from={cursor} durationInFrames={CTA_DURATION}>
-        <CtaSegment />
+      <Sequence from={cursor} durationInFrames={d.transitionOut}>
+        <MotionTransition
+          motionStyle={ms}
+          durationInFrames={d.transitionOut}
+          accentColor={colors.accent}
+          veilColor={colors.black}
+          glowColor="rgba(0,0,0,0.85)"
+        />
+      </Sequence>
+
+      <Sequence from={cursor + d.transitionOut} durationInFrames={d.cta}>
+        <CtaSegment ms={ms} />
       </Sequence>
     </Frame>
   );

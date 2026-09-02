@@ -184,6 +184,132 @@ performance de render.
 
 ---
 
+## 0.2 Sistema de estilo de MOTION — `motionStyle` (2026-09-01, Round C)
+
+Terceira dimensão paramétrica, equivalente em espírito ao `visualStyle`
+(§0.1) mas pro eixo do TEMPO — ver `docs/plano-catalogo-em-escala.md` Round
+C. Até aqui os 2 Reels (`DadoVsAchismoReel`, `MetodologiaReel`) tinham o
+motion inteiro hardcoded dentro do componente. `src/lib/motionStyles.ts`
+extrai isso em **7 presets** sistemáticos — cada um definindo, de forma
+combinável (nunca CSS/timing solto por Reel):
+
+- **`textEntry`** — tipo de entrada de texto: `staggerWord` (palavra a
+  palavra, kinetic typography), `slideFadeBlock` (bloco inteiro junto, sem
+  floreio), `typewriter` (caractere a caractere), `splitMeet` (entra de um
+  lado, esquerda ou direita).
+- **`transition`** — corte entre segmentos/cenas: `wipe`, `cutSeco` (corte
+  seco de verdade — ausência de elemento visual, não é "sem efeito por
+  preguiça"), `zoomPunch`, `crossDissolve` (fade através de uma cor sólida),
+  `whipPan` (streak horizontal borrado), `matchCut` (flash curto no corte),
+  `splitConverge` (2 painéis entram de lados opostos e se encontram no
+  centro).
+- **`easing`** — curva de peso dominante: `strong` (`EASE_OUT_STRONG`,
+  já existia), `gentle` (nova, `EASE_GENTLE` — mais calma, nunca linear),
+  `bounce` (nova, `EASE_BOUNCE_OUT` — back-out com leve overshoot embutido
+  na curva, sem precisar de spring físico).
+- **`highlight`** — efeito de destaque no elemento hero (número, dot,
+  badge): `none`, `popOvershoot` (curva original hardcoded, agora
+  formalizada), `scalePop` (estalo mais forte, legenda 2026), `flash`
+  (clarão radial suave — ver achado de QA abaixo).
+- **`paceScale`** — multiplica a duração de cada segmento (>1 mais lento,
+  <1 mais cortante). As 3 Compositions de Reel usam `calculateMetadata`
+  (Root.tsx) pra recalcular a duração real a partir do `motionStyle`
+  recebido — sem isso, um preset lento (`minimalFade`, 1.35x) cortaria a
+  peça antes do CTA terminar de entrar.
+- **`staggerFrames`** / **`spring`** — defasagem entre palavras e config de
+  spring (`POP_SPRING`/`SOFT_SPRING`/variação) pros elementos que "chegam"
+  com física.
+
+### Pesquisa aplicada ANTES de definir os presets
+
+Pesquisa rápida de mercado (2026, motion pra vídeo curto B2B/social) feita
+antes de codar qualquer preset novo:
+
+- Legendas/kinetic typography 2026 fazem reveal **palavra-a-palavra com
+  "scale pop" na palavra-chave** (não a frase toda de uma vez) — informa
+  `highlight: 'scalePop'` em `whipPanCut` (convenção adotada: a ÚLTIMA
+  palavra da frase recebe o pop, por ser o formato de brief mais previsível
+  sem precisar de marcação manual de "palavra-chave").
+- **Whip-pan borrado é a transição de corte de tempo/cena mais barata e
+  legível em vertical** — informa `transition: 'whipPan'` (implementado como
+  "speed lines" borradas, já que a técnica de câmera literal não se aplica a
+  composições geradas em código).
+- **Match cut (corte na mesma forma/posição) é o padrão real pra
+  antes/depois** — informa `transition: 'matchCut'`.
+- **"Heavy transition packs com spin/glitch em todo corte lê 2022" e "Reels
+  premia polimento/tipografia kerned — motion pesado por cima de tudo soa
+  ad-coded"** — DECISÃO DOCUMENTADA: o `plano-catalogo-em-escala.md`
+  original sugeria `glitch-transition` como preset; **substituído por
+  `whipPanCut`/`matchCut`**, que entregam a mesma energia de corte sem o
+  efeito datado. Nenhum preset novo usa glitch de tela cheia.
+- Revival de estética analógica (grain/imperfeição) já está coberto pelo
+  grain existente (`Texture.tsx`) — não duplicado como preset à parte.
+
+### Os 7 presets
+
+| Preset | Quando usar | textEntry | transition | easing | highlight | paceScale |
+|---|---|---|---|---|---|---|
+| `kineticForte` | **Default de compatibilidade** — é a aparência ORIGINAL dos 2 Reels pré-Round C, formalizada em preset. Energia alta, ritmo de anúncio. | staggerWord | wipe | strong | popOvershoot | 1.0 |
+| `minimalFade` | Bastidores/Depoimento, tom sóbrio/confiante — cortes secos, sem floreio, ritmo mais lento. | slideFadeBlock | crossDissolve | gentle | none | 1.35 |
+| `zoomPunch` | Vitrine de Produto/lançamento — zoom agressivo, corte rápido, impacto imediato. | staggerWord | zoomPunch | bounce | scalePop | 0.78 |
+| `typewriter` | Depoimento/citação — cadência de fala real, tom pessoal/autêntico. | typewriter | cutSeco | gentle | none | 1.2 |
+| `splitReveal` | Comparativo — cada opção "vem do seu lado" e se encontra no centro. | splitMeet | splitConverge | strong | popOvershoot | 1.0 |
+| `whipPanCut` | Conteúdo com vários pontos rápidos (dica prática em vídeo, listicle) — assinatura de edição mais copiada em vertical (pesquisa 2026). | staggerWord | whipPan | strong | scalePop | 0.85 |
+| `matchCut` | Qualquer conteúdo com 2 estados que se opõem — reforça continuidade no corte. | slideFadeBlock | matchCut | strong | flash | 0.9 |
+
+- Cada Reel refatorado recebe `motionStyle?: MotionStyleName` **opcional**
+  — omitido = `kineticForte` (aparência original, nenhum vídeo já aprovado
+  muda de comportamento).
+- Helpers centralizam a lógica: `getMotionStyle`, `getEasingFn`,
+  `scalePace`, `resolveHighlight` (`motionStyles.ts`); `KineticText.tsx`
+  dispatcha `textEntry`; `MotionTransition.tsx` dispatcha `transition`. Reel
+  nunca faz `if (motionStyle === ...)` espalhado pelo JSX.
+- **Reels refatorados pra aceitar `motionStyle`:** `DadoVsAchismoReel`,
+  `MetodologiaReel` (ambos preservam 100% do comportamento original quando
+  `motionStyle` é omitido — verificado nos renders de regressão
+  `*-kineticForte.mp4`). **Reel NOVO:** `ComparativoReel` (primeiro tipo de
+  conteúdo animado além dos 2 originais — ver `src/templates/ComparativoReel.tsx`).
+- **Decisão de escopo (`MetodologiaReel`):** a transição ENTRE PASSOS
+  continua sendo o tracker de progresso (mecanismo de transição PRÓPRIO do
+  template) — `MotionTransition` só entra nas 2 bordas que antes eram corte
+  seco sem nenhum efeito (Cover→Passo 1, último Passo→CTA). Trocar o tracker
+  por `MotionTransition` a cada passo destruiria a leitura de "processo
+  contínuo" que é o ponto do template.
+
+### Achado real de QA visual (Regra Inviolável #1)
+
+O highlight `flash` (usado por `matchCut`) inicialmente renderizava uma
+**caixa com `borderRadius`+`blur` atrás do número** — no vídeo real (frame
+extraído via ffmpeg em `DadoVsAchismoReel-matchCut.mp4`), isso aparecia como
+um **retângulo cinza esfumaçado**, não um clarão. Corrigido pra um
+`radial-gradient` centrado (sem borda dura) — resultado real: bloom radial
+suave, lê como "flash" de verdade. Mesmo padrão aplicado no número de passo
+do `MetodologiaReel` (que antes ignorava `flashOpacity` por completo —
+adicionado o mesmo clarão, adaptado pra fundo claro: preto translúcido em
+vez de branco).
+
+### Renders de prova (Round C)
+
+**11 vídeos MP4 reais** renderizados em `out/qa/motion/` (`npm run
+qa:motion`, script `scripts/qa-motion-styles.mjs`), cruzando os 3 tipos de
+conteúdo animável (`DadoVsAchismoReel`, `MetodologiaReel`, `ComparativoReel`)
+com os 7 `motionStyle` (todos os 7 presets aparecem pelo menos 1 vez;
+`kineticForte` aparece nos 3 tipos como baseline de regressão). Revisão
+real via contact sheets (`ffmpeg fps+tile`) + frames extraídos exatamente
+nos pontos de transição/highlight (não dá pra confiar em amostragem
+uniforme — as transições duram 6-14 frames, somem entre 2 samples de um
+contact sheet genérico). 1 achado real corrigido (flash, acima) — nenhum
+vídeo abaixo do padrão foi aceito. `out/` é gitignored (mesmo padrão dos
+PNGs de estilo visual do Round A/B) — os MP4s são prova local, não
+versionados.
+
+**Próximo passo (Round D):** escalar vídeo pra mais tipos de conteúdo
+(Depoimento é o candidato mais óbvio pro `typewriter`, Bastidores pro
+`minimalFade`), mirar 15-25 vídeos renderizados cruzando mais combinações
+tipo×motionStyle×tema.
+
+---
+
 ## Fotografia real (2026-08-31)
 
 Pedido explícito do fundador — "mais opções com fotos reais do restaurante,

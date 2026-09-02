@@ -2,6 +2,7 @@
 
 import type {ThemeName} from './themes';
 import type {VisualStyleName} from './visualStyles';
+import type {MotionStyleName} from './motionStyles';
 
 export type ProductKey = 'ntbEstoque' | 'ntbVendas' | 'norteAvalia' | null;
 
@@ -151,6 +152,12 @@ export type DadoVsAchismoReelData = {
   dadoTexto: string;
   fonteDado?: string;
   theme?: ThemeName;
+  /**
+   * Estilo de motion (Round C, 2026-09-01) — ver src/lib/motionStyles.ts.
+   * Opcional: omitido = `kineticForte`, que é a aparência ORIGINAL deste
+   * Reel (pré-Round C) — nenhum vídeo já aprovado muda de comportamento.
+   */
+  motionStyle?: MotionStyleName;
 };
 
 /**
@@ -165,6 +172,8 @@ export type MetodologiaReelData = {
   metodo?: string;
   titulo: string;
   passos: MetodologiaReelStep[];
+  /** Estilo de motion (Round C, 2026-09-01) — ver src/lib/motionStyles.ts. Opcional, omitido = `kineticForte` (aparência original). */
+  motionStyle?: MotionStyleName;
 };
 
 export type CoverFotoRealData = {
@@ -238,6 +247,24 @@ export type ComparativoData = {
   theme?: ThemeName;
   /** Estilo visual (novo, 2026-09-01) — ver src/lib/visualStyles.ts. Opcional, omitido = aparência original. */
   visualStyle?: VisualStyleName;
+};
+
+/**
+ * Reel (Composition) — versão animada do Comparativo (Round C, 2026-09-01,
+ * primeiro tipo de conteúdo NOVO a ganhar Reel — ver
+ * src/templates/ComparativoReel.tsx). Só a variante `colunas` (a que faz
+ * sentido animar: 2 colunas que se opõem, papel natural pro preset
+ * `splitReveal` — cada opção "vem do seu lado" e se encontra no centro).
+ * `itens` limitado a 3 na versão animada (tempo de tela por item é maior que
+ * no Still — 3 já enche o Reel sem cansar).
+ */
+export type ComparativoReelData = {
+  tituloA: string;
+  tituloB: string;
+  itens: ComparativoItem[];
+  produto?: ProductKey;
+  theme?: ThemeName;
+  motionStyle?: MotionStyleName;
 };
 
 /**

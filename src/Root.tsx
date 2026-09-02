@@ -23,6 +23,11 @@ import {
   metodologiaReelDefaultProps,
   metodologiaReelDurationInFrames,
 } from './templates/MetodologiaReel';
+import {
+  ComparativoReel,
+  comparativoReelDefaultProps,
+  comparativoReelDurationInFrames,
+} from './templates/ComparativoReel';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -115,14 +120,25 @@ export const RemotionRoot: React.FC = () => {
         no Still (Dado vs. Achismo, Metodologia sem Enrolacao) — mais faceis
         de "esticar no tempo" com fidelidade ao conteudo original.
       */}
+      {/*
+        Round C (2026-09-01, motionStyle — docs/plano-catalogo-em-escala.md):
+        os 3 Reels usam `calculateMetadata` pra recalcular a duração real a
+        partir dos props recebidos (motionStyle muda `paceScale`, e no caso
+        do Comparativo/Metodologia também a quantidade de itens/passos) — sem
+        isso, renderizar com um motionStyle "lento" (ex. minimalFade,
+        paceScale 1.35) cortaria a peça antes do CTA terminar de entrar.
+      */}
       <Composition
         id="DadoVsAchismoReel"
         component={DadoVsAchismoReel}
         width={formats.reel.width}
         height={formats.reel.height}
         fps={formats.reel.fps}
-        durationInFrames={dadoVsAchismoReelDurationInFrames}
+        durationInFrames={dadoVsAchismoReelDurationInFrames(dadoVsAchismoReelDefaultProps.motionStyle)}
         defaultProps={dadoVsAchismoReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: dadoVsAchismoReelDurationInFrames(props.motionStyle),
+        })}
       />
       <Composition
         id="MetodologiaReel"
@@ -130,8 +146,28 @@ export const RemotionRoot: React.FC = () => {
         width={formats.reel.width}
         height={formats.reel.height}
         fps={formats.reel.fps}
-        durationInFrames={metodologiaReelDurationInFrames(metodologiaReelDefaultProps.passos.length)}
+        durationInFrames={metodologiaReelDurationInFrames(metodologiaReelDefaultProps.passos.length, metodologiaReelDefaultProps.motionStyle)}
         defaultProps={metodologiaReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: metodologiaReelDurationInFrames(props.passos.length, props.motionStyle),
+        })}
+      />
+      {/*
+        Comparativo Reel (Round C, 2026-09-01) — primeiro tipo de conteúdo
+        NOVO a ganhar versão animada além dos 2 originais. Ver
+        src/templates/ComparativoReel.tsx.
+      */}
+      <Composition
+        id="ComparativoReel"
+        component={ComparativoReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={comparativoReelDurationInFrames(comparativoReelDefaultProps.itens.length, comparativoReelDefaultProps.motionStyle)}
+        defaultProps={comparativoReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: comparativoReelDurationInFrames(props.itens.length, props.motionStyle),
+        })}
       />
     </>
   );

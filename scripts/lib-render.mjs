@@ -26,3 +26,28 @@ export function renderStill({compositionId, props, outPath}) {
 
   execFileSync('npx', args, {stdio: 'inherit'});
 }
+
+/**
+ * Renderiza uma Composition (Reel) pra MP4 — equivalente de `renderStill`
+ * pra video (Round C, 2026-09-01: primeira vez que o pipeline precisa
+ * renderizar MP4 de verdade, nao so PNG). Mesmo cuidado de props via arquivo
+ * JSON temporario (bug de encoding de acentos ja documentado em
+ * `renderStill`). `durationInFrames` NAO e passado aqui — as 3 Compositions
+ * de Reel usam `calculateMetadata` (ver Root.tsx) pra recalcular a duracao
+ * real a partir de `motionStyle`/quantidade de itens, entao o CLI resolve
+ * isso sozinho a partir dos props.
+ */
+export function renderVideo({compositionId, props, outPath}) {
+  mkdirSync(path.dirname(outPath), {recursive: true});
+
+  const args = ['remotion', 'render', 'src/index.ts', compositionId, outPath, '--overwrite', '--codec=h264'];
+
+  if (props !== undefined) {
+    const dir = mkdtempSync(path.join(tmpdir(), 'norte-conteudo-props-'));
+    const propsPath = path.join(dir, 'props.json');
+    writeFileSync(propsPath, JSON.stringify(props), 'utf-8');
+    args.push(`--props=${propsPath}`);
+  }
+
+  execFileSync('npx', args, {stdio: 'inherit'});
+}

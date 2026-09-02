@@ -60,11 +60,51 @@ precisamos de mais UMA dimensão combinável em cada lado:
   **Contagem total real do catálogo: 172** (62 baseline + 40 Round A + 70
   Round B — matemática completa e auditável em `src/templates/CATALOGO.md`,
   seção "Contagem total do catálogo").
-  **Próximo passo (Round C)**: infraestrutura de `motionStyle` pra vídeo —
-  `src/lib/motionStyles.ts` com 6-8 presets de motion (kinetic-typography-
-  forte, minimal-fade, glitch-transition, split-screen-reveal, zoom-punch,
-  stopmotion-cut), aplicados a 2-3 tipos já animados (`DadoVsAchismoReel`,
-  `MetodologiaReel`) antes de escalar pra mais tipos no Round D.
+- **Round C — CONCLUÍDO (2026-09-01, execução autônoma overnight, fundador
+  dormindo)**: `src/lib/motionStyles.ts` criado com **7 presets** de motion
+  (`kineticForte`, `minimalFade`, `zoomPunch`, `typewriter`, `splitReveal`,
+  `whipPanCut`, `matchCut`), calibrados com pesquisa rápida de mercado (motion
+  pra vídeo curto B2B/social 2026) ANTES de codar — ver
+  `src/templates/CATALOGO.md` §0.2 pra fontes e detalhe de cada preset.
+  **Decisão de julgamento documentada:** o plano original sugeria
+  `glitch-transition`/`stopmotion-cut`; a pesquisa encontrou que "heavy
+  transition packs com glitch em todo corte lê 2022" e "motion pesado soa
+  ad-coded" em conteúdo B2B — substituídos por `whipPanCut` (whip-pan
+  borrado) e `matchCut` (flash no corte), que a mesma pesquisa aponta como
+  os padrões reais de 2026 pra energia de corte sem o efeito datado.
+  Cada preset define, de forma sistemática (nunca hardcoded por Reel):
+  `textEntry` (staggerWord/slideFadeBlock/typewriter/splitMeet),
+  `transition` (wipe/cutSeco/zoomPunch/crossDissolve/whipPan/matchCut/
+  splitConverge), `easing` (strong/gentle/bounce — nunca linear),
+  `highlight` (none/popOvershoot/scalePop/flash) e `paceScale` (duração
+  dos segmentos escala com o preset, via `calculateMetadata` no Root.tsx —
+  sem isso um preset mais lento cortaria a peça antes do fim).
+  Novos primitivos em `src/lib/motion.ts` (`typewriterReveal`, `splitEnter`,
+  `zoomPunchIn`, `whipPanProgress`, `flashPulse`, `scalePopKeyword`,
+  `EASE_GENTLE`, `EASE_BOUNCE_OUT`) + 2 componentes novos
+  (`src/lib/KineticText.tsx` dispatcha `textEntry`, `src/lib/MotionTransition.tsx`
+  dispatcha `transition`) — Reels nunca fazem `if (motionStyle === ...)`
+  espalhado.
+  **`DadoVsAchismoReel` e `MetodologiaReel` refatorados** pra aceitar
+  `motionStyle?` (omitido = `kineticForte`, aparência 100% original —
+  verificado nos renders de regressão). **1 Reel NOVO: `ComparativoReel`**
+  (primeiro tipo de conteúdo animado além dos 2 originais — par natural do
+  preset `splitReveal`).
+  **11 vídeos MP4 reais renderizados** (`npm run qa:motion`, script
+  `scripts/qa-motion-styles.mjs`) cruzando os 3 tipos animáveis × os 7
+  motionStyles (todos os 7 aparecem pelo menos 1 vez). Revisão real via
+  contact sheets (`ffmpeg fps+tile`) + frames extraídos exatamente nos
+  pontos de transição/highlight (Regra Inviolável #1 — amostragem uniforme
+  não pega transições de 6-14 frames). **1 achado real de QA corrigido**: o
+  highlight `flash` renderizava uma caixa com blur+borderRadius atrás do
+  número, que no vídeo real aparecia como retângulo cinza esfumaçado — trocado
+  por `radial-gradient` centrado (bloom suave de verdade), corrigido também no
+  `MetodologiaReel` (que antes ignorava `flashOpacity` por completo). Detalhe
+  completo em `src/templates/CATALOGO.md` §0.2.
+  **Próximo passo (Round D)**: escalar vídeo pra mais tipos de conteúdo
+  (Depoimento com `typewriter`, Bastidores com `minimalFade` são os
+  candidatos mais óbvios pelo `quandoUsar` de cada preset), mirar 15-25
+  vídeos renderizados cruzando mais combinações tipo×motionStyle×tema.
 
 ## Rounds de execução (cada um = 1 dispatch do Rafael, sequencial)
 
