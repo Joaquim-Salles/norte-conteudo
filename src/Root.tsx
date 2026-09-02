@@ -28,6 +28,21 @@ import {
   comparativoReelDefaultProps,
   comparativoReelDurationInFrames,
 } from './templates/ComparativoReel';
+import {
+  DepoimentoReel,
+  depoimentoReelDefaultProps,
+  depoimentoReelDurationInFrames,
+} from './templates/DepoimentoReel';
+import {
+  BastidoresReel,
+  bastidoresReelDefaultProps,
+  bastidoresReelDurationInFrames,
+} from './templates/BastidoresReel';
+import {
+  AntesDepoisReel,
+  antesDepoisReelDefaultProps,
+  antesDepoisReelDurationInFrames,
+} from './templates/AntesDepoisReel';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -167,6 +182,53 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={comparativoReelDefaultProps}
         calculateMetadata={({props}) => ({
           durationInFrames: comparativoReelDurationInFrames(props.itens.length, props.motionStyle),
+        })}
+      />
+
+      {/*
+        Round D (2026-09-01, docs/plano-catalogo-em-escala.md) — escala o
+        catálogo de vídeo pra mais tipos de conteúdo animável. 3 Reels novos:
+        Depoimento (par natural do preset `typewriter`), Bastidores (par
+        natural de `minimalFade`, mantém a decisão de NÃO ter CtaBand cheio
+        no fechamento — mesma regra do Still) e Antes/Depois (par natural de
+        `matchCut`, já documentado desde o Round C como "o padrão real pra
+        antes/depois" — ver comentário de julgamento em AntesDepoisReel.tsx).
+        Mesmo padrão de `calculateMetadata` dos 3 Reels anteriores.
+      */}
+      <Composition
+        id="DepoimentoReel"
+        component={DepoimentoReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={depoimentoReelDurationInFrames(depoimentoReelDefaultProps.citacao.length, depoimentoReelDefaultProps.motionStyle)}
+        defaultProps={depoimentoReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: depoimentoReelDurationInFrames(props.citacao.length, props.motionStyle),
+        })}
+      />
+      <Composition
+        id="BastidoresReel"
+        component={BastidoresReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={bastidoresReelDurationInFrames(bastidoresReelDefaultProps.principios.length, bastidoresReelDefaultProps.motionStyle)}
+        defaultProps={bastidoresReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: bastidoresReelDurationInFrames(props.principios.length, props.motionStyle),
+        })}
+      />
+      <Composition
+        id="AntesDepoisReel"
+        component={AntesDepoisReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={antesDepoisReelDurationInFrames(antesDepoisReelDefaultProps.motionStyle)}
+        defaultProps={antesDepoisReelDefaultProps}
+        calculateMetadata={({props}) => ({
+          durationInFrames: antesDepoisReelDurationInFrames(props.motionStyle),
         })}
       />
     </>

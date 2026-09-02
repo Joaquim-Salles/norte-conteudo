@@ -302,3 +302,58 @@ export type BastidoresData = {
    */
   visualStyle?: VisualStyleName;
 };
+
+/**
+ * Reel (Composition) — versão animada de Depoimento (Round D, 2026-09-01,
+ * docs/plano-catalogo-em-escala.md). Par natural do preset `typewriter` (a
+ * citação aparece letra a letra — ver src/templates/DepoimentoReel.tsx).
+ * Compacta capa (citação+atribuição) e resultado (o "depois" nas palavras do
+ * cliente) numa única timeline — sem os 2 covers alternativos do Still
+ * (capa/capa-metrica), pra manter o Reel enxuto (o formato "resultado como
+ * gancho" já está coberto por AntesDepoisReel/metricaHero equivalente).
+ */
+export type DepoimentoReelData = {
+  citacao: string;
+  cliente: string;
+  empresa?: string;
+  corpoResultado: string;
+  metrica?: string;
+  produto?: ProductKey;
+  theme?: ThemeName;
+  /** Estilo de motion (Round D, 2026-09-01) — ver src/lib/motionStyles.ts. Opcional, omitido = `kineticForte`. */
+  motionStyle?: MotionStyleName;
+};
+
+/**
+ * Reel (Composition) — versão animada de Bastidores, variante `manifesto`
+ * (Round D, 2026-09-01). Par natural do preset `minimalFade` (tom sóbrio,
+ * sem floreio — ver src/templates/BastidoresReel.tsx). MESMA regra de escopo
+ * do Still: sem `CtaBand` cheio no fechamento (bastidores constrói confiança
+ * de fundo de funil, não força venda direta).
+ */
+export type BastidoresReelData = {
+  eyebrow?: string;
+  titulo: string;
+  principios: string[];
+  /** Estilo de motion (Round D, 2026-09-01) — ver src/lib/motionStyles.ts. Opcional, omitido = `kineticForte`. */
+  motionStyle?: MotionStyleName;
+};
+
+/**
+ * Reel (Composition) — versão animada de Antes/Depois, variante `padrao`
+ * (Round D, 2026-09-01, decisão de julgamento — ver comentário no topo de
+ * src/templates/AntesDepoisReel.tsx). Par natural do preset `matchCut`: já
+ * documentado desde o Round C (`motionStyles.ts` `quandoUsar`) como "o
+ * padrão real pra antes/depois" — o corte com flash reforça no tempo a
+ * mesma virada que o selo "Com a Norte" reforça no Still.
+ */
+export type AntesDepoisReelData = {
+  antesLabel?: string;
+  antesTexto: string;
+  depoisLabel?: string;
+  depoisTexto: string;
+  metrica?: string;
+  theme?: ThemeName;
+  /** Estilo de motion (Round D, 2026-09-01) — ver src/lib/motionStyles.ts. Opcional, omitido = `kineticForte`. */
+  motionStyle?: MotionStyleName;
+};

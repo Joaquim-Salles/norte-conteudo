@@ -4,6 +4,10 @@
 fim deste arquivo): 172 peças** (62 baseline pré-`visualStyle` + 40 Round A +
 70 Round B).
 
+**Catálogo de VÍDEO (Reels): 6 tipos de conteúdo animável, 30 MP4s reais
+renderizados no total** (11 do Round C + 19 do Round D — ver §0.2/§0.3 pra
+detalhe de cada rodada).
+
 Atualizado em 2026-09-01, execução autônoma overnight (Round B do plano de
 catálogo em escala — ver `docs/plano-catalogo-em-escala.md`) — os 5 tipos que
 faltavam (`AntesDepois`, `VitrineProduto`, `DicaPratica`,
@@ -307,6 +311,94 @@ versionados.
 (Depoimento é o candidato mais óbvio pro `typewriter`, Bastidores pro
 `minimalFade`), mirar 15-25 vídeos renderizados cruzando mais combinações
 tipo×motionStyle×tema.
+
+---
+
+## 0.3 Round D — escala de vídeo pra mais tipos (2026-09-01, execução
+autônoma overnight, fundador dormindo)
+
+**3 Reels NOVOS**, dobrando o catálogo de vídeo de 3 pra 6 tipos de conteúdo
+animável:
+
+| Reel novo | Par de `motionStyle` | Por quê |
+|---|---|---|
+| `DepoimentoReel.tsx` | `typewriter` (par documentado desde o Round C) | A citação do cliente aparece letra a letra — reforça no TEMPO que é a VOZ dele, não nossa reformulação. Também testado com `minimalFade` (também documentado em `motionStyles.ts` como bom pra Depoimento) e `kineticForte` (baseline universal). |
+| `BastidoresReel.tsx` | `minimalFade` (par documentado desde o Round C) | Tom sóbrio/confiante, sem floreio — mesma lógica de "confiança > venda direta" que já definia o Still. **Mantém a MESMA decisão de escopo do Still: sem `CtaBand` cheio no fechamento** — só uma linha discreta "link na bio". É o único Reel do catálogo sem CTA de destaque, por decisão consciente, não por esquecimento. |
+| `AntesDepoisReel.tsx` | `matchCut` | **Decisão de julgamento (3º Reel, além dos 2 pedidos):** o preset `matchCut` já existia desde o Round C com a `quandoUsar` "qualquer conteúdo com 2 estados que se opõem" e o CATALOGO.md já registrava "match cut é o padrão real pra antes/depois" como achado de pesquisa — mas nenhum tipo do catálogo até agora tinha essa estrutura de "2 estados que se opõem" pra usar o preset de verdade (Comparativo é 2 OPÇÕES concretas, não uma virada temporal). Antes/Depois é o par óbvio que faltava. Cogitei `VitrineProdutoReel` (par natural de `zoomPunch`) em vez deste, mas cruzar produto+screenshot+device frame numa timeline animada é escopo maior (moldura de device com estado antes/depois do próprio app) — fica pra uma rodada futura, não por falta de sentido. |
+
+Todos os 3 seguem o mesmo padrão de infraestrutura dos 3 Reels do Round C:
+`motionStyle?: MotionStyleName` opcional (default `kineticForte`, mesma
+convenção de `ComparativoReel` — nasceram depois do Round C, sem "aparência
+original" a preservar, mas default consistente com o resto do catálogo),
+`calculateMetadata` no `Root.tsx` recalculando a duração real a partir do
+preset recebido, e reuso total de `KineticText`/`MotionTransition`/
+`resolveHighlight` (nenhum `if (motionStyle === ...)` novo espalhado).
+
+### Achado real de QA corrigido (Regra Inviolável #1)
+
+O highlight `scalePop` (usado por `whipPanCut`, aplicado à ÚLTIMA palavra de
+um título via `KineticText`) escalava o span a partir do **centro** (origem
+padrão do CSS) — num título mais longo (`ComparativoReel-whipPanCut-vendas.mp4`,
+título "Comanda de papel"), o estalo de ~1.35x na palavra "papel" invadiu
+visualmente o espaço da palavra anterior ("de"), produzindo overlap real no
+vídeo (não só metadado) — bug LATENTE desde o Round C, só não visível nos
+títulos mais curtos usados até então. Corrigido em `KineticText.tsx`:
+`transformOrigin: 'left center'` no span da palavra — o estalo agora cresce
+só pra direita, nunca sobre a palavra anterior, independente do tamanho do
+título. Corrigido no componente COMPARTILHADO (não só no Reel novo) — re-
+renderizado e revisado `ComparativoReel-whipPanCut-vendas.mp4` (corrigido) e,
+por regressão, `MetodologiaReel-whipPanCut.mp4` (Round C, mesmo mecanismo —
+confirmado sem quebra, "estoque" quebra de linha e escala limpo).
+
+Achado secundário (menor, mesma regra): o label "Como sustentamos isso" do
+`BastidoresReel` não tinha entrada animada (inconsistente com o resto do
+catálogo, que sempre anima labels via `slideFadeIn`) — corrigido antes do
+lote de renders.
+
+### Critério de combinações que NÃO entraram (documentado, não forçado)
+
+- `DepoimentoReel`: sem `zoomPunch`/`whipPanCut`/`splitReveal` — energia
+  agressiva ou estrutura de "2 lados que se encontram" contradiz o tom de
+  voz pessoal do cliente que define o formato.
+- `BastidoresReel`: só 2 combinações reais (`minimalFade` + `kineticForte`
+  baseline) — o tipo não tem eixo de tema/produto (sempre preto/roxo fixo),
+  e nenhum outro preset tem `quandoUsar` compatível com sobriedade/confiança
+  sem forçar.
+- `AntesDepoisReel`: sem `zoomPunch` (impacto agressivo é pra lançamento de
+  produto, não uma virada gradual) nem `splitReveal`/`whipPanCut` (estruturas
+  de "2 opções" ou "vários pontos rápidos", que não é o que Antes/Depois
+  representa).
+
+### Renders de prova (Round D)
+
+**19 vídeos MP4 novos** renderizados em `out/qa/motion/` (`node
+scripts/qa-motion-styles.mjs --round-d`, batch `BATCH_ROUND_D` no mesmo
+script do Round C): 6 `DepoimentoReel`, 2 `BastidoresReel`, 6
+`AntesDepoisReel`, + 5 combinações novas nos 3 tipos já existentes
+(`DadoVsAchismoReel` ganha `typewriter` — a "Achismo" já É uma citação em
+1ª pessoa, mesma lógica do Depoimento; `MetodologiaReel` ganha `minimalFade`;
+`ComparativoReel` ganha `whipPanCut` + 2 cruzamentos de produto NTB Vendas
+com presets já provados). Conteúdo customizado (cliente/produto diferente
+por combinação, não só o mesmo texto com paleta trocada) pra exercitar
+tema×produto de verdade, não só motionStyle isolado — citações de cliente
+são PLACEHOLDER de QA (mesma regra do Still, nunca produção real).
+
+Revisão real via contact sheets + frames extraídos em pontos de transição
+(Regra Inviolável #1) — 1 achado real corrigido (scalePop overlap, acima).
+Os 11 vídeos do Round C também seguem em `out/qa/motion/` (nunca apagados —
+`out/` é gitignored mas os arquivos persistem em disco entre sessões).
+
+**Total acumulado real do catálogo de vídeo: 30 MP4s** (11 do Round C + 19
+do Round D) — confirmado por contagem direta de arquivo
+(`ls out/qa/motion/*.mp4 | wc -l`), não estimado. Dentro da meta pedida de
+30-50; ficou na ponta inferior por decisão consciente de não forçar
+combinações tipo×motionStyle sem sentido semântico (ver critério acima) —
+prioridade dada à Regra Inviolável #1 sobre bater o topo do intervalo.
+
+**Próximo passo (Round E, se houver):** consolidar catálogo geral
+(posts+vídeo) numa galeria única; considerar `VitrineProdutoReel` (par de
+`zoomPunch`) como 7º tipo animável se a Norte quiser continuar escalando
+vídeo — maior escopo (device frame animado) do que os 3 Reels desta rodada.
 
 ---
 

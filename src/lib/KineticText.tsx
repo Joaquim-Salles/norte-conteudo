@@ -93,6 +93,15 @@ export const KineticText: React.FC<KineticTextProps> = ({
               display: 'inline-block',
               opacity: w.opacity,
               transform: `${w.transform} scale(${keywordScale})`,
+              // Achado real de QA (Round D, 2026-09-01, ver
+              // ComparativoReel-whipPanCut-vendas.mp4): sem transformOrigin
+              // explícito, o scale por padrão cresce a partir do CENTRO do
+              // span — pra um estalo de ~1.35x (highlight scalePop), isso
+              // invade visualmente o espaço da palavra ANTERIOR (overlap
+              // real no vídeo, não só metadado). 'left center' faz o estalo
+              // crescer só pra direita, nunca sobre a palavra anterior —
+              // seguro pra qualquer tamanho/posição de palavra-chave.
+              transformOrigin: 'left center',
               marginRight: wordGap,
             }}
           >

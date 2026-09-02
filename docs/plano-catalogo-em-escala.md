@@ -106,6 +106,38 @@ precisamos de mais UMA dimensão combinável em cada lado:
   candidatos mais óbvios pelo `quandoUsar` de cada preset), mirar 15-25
   vídeos renderizados cruzando mais combinações tipo×motionStyle×tema.
 
+- **Round D — CONCLUÍDO (2026-09-01, execução autônoma overnight, fundador
+  dormindo)**: 3 Reels NOVOS, dobrando o catálogo de vídeo de 3 pra 6 tipos
+  animáveis — `DepoimentoReel` (par de `typewriter`, a citação aparece
+  letra a letra), `BastidoresReel` (par de `minimalFade`, mantém a MESMA
+  decisão de escopo do Still: sem `CtaBand` cheio no fechamento, só linha
+  discreta) e `AntesDepoisReel` (3º Reel, decisão de julgamento — par de
+  `matchCut`, já documentado desde o Round C como "o padrão real pra
+  antes/depois"; nenhum tipo do catálogo tinha ainda a estrutura "2 estados
+  que se opõem" pra usar o preset de verdade; `VitrineProdutoReel`/
+  `zoomPunch` cogitado e adiado por escopo maior — device frame animado).
+  Todos os 3 seguem a infraestrutura de `motionStyle` do Round C sem
+  duplicar lógica (`KineticText`/`MotionTransition`/`calculateMetadata`).
+  **1 achado real de QA corrigido** (Regra Inviolável #1): o highlight
+  `scalePop` escalava a palavra-chave a partir do centro, invadindo
+  visualmente a palavra anterior em títulos mais longos — bug LATENTE desde
+  o Round C, só ficou visível com o conteúdo novo desta rodada. Corrigido em
+  `KineticText.tsx` (`transformOrigin: 'left center'`), componente
+  COMPARTILHADO — re-renderizado e revisado tanto o vídeo novo afetado
+  quanto um vídeo do Round C que usa o mesmo mecanismo (regressão limpa).
+  **19 vídeos MP4 novos renderizados** (`node scripts/qa-motion-styles.mjs
+  --round-d`) — 6 `DepoimentoReel`, 2 `BastidoresReel`, 6 `AntesDepoisReel`,
+  + 5 combinações novas nos 3 tipos existentes (incluindo `typewriter` no
+  `DadoVsAchismoReel` — a "Achismo" já é uma citação em 1ª pessoa). Critério
+  de exclusão documentado pra combinações que NÃO fazem sentido semântico
+  (zoomPunch/splitReveal/whipPanCut fora de Depoimento/Bastidores/
+  AntesDepois — ver `CATALOGO.md` §0.3). **Total acumulado real: 30 vídeos
+  MP4** (11 do Round C + 19 novos, confirmado por contagem direta de
+  arquivo) — na ponta inferior da meta de 30-50 por decisão consciente de
+  não forçar combinação ruim, não por limitação de tempo de render (19
+  vídeos renderizaram em ~3 minutos no total, ~9s cada). Detalhe completo em
+  `src/templates/CATALOGO.md` §0.3.
+
 ## Rounds de execução (cada um = 1 dispatch do Rafael, sequencial)
 
 1. **Round A — infraestrutura de `visualStyle`**: `src/lib/visualStyles.ts`, 4-5 presets
@@ -116,8 +148,8 @@ precisamos de mais UMA dimensão combinável em cada lado:
 3. **Round C — infraestrutura de `motionStyle` pra vídeo**: `src/lib/motionStyles.ts`,
    6-8 presets de motion (ex: kinetic-typography-forte, minimal-fade, glitch-transition,
    split-screen-reveal, zoom-punch, stopmotion-cut). Aplicar em 2-3 tipos já animados.
-4. **Round D — escalar vídeo**: mais tipos ganham versão Reel, combinar com motionStyle,
-   mirar 15-25 vídeos renderizados de verdade (MP4).
+4. **Round D — CONCLUÍDO — escalar vídeo**: mais tipos ganham versão Reel, combinar com
+   motionStyle. Meta original 15-25 vídeos; real: 19 novos (30 acumulado) — ver detalhe acima.
 5. **Round E — consolidação**: atualizar CATALOGO.md com a contagem final real (não
    arredondar pra 50/100 se não bateu — reportar o número real), gerar galeria.
 
