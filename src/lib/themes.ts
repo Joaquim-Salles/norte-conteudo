@@ -16,8 +16,15 @@ import type {ProductKey} from './types';
 
 export type ThemeName = 'marca' | 'estoque' | 'vendas' | 'avalia';
 
-/** 'bezel' = SurfaceCard double-bezel (mais "all", profundidade física). 'flat' = caixa reta de traço único (mais direto/"software"). */
-export type CardStyle = 'bezel' | 'flat';
+/**
+ * 'bezel' = SurfaceCard double-bezel (mais "all", profundidade física).
+ * 'flat' = caixa reta de traço único (mais direto/"software").
+ * 'outline' (novo, visualStyle corporateClean) = borda fina única, fundo
+ * transparente — mais formal/reto, sem profundidade nem preenchimento.
+ * Ver src/lib/visualStyles.ts — cardStyleOverride de um visualStyle tem
+ * prioridade sobre o cardStyle do tema (ver resolveCardStyle).
+ */
+export type CardStyle = 'bezel' | 'flat' | 'outline';
 
 export type Theme = {
   name: ThemeName;

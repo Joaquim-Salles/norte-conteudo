@@ -1,5 +1,14 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+Atualizado em 2026-09-01 (Round A do plano de catálogo em escala — ver
+`docs/plano-catalogo-em-escala.md`) — nova dimensão **`visualStyle`** (estilo
+visual), ortogonal ao `theme` que já existia: 5 presets sistemáticos
+(composição/densidade, textura, estilo de card, peso tipográfico, gráfico de
+apoio) aplicáveis a qualquer template refatorado, combinando com `theme` de
+verdade (mesmo conteúdo × mesmo tema × estilos diferentes = saídas
+visivelmente diferentes). Ver seção **"0.1 Sistema de estilo visual"** logo
+abaixo da seção de temas.
+
 Atualizado em 2026-09-01 — **3 tipos NOVOS de post** (Depoimento/Prova
 Social, Comparativo Direto, Bastidores/Como Trabalhamos), além dos 5
 originais da Fase 0. Pedido literal do fundador: *"mais modelos mais
@@ -51,6 +60,10 @@ Como testar:
   cobre os 5 tipos de post/variações de layout.
 - `npm run qa:temas` gera a matriz tema × variante em `out/qa/temas/` (ver
   `scripts/qa-theme-batch.mjs`) — prova o sistema de temas descrito na §0.
+- `npm run qa:estilos` gera a matriz template × visualStyle × tema em
+  `out/qa/estilos/` (ver `scripts/qa-visual-styles.mjs`) — prova o sistema de
+  estilo visual descrito na §0.1 (40 combinações reais renderizadas em
+  2026-09-01, ver histórico de commits).
 
 ---
 
@@ -225,6 +238,57 @@ visuais diferentes trocando só uma prop.
 - **`VitrineProduto` não recebe `theme` manualmente** — o tema é sempre
   derivado automaticamente do campo `produto` (`getThemeForProduct`), porque
   uma vitrine sempre anuncia o produto certo, nunca uma escolha livre.
+
+## 0.1 Sistema de estilo visual — `visualStyle` (2026-09-01, Round A)
+
+Segunda dimensão paramétrica, **ortogonal ao `theme`** (§0): `theme` resolve
+"de qual sistema/produto é a cor", `visualStyle` resolve "que TIPO de
+composição visual é essa peça". As duas se combinam livremente — mesmo
+conteúdo, tema Estoque + estilo minimalista vs. tema Estoque + estilo
+boldTipografico são visivelmente diferentes sem trocar uma linha de cor. É a
+peça de infraestrutura que faltava pra multiplicar o catálogo de posts de
+forma combinatória (ver `docs/plano-catalogo-em-escala.md`): 8 tipos × 4
+temas × 5 estilos = até 160 combinações possíveis (nem todas fazem sentido
+semântico em todo template — usar critério, não forçar).
+
+Calibrado com pesquisa rápida de mercado B2B/editorial 2026 antes de definir
+os presets (não decidido no vácuo): "minimaximalismo" 2026 (base minimalista
++ tipografia/cor assertiva), estilo Suíço/Internacional Typographic (grid
+funcional, alto contraste, 1 cor de destaque), tipografia como elemento
+"hero" (grande/protagonista), e o padrão de restrição visual = credibilidade
+em conteúdo B2B/LinkedIn.
+
+**`src/lib/visualStyles.ts`** define 5 presets, cada um um conjunto de KNOBS
+sistemáticos (nunca CSS solto por template):
+
+| Preset | Quando usar | Composição/densidade | Textura | Estilo de card | Tipografia hero | Gráfico de apoio |
+|---|---|---|---|---|---|---|
+| `minimalista` | Peça institucional/conceitual — credibilidade por sobriedade | Muito espaço em branco (spacingScale 1.3) | Desligada | `flat` | Bold, tamanho normal | Não |
+| `dadoEmDestaque` | Peça COM um número/métrica forte pra vender — generaliza o princípio que já existia isolado na variante `impacto` de DadoVsAchismo pra qualquer template | Compacto, número domina (spacingScale 0.88) | Ligada, mais densa | Herda do tema | Bold, +45% de tamanho | Sim |
+| `editorial` | Tom de reportagem/revista — depoimento, contexto, prova social | Levemente mais espaçoso (1.1) | Ligada, sutil (papel) | `bezel` (profundidade) | Itálico regular, elegante | Sim |
+| `boldTipografico` | A frase/afirmação em si é o gancho (manifesto, regra da casa) — tipografia É o gráfico | Compacto, tipografia enche o quadro (0.82) | Desligada | `flat` | Bold, +65% de tamanho, tracking negativo | Não |
+| `corporateClean` | Contexto B2B mais formal/conservador — "chamativo" seria contraproducente | Respiro formal (1.15) | Desligada | `outline` (borda fina) | Bold, tamanho reduzido (-8%) | Não |
+
+- Cada template refatorado recebe `visualStyle?: VisualStyleName` **opcional**
+  — omitido = aparência ORIGINAL (pré-2026-09-01), nenhuma peça já aprovada
+  muda de aspecto por causa desta rodada.
+- Helpers em `visualStyles.ts` (`scaleSpacing`, `headlineStyle`,
+  `resolveTexture`, `resolveCardStyle`, `showGraphicSupport`) resolvem os
+  knobs de forma centralizada — template nunca faz `if (visualStyle === ...)`
+  espalhado pelo JSX.
+- Novo `CardStyle` `'outline'` (borda fina única, fundo transparente) somado
+  a `'bezel'`/`'flat'` que já existiam, pro preset `corporateClean`
+  (`src/lib/themes.ts`, `src/lib/SurfaceCard.tsx`).
+- **Templates refatorados pra aceitar `visualStyle` (Round A):**
+  `DadoVsAchismo` (3 variantes), `Comparativo` (2 variantes), `Depoimento` (5
+  estados de slide). Os outros 5 tipos ainda não foram tocados — fica pro
+  Round B (`docs/plano-catalogo-em-escala.md`).
+- Achado real de QA visual (Regra Inviolável #1): o headlineScale de
+  `dadoEmDestaque`/`boldTipografico` aplicado ao título de coluna do
+  `Comparativo` ("DO JEITO ANTIGO") quebrava em 2 linhas enquanto "COM A
+  NORTE" ficava em 1, ficando visualmente assimétrico. Corrigido com um clamp
+  de fontSize (28px) só nesse elemento — o efeito de peso/estilo continua
+  presente, sem quebrar o layout.
 
 ## Vitrine de Produto — variante `print` (nova, 2026-08-31)
 

@@ -6,6 +6,7 @@ import {getTheme} from '../lib/themes';
 import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
 import {IconAlert, IconChart} from '../lib/icons';
 import {Badge} from '../lib/Badge';
+import {getVisualStyle, headlineStyle, resolveTexture, scaleSpacing, showGraphicSupport} from '../lib/visualStyles';
 import type {DadoVsAchismoData} from '../lib/types';
 
 /**
@@ -20,6 +21,12 @@ import type {DadoVsAchismoData} from '../lib/types';
  * `theme` (default 'marca') troca a paleta de fundo/glow pelo sistema anunciado
  * (ver src/lib/themes.ts) — o accent vermelho de CTA/badge fica fixo em todos os
  * temas de proposito (reconhecimento de marca + urgencia do lead-gen).
+ *
+ * `visualStyle` (novo, 2026-09-01, opcional — ver src/lib/visualStyles.ts) e
+ * ortogonal ao `theme`: muda densidade de layout, textura, peso/tamanho do
+ * numero do dado e presenca de grafico de apoio (GhostBars/GhostQuote), SEM
+ * mexer em cor. Omitido = aparencia original de cada variante, identica a
+ * antes desta rodada.
  */
 export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   achismo,
@@ -27,12 +34,23 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   fonteDado,
   variant = 'padrao',
   theme = 'marca',
+  visualStyle,
 }) => {
   const t = getTheme(theme);
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, t.textureOpacity);
+  const graphics = showGraphicSupport(vs);
 
   if (variant === 'impacto') {
+    const dadoStyle = headlineStyle(vs, 92, -2.8);
+    const tarjaHeight = scaleSpacing(vs, 200, {min: 140, max: 260});
     return (
-      <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={true}>
+      <Frame
+        background={t.colors.dark}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         {/* Achismo — tarja fina, quase apagada */}
         <div
           style={{
@@ -40,7 +58,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             top: 0,
             left: 0,
             right: 0,
-            height: 200,
+            height: tarjaHeight,
             background: 'rgba(255,255,255,0.06)',
             padding: '52px 64px 0',
             borderBottom: '1px solid rgba(255,255,255,0.09)',
@@ -81,7 +99,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
         <div
           style={{
             position: 'absolute',
-            top: 200,
+            top: tarjaHeight,
             left: 0,
             right: 0,
             bottom: 0,
@@ -97,12 +115,13 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           </div>
           <p
             style={{
-              fontSize: 92,
-              fontWeight: 700,
+              fontSize: dadoStyle.fontSize,
+              fontWeight: dadoStyle.fontWeight,
+              fontStyle: dadoStyle.fontStyle,
               color: colors.white,
               lineHeight: 0.98,
               margin: '30px 0 0',
-              letterSpacing: -2.8,
+              letterSpacing: dadoStyle.letterSpacing,
             }}
           >
             {dado}
@@ -112,9 +131,11 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
               Fonte: {fonteDado}
             </span>
           ) : null}
-          <div style={{position: 'absolute', right: -20, bottom: 220}}>
-            <GhostBars color={t.colors.light} opacity={0.22} width={340} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: -20, bottom: 220}}>
+              <GhostBars color={t.colors.light} opacity={0.22} width={340} />
+            </div>
+          ) : null}
         </div>
 
         <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
@@ -125,8 +146,15 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   }
 
   if (variant === 'ladoALado') {
+    const dadoStyle = headlineStyle(vs, 52, -1);
+    const achismoColWidth = scaleSpacing(vs, 400, {min: 300, max: 500});
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame
+        background={colors.white}
+        wordmarkColor={colors.black}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         {/* Coluna ACHISMO — esquerda, comprimida */}
         <div
           style={{
@@ -134,7 +162,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             top: 0,
             left: 0,
             bottom: 260,
-            width: 400,
+            width: achismoColWidth,
             background: '#e7e7ee',
             padding: '100px 40px 0 64px',
             display: 'flex',
@@ -170,9 +198,11 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           >
             {achismo}
           </p>
-          <div style={{position: 'absolute', left: 26, bottom: 36}}>
-            <GhostQuote color="#54546a" opacity={0.12} size={110} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', left: 26, bottom: 36}}>
+              <GhostQuote color="#54546a" opacity={0.12} size={110} />
+            </div>
+          ) : null}
         </div>
 
         {/* Coluna DADO — direita, dominante */}
@@ -180,7 +210,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           style={{
             position: 'absolute',
             top: 0,
-            left: 400,
+            left: achismoColWidth,
             right: 0,
             bottom: 260,
             background: t.colors.dark,
@@ -205,12 +235,13 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           </div>
           <p
             style={{
-              fontSize: 52,
-              fontWeight: 700,
+              fontSize: dadoStyle.fontSize,
+              fontWeight: dadoStyle.fontWeight,
+              fontStyle: dadoStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.14,
               margin: '20px 0 0',
-              letterSpacing: -1,
+              letterSpacing: dadoStyle.letterSpacing,
             }}
           >
             {dado}
@@ -220,9 +251,11 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
               Fonte: {fonteDado}
             </span>
           ) : null}
-          <div style={{position: 'absolute', right: 6, bottom: 24}}>
-            <GhostBars color={t.colors.light} opacity={0.16} width={210} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: 6, bottom: 24}}>
+              <GhostBars color={t.colors.light} opacity={0.16} width={210} />
+            </div>
+          ) : null}
         </div>
 
         {/* Costura vertical entre as colunas — reforca a "virada" achismo -> dado */}
@@ -231,7 +264,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             position: 'absolute',
             top: 0,
             bottom: 260,
-            left: 386,
+            left: achismoColWidth - 14,
             width: 30,
             background: colors.accent,
             transform: 'skewX(-4deg)',
@@ -247,8 +280,15 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   }
 
   // variant === 'padrao'
+  const dadoStylePadrao = headlineStyle(vs, 68, -1);
+  const splitHeight = scaleSpacing(vs, 420, {min: 260, max: 560});
   return (
-    <Frame background={colors.white} wordmarkColor={colors.white}>
+    <Frame
+      background={colors.white}
+      wordmarkColor={colors.white}
+      texture={tex.enabled}
+      textureOpacity={tex.opacity}
+    >
       {/* Bloco ACHISMO — comprimido, cinza, riscado: visualmente "errado" */}
       <div
         style={{
@@ -256,7 +296,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           top: 0,
           left: 0,
           right: 0,
-          height: 420,
+          height: splitHeight,
           background: '#e7e7ee',
           padding: '64px 64px 0',
           display: 'flex',
@@ -293,16 +333,18 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
         >
           {achismo}
         </p>
-        <div style={{position: 'absolute', right: 24, top: 30}}>
-          <GhostQuote color="#54546a" opacity={0.1} size={150} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: 24, top: 30}}>
+            <GhostQuote color="#54546a" opacity={0.1} size={150} />
+          </div>
+        ) : null}
       </div>
 
       {/* Bloco DADO — dominante, cor primaria, tipografia grande */}
       <div
         style={{
           position: 'absolute',
-          top: 420,
+          top: splitHeight,
           left: 0,
           right: 0,
           bottom: 0,
@@ -329,12 +371,13 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
         </div>
         <p
           style={{
-            fontSize: 68,
-            fontWeight: 700,
+            fontSize: dadoStylePadrao.fontSize,
+            fontWeight: dadoStylePadrao.fontWeight,
+            fontStyle: dadoStylePadrao.fontStyle,
             color: colors.white,
             lineHeight: 1.08,
             margin: '18px 0 0',
-            letterSpacing: -1,
+            letterSpacing: dadoStylePadrao.letterSpacing,
           }}
         >
           {dado}
@@ -344,16 +387,18 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             Fonte: {fonteDado}
           </span>
         ) : null}
-        <div style={{position: 'absolute', right: 20, bottom: 210}}>
-          <GhostBars color={t.colors.light} opacity={0.12} width={300} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: 20, bottom: 210}}>
+            <GhostBars color={t.colors.light} opacity={0.12} width={300} />
+          </div>
+        ) : null}
       </div>
 
       {/* Divisor diagonal entre os dois blocos, reforca a "virada" achismo -> dado */}
       <div
         style={{
           position: 'absolute',
-          top: 396,
+          top: splitHeight - 24,
           left: 0,
           right: 0,
           height: 48,

@@ -1,6 +1,7 @@
 /** Tipos de dado dos 5 templates — populados pelo parser do brief mensal (scripts/parse-brief.mjs). */
 
 import type {ThemeName} from './themes';
+import type {VisualStyleName} from './visualStyles';
 
 export type ProductKey = 'ntbEstoque' | 'ntbVendas' | 'norteAvalia' | null;
 
@@ -18,6 +19,12 @@ export type DadoVsAchismoData = {
   variant?: DadoVsAchismoVariant;
   /** Tema de paleta (sistema/produto ou marca geral). Default: 'marca'. */
   theme?: ThemeName;
+  /**
+   * Estilo visual (novo, 2026-09-01) — dimensão ortogonal ao `theme` (ver
+   * src/lib/visualStyles.ts). Opcional: omitido = aparência original da
+   * variante, sem nenhuma peça já aprovada mudando de aspecto.
+   */
+  visualStyle?: VisualStyleName;
 };
 
 export type DicaPraticaSlide =
@@ -188,6 +195,8 @@ export type DepoimentoData = {
   slides: DepoimentoSlide[];
   /** Tema de paleta — default 'marca'. Ver src/lib/themes.ts. */
   theme?: ThemeName;
+  /** Estilo visual (novo, 2026-09-01) — ver src/lib/visualStyles.ts. Opcional, omitido = aparência original. */
+  visualStyle?: VisualStyleName;
 };
 
 /**
@@ -216,6 +225,8 @@ export type ComparativoData = {
   produto?: ProductKey;
   /** Usado so quando `produto` NAO e informado (comparativo generico, sem produto especifico). Default 'marca'. */
   theme?: ThemeName;
+  /** Estilo visual (novo, 2026-09-01) — ver src/lib/visualStyles.ts. Opcional, omitido = aparência original. */
+  visualStyle?: VisualStyleName;
 };
 
 /**

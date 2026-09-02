@@ -14,6 +14,15 @@ type FrameProps = {
   wordmarkColor?: string;
   /** Grain sutil de superficie (ver lib/Texture.tsx). Default: true — desligar so em caso pontual. */
   texture?: boolean;
+  /**
+   * Opacidade do grain quando texture=true. Default 0.045 (era hardcoded
+   * antes de 2026-09-01 — `theme.textureOpacity` existia mas nao era usado
+   * em lugar nenhum). Passar `theme.textureOpacity` (opcionalmente
+   * multiplicado pelo `visualStyle.texture.opacityMultiplier`, ver
+   * src/lib/visualStyles.ts `resolveTexture`) pra fazer tema E estilo visual
+   * afetarem a densidade do grain de verdade.
+   */
+  textureOpacity?: number;
 };
 
 /**
@@ -27,6 +36,7 @@ export const Frame: React.FC<FrameProps> = ({
   showWordmark = true,
   wordmarkColor = colors.black,
   texture = true,
+  textureOpacity = 0.045,
 }) => {
   return (
     <AbsoluteFill
@@ -70,7 +80,7 @@ export const Frame: React.FC<FrameProps> = ({
           </span>
         </div>
       ) : null}
-      {texture ? <GrainOverlay opacity={0.045} /> : null}
+      {texture ? <GrainOverlay opacity={textureOpacity} /> : null}
     </AbsoluteFill>
   );
 };

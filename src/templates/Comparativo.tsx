@@ -7,6 +7,7 @@ import {colors} from '../lib/tokens';
 import {getTheme, getThemeForProduct} from '../lib/themes';
 import {GhostArrowUp} from '../lib/GhostGraphics';
 import {IconCheck, IconX} from '../lib/icons';
+import {getVisualStyle, headlineStyle, resolveCardStyle, resolveTexture, scaleSpacing, showGraphicSupport} from '../lib/visualStyles';
 import type {ComparativoData} from '../lib/types';
 
 /**
@@ -19,6 +20,11 @@ import type {ComparativoData} from '../lib/types';
  * nao um numero isolado. Pesquisa de mercado 2026 (ver CATALOGO.md §6):
  * comparativos diretos captam "intencao de fase de pesquisa" — quem esta
  * decidindo entre alternativas, nao so consumindo conteudo educativo.
+ *
+ * `visualStyle` (novo, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * troca estilo de card (bezel/flat/outline), textura, densidade das colunas
+ * e peso/tamanho dos titulos A/B — ortogonal ao `theme`/`produto`. Omitido =
+ * aparencia original.
  */
 export const Comparativo: React.FC<ComparativoData> = ({
   tituloA,
@@ -27,12 +33,25 @@ export const Comparativo: React.FC<ComparativoData> = ({
   variant = 'colunas',
   produto,
   theme,
+  visualStyle,
 }) => {
   const t = produto ? getThemeForProduct(produto) : getTheme(theme ?? 'marca');
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, t.textureOpacity);
+  const graphics = showGraphicSupport(vs);
+  const cardVariant = resolveCardStyle(vs, t.cardStyle);
+  const tituloStyleRaw = headlineStyle(vs, 25, 1);
+  // Clamp: tituloA/B e' label curto de 1 linha ("DO JEITO ANTIGO") — achado
+  // real no QA visual de 2026-09-01 (Regra Inviolavel #1): headlineScale de
+  // dadoEmDestaque/boldTipografico (1.45x/1.65x) faz "DO JEITO ANTIGO" quebrar
+  // em 2 linhas, ficando assimetrico com "COM A NORTE" (1 linha) na mesma
+  // fileira. Cap em 28px preserva o efeito de peso/estilo sem quebrar layout.
+  const tituloStyle = {...tituloStyleRaw, fontSize: Math.min(tituloStyleRaw.fontSize, 28)};
 
   if (variant === 'tabela') {
+    const rowGap = scaleSpacing(vs, 14, {min: 8, max: 22});
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -49,9 +68,10 @@ export const Comparativo: React.FC<ComparativoData> = ({
             <div style={{flex: 1, textAlign: 'center'}}>
               <span
                 style={{
-                  fontSize: 21,
-                  fontWeight: 700,
-                  letterSpacing: 1.5,
+                  fontSize: tituloStyle.fontSize,
+                  fontWeight: tituloStyle.fontWeight,
+                  fontStyle: tituloStyle.fontStyle,
+                  letterSpacing: tituloStyle.letterSpacing,
                   color: '#8a8a9c',
                   textTransform: 'uppercase',
                 }}
@@ -62,9 +82,10 @@ export const Comparativo: React.FC<ComparativoData> = ({
             <div style={{flex: 1, textAlign: 'center'}}>
               <span
                 style={{
-                  fontSize: 21,
-                  fontWeight: 700,
-                  letterSpacing: 1.5,
+                  fontSize: tituloStyle.fontSize,
+                  fontWeight: tituloStyle.fontWeight,
+                  fontStyle: tituloStyle.fontStyle,
+                  letterSpacing: tituloStyle.letterSpacing,
                   color: t.colors.base,
                   textTransform: 'uppercase',
                 }}
@@ -74,9 +95,13 @@ export const Comparativo: React.FC<ComparativoData> = ({
             </div>
           </div>
 
-          <div style={{marginTop: 18, display: 'flex', flexDirection: 'column', gap: 14}}>
+          <div style={{marginTop: 18, display: 'flex', flexDirection: 'column', gap: rowGap}}>
             {itens.slice(0, 5).map((item, i) => (
-              <SurfaceCard key={i} variant={t.cardStyle}>
+              <SurfaceCard
+                key={i}
+                variant={cardVariant}
+                borderColor={cardVariant === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}
+              >
                 <div style={{display: 'flex', alignItems: 'center', padding: '24px 22px', gap: 10}}>
                   <div style={{flex: 1.15}}>
                     <span style={{fontSize: 27, fontWeight: 700, color: colors.black, lineHeight: 1.2}}>
@@ -131,8 +156,9 @@ export const Comparativo: React.FC<ComparativoData> = ({
   // ladoALado, mesmo padrao), a area onde o wordmark fica e o branco padrao
   // do Frame, nao a cor do tema — texto branco ali ficaria invisivel (bug
   // real encontrado no QA visual de 2026-09-01, corrigido antes de aprovar).
+  const colPaddingTop = scaleSpacing(vs, 190, {min: 140, max: 250});
   return (
-    <Frame background={colors.white} wordmarkColor={colors.black}>
+    <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
       <div style={{position: 'absolute', top: 0, left: 0, right: 0, padding: '90px 64px 0', zIndex: 2}}>
         <Badge>Comparativo</Badge>
       </div>
@@ -146,14 +172,15 @@ export const Comparativo: React.FC<ComparativoData> = ({
           left: 0,
           width: '50%',
           background: '#dcdce6',
-          padding: '190px 32px 0 64px',
+          padding: `${colPaddingTop}px 32px 0 64px`,
         }}
       >
         <span
           style={{
-            fontSize: 25,
-            fontWeight: 700,
-            letterSpacing: 1,
+            fontSize: tituloStyle.fontSize,
+            fontWeight: tituloStyle.fontWeight,
+            fontStyle: tituloStyle.fontStyle,
+            letterSpacing: tituloStyle.letterSpacing,
             color: '#6c6c80',
             textTransform: 'uppercase',
           }}
@@ -172,9 +199,11 @@ export const Comparativo: React.FC<ComparativoData> = ({
             </div>
           ))}
         </div>
-        <div style={{position: 'absolute', left: 6, bottom: 20}}>
-          <GhostArrowUp color="#54546a" opacity={0.07} size={140} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', left: 6, bottom: 20}}>
+            <GhostArrowUp color="#54546a" opacity={0.07} size={140} />
+          </div>
+        ) : null}
       </div>
 
       {/* Coluna B — cor do tema, "com a Norte" */}
@@ -186,14 +215,15 @@ export const Comparativo: React.FC<ComparativoData> = ({
           left: '50%',
           right: 0,
           background: `linear-gradient(160deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`,
-          padding: '190px 64px 0 32px',
+          padding: `${colPaddingTop}px 64px 0 32px`,
         }}
       >
         <span
           style={{
-            fontSize: 25,
-            fontWeight: 700,
-            letterSpacing: 1,
+            fontSize: tituloStyle.fontSize,
+            fontWeight: tituloStyle.fontWeight,
+            fontStyle: tituloStyle.fontStyle,
+            letterSpacing: tituloStyle.letterSpacing,
             color: colors.white,
             textTransform: 'uppercase',
           }}
@@ -212,9 +242,11 @@ export const Comparativo: React.FC<ComparativoData> = ({
             </div>
           ))}
         </div>
-        <div style={{position: 'absolute', right: 2, bottom: 6}}>
-          <GhostArrowUp color={colors.white} opacity={0.09} size={150} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: 2, bottom: 6}}>
+            <GhostArrowUp color={colors.white} opacity={0.09} size={150} />
+          </div>
+        ) : null}
       </div>
 
       {/* Selo VS na costura central */}

@@ -7,6 +7,14 @@ import {colors} from '../lib/tokens';
 import {getTheme, type ThemeName} from '../lib/themes';
 import {GhostQuote, GhostBars} from '../lib/GhostGraphics';
 import {IconQuote, IconAlert, IconGrowth} from '../lib/icons';
+import {
+  getVisualStyle,
+  headlineStyle,
+  resolveCardStyle,
+  resolveTexture,
+  showGraphicSupport,
+  type VisualStyleName,
+} from '../lib/visualStyles';
 import type {DepoimentoSlide} from '../lib/types';
 
 const productLabel: Record<string, string> = {
@@ -32,9 +40,22 @@ const productLabel: Record<string, string> = {
  * usar foto de banco de imagem generica fingindo ser o cliente seria
  * enganoso (mesmo espirito da regra de nao usar IA generativa pra simular
  * pessoa real). Atribuicao usa iniciais num selo colorido em vez de rosto.
+ *
+ * `visualStyle` (novo, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * troca estilo de card do selo de atribuicao, textura, presenca de
+ * GhostQuote/GhostBars decorativo, e peso/tamanho da citacao/metrica —
+ * ortogonal ao `theme`. Omitido = aparencia original.
  */
-export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> = ({slide, theme = 'marca'}) => {
+export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; visualStyle?: VisualStyleName}> = ({
+  slide,
+  theme = 'marca',
+  visualStyle,
+}) => {
   const t = getTheme(theme);
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, t.textureOpacity);
+  const graphics = showGraphicSupport(vs);
+  const cardVariant = resolveCardStyle(vs, t.cardStyle);
 
   const iniciais = (nome: string) =>
     nome
@@ -45,17 +66,27 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
       .join('');
 
   if (slide.kind === 'capa') {
+    const citacaoStyle = headlineStyle(vs, 54, 0);
     return (
-      <Frame background={`linear-gradient(165deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`} wordmarkColor={colors.white}>
+      <Frame
+        background={`linear-gradient(165deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         {/* Aspas graficas grandes, abertura + fechamento espelhado — mesma
             gramatica do cover-quote do DicaPratica, da moldura visual real
             a citacao em vez de deixar o meio da peca vazio. */}
-        <div style={{position: 'absolute', right: -50, top: -50}}>
-          <GhostQuote color={colors.white} opacity={0.1} size={360} />
-        </div>
-        <div style={{position: 'absolute', left: -20, bottom: 130, transform: 'rotate(180deg)'}}>
-          <GhostQuote color={colors.white} opacity={0.06} size={220} />
-        </div>
+        {graphics ? (
+          <>
+            <div style={{position: 'absolute', right: -50, top: -50}}>
+              <GhostQuote color={colors.white} opacity={0.1} size={360} />
+            </div>
+            <div style={{position: 'absolute', left: -20, bottom: 130, transform: 'rotate(180deg)'}}>
+              <GhostQuote color={colors.white} opacity={0.06} size={220} />
+            </div>
+          </>
+        ) : null}
 
         <div
           style={{
@@ -71,12 +102,13 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
 
           <p
             style={{
-              fontSize: 54,
-              fontWeight: 400,
-              fontStyle: 'italic',
+              fontSize: citacaoStyle.fontSize,
+              fontWeight: citacaoStyle.fontWeight,
+              fontStyle: citacaoStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.3,
               margin: '40px 0 0',
+              letterSpacing: citacaoStyle.letterSpacing,
               maxWidth: 900,
             }}
           >
@@ -84,7 +116,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
           </p>
 
           <div style={{marginTop: 52}}>
-            <SurfaceCard variant={t.cardStyle} shellColor="rgba(255,255,255,0.08)" coreColor="rgba(255,255,255,0.12)">
+            <SurfaceCard variant={cardVariant} shellColor="rgba(255,255,255,0.08)" coreColor="rgba(255,255,255,0.12)">
               <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '22px 26px'}}>
                 <div
                   style={{
@@ -120,14 +152,19 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
   }
 
   if (slide.kind === 'capa-metrica') {
+    const metricaStyle = headlineStyle(vs, 120, -3);
     return (
-      <Frame background={t.colors.dark} wordmarkColor={colors.white}>
-        <div style={{position: 'absolute', left: -70, top: -60}}>
-          <GhostQuote color={colors.white} opacity={0.07} size={320} />
-        </div>
-        <div style={{position: 'absolute', right: -50, bottom: 190, transform: 'rotate(180deg)'}}>
-          <GhostQuote color={colors.white} opacity={0.06} size={240} />
-        </div>
+      <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+        {graphics ? (
+          <>
+            <div style={{position: 'absolute', left: -70, top: -60}}>
+              <GhostQuote color={colors.white} opacity={0.07} size={320} />
+            </div>
+            <div style={{position: 'absolute', right: -50, bottom: 190, transform: 'rotate(180deg)'}}>
+              <GhostQuote color={colors.white} opacity={0.06} size={240} />
+            </div>
+          </>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -146,11 +183,12 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
             <IconGrowth size={54} color={colors.accent} strokeWidth={2.2} />
             <span
               style={{
-                fontSize: 120,
-                fontWeight: 700,
+                fontSize: metricaStyle.fontSize,
+                fontWeight: metricaStyle.fontWeight,
+                fontStyle: metricaStyle.fontStyle,
                 color: colors.accent,
                 lineHeight: 0.95,
-                letterSpacing: -3,
+                letterSpacing: metricaStyle.letterSpacing,
                 textShadow: '0 20px 50px rgba(244,63,94,0.35)',
               }}
             >
@@ -196,11 +234,19 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
   }
 
   if (slide.kind === 'contexto') {
+    const corpoStyle = headlineStyle(vs, 38, 0);
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
-        <div style={{position: 'absolute', right: -70, bottom: -50}}>
-          <GhostQuote color={colors.primaryDark} opacity={0.05} size={420} />
-        </div>
+      <Frame
+        background={colors.white}
+        wordmarkColor={colors.black}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
+        {graphics ? (
+          <div style={{position: 'absolute', right: -70, bottom: -50}}>
+            <GhostQuote color={colors.primaryDark} opacity={0.05} size={420} />
+          </div>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -226,15 +272,16 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
               Antes, nas palavras do cliente
             </span>
           </div>
-          <SurfaceCard>
+          <SurfaceCard variant={cardVariant} borderColor={cardVariant === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}>
             <p
               style={{
-                fontSize: 38,
-                fontWeight: 400,
-                fontStyle: 'italic',
+                fontSize: corpoStyle.fontSize,
+                fontWeight: corpoStyle.fontWeight,
+                fontStyle: corpoStyle.fontStyle,
                 color: colors.primaryDark,
                 lineHeight: 1.4,
                 margin: 0,
+                letterSpacing: corpoStyle.letterSpacing,
                 padding: '38px 34px',
               }}
             >
@@ -248,8 +295,14 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
 
   if (slide.kind === 'resultado') {
     const produtoTag = slide.produto ? productLabel[slide.produto] : undefined;
+    const corpoStyle = headlineStyle(vs, 40, 0);
     return (
-      <Frame background={`linear-gradient(160deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`} wordmarkColor={colors.white}>
+      <Frame
+        background={`linear-gradient(160deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         <div
           style={{
             position: 'absolute',
@@ -264,12 +317,13 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
           <Badge>Resultado</Badge>
           <p
             style={{
-              fontSize: 40,
-              fontWeight: 700,
-              fontStyle: 'italic',
+              fontSize: corpoStyle.fontSize,
+              fontWeight: corpoStyle.fontWeight,
+              fontStyle: corpoStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.32,
               margin: 0,
+              letterSpacing: corpoStyle.letterSpacing,
               maxWidth: 880,
             }}
           >
@@ -309,19 +363,24 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
             ) : null}
           </div>
         </div>
-        <div style={{position: 'absolute', right: -60, bottom: -40}}>
-          <GhostBars color={colors.white} opacity={0.09} width={380} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: -60, bottom: -40}}>
+            <GhostBars color={colors.white} opacity={0.09} width={380} />
+          </div>
+        ) : null}
       </Frame>
     );
   }
 
   // slide.kind === 'cta'
+  const headlineStyleCta = headlineStyle(vs, 56, -1);
   return (
-    <Frame background={colors.black} wordmarkColor={colors.white}>
-      <div style={{position: 'absolute', right: -80, bottom: -60}}>
-        <GhostQuote color={colors.white} opacity={0.06} size={420} />
-      </div>
+    <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+      {graphics ? (
+        <div style={{position: 'absolute', right: -80, bottom: -60}}>
+          <GhostQuote color={colors.white} opacity={0.06} size={420} />
+        </div>
+      ) : null}
       <div
         style={{
           position: 'absolute',
@@ -336,11 +395,12 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
         <Badge>Depoimento</Badge>
         <h2
           style={{
-            fontSize: 56,
-            fontWeight: 700,
+            fontSize: headlineStyleCta.fontSize,
+            fontWeight: headlineStyleCta.fontWeight,
+            fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
             lineHeight: 1.12,
-            letterSpacing: -1,
+            letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}
         >
@@ -352,7 +412,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName}> =
   );
 };
 
-export const depoimentoDefaultProps: {slide: DepoimentoSlide; theme?: ThemeName} = {
+export const depoimentoDefaultProps: {slide: DepoimentoSlide; theme?: ThemeName; visualStyle?: VisualStyleName} = {
   slide: {
     kind: 'capa',
     citacao:

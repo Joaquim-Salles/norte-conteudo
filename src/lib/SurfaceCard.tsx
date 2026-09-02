@@ -11,8 +11,17 @@ type SurfaceCardProps = {
    * 'bezel' (default) = casca+nucleo com profundidade fisica.
    * 'flat' = caixa reta de traco unico, sem camada dupla — usado pelo tema de
    * produto que pede visual mais direto/"software" (ver `theme.cardStyle`).
+   * 'outline' = borda fina unica, fundo transparente, sem sombra nem
+   * preenchimento — usado pelo visualStyle corporateClean (ver visualStyles.ts).
    */
   variant?: CardStyle;
+  /**
+   * Usado so no variant 'outline' — cor da borda fina. shellColor/coreColor
+   * nao fazem sentido pra outline (nao ha preenchimento). Escolher conforme o
+   * fundo por tras do card: tom escuro translucido sobre fundo claro, tom
+   * branco translucido sobre fundo escuro/tema.
+   */
+  borderColor?: string;
 };
 
 /**
@@ -30,7 +39,22 @@ export const SurfaceCard: React.FC<SurfaceCardProps> = ({
   padding = 7,
   radius = 26,
   variant = 'bezel',
+  borderColor,
 }) => {
+  if (variant === 'outline') {
+    return (
+      <div
+        style={{
+          background: 'transparent',
+          borderRadius: Math.max(radius - padding, 8),
+          border: `1.5px solid ${borderColor ?? 'rgba(255,255,255,0.35)'}`,
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
   if (variant === 'flat') {
     return (
       <div
