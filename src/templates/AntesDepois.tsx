@@ -5,6 +5,7 @@ import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
 import {GhostArrowUp} from '../lib/GhostGraphics';
 import {IconAlert, IconCheck, IconGrowth} from '../lib/icons';
+import {getVisualStyle, headlineStyle, resolveTexture, scaleSpacing, showGraphicSupport} from '../lib/visualStyles';
 import type {AntesDepoisData} from '../lib/types';
 
 /**
@@ -18,6 +19,17 @@ import type {AntesDepoisData} from '../lib/types';
  * `theme` (default 'marca') troca o gradiente do bloco DEPOIS pelo sistema
  * anunciado (ver src/lib/themes.ts) — accent/selo "Com a Norte" ficam fixos
  * (identidade de marca e CTA nao mudam por tema).
+ *
+ * `visualStyle` (Round B, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * afeta textura, presenca de GhostArrowUp, espacamento e peso/tamanho do
+ * elemento HERO de cada variante — o texto DEPOIS (padrao/ladoALado) ou a
+ * metrica gigante (metricaHero). O texto ANTES fica deliberadamente de fora
+ * do headlineStyle em todas as variantes: e o lado "apagado/sem prova" da
+ * peca, escalar o tamanho dele junto contrariaria o proprio contraste
+ * antes/depois que da sentido ao template. cardStyleOverride nao se aplica
+ * aqui — os badges de metrica sao pilulas cruas (nao SurfaceCard); trocar
+ * a estrutura deles quebraria a garantia de "omitido = aparencia original"
+ * pras pecas ja aprovadas, entao o knob de card fica de fora por decisao.
  */
 export const AntesDepois: React.FC<AntesDepoisData> = ({
   antesLabel = 'Antes',
@@ -27,12 +39,24 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   metrica,
   variant = 'padrao',
   theme = 'marca',
+  visualStyle,
 }) => {
   const t = getTheme(theme);
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, t.textureOpacity);
+  const graphics = showGraphicSupport(vs);
 
   if (variant === 'metricaHero') {
+    // Clamp: metrica e string curta numa unica linha ao lado de um icone de
+    // 68px — achado real de QA (mesmo padrao do Comparativo): headlineScale
+    // de boldTipografico (1.65x) em cima de 158px estourava a largura segura
+    // do quadro. Cap em 215px preserva o efeito "numero gigante" sem colidir
+    // com a margem.
+    const metricaStyleRaw = headlineStyle(vs, 158, -4);
+    const metricaStyle = {...metricaStyleRaw, fontSize: Math.min(metricaStyleRaw.fontSize, 215)};
+    const depoisStyle = headlineStyle(vs, 36, 0);
     return (
-      <Frame background={t.colors.dark} wordmarkColor={colors.white}>
+      <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -74,7 +98,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           {metrica ? (
             <div
               style={{
-                marginTop: 56,
+                marginTop: scaleSpacing(vs, 56, {min: 36, max: 76}),
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -84,11 +108,12 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
                 <IconGrowth size={68} color={colors.accent} strokeWidth={2} />
                 <span
                   style={{
-                    fontSize: 158,
-                    fontWeight: 700,
+                    fontSize: metricaStyle.fontSize,
+                    fontWeight: metricaStyle.fontWeight,
+                    fontStyle: metricaStyle.fontStyle,
                     color: colors.accent,
                     lineHeight: 0.92,
-                    letterSpacing: -4,
+                    letterSpacing: metricaStyle.letterSpacing,
                     textShadow: '0 20px 50px rgba(244,63,94,0.35)',
                   }}
                 >
@@ -115,20 +140,24 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           </div>
           <p
             style={{
-              fontSize: 36,
-              fontWeight: 700,
+              fontSize: depoisStyle.fontSize,
+              fontWeight: depoisStyle.fontWeight,
+              fontStyle: depoisStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.22,
               margin: '10px 0 0',
+              letterSpacing: depoisStyle.letterSpacing,
               maxWidth: 800,
             }}
           >
             {depoisTexto}
           </p>
 
-          <div style={{position: 'absolute', right: -10, top: 60}}>
-            <GhostArrowUp color={colors.white} opacity={0.08} size={200} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: -10, top: 60}}>
+              <GhostArrowUp color={colors.white} opacity={0.08} size={200} />
+            </div>
+          ) : null}
         </div>
 
         <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
@@ -139,8 +168,14 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   }
 
   if (variant === 'ladoALado') {
+    const depoisStyle = headlineStyle(vs, 38, 0);
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame
+        background={colors.white}
+        wordmarkColor={colors.black}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         {/* ANTES — coluna esquerda, apagada */}
         <div
           style={{
@@ -178,9 +213,11 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           >
             {antesTexto}
           </p>
-          <div style={{position: 'absolute', left: 20, bottom: 30}}>
-            <GhostArrowUp color="#54546a" opacity={0.09} size={140} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', left: 20, bottom: 30}}>
+              <GhostArrowUp color="#54546a" opacity={0.09} size={140} />
+            </div>
+          ) : null}
         </div>
 
         {/* DEPOIS — coluna direita, viva */}
@@ -211,11 +248,13 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           </div>
           <p
             style={{
-              fontSize: 38,
-              fontWeight: 700,
+              fontSize: depoisStyle.fontSize,
+              fontWeight: depoisStyle.fontWeight,
+              fontStyle: depoisStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.28,
               margin: '18px 0 0',
+              letterSpacing: depoisStyle.letterSpacing,
             }}
           >
             {depoisTexto}
@@ -223,7 +262,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
           {metrica ? (
             <div
               style={{
-                marginTop: 26,
+                marginTop: scaleSpacing(vs, 26, {min: 16, max: 36}),
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 10,
@@ -237,9 +276,11 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               <span style={{fontSize: 36, fontWeight: 700, color: colors.white}}>{metrica}</span>
             </div>
           ) : null}
-          <div style={{position: 'absolute', right: 4, bottom: 20}}>
-            <GhostArrowUp color={colors.white} opacity={0.1} size={160} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: 4, bottom: 20}}>
+              <GhostArrowUp color={colors.white} opacity={0.1} size={160} />
+            </div>
+          ) : null}
         </div>
 
         {/* Selo na costura vertical */}
@@ -270,8 +311,14 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   }
 
   // variant === 'padrao'
+  const depoisStylePadrao = headlineStyle(vs, 44, 0);
   return (
-    <Frame background={colors.white} wordmarkColor={colors.white}>
+    <Frame
+      background={colors.white}
+      wordmarkColor={colors.white}
+      texture={tex.enabled}
+      textureOpacity={tex.opacity}
+    >
       {/* ANTES — metade superior, tom apagado */}
       <div
         style={{
@@ -310,9 +357,11 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         >
           {antesTexto}
         </p>
-        <div style={{position: 'absolute', right: 10, bottom: 20}}>
-          <GhostArrowUp color="#54546a" opacity={0.08} size={190} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: 10, bottom: 20}}>
+            <GhostArrowUp color="#54546a" opacity={0.08} size={190} />
+          </div>
+        ) : null}
       </div>
 
       {/* DEPOIS — metade inferior, cor viva */}
@@ -343,11 +392,13 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         </div>
         <p
           style={{
-            fontSize: 44,
-            fontWeight: 700,
+            fontSize: depoisStylePadrao.fontSize,
+            fontWeight: depoisStylePadrao.fontWeight,
+            fontStyle: depoisStylePadrao.fontStyle,
             color: colors.white,
             lineHeight: 1.2,
             margin: '18px 0 0',
+            letterSpacing: depoisStylePadrao.letterSpacing,
             maxWidth: 880,
           }}
         >
@@ -356,7 +407,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
         {metrica ? (
           <div
             style={{
-              marginTop: 28,
+              marginTop: scaleSpacing(vs, 28, {min: 18, max: 38}),
               display: 'inline-flex',
               alignItems: 'baseline',
               gap: 10,
@@ -370,9 +421,11 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             <span style={{fontSize: 46, fontWeight: 700, color: colors.white}}>{metrica}</span>
           </div>
         ) : null}
-        <div style={{position: 'absolute', right: 10, bottom: 250}}>
-          <GhostArrowUp color={colors.white} opacity={0.09} size={220} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: 10, bottom: 250}}>
+            <GhostArrowUp color={colors.white} opacity={0.09} size={220} />
+          </div>
+        ) : null}
       </div>
 
       {/* Selo central marcando a virada */}

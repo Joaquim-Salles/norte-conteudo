@@ -6,6 +6,15 @@ import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {
+  getVisualStyle,
+  headlineStyle,
+  resolveCardStyle,
+  resolveTexture,
+  scaleSpacing,
+  showGraphicSupport,
+  type VisualStyleName,
+} from '../lib/visualStyles';
 import type {DicaPraticaSlide} from '../lib/types';
 
 /**
@@ -22,11 +31,28 @@ import type {DicaPraticaSlide} from '../lib/types';
  *    contexto fisico de restaurante/bar/lanchonete (ex: NTB Vendas).
  *  - bridge: 1 ideia por slide, numerada, nunca mais de ~2 frases (retencao).
  *  - cta: slide dedicado, 100% focado em levar pro WhatsApp — nao divide atencao.
+ *
+ * `visualStyle` (Round B, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * este template NAO tem `theme` (nunca teve — sempre foi cor de marca fixa),
+ * entao a base de textura usa a opacidade padrao do Frame (0.045), nao um
+ * theme.textureOpacity. `cover-foto` ignora deliberadamente textura/gráfico
+ * de apoio (foto real full-bleed, mesmo raciocinio documentado em
+ * VitrineProduto) — visualStyle nela afeta so o headline.
  */
-export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
+const BASE_TEXTURE_OPACITY = 0.045;
+
+export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: VisualStyleName}> = ({
+  slide,
+  visualStyle,
+}) => {
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, BASE_TEXTURE_OPACITY);
+  const graphics = showGraphicSupport(vs);
+
   if (slide.kind === 'cover') {
+    const tituloStyle = headlineStyle(vs, 76, -1.5);
     return (
-      <Frame background={colors.primary} wordmarkColor={colors.white}>
+      <Frame background={colors.primary} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -40,11 +66,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
           <h1
             style={{
-              fontSize: 76,
-              fontWeight: 700,
+              fontSize: tituloStyle.fontSize,
+              fontWeight: tituloStyle.fontWeight,
+              fontStyle: tituloStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.04,
-              letterSpacing: -1.5,
+              letterSpacing: tituloStyle.letterSpacing,
               margin: '32px 0 0',
             }}
           >
@@ -52,7 +79,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           </h1>
           <span
             style={{
-              marginTop: 40,
+              marginTop: scaleSpacing(vs, 40, {min: 26, max: 54}),
               fontSize: 24,
               fontWeight: 400,
               fontStyle: 'italic',
@@ -61,17 +88,20 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           >
             Arrasta pro lado →
           </span>
-          <div style={{position: 'absolute', right: -40, bottom: 260}}>
-            <GhostCheck color={colors.white} opacity={0.09} size={380} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: -40, bottom: 260}}>
+              <GhostCheck color={colors.white} opacity={0.09} size={380} />
+            </div>
+          ) : null}
         </div>
       </Frame>
     );
   }
 
   if (slide.kind === 'cover-grid') {
+    const tituloStyleGrid = headlineStyle(vs, 62, -1.3);
     return (
-      <Frame background={colors.primary} wordmarkColor={colors.white}>
+      <Frame background={colors.primary} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -84,11 +114,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
           <h1
             style={{
-              fontSize: 62,
-              fontWeight: 700,
+              fontSize: tituloStyleGrid.fontSize,
+              fontWeight: tituloStyleGrid.fontWeight,
+              fontStyle: tituloStyleGrid.fontStyle,
               color: colors.white,
               lineHeight: 1.06,
-              letterSpacing: -1.3,
+              letterSpacing: tituloStyleGrid.letterSpacing,
               margin: '28px 0 0',
             }}
           >
@@ -98,7 +129,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           {/* Previa em grade dos itens — "prova de conteudo" antes do swipe */}
           <div
             style={{
-              marginTop: 44,
+              marginTop: scaleSpacing(vs, 44, {min: 28, max: 58}),
               display: 'flex',
               flexDirection: 'column',
               gap: 14,
@@ -156,16 +187,27 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   }
 
   if (slide.kind === 'cover-quote') {
+    // DECISAO: citacao mantem SEMPRE bold+italic (voz de "citacao falada" —
+    // mesma logica documentada no manifesto de Bastidores) — visualStyle so
+    // varia tamanho/letter-spacing/textura/gráfico de apoio/estilo de card,
+    // nunca a fonte da citacao em si.
+    const citacaoStyleRaw = headlineStyle(vs, 66, -1);
+    const citacaoStyle = {...citacaoStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
+    const cardVariantQuote = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.black} wordmarkColor={colors.white}>
+      <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Aspas graficas grandes (aberta + fechada espelhada) — a citacao
             passa a ter uma moldura visual de verdade, nao so aspas de texto */}
-        <div style={{position: 'absolute', left: 10, top: -60}}>
-          <GhostQuote color={colors.white} opacity={0.1} size={400} />
-        </div>
-        <div style={{position: 'absolute', right: 0, bottom: 160, transform: 'rotate(180deg)'}}>
-          <GhostQuote color={colors.white} opacity={0.05} size={260} />
-        </div>
+        {graphics ? (
+          <>
+            <div style={{position: 'absolute', left: 10, top: -60}}>
+              <GhostQuote color={colors.white} opacity={0.1} size={400} />
+            </div>
+            <div style={{position: 'absolute', right: 0, bottom: 160, transform: 'rotate(180deg)'}}>
+              <GhostQuote color={colors.white} opacity={0.05} size={260} />
+            </div>
+          </>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -178,12 +220,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
         >
           <h1
             style={{
-              fontSize: 66,
-              fontWeight: 700,
-              fontStyle: 'italic',
+              fontSize: citacaoStyle.fontSize,
+              fontWeight: citacaoStyle.fontWeight,
+              fontStyle: citacaoStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.14,
-              letterSpacing: -1,
+              letterSpacing: citacaoStyle.letterSpacing,
               margin: 0,
             }}
           >
@@ -192,8 +234,14 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
 
           {/* Assinatura/atribuicao em card, no lugar de um h2 solto — da peso
               de "selo de fonte" a citacao */}
-          <div style={{marginTop: 44}}>
-            <SurfaceCard shellColor="rgba(255,255,255,0.05)" coreColor="rgba(255,255,255,0.09)" radius={20}>
+          <div style={{marginTop: scaleSpacing(vs, 44, {min: 30, max: 58})}}>
+            <SurfaceCard
+              variant={cardVariantQuote}
+              shellColor="rgba(255,255,255,0.05)"
+              coreColor="rgba(255,255,255,0.09)"
+              borderColor={cardVariantQuote === 'outline' ? 'rgba(255,255,255,0.35)' : undefined}
+              radius={20}
+            >
               <div style={{display: 'flex', alignItems: 'center', gap: 16, padding: '22px 28px'}}>
                 <div style={{width: 8, height: 8, borderRadius: 999, background: colors.accent, flexShrink: 0}} />
                 <span style={{fontSize: 28, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.2}}>
@@ -208,6 +256,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   }
 
   if (slide.kind === 'cover-foto') {
+    // Foto real full-bleed: textura/GhostQuote ficam de fora por decisao
+    // (mesmo raciocinio documentado no topo do arquivo) — visualStyle so
+    // afeta o headline aqui. justifyContent:'flex-end' faz o bloco crescer
+    // pra CIMA sobre a foto, entao nao ha risco de colisao com elemento
+    // fixo abaixo — sem necessidade de clamp.
+    const tituloStyleFoto = headlineStyle(vs, 72, -1.5);
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
         <PhotoBackground src={slide.foto} position={slide.fotoPosition ?? 'center 15%'} overlay="bottom" />
@@ -224,11 +278,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
           <h1
             style={{
-              fontSize: 72,
-              fontWeight: 700,
+              fontSize: tituloStyleFoto.fontSize,
+              fontWeight: tituloStyleFoto.fontWeight,
+              fontStyle: tituloStyleFoto.fontStyle,
               color: colors.white,
               lineHeight: 1.05,
-              letterSpacing: -1.5,
+              letterSpacing: tituloStyleFoto.letterSpacing,
               margin: '28px 0 0',
               textShadow: '0 10px 34px rgba(0,0,0,0.55)',
             }}
@@ -252,8 +307,10 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   }
 
   if (slide.kind === 'bridge') {
+    const tituloStyleBridge = headlineStyle(vs, 58, -1);
+    const cardVariantBridge = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Tracker de progresso no topo — mesma linguagem do "passo" do
             Metodologia, da continuidade visual entre os 2 carrosseis */}
         <div style={{position: 'absolute', top: 140, left: 72, display: 'flex', gap: 10}}>
@@ -270,9 +327,11 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           ))}
         </div>
 
-        <div style={{position: 'absolute', right: -70, bottom: -50}}>
-          <GhostCheck color={colors.primaryDark} opacity={0.05} size={420} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: -70, bottom: -50}}>
+            <GhostCheck color={colors.primaryDark} opacity={0.05} size={420} />
+          </div>
+        ) : null}
 
         <div
           style={{
@@ -282,13 +341,19 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: 32,
+            gap: scaleSpacing(vs, 32, {min: 20, max: 44}),
           }}
         >
           {/* Numero da ideia agora vive num card double-bezel — nao e mais um
               numero solto flutuando no espaco em branco */}
           <div style={{display: 'flex', alignItems: 'center', gap: 24}}>
-            <SurfaceCard shellColor="rgba(244,63,94,0.08)" coreColor="rgba(244,63,94,0.13)" radius={28}>
+            <SurfaceCard
+              variant={cardVariantBridge}
+              shellColor="rgba(244,63,94,0.08)"
+              coreColor="rgba(244,63,94,0.13)"
+              borderColor={cardVariantBridge === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}
+              radius={28}
+            >
               <div style={{width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <span
                   style={{
@@ -314,11 +379,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
           </div>
           <h2
             style={{
-              fontSize: 58,
-              fontWeight: 700,
+              fontSize: tituloStyleBridge.fontSize,
+              fontWeight: tituloStyleBridge.fontWeight,
+              fontStyle: tituloStyleBridge.fontStyle,
               color: colors.primaryDark,
               lineHeight: 1.1,
-              letterSpacing: -1,
+              letterSpacing: tituloStyleBridge.letterSpacing,
               margin: 0,
             }}
           >
@@ -333,11 +399,14 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
   }
 
   // slide.kind === 'cta'
+  const headlineStyleCta = headlineStyle(vs, 60, -1);
   return (
-    <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
-      <div style={{position: 'absolute', right: -60, bottom: -40}}>
-        <GhostCheck color={colors.white} opacity={0.06} size={420} />
-      </div>
+    <Frame background={colors.primaryDark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+      {graphics ? (
+        <div style={{position: 'absolute', right: -60, bottom: -40}}>
+          <GhostCheck color={colors.white} opacity={0.06} size={420} />
+        </div>
+      ) : null}
       <div
         style={{
           position: 'absolute',
@@ -351,11 +420,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide}> = ({slide}) => {
       >
         <h2
           style={{
-            fontSize: 60,
-            fontWeight: 700,
+            fontSize: headlineStyleCta.fontSize,
+            fontWeight: headlineStyleCta.fontWeight,
+            fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
             lineHeight: 1.1,
-            letterSpacing: -1,
+            letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}
         >

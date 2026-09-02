@@ -8,6 +8,14 @@ import {GhostCheck} from '../lib/GhostGraphics';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {
+  getVisualStyle,
+  headlineStyle,
+  resolveCardStyle,
+  resolveTexture,
+  scaleSpacing,
+  showGraphicSupport,
+} from '../lib/visualStyles';
 import type {VitrineProdutoData} from '../lib/types';
 
 const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
@@ -32,7 +40,19 @@ const productLogo: Record<VitrineProdutoData['produto'], string | null> = {
  * CTA sempre comercial direto (nao so informativo).
  *
  * Tema (paleta + cardStyle) e SEMPRE derivado do produto anunciado — nao e
- * escolha manual (ver src/lib/themes.ts, getThemeForProduct).
+ * escolha manual (ver src/lib/themes.ts, getThemeForProduct). Essa regra
+ * NAO muda com `visualStyle` (Round B, 2026-09-01, opcional — ver
+ * src/lib/visualStyles.ts): visualStyle continua ortogonal, so afeta
+ * textura, estilo de card, gráfico de apoio, espacamento e peso/tamanho do
+ * headline — nunca a cor (que e sempre do produto).
+ *
+ * Exclusao documentada: só a variante `contexto` (foto real de ambiente em
+ * tela cheia, full-bleed) ignora deliberadamente `resolveTexture`/
+ * `showGraphicSupport` — grain ou GhostCheck por cima de uma foto real
+ * sujaria a imagem sem ganho (mesmo raciocínio que já fixava
+ * `texture={false}` nela antes desta rodada). `print` (screenshot dentro de
+ * moldura de device, sem foto full-bleed) recebe textura/gráfico de apoio
+ * normalmente — o fundo ali é cor sólida do tema, não uma foto real.
  */
 export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   produto,
@@ -46,18 +66,35 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   screenshotAspect,
   foto,
   fotoPosition,
+  visualStyle,
 }) => {
   const theme = getThemeForProduct(produto);
   const productColor = theme.colors;
-  const cardStyle = theme.cardStyle;
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const cardStyle = resolveCardStyle(vs, theme.cardStyle);
+  const tex = resolveTexture(vs, theme.textureOpacity);
+  const graphics = showGraphicSupport(vs);
   const logo = productLogo[produto];
 
   if (variant === 'hero') {
+    // Clamp: headline centralizada de ate 2-3 linhas dentro de maxWidth 880 —
+    // achado real de QA (mesmo padrao do Comparativo/AntesDepois): 1.65x
+    // (boldTipografico) em cima de 62px ja fica pesado o bastante; cap em 84px
+    // evita colidir com as pilulas de feature logo abaixo.
+    const headlineStyleRaw = headlineStyle(vs, 62, -1);
+    const headlineStyleHero = {...headlineStyleRaw, fontSize: Math.min(headlineStyleRaw.fontSize, 84)};
     return (
-      <Frame background={productColor.dark} wordmarkColor={colors.white}>
-        <div style={{position: 'absolute', right: -60, top: -60, zIndex: 0}}>
-          <GhostCheck color={colors.white} opacity={0.05} size={420} />
-        </div>
+      <Frame
+        background={productColor.dark}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
+        {graphics ? (
+          <div style={{position: 'absolute', right: -60, top: -60, zIndex: 0}}>
+            <GhostCheck color={colors.white} opacity={0.05} size={420} />
+          </div>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -101,11 +138,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           </span>
           <h1
             style={{
-              fontSize: 62,
-              fontWeight: 700,
+              fontSize: headlineStyleHero.fontSize,
+              fontWeight: headlineStyleHero.fontWeight,
+              fontStyle: headlineStyleHero.fontStyle,
               color: colors.white,
               lineHeight: 1.08,
-              letterSpacing: -1,
+              letterSpacing: headlineStyleHero.letterSpacing,
               margin: '20px 0 0',
               maxWidth: 880,
             }}
@@ -115,7 +153,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
 
           <div
             style={{
-              marginTop: 52,
+              marginTop: scaleSpacing(vs, 52, {min: 34, max: 68}),
               display: 'flex',
               flexWrap: 'wrap',
               justifyContent: 'center',
@@ -149,8 +187,20 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   }
 
   if (variant === 'grid') {
+    // Clamp: o bloco de identidade tem altura FIXA (400px) e a grade de
+    // features comeca logo abaixo em top:440 — achado real de QA: sem cap, o
+    // headlineScale de boldTipografico/dadoEmDestaque (1.45-1.65x) faz um
+    // headline de 2+ linhas estourar a altura fixa e invadir visualmente a
+    // grade. Cap em 62px preserva o peso extra sem quebrar a grade.
+    const headlineStyleGridRaw = headlineStyle(vs, 50, -1);
+    const headlineStyleGrid = {...headlineStyleGridRaw, fontSize: Math.min(headlineStyleGridRaw.fontSize, 62)};
     return (
-      <Frame background={productColor.dark} wordmarkColor={colors.white}>
+      <Frame
+        background={productColor.dark}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         <div
           style={{
             position: 'absolute',
@@ -195,11 +245,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           </div>
           <h1
             style={{
-              fontSize: 50,
-              fontWeight: 700,
+              fontSize: headlineStyleGrid.fontSize,
+              fontWeight: headlineStyleGrid.fontWeight,
+              fontStyle: headlineStyleGrid.fontStyle,
               color: colors.white,
               lineHeight: 1.1,
-              letterSpacing: -1,
+              letterSpacing: headlineStyleGrid.letterSpacing,
               margin: 0,
               maxWidth: 900,
             }}
@@ -251,9 +302,11 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           ))}
         </div>
 
-        <div style={{position: 'absolute', right: -40, bottom: 200, zIndex: 0}}>
-          <GhostCheck color={colors.white} opacity={0.05} size={300} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', right: -40, bottom: 200, zIndex: 0}}>
+            <GhostCheck color={colors.white} opacity={0.05} size={300} />
+          </div>
+        ) : null}
 
         <div style={{position: 'absolute', left: 64, right: 64, bottom: 130}}>
           <CtaBand label={ctaLabel ?? 'Quero isso na minha loja'} sub="fala com a gente — link na bio" />
@@ -264,8 +317,18 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
 
   if (variant === 'print') {
     const screenshotSrc = screenshot ?? 'screenshots/home-desktop.png';
+    // Mesmo clamp do variant 'grid' — faixa de identidade com altura FIXA
+    // (300px, ainda mais compacta que a do grid), device frame comeca logo
+    // abaixo (top:340/400). Cap mais apertado (54px) porque a faixa e menor.
+    const headlineStylePrintRaw = headlineStyle(vs, 42, -0.6);
+    const headlineStylePrint = {...headlineStylePrintRaw, fontSize: Math.min(headlineStylePrintRaw.fontSize, 54)};
     return (
-      <Frame background={productColor.dark} wordmarkColor={colors.white}>
+      <Frame
+        background={productColor.dark}
+        wordmarkColor={colors.white}
+        texture={tex.enabled}
+        textureOpacity={tex.opacity}
+      >
         {/* Faixa superior de identidade — mais compacta que as outras variantes,
             pra sobrar espaco de verdade pro device frame ser o protagonista */}
         <div
@@ -313,11 +376,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           </div>
           <h1
             style={{
-              fontSize: 42,
-              fontWeight: 700,
+              fontSize: headlineStylePrint.fontSize,
+              fontWeight: headlineStylePrint.fontWeight,
+              fontStyle: headlineStylePrint.fontStyle,
               color: colors.white,
               lineHeight: 1.14,
-              letterSpacing: -0.6,
+              letterSpacing: headlineStylePrint.letterSpacing,
               margin: 0,
               maxWidth: 880,
             }}
@@ -326,9 +390,11 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           </h1>
         </div>
 
-        <div style={{position: 'absolute', left: -60, bottom: 150, zIndex: 0}}>
-          <GhostCheck color={colors.white} opacity={0.05} size={320} />
-        </div>
+        {graphics ? (
+          <div style={{position: 'absolute', left: -60, bottom: 150, zIndex: 0}}>
+            <GhostCheck color={colors.white} opacity={0.05} size={320} />
+          </div>
+        ) : null}
 
         {/* Print real do sistema dentro da moldura de device — elemento central,
             com sombra e leve inclinacao (nao e imagem crua colada na peca) */}
@@ -368,6 +434,13 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   if (variant === 'contexto') {
     const fotoSrc = foto ?? 'photos/prato-gourmet-mesa-madeira.jpg';
     const screenshotSrc = screenshot ?? 'screenshots/vendas-mobile.png';
+    // Clamp: o mockup do celular tem posicao FIXA (top:560) — headline mais
+    // longo em fonte muito maior tem so ~372px de folga antes de colidir.
+    // Cap em 66px preserva a variacao sem risco de sobreposicao. Textura e
+    // GhostCheck ficam de fora aqui de proposito — ver comentario no topo
+    // do arquivo (foto real full-bleed).
+    const headlineStyleContextoRaw = headlineStyle(vs, 50, -1);
+    const headlineStyleContexto = {...headlineStyleContextoRaw, fontSize: Math.min(headlineStyleContextoRaw.fontSize, 66)};
     return (
       <Frame background={productColor.dark} wordmarkColor={colors.white} texture={false}>
         {/* Foto real de ambiente/comida em tela cheia — identidade sobre o
@@ -420,11 +493,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           </div>
           <h1
             style={{
-              fontSize: 50,
-              fontWeight: 700,
+              fontSize: headlineStyleContexto.fontSize,
+              fontWeight: headlineStyleContexto.fontWeight,
+              fontStyle: headlineStyleContexto.fontStyle,
               color: colors.white,
               lineHeight: 1.1,
-              letterSpacing: -1,
+              letterSpacing: headlineStyleContexto.letterSpacing,
               margin: 0,
               maxWidth: 820,
               textShadow: '0 8px 28px rgba(0,0,0,0.55)',
@@ -462,8 +536,17 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   }
 
   // variant === 'padrao'
+  // Mesmo clamp de 'grid'/'print': a lista de features comeca em top:480,
+  // fixa, sobre o fim do bloco de identidade (altura 620) — cap em 78px.
+  const headlineStylePadraoRaw = headlineStyle(vs, 60, -1);
+  const headlineStylePadrao = {...headlineStylePadraoRaw, fontSize: Math.min(headlineStylePadraoRaw.fontSize, 78)};
   return (
-    <Frame background={productColor.dark} wordmarkColor={colors.white}>
+    <Frame
+      background={productColor.dark}
+      wordmarkColor={colors.white}
+      texture={tex.enabled}
+      textureOpacity={tex.opacity}
+    >
       {/* Bloco superior de identidade do produto */}
       <div
         style={{
@@ -509,11 +592,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         </div>
         <h1
           style={{
-            fontSize: 60,
-            fontWeight: 700,
+            fontSize: headlineStylePadrao.fontSize,
+            fontWeight: headlineStylePadrao.fontWeight,
+            fontStyle: headlineStylePadrao.fontStyle,
             color: colors.white,
             lineHeight: 1.08,
-            letterSpacing: -1,
+            letterSpacing: headlineStylePadrao.letterSpacing,
             margin: 0,
             maxWidth: 900,
           }}
@@ -522,9 +606,11 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         </h1>
       </div>
 
-      <div style={{position: 'absolute', right: -50, bottom: 210, zIndex: 0}}>
-        <GhostCheck color={colors.white} opacity={0.06} size={340} />
-      </div>
+      {graphics ? (
+        <div style={{position: 'absolute', right: -50, bottom: 210, zIndex: 0}}>
+          <GhostCheck color={colors.white} opacity={0.06} size={340} />
+        </div>
+      ) : null}
 
       {/* Lista de features — cartoes compactos, escaneavel, double-bezel */}
       <div

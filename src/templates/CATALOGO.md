@@ -1,5 +1,17 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+**Contagem total do catálogo (real, 2026-09-01 — ver "Contagem total" no
+fim deste arquivo): 172 peças** (62 baseline pré-`visualStyle` + 40 Round A +
+70 Round B).
+
+Atualizado em 2026-09-01, execução autônoma overnight (Round B do plano de
+catálogo em escala — ver `docs/plano-catalogo-em-escala.md`) — os 5 tipos que
+faltavam (`AntesDepois`, `VitrineProduto`, `DicaPratica`,
+`MetodologiaSemEnrolacao`, `Bastidores`) agora também aceitam `visualStyle`.
+**8 de 8 tipos combinam com estilo visual.** Ver seção **"0.1.1 Round B"**
+pra decisões de julgamento (travas de itálico, clamps, exclusões de knob) e
+achados reais de QA.
+
 Atualizado em 2026-09-01 (Round A do plano de catálogo em escala — ver
 `docs/plano-catalogo-em-escala.md`) — nova dimensão **`visualStyle`** (estilo
 visual), ortogonal ao `theme` que já existia: 5 presets sistemáticos
@@ -62,8 +74,8 @@ Como testar:
   `scripts/qa-theme-batch.mjs`) — prova o sistema de temas descrito na §0.
 - `npm run qa:estilos` gera a matriz template × visualStyle × tema em
   `out/qa/estilos/` (ver `scripts/qa-visual-styles.mjs`) — prova o sistema de
-  estilo visual descrito na §0.1 (40 combinações reais renderizadas em
-  2026-09-01, ver histórico de commits).
+  estilo visual descrito na §0.1/§0.1.1 (110 combinações reais renderizadas
+  em 2026-09-01: 40 no Round A + 70 no Round B, ver histórico de commits).
 
 ---
 
@@ -279,16 +291,90 @@ sistemáticos (nunca CSS solto por template):
 - Novo `CardStyle` `'outline'` (borda fina única, fundo transparente) somado
   a `'bezel'`/`'flat'` que já existiam, pro preset `corporateClean`
   (`src/lib/themes.ts`, `src/lib/SurfaceCard.tsx`).
-- **Templates refatorados pra aceitar `visualStyle` (Round A):**
-  `DadoVsAchismo` (3 variantes), `Comparativo` (2 variantes), `Depoimento` (5
-  estados de slide). Os outros 5 tipos ainda não foram tocados — fica pro
-  Round B (`docs/plano-catalogo-em-escala.md`).
-- Achado real de QA visual (Regra Inviolável #1): o headlineScale de
+- **Templates refatorados pra aceitar `visualStyle`:** todos os 8 tipos de
+  post — Round A (2026-09-01, manhã): `DadoVsAchismo` (3 variantes),
+  `Comparativo` (2 variantes), `Depoimento` (5 estados de slide). Round B
+  (2026-09-01, execução autônoma overnight): `AntesDepois` (3 variantes),
+  `VitrineProduto` (5 variantes), `DicaPratica` (6 slide kinds),
+  `MetodologiaSemEnrolacao` (5 slide kinds), `Bastidores` (2 variantes) — ver
+  seção **"0.1.1 Round B — os 5 tipos restantes"** logo abaixo pra detalhe
+  completo de decisões de julgamento, achados de QA e clamps.
+- Achado real de QA visual (Regra Inviolável #1, Round A): o headlineScale de
   `dadoEmDestaque`/`boldTipografico` aplicado ao título de coluna do
   `Comparativo` ("DO JEITO ANTIGO") quebrava em 2 linhas enquanto "COM A
   NORTE" ficava em 1, ficando visualmente assimétrico. Corrigido com um clamp
   de fontSize (28px) só nesse elemento — o efeito de peso/estilo continua
   presente, sem quebrar o layout.
+
+### 0.1.1 Round B — os 5 tipos restantes (2026-09-01, execução autônoma)
+
+Execução overnight, fundador dormindo — decisões de julgamento tomadas e
+documentadas aqui, sem pausar pra perguntar (pedido explícito da tarefa).
+
+**Resultado: 8 de 8 tipos agora aceitam `visualStyle`.** Nenhum cruzamento
+precisou ser INTEIRAMENTE excluído — toda combinação testada (110 renders
+reais em `out/qa/estilos/`, ver `npm run qa:estilos`) ficou dentro do padrão
+de qualidade depois dos ajustes abaixo. O julgamento pedido pela tarefa virou,
+na prática, ajuste cirúrgico de knob por elemento (clamp de tamanho, ou
+"travar" um sub-atributo específico do preset), não exclusão de estilo
+inteiro — a diferença: excluir jogaria fora uma combinação inteira; o ajuste
+cirúrgico preserva a variação (o preset ainda muda a peça de verdade) e só
+neutraliza a parte que quebrava.
+
+**Decisões de "trava" documentadas (headlineWeight/fontStyle do preset
+IGNORADO de propósito, resto do preset aplica normal):**
+- `DicaPratica` slide `cover-quote` (citação) e `MetodologiaSemEnrolacao`
+  slide `cover-editorial` (pull-quote) e `Bastidores` variant `manifesto`
+  (afirmação central): os 3 já tinham bold+itálico HARDCODED desde a criação
+  como voz de marca ("isso é uma citação/manifesto falado"). Deixar o preset
+  sobrescrever pra `fontWeight: 700, fontStyle: 'normal'` (o que
+  `boldTipografico`/`dadoEmDestaque`/`minimalista`/`corporateClean` fariam,
+  já que só `editorial` é itálico) descaracterizaria esse tom. Fix: tamanho/
+  letter-spacing/espaçamento vêm do preset, fontWeight/fontStyle ficam
+  fixos. Confirmado no render real (`DicaPratica-coverQuote-boldTipografico.png`)
+  que o resultado — citação gigante, bold, itálico — fica ÓTIMO, não
+  descaracterizado; a preocupação original do fundador ("Bastidores pode não
+  combinar com boldTipografico") não se confirmou depois de aplicar essa
+  trava — o cruzamento ficou bom o bastante pra manter no catálogo.
+
+**Clamps de tamanho (achados reais de QA, Regra Inviolável #1):**
+- `AntesDepois` `metricaHero`: metrica de 158px × 1.65 (boldTipografico)
+  estourava a margem segura ao lado do ícone — cap em 215px.
+- `VitrineProduto` `padrao`/`grid`/`print`/`contexto`: cada uma dessas 4
+  variantes tem um elemento de posição FIXA logo abaixo do headline (lista de
+  features, device frame ou mockup de celular) — headline sem cap invadia
+  visualmente esse elemento em telas com headline de 2+ linhas. Cap
+  específico por variante (66-84px) preserva o peso extra sem colisão.
+- `MetodologiaSemEnrolacao` `passo`: numero "02" com anel decorativo FIXO de
+  172px — cap em 158px pro numero não estourar o anel. Também achado (e
+  corrigido) que o `letterSpacingBoost` negativo de
+  `boldTipografico`/`dadoEmDestaque` somado ao `-6` já agressivo do design
+  original quase comprimia demais os 2 dígitos — floor em `-6` (visualStyle
+  só pode DEIXAR mais espaçado que o original, nunca mais compacto nesse
+  elemento específico). Comparado lado a lado com o render sem `visualStyle`
+  (mesma aparência "0"/"2" justapostos) — confirmado que o aspecto
+  "apertado" é o design ORIGINAL já aprovado (glifo de zero cortado da
+  Atkinson Hyperlegible), não um bug novo desta rodada.
+
+**Exclusão de knob (não de estilo inteiro) documentada:**
+- `VitrineProduto` variant `contexto` (foto real full-bleed): `resolveTexture`/
+  `showGraphicSupport` ficam sempre desligados, igual já era antes desta
+  rodada — grain/GhostCheck por cima de foto real suja a imagem sem ganho.
+  `visualStyle` nela ainda afeta headline normalmente. `print` (screenshot
+  dentro de moldura, fundo é cor sólida do tema, não foto) NÃO tem essa
+  exclusão — textura/gráfico de apoio funcionam normal ali.
+- `DicaPratica` slide `cover-foto`: mesma lógica (foto real full-bleed).
+
+**Regra que NÃO mudou:** `VitrineProduto` continua derivando o tema
+SEMPRE do `produto` (nunca escolha manual) — `visualStyle` foi só somado por
+cima, ortogonal, como pedido.
+
+**110 renders reais** em `out/qa/estilos/` nesta chamada de
+`scripts/qa-visual-styles.mjs` (40 do Round A, re-renderizados como
+regressão + 70 novos do Round B — blocos 4-8 do script). Revisão visual real
+feita via contact sheets (`ffmpeg tile`) + inspeção individual dos casos de
+risco (clamps, travas de itálico) antes de aprovar — nenhuma peça abaixo do
+padrão foi aceita.
 
 ## Vitrine de Produto — variante `print` (nova, 2026-08-31)
 
@@ -566,3 +652,38 @@ equilíbrio de composição sem competir com o texto.
 - **`icons.tsx` → `IconCompass`** (novo, 2026-09-01) — bússola, selo "como
   pensamos" de Bastidores.tsx — trocadilho deliberado com o nome "Norte"
   (direção, não achismo).
+
+---
+
+## Contagem total do catálogo (real, 2026-09-01, fim do Round B)
+
+Método de contagem — transparente e auditável, sem arredondar pra bater um
+número redondo (regra inegociável do plano, ver
+`docs/plano-catalogo-em-escala.md`):
+
+| Camada | O que é | Contagem |
+|---|---|---|
+| Baseline pré-`visualStyle` | 8 tipos × variantes/slide-kinds × temas aplicáveis, ANTES de existir a dimensão `visualStyle` — número documentado no início do plano (`docs/plano-catalogo-em-escala.md`: "62 peças hoje vieram de 8 tipos × poucas variantes × 4 temas"). | **62** |
+| Round A (manhã de 2026-09-01) | `DadoVsAchismo` + `Comparativo` + `Depoimento` × 5 `visualStyle` × 2-3 temas/produtos cada — 40 renders reais, cada um uma combinação nova (tema×estilo que não existia antes de `visualStyle` existir). | **+40** |
+| Round B (execução autônoma overnight, 2026-09-01) | `AntesDepois` + `VitrineProduto` + `DicaPratica` + `MetodologiaSemEnrolacao` + `Bastidores` × `visualStyle` — 70 renders reais (ver blocos 4-8 de `scripts/qa-visual-styles.mjs`), todos aprovados no QA visual (nenhuma combinação excluída — ver §0.1.1). | **+70** |
+| **TOTAL** | | **172** |
+
+Notas de honestidade sobre esse número (pedido explícito da tarefa —
+"reporte o número real, sem inflar"):
+- Os renders de `out/qa/` são locais/efêmeros (`out/` está no `.gitignore`,
+  nunca foi commitado) — a contagem de 62+40 vem da documentação escrita nas
+  rodadas anteriores (commits `8cd3c04`/`b5a9839` e o próprio plano), não de
+  arquivos físicos que sobreviveram entre sessões. A contagem de 70 (Round B)
+  **foi conferida agora**: `find out/qa/estilos -iname "*.png" | wc -l`
+  retornou exatamente 110 (40+70) depois do render desta rodada.
+- O alvo pedido era 60-100 peças NOVAS nesta rodada — o real ficou em 70,
+  dentro do alvo. O total ACUMULADO (172) passa de 100 porque o Round A já
+  tinha empurrado o acumulado pra 102 antes do Round B começar — isso é
+  esperado e foi sinalizado como aceitável na própria tarefa ("se o real
+  ficar em 55 ou 130, tudo bem").
+- "172 peças" conta combinações tipo×variante×tema×estilo que foram
+  efetivamente renderizadas e revisadas (Regra Inviolável #1) em algum ponto
+  do projeto — não é o total teórico de TODAS as combinações matematicamente
+  possíveis (que seria bem maior, já que nem todo tema/estilo foi cruzado
+  com toda variante de todo tipo; ver §0.1.1 pra critério de cobertura usado
+  no Round B).

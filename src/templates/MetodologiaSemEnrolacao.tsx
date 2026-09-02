@@ -6,6 +6,15 @@ import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
 import {IconCycle} from '../lib/icons';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
+import {
+  getVisualStyle,
+  headlineStyle,
+  resolveCardStyle,
+  resolveTexture,
+  scaleSpacing,
+  showGraphicSupport,
+  type VisualStyleName,
+} from '../lib/visualStyles';
 import type {MetodologiaSlide} from '../lib/types';
 
 /**
@@ -25,11 +34,29 @@ import type {MetodologiaSlide} from '../lib/types';
  * nunca os 3 estados do carrossel. Os dois foram corrigidos: cover abaixo ganhou
  * badge + hint de continuidade igual ao "Arrasta pro lado" do DicaPratica, e
  * scripts/qa-preview.mjs agora renderiza cover + passo + cta de toda peca-carrossel.
+ *
+ * `visualStyle` (Round B, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * este template NAO tem `theme` (sempre foi preto/branco/accent fixo) —
+ * textura usa a opacidade padrao do Frame (0.045). `cover-editorial` mantem
+ * SEMPRE o titulo em itálico (voz "pull-quote" documentada desde a criacao
+ * do slide) — visualStyle nele varia so tamanho/letter-spacing/espacamento/
+ * gráfico de apoio, nunca a fonte.
  */
-export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({slide}) => {
+const BASE_TEXTURE_OPACITY = 0.045;
+
+export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualStyle?: VisualStyleName}> = ({
+  slide,
+  visualStyle,
+}) => {
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, BASE_TEXTURE_OPACITY);
+  const graphics = showGraphicSupport(vs);
+
   if (slide.kind === 'cover') {
+    const tituloStyle = headlineStyle(vs, 72, -1.5);
+    const cardVariantCover = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.black} wordmarkColor={colors.white}>
+      <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -43,11 +70,12 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           {slide.metodo ? <Badge>{slide.metodo}</Badge> : null}
           <h1
             style={{
-              fontSize: 72,
-              fontWeight: 700,
+              fontSize: tituloStyle.fontSize,
+              fontWeight: tituloStyle.fontWeight,
+              fontStyle: tituloStyle.fontStyle,
               color: colors.white,
               lineHeight: 1.05,
-              letterSpacing: -1.5,
+              letterSpacing: tituloStyle.letterSpacing,
               margin: '32px 0 0',
             }}
           >
@@ -67,8 +95,14 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           </span>
 
           {/* Selo de metodo — da peso visual real ao cover em vez de so texto solto */}
-          <div style={{marginTop: 64}}>
-            <SurfaceCard shellColor="rgba(255,255,255,0.05)" coreColor="rgba(255,255,255,0.09)" radius={24}>
+          <div style={{marginTop: scaleSpacing(vs, 64, {min: 44, max: 84})}}>
+            <SurfaceCard
+              variant={cardVariantCover}
+              shellColor="rgba(255,255,255,0.05)"
+              coreColor="rgba(255,255,255,0.09)"
+              borderColor={cardVariantCover === 'outline' ? 'rgba(255,255,255,0.35)' : undefined}
+              radius={24}
+            >
               <div style={{display: 'flex', alignItems: 'center', gap: 24, padding: '28px 32px', maxWidth: 640}}>
                 <div
                   style={{
@@ -95,17 +129,21 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
             </SurfaceCard>
           </div>
 
-          <div style={{position: 'absolute', right: -70, bottom: 60}}>
-            <GhostBars color={colors.white} opacity={0.1} width={480} />
-          </div>
+          {graphics ? (
+            <div style={{position: 'absolute', right: -70, bottom: 60}}>
+              <GhostBars color={colors.white} opacity={0.1} width={480} />
+            </div>
+          ) : null}
         </div>
       </Frame>
     );
   }
 
   if (slide.kind === 'cover-roadmap') {
+    const tituloStyleRoadmap = headlineStyle(vs, 60, -1.3);
+    const cardVariantRoadmap = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.black} wordmarkColor={colors.white}>
+      <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -118,11 +156,12 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           {slide.metodo ? <Badge>{slide.metodo}</Badge> : null}
           <h1
             style={{
-              fontSize: 60,
-              fontWeight: 700,
+              fontSize: tituloStyleRoadmap.fontSize,
+              fontWeight: tituloStyleRoadmap.fontWeight,
+              fontStyle: tituloStyleRoadmap.fontStyle,
               color: colors.white,
               lineHeight: 1.06,
-              letterSpacing: -1.3,
+              letterSpacing: tituloStyleRoadmap.letterSpacing,
               margin: '28px 0 0',
             }}
           >
@@ -131,8 +170,14 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
 
           {/* Mini-roadmap das etapas — previa do metodo antes do swipe, num card
               double-bezel em vez de bullets soltos flutuando no fundo preto */}
-          <div style={{marginTop: 48}}>
-            <SurfaceCard shellColor="rgba(255,255,255,0.04)" coreColor="rgba(255,255,255,0.07)" radius={26}>
+          <div style={{marginTop: scaleSpacing(vs, 48, {min: 32, max: 62})}}>
+            <SurfaceCard
+              variant={cardVariantRoadmap}
+              shellColor="rgba(255,255,255,0.04)"
+              coreColor="rgba(255,255,255,0.07)"
+              borderColor={cardVariantRoadmap === 'outline' ? 'rgba(255,255,255,0.35)' : undefined}
+              radius={26}
+            >
               <div style={{display: 'flex', flexDirection: 'column', gap: 0, padding: '32px 34px 26px'}}>
                 {slide.etapas.map((etapa, i) => (
                   <div key={i} style={{display: 'flex', alignItems: 'stretch', gap: 20}}>
@@ -184,17 +229,27 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
   }
 
   if (slide.kind === 'cover-editorial') {
+    // DECISAO: titulo mantem SEMPRE bold+italic ("pull-quote" e a identidade
+    // do proprio slide desde a criacao, mesma logica ja documentada no
+    // cover-quote do DicaPratica/manifesto de Bastidores) — visualStyle so
+    // varia tamanho/letter-spacing/espacamento/gráfico de apoio.
+    const tituloStyleRaw = headlineStyle(vs, 78, -1.5);
+    const tituloStyleEditorial = {...tituloStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Aspas graficas grandes reforcam o tom "quote-like" pedido no design —
             no lugar das barras de crescimento (que combinam mais com dado/resultado
             do que com um cover editorial). Bleed parcial pra fora do quadro. */}
-        <div style={{position: 'absolute', right: -60, top: -70}}>
-          <GhostQuote color={colors.primaryDark} opacity={0.06} size={480} />
-        </div>
-        <div style={{position: 'absolute', left: 30, bottom: 40, transform: 'rotate(180deg)'}}>
-          <GhostQuote color={colors.primaryDark} opacity={0.045} size={260} />
-        </div>
+        {graphics ? (
+          <>
+            <div style={{position: 'absolute', right: -60, top: -70}}>
+              <GhostQuote color={colors.primaryDark} opacity={0.06} size={480} />
+            </div>
+            <div style={{position: 'absolute', left: 30, bottom: 40, transform: 'rotate(180deg)'}}>
+              <GhostQuote color={colors.primaryDark} opacity={0.045} size={260} />
+            </div>
+          </>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -223,12 +278,12 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
             </span>
             <h1
               style={{
-                fontSize: 78,
-                fontWeight: 700,
-                fontStyle: 'italic',
+                fontSize: tituloStyleEditorial.fontSize,
+                fontWeight: tituloStyleEditorial.fontWeight,
+                fontStyle: tituloStyleEditorial.fontStyle,
                 color: colors.primaryDark,
                 lineHeight: 1.05,
-                letterSpacing: -1.5,
+                letterSpacing: tituloStyleEditorial.letterSpacing,
                 margin: '22px 0 0',
               }}
             >
@@ -246,8 +301,26 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
   }
 
   if (slide.kind === 'passo') {
+    // Hero desta slide e o numero grande (checkpoint) — o h2/descricao ficam
+    // de fora do headlineStyle, mesmo criterio ja usado nos outros
+    // carrosseis (so 1 elemento "hero" por slide).
+    // Cap em 158: o anel tracejado decorativo ao redor e um circulo FIXO de
+    // 172px — numero maior que isso estoura visualmente o anel.
+    // Achado real de QA (2026-09-01): "02" ja nasce com letterSpacing -6
+    // (bem agressivo, proposital pro numero colar). Somar o letterSpacingBoost
+    // negativo de boldTipografico/dadoEmDestaque em cima disso (-6 + -3 ou
+    // -6 + -2.5) faz os 2 digitos se SOBREPOREM de verdade nesse tamanho de
+    // fonte — nao e estetica, e bug de legibilidade. Floor em -6: visualStyle
+    // pode deixar o numero mais espaçado que o base, nunca mais compacto.
+    const numeroStyleRaw = headlineStyle(vs, 140, -6);
+    const numeroStyle = {
+      ...numeroStyleRaw,
+      fontSize: Math.min(numeroStyleRaw.fontSize, 158),
+      letterSpacing: Math.max(numeroStyleRaw.letterSpacing, -6),
+    };
+    const cardVariantPasso = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black}>
+      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
           style={{
             position: 'absolute',
@@ -292,11 +365,12 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
               />
               <span
                 style={{
-                  fontSize: 140,
-                  fontWeight: 700,
+                  fontSize: numeroStyle.fontSize,
+                  fontWeight: numeroStyle.fontWeight,
+                  fontStyle: numeroStyle.fontStyle,
                   color: colors.black,
                   lineHeight: 0.82,
-                  letterSpacing: -6,
+                  letterSpacing: numeroStyle.letterSpacing,
                   textShadow: '0 16px 34px rgba(0,0,0,0.14)',
                 }}
               >
@@ -324,8 +398,14 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           {/* Mini-diagrama do ciclo — mostra as `total` etapas com a atual
               destacada, em vez de deixar so texto solto preenchendo o resto
               do quadro (pedido explicito do fundador) */}
-          <div style={{marginTop: 64}}>
-            <SurfaceCard shellColor="rgba(0,0,0,0.035)" coreColor="rgba(0,0,0,0.02)" radius={22}>
+          <div style={{marginTop: scaleSpacing(vs, 64, {min: 44, max: 84})}}>
+            <SurfaceCard
+              variant={cardVariantPasso}
+              shellColor="rgba(0,0,0,0.035)"
+              coreColor="rgba(0,0,0,0.02)"
+              borderColor={cardVariantPasso === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}
+              radius={22}
+            >
               <div style={{display: 'flex', alignItems: 'center', padding: '26px 30px'}}>
                 {Array.from({length: slide.total}).map((_, i) => {
                   const stepNum = i + 1;
@@ -388,11 +468,14 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
   }
 
   // slide.kind === 'cta'
+  const headlineStyleCta = headlineStyle(vs, 58, -1);
   return (
-    <Frame background={colors.black} wordmarkColor={colors.white}>
-      <div style={{position: 'absolute', right: -80, bottom: -60}}>
-        <GhostBars color={colors.white} opacity={0.11} width={520} />
-      </div>
+    <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+      {graphics ? (
+        <div style={{position: 'absolute', right: -80, bottom: -60}}>
+          <GhostBars color={colors.white} opacity={0.11} width={520} />
+        </div>
+      ) : null}
       <div
         style={{
           position: 'absolute',
@@ -401,17 +484,18 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide}> = ({sl
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 32,
+          gap: scaleSpacing(vs, 32, {min: 20, max: 44}),
         }}
       >
         <Badge>Metodologia</Badge>
         <h2
           style={{
-            fontSize: 58,
-            fontWeight: 700,
+            fontSize: headlineStyleCta.fontSize,
+            fontWeight: headlineStyleCta.fontWeight,
+            fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
             lineHeight: 1.1,
-            letterSpacing: -1,
+            letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}
         >

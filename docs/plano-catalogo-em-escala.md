@@ -31,6 +31,41 @@ precisamos de mais UMA dimensão combinável em cada lado:
   Bastidores — CoverFotoReal é exploratório, avaliar se entra) e escalar o
   render em lote pra mirar 60-100 peças cumulativas.
 
+- **Round B — CONCLUÍDO (2026-09-01, execução autônoma overnight, fundador
+  dormindo)**: os 5 tipos restantes (`AntesDepois`, `VitrineProduto`,
+  `DicaPratica`, `MetodologiaSemEnrolacao`, `Bastidores`) refatorados pra
+  aceitar `visualStyle`, seguindo o mesmo padrão do Round A. **8 de 8 tipos
+  de post agora combinam com estilo visual.** `CoverFotoReal` (exploratório,
+  fora dos "8 tipos") não foi tocado — decisão: manter escopo nos 8 tipos
+  formais do catálogo.
+  Julgamento exercido sem pausar pra perguntar (documentado em detalhe em
+  `src/templates/CATALOGO.md` §0.1.1): 3 elementos (`DicaPratica`
+  `cover-quote`, `MetodologiaSemEnrolacao` `cover-editorial`, `Bastidores`
+  `manifesto`) têm bold+itálico hardcoded como voz de marca desde a criação —
+  o preset de `visualStyle` varia tamanho/espaçamento nesses casos, mas NUNCA
+  sobrescreve fontWeight/fontStyle, senão descaracterizaria o tom. Nenhum
+  cruzamento precisou ser excluído por inteiro — a preocupação original
+  ("Bastidores pode não combinar com boldTipografico") não se confirmou no
+  render real; o resultado ficou bom com a trava de fonte aplicada. Outros
+  achados reais de QA corrigidos: clamps de fontSize em 4 pontos com elemento
+  de posição fixa logo abaixo do headline (`AntesDepois` metricaHero,
+  `VitrineProduto` padrao/grid/print/contexto, `MetodologiaSemEnrolacao`
+  passo), e um floor de letterSpacing no número do `passo` (preset não pode
+  comprimir mais que o design original).
+  **110 PNGs reais renderizados** (`npm run qa:estilos`, script expandido em
+  `scripts/qa-visual-styles.mjs`, blocos 4-8): 40 re-renderizados como
+  regressão do Round A + 70 novos do Round B. Todos revisados via contact
+  sheets (`ffmpeg tile`) + inspeção individual dos casos de risco antes de
+  aprovar (Regra Inviolável #1) — nenhuma peça abaixo do padrão foi aceita.
+  **Contagem total real do catálogo: 172** (62 baseline + 40 Round A + 70
+  Round B — matemática completa e auditável em `src/templates/CATALOGO.md`,
+  seção "Contagem total do catálogo").
+  **Próximo passo (Round C)**: infraestrutura de `motionStyle` pra vídeo —
+  `src/lib/motionStyles.ts` com 6-8 presets de motion (kinetic-typography-
+  forte, minimal-fade, glitch-transition, split-screen-reveal, zoom-punch,
+  stopmotion-cut), aplicados a 2-3 tipos já animados (`DadoVsAchismoReel`,
+  `MetodologiaReel`) antes de escalar pra mais tipos no Round D.
+
 ## Rounds de execução (cada um = 1 dispatch do Rafael, sequencial)
 
 1. **Round A — infraestrutura de `visualStyle`**: `src/lib/visualStyles.ts`, 4-5 presets

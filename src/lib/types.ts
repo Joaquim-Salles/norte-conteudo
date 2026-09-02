@@ -69,6 +69,8 @@ export type AntesDepoisData = {
   variant?: AntesDepoisVariant;
   /** Tema de paleta (sistema/produto ou marca geral). Default: 'marca'. */
   theme?: ThemeName;
+  /** Estilo visual (Round B, 2026-09-01) — ver src/lib/visualStyles.ts. Opcional, omitido = aparência original. */
+  visualStyle?: VisualStyleName;
 };
 
 export type VitrineProdutoVariant = 'padrao' | 'hero' | 'grid' | 'print' | 'contexto';
@@ -107,6 +109,15 @@ export type VitrineProdutoData = {
   foto?: string;
   /** Usado so na variant 'contexto' — object-position CSS pra controlar o crop da foto. */
   fotoPosition?: string;
+  /**
+   * Estilo visual (Round B, 2026-09-01) — ver src/lib/visualStyles.ts.
+   * Opcional, omitido = aparência original. NÃO afeta o tema (continua
+   * sempre derivado do `produto`, nunca escolha manual) — visualStyle e
+   * theme continuam ortogonais. Nas variantes `print`/`contexto` (foto ou
+   * screenshot real como elemento central), os knobs de textura/gráfico de
+   * apoio são deliberadamente ignorados — ver comentário no componente.
+   */
+  visualStyle?: VisualStyleName;
 };
 
 export type MetodologiaSlide =
@@ -252,4 +263,15 @@ export type BastidoresData = {
   /** Usado so na variant 'regraDaCasa' — explicacao curta da regra. */
   corpo?: string;
   variant?: BastidoresVariant;
+  /**
+   * Estilo visual (Round B, 2026-09-01) — ver src/lib/visualStyles.ts.
+   * Opcional, omitido = aparência original. DECISÃO DOCUMENTADA: no
+   * `manifesto`, o título/citação central SEMPRE mantém bold+itálico (voz de
+   * marca já hardcoded, ver componente) — visualStyle varia tamanho/
+   * letter-spacing/espaçamento/textura/gráfico de apoio, nunca a fonte do
+   * manifesto. Julgamento: forçar `headlineWeight` de um preset (ex.
+   * `boldTipografico` remove itálico) descaracterizaria o tom de "citação de
+   * princípio" que definiu esse variant desde a criação.
+   */
+  visualStyle?: VisualStyleName;
 };

@@ -4,6 +4,14 @@ import {SurfaceCard} from '../lib/SurfaceCard';
 import {colors} from '../lib/tokens';
 import {GhostBars, GhostCheck} from '../lib/GhostGraphics';
 import {IconCompass, IconCheck} from '../lib/icons';
+import {
+  getVisualStyle,
+  headlineStyle,
+  resolveCardStyle,
+  resolveTexture,
+  scaleSpacing,
+  showGraphicSupport,
+} from '../lib/visualStyles';
 import type {BastidoresData} from '../lib/types';
 
 /**
@@ -29,7 +37,21 @@ import type {BastidoresData} from '../lib/types';
  * concordam — bastidores constroi confianca pro fundo de funil, forcar CTA
  * agressivo aqui contradiz o proprio genero (autenticidade > venda). O link
  * da bio aparece só como linha discreta, nao como banda de destaque.
+ *
+ * `visualStyle` (Round B, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
+ * sem `theme` (sempre preto/primaryDark/accent fixo) — textura usa a
+ * opacidade padrao do Frame. DECISAO DOCUMENTADA (julgamento pedido pela
+ * tarefa): no `manifesto`, o titulo/afirmacao central SEMPRE mantem
+ * bold+itálico (voz de "citacao de principio" ja hardcoded) — visualStyle
+ * so varia tamanho/letter-spacing/espacamento/textura/gráfico de apoio,
+ * nunca a fonte do manifesto. Forcar o `headlineWeight` bruto de um preset
+ * (ex. boldTipografico removeria o itálico) descaracterizaria o tom que
+ * define esse variant desde a criacao. `regraDaCasa` NAO tem essa
+ * restricao (titulo ja e bold reto, sem itálico) — headlineStyle se aplica
+ * ali sem ressalva.
  */
+const BASE_TEXTURE_OPACITY = 0.045;
+
 export const Bastidores: React.FC<BastidoresData> = ({
   eyebrow = 'Como trabalhamos',
   titulo,
@@ -37,16 +59,27 @@ export const Bastidores: React.FC<BastidoresData> = ({
   numero,
   corpo,
   variant = 'manifesto',
+  visualStyle,
 }) => {
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const tex = resolveTexture(vs, BASE_TEXTURE_OPACITY);
+  const graphics = showGraphicSupport(vs);
+
   if (variant === 'regraDaCasa') {
+    const tituloStyleRegra = headlineStyle(vs, 50, -1);
+    const cardVariantRegra = resolveCardStyle(vs, 'bezel');
     return (
-      <Frame background={colors.primaryDark} wordmarkColor={colors.white}>
-        <div style={{position: 'absolute', left: -110, bottom: -90}}>
-          <GhostBars color={colors.white} opacity={0.08} width={620} />
-        </div>
-        <div style={{position: 'absolute', right: -70, top: -60}}>
-          <GhostCheck color={colors.white} opacity={0.05} size={320} />
-        </div>
+      <Frame background={colors.primaryDark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+        {graphics ? (
+          <>
+            <div style={{position: 'absolute', left: -110, bottom: -90}}>
+              <GhostBars color={colors.white} opacity={0.08} width={620} />
+            </div>
+            <div style={{position: 'absolute', right: -70, top: -60}}>
+              <GhostCheck color={colors.white} opacity={0.05} size={320} />
+            </div>
+          </>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -55,7 +88,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: 30,
+            gap: scaleSpacing(vs, 30, {min: 18, max: 42}),
           }}
         >
           <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
@@ -73,7 +106,12 @@ export const Bastidores: React.FC<BastidoresData> = ({
             </span>
           </div>
 
-          <SurfaceCard shellColor="rgba(255,255,255,0.06)" coreColor="rgba(255,255,255,0.1)">
+          <SurfaceCard
+            variant={cardVariantRegra}
+            shellColor="rgba(255,255,255,0.06)"
+            coreColor="rgba(255,255,255,0.1)"
+            borderColor={cardVariantRegra === 'outline' ? 'rgba(255,255,255,0.35)' : undefined}
+          >
             <div style={{padding: '40px 38px'}}>
               {numero ? (
                 <span
@@ -90,11 +128,12 @@ export const Bastidores: React.FC<BastidoresData> = ({
               ) : null}
               <h2
                 style={{
-                  fontSize: 50,
-                  fontWeight: 700,
+                  fontSize: tituloStyleRegra.fontSize,
+                  fontWeight: tituloStyleRegra.fontWeight,
+                  fontStyle: tituloStyleRegra.fontStyle,
                   color: colors.white,
                   lineHeight: 1.16,
-                  letterSpacing: -1,
+                  letterSpacing: tituloStyleRegra.letterSpacing,
                   margin: '14px 0 0',
                 }}
               >
@@ -127,8 +166,12 @@ export const Bastidores: React.FC<BastidoresData> = ({
   }
 
   // variant === 'manifesto' (default)
+  // Titulo mantem SEMPRE bold+italic (ver decisao documentada no topo do
+  // arquivo) — so tamanho/letter-spacing vem do preset.
+  const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1);
+  const tituloStyleManifesto = {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
   return (
-    <Frame background={colors.black} wordmarkColor={colors.white}>
+    <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
       <div
         style={{
           position: 'absolute',
@@ -137,7 +180,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 40,
+          gap: scaleSpacing(vs, 40, {min: 26, max: 54}),
         }}
       >
         <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
@@ -169,12 +212,12 @@ export const Bastidores: React.FC<BastidoresData> = ({
 
         <h2
           style={{
-            fontSize: 58,
-            fontWeight: 700,
-            fontStyle: 'italic',
+            fontSize: tituloStyleManifesto.fontSize,
+            fontWeight: tituloStyleManifesto.fontWeight,
+            fontStyle: tituloStyleManifesto.fontStyle,
             color: colors.white,
             lineHeight: 1.16,
-            letterSpacing: -1,
+            letterSpacing: tituloStyleManifesto.letterSpacing,
             margin: 0,
             maxWidth: 900,
           }}
@@ -198,12 +241,16 @@ export const Bastidores: React.FC<BastidoresData> = ({
         ) : null}
       </div>
 
-      <div style={{position: 'absolute', right: -90, bottom: -70}}>
-        <GhostBars color={colors.white} opacity={0.07} width={560} />
-      </div>
-      <div style={{position: 'absolute', left: -60, top: -50}}>
-        <GhostCheck color={colors.white} opacity={0.04} size={280} />
-      </div>
+      {graphics ? (
+        <>
+          <div style={{position: 'absolute', right: -90, bottom: -70}}>
+            <GhostBars color={colors.white} opacity={0.07} width={560} />
+          </div>
+          <div style={{position: 'absolute', left: -60, top: -50}}>
+            <GhostCheck color={colors.white} opacity={0.04} size={280} />
+          </div>
+        </>
+      ) : null}
 
       <div style={{position: 'absolute', left: 72, right: 72, bottom: 130, textAlign: 'left'}}>
         <span style={{fontSize: 20, fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.5)'}}>
