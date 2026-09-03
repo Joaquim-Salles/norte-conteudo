@@ -46,6 +46,13 @@ export type DicaPraticaSlide =
       foto: string;
       /** object-position CSS pra controlar o crop da foto. Default: 'center 15%'. */
       fotoPosition?: string;
+      /**
+       * Ícone de produto (Round G, 2026-09-03) pra selo de "prova de
+       * contexto" — caminho em public/logos/ (ex: 'logos/estoque-icon.svg').
+       * Só aparece quando `visualStyle` liga `showIconBadge` (ver
+       * `analogiaReal` em visualStyles.ts). Omitido = sem selo.
+       */
+      iconeBadge?: string;
     }
   | {kind: 'bridge'; numero: number; total: number; titulo: string; corpo: string}
   | {kind: 'cta'; headline?: string};

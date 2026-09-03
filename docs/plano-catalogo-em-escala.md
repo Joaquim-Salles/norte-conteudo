@@ -206,6 +206,22 @@ precisamos de mais UMA dimensão combinável em cada lado:
    decisão do fundador, em `src/templates/CATALOGO.md` §0.4 e §Fotografia
    real. 8 PNGs de prova em `out/qa/round-f/`, revisados individualmente
    (3 correções reais de QA aplicadas antes de aprovar).
+7. **Round G — CONCLUÍDO — `analogiaReal` (2026-09-03, mesmo dia)**: o
+   fundador autorizou reautenticar `instagram-control` na conta pessoal dele
+   pra puxar o feed real de @thaleslaray (35 posts). Limitação real
+   encontrada: as ferramentas não expõem slide interno de carrossel (23/35
+   posts são carrossel) — pesquisa cobre captions reais + 1 imagem NATIVA
+   baixada e inspecionada pixel a pixel
+   (`docs/referencias-visuais/thaleslaray-iceberg-meme.jpg`). Preset novo
+   `analogiaReal`: contorno grosso de texto (`textStroke`) + selo de ícone de
+   produto próprio (`IconBadge.tsx`, nunca logo de terceiro) — 2 mecanismos
+   que não existiam em nenhum dos 7 presets anteriores. Provado em 2
+   templates (`DicaPratica`, `Depoimento`), 3 PNGs em `out/qa/round-g/`,
+   zero correções de QA necessárias (contorno resolveu de graça um problema
+   de contraste que o Round F tinha deixado em aberto). Sugestão anotada
+   pro fundador (não decidida): 9º tipo de post em torno do CTA "Comenta
+   [PALAVRA]" — sinal real de 1.778/3.085 comentários no perfil pesquisado.
+   Detalhe completo em `src/templates/CATALOGO.md` §0.5.
 
 ## Regras inegociáveis (não mudam à noite)
 - Regra Inviolável #1: qualidade visual > volume. Nunca aprovar peça abaixo do padrão

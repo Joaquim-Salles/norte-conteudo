@@ -26,7 +26,15 @@ em 2 templates, e 3 fotos reais novas aumentando a presença de foto de fundo
 (antes 3 fotos em 3 templates, agora 6 usos em 5 templates). Cobertura
 DELIBERADAMENTE parcial (2 de 8 tipos de post, nenhum Reel) — não é
 reconsolidação de catálogo, é prova de conceito pra decisão do fundador sobre
-expandir ou não. Total físico em disco agora: **180 PNGs + 30 MP4s = 210**.
+expandir ou não. Total físico em disco após o Round F: **180 PNGs + 30 MP4s = 210**.
+
+**Atualização Round G (2026-09-03, mesmo dia, ver §0.5):** +3 PNGs de prova
+em `out/qa/round-g/` — 1 preset novo (`analogiaReal`, baseado em pesquisa
+real do feed de @thaleslaray via `instagram-control`, 35 posts + 1 imagem
+nativa inspecionada pixel a pixel) com 2 mecanismos genuinamente novos:
+contorno de texto (`textStroke`) e selo de ícone de produto (`IconBadge`).
+Cobertura em 2 templates (`DicaPratica`, `Depoimento`). Total físico em
+disco agora: **183 PNGs + 30 MP4s = 213**.
 
 **Principais achados/bugs corrigidos ao longo do processo** (todos com
 detalhe completo no corpo deste arquivo, referenciados por seção):
@@ -553,6 +561,93 @@ provam os presets novos (`Depoimento`/`DadoVsAchismo` × `marcador`/
 individualmente (não só contact sheet) antes de aprovar — 3 correções reais
 aplicadas (2 de posição do `GhostMarker`, 1 de overlay+contraste no
 `Bastidores`).
+
+---
+
+## 0.5 Round G — `analogiaReal`, formato "meme com propósito" (2026-09-03)
+
+Mesmo dia do Round F, pesquisa foi além do texto/bio público: o fundador
+autorizou reautenticar o `instagram-control` MCP na conta pessoal dele
+(@eujoaquimsalles) pra puxar o **feed real de @thaleslaray** — 35 posts,
+captions completas, métricas de engajamento reais (não estimadas).
+
+**Limitação real das ferramentas, encontrada e documentada** (não
+contornada de verdade — reportada como está): `instagram_get_media_info` só
+traz metadado do post inteiro, `instagram_download_post` retorna erro
+("Must been photo") pra carrossel (`type: 8`) e só funciona em foto única
+(`type: 1`); WebFetch na URL do post só pega a capa. **23 dos 35 posts são
+carrossel** — não deu pra inspecionar os slides internos deles. A pesquisa
+cobre então: (a) estrutura/tom dos 35 captions reais, (b) 1 imagem NATIVA
+real baixada e inspecionada pixel a pixel (a única foto única disponível pra
+download direto). Detalhe completo, com a imagem, em
+[`docs/referencias-visuais/thaleslaray-pesquisa.md`](../../docs/referencias-visuais/thaleslaray-pesquisa.md)
+e [`thaleslaray-iceberg-meme.jpg`](../../docs/referencias-visuais/thaleslaray-iceberg-meme.jpg).
+
+**O que a imagem real mostrou** (formato "meme de iceberg", nativo, não
+carrossel): foto real de banco de imagem em tela cheia (não cor sólida) +
+tipografia com preenchimento branco e **contorno preto grosso** (estilo
+legenda/meme viral — nada parecido existia nos 7 presets anteriores) + texto
+flutuando livre sobre a foto, não em bloco/card + 2 selos pequenos quadrados
+com ícone de app (ChatGPT/Claude) como "prova de contexto" + formato
+retórico de analogia/comparação relacionável ("o que eu mostro" vs "o que eu
+escondo").
+
+**Preset novo em `src/lib/visualStyles.ts`: `analogiaReal`** — primeiro
+preset que:
+1. Introduz `textStroke` (contorno de texto via `-webkit-text-stroke` +
+   `paintOrder: 'stroke fill'`, resolvido por `textStrokeStyle()`) — só faz
+   sentido sobre foto real, documentado como tal no `quandoUsar`.
+2. Introduz `showIconBadge` + `src/lib/IconBadge.tsx` (selo quadrado, cantos
+   arredondados, com ícone de PRODUTO PRÓPRIO da Norte —
+   `logos/estoque-icon.svg`, `logos/vendas-icon-192.png` — nunca logo de
+   ChatGPT/Claude/terceiro, mesma linha vermelha já aplicada ao ícone do
+   WhatsApp).
+
+**Wired em 2 templates** (cobertura parcial e deliberada, mesmo padrão dos
+Rounds anteriores):
+- `DicaPratica` (`cover-foto`) — texto flutuante + selo de produto, o fit
+  mais direto com a referência (headline única flutuando sobre a foto).
+- `Depoimento` (`capa`, só quando `slide.foto` está presente) — prova que o
+  `textStroke` generaliza pra outro template/composição; sem selo aqui (o
+  selo de iniciais de atribuição já cumpre um papel parecido).
+
+**Achado real de QA (positivo, não uma correção):** o contorno de texto
+resolveu, de graça, um problema de contraste que o Round F tinha deixado em
+aberto — no render `RoundF-Depoimento-capa-foto-marca` a citação perdia
+contraste sobre a parte clara da janela ao fundo; com `textStroke` no mesmo
+enquadramento (`RoundG-Depoimento-capa-analogiaReal-marca`), o texto lê
+perfeitamente em cima de QUALQUER trecho da foto, claro ou escuro — o
+contorno é robusto ao brilho local da imagem de um jeito que texto sem
+contorno não é.
+
+### Renders de prova (Round G)
+
+**3 PNGs novos** em `out/qa/round-g/` (`node scripts/qa-round-g.mjs`): 2
+`DicaPratica` (Estoque e Vendas, cada um com selo do produto certo) + 1
+`Depoimento` capa+foto. Revisados individualmente antes de aprovar — nenhuma
+correção necessária nesta rodada (contorno de texto se mostrou robusto de
+primeira, ao contrário do `GhostMarker`/overlay do Round F).
+
+**A mesma ressalva de honestidade do Round F (ver §Fotografia real) se
+aplica aqui igualmente** — o render de `Depoimento` usa a mesma foto de
+ambiente genérico sob o badge "Cliente Norte", decisão que segue pendente do
+fundador, não resolvida aqui.
+
+### Sugestão pro fundador (NÃO decidida — anotada conforme pedido)
+
+Os 35 captions reais mostraram um sinal concreto de mercado: o CTA
+**"Comenta [PALAVRA] pra receber X no direct"** bateu 1.778 e 3.085
+comentários nos 2 exemplos mais fortes do perfil — visto ao vivo nos dados
+reais, não estimado. Isso é maior que qualquer métrica de engajamento
+citada em qualquer pesquisa anterior deste catálogo. Como a meta declarada
+da Norte é geração de lead (não alcance puro), pode valer a pena um TIPO de
+post inteiro (9º tipo, não só uma variação visual dos 8 atuais) desenhado em
+torno desse mecanismo de CTA — estrutura de conteúdo pede uma "palavra-gatilho"
+clara e uma promessa de entrega no direct, o que é diferente de como os CTAs
+atuais (sempre WhatsApp/link na bio) funcionam. **Isso é decisão de
+calendário editorial/estratégia — fora do escopo do Rafael (ver SKILL.md
+§5)** — só fica registrado aqui como sugestão pro fundador avaliar, não foi
+implementado nem decidido.
 
 ---
 

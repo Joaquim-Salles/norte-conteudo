@@ -15,6 +15,7 @@ import {
   resolveCardStyle,
   resolveTexture,
   showGraphicSupport,
+  textStrokeStyle,
   type VisualStyleName,
 } from '../lib/visualStyles';
 import type {DepoimentoSlide} from '../lib/types';
@@ -54,6 +55,12 @@ const productLabel: Record<string, string> = {
  * tambem e o unico slide que aplica `resolveCanvas` (papelQuente) — canvas
  * unico, sem bloco interno de cor propria, exatamente o cenario que
  * `canvasOverride` foi desenhado pra cobrir (ver visualStyles.ts).
+ *
+ * Round G (2026-09-03): quando `slide.foto` esta presente E `visualStyle` e
+ * `analogiaReal`, a citacao da capa ganha contorno grosso de texto
+ * (`textStroke`, referencia real pesquisada — ver
+ * docs/referencias-visuais/thaleslaray-pesquisa.md). Sem foto, o contorno e
+ * ignorado de proposito (nao faz sentido sobre o degrade solido).
  */
 export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; visualStyle?: VisualStyleName}> = ({
   slide,
@@ -123,6 +130,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
               margin: '40px 0 0',
               letterSpacing: citacaoStyle.letterSpacing,
               maxWidth: 900,
+              ...(temFoto ? textStrokeStyle(vs) : {}),
             }}
           >
             &ldquo;{slide.citacao}&rdquo;

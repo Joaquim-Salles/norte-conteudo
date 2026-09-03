@@ -6,6 +6,7 @@ import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {IconBadge} from '../lib/IconBadge';
 import {
   getVisualStyle,
   headlineStyle,
@@ -13,6 +14,8 @@ import {
   resolveTexture,
   scaleSpacing,
   showGraphicSupport,
+  showIconBadge,
+  textStrokeStyle,
   type VisualStyleName,
 } from '../lib/visualStyles';
 import type {DicaPraticaSlide} from '../lib/types';
@@ -29,6 +32,11 @@ import type {DicaPraticaSlide} from '../lib/types';
  *    restaurante/comida em tela cheia (public/photos/, zero IA generativa) +
  *    overlay de gradiente escuro pra legibilidade — bom pra dica ligada a um
  *    contexto fisico de restaurante/bar/lanchonete (ex: NTB Vendas).
+ *    Round G (2026-09-03): quando `visualStyle` e `analogiaReal`, o titulo
+ *    ganha contorno grosso (`textStroke`, referencia real pesquisada — ver
+ *    docs/referencias-visuais/thaleslaray-pesquisa.md) e, se `slide.iconeBadge`
+ *    vier preenchido, aparece um selo pequeno com o icone do produto (prova
+ *    de contexto, `IconBadge.tsx`) — omitido em qualquer outro estilo.
  *  - bridge: 1 ideia por slide, numerada, nunca mais de ~2 frases (retencao).
  *  - cta: slide dedicado, 100% focado em levar pro WhatsApp — nao divide atencao.
  *
@@ -275,7 +283,12 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
             justifyContent: 'flex-end',
           }}
         >
-          {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
+          {slide.tagNumero || (showIconBadge(vs) && slide.iconeBadge) ? (
+            <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
+              {showIconBadge(vs) && slide.iconeBadge ? <IconBadge src={slide.iconeBadge} size={56} /> : null}
+              {slide.tagNumero ? <Badge>{slide.tagNumero}</Badge> : null}
+            </div>
+          ) : null}
           <h1
             style={{
               fontSize: tituloStyleFoto.fontSize,
@@ -286,6 +299,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               letterSpacing: tituloStyleFoto.letterSpacing,
               margin: '28px 0 0',
               textShadow: '0 10px 34px rgba(0,0,0,0.55)',
+              ...textStrokeStyle(vs),
             }}
           >
             {slide.titulo}

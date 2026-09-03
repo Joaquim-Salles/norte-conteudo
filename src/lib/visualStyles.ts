@@ -37,6 +37,12 @@
  * (`canvasOverride`, exceção documentada e restrita). Detalhe completo de
  * pesquisa/decisão em `src/templates/CATALOGO.md` §0.4.
  *
+ * Round G (2026-09-03, mesmo dia — feed real de @thaleslaray puxado de
+ * verdade via `instagram-control` MCP, 35 posts): resultou em `analogiaReal`
+ * — foto real + texto com contorno grosso (`textStroke`) + selo de ícone de
+ * produto (`showIconBadge`, ver `src/lib/IconBadge.tsx`). Detalhe de
+ * pesquisa em `docs/referencias-visuais/thaleslaray-pesquisa.md`.
+ *
  * Cada preset é um conjunto de KNOBS sistemáticos (não CSS solto por
  * template): densidade/espaçamento, textura, estilo de card, peso
  * tipográfico dominante do elemento hero, presença de gráfico de apoio
@@ -59,7 +65,8 @@ export type VisualStyleName =
   | 'boldTipografico'
   | 'corporateClean'
   | 'marcador'
-  | 'papelQuente';
+  | 'papelQuente'
+  | 'analogiaReal';
 
 export type HeadlineWeight = 'bold' | 'boldItalic' | 'regularItalic';
 
@@ -119,6 +126,26 @@ export type VisualStyle = {
    * undefined = comportamento original (fundo 100% decidido pelo template/tema).
    */
   canvasOverride?: {background: string; ink: string};
+  /**
+   * Contorno grosso no texto (efeito "legenda de meme/vídeo viral") — Round G
+   * (2026-09-03), referência pesquisada de verdade: post NATIVO real de
+   * @thaleslaray (foto única, não carrossel — as ferramentas disponíveis não
+   * expõem slide interno de carrossel, ver
+   * `docs/referencias-visuais/thaleslaray-pesquisa.md`), imagem baixada e
+   * inspecionada pixel a pixel
+   * (`docs/referencias-visuais/thaleslaray-iceberg-meme.jpg`). Só faz
+   * sentido sobre FOTO REAL (texto flutuando livre sobre a imagem, não em
+   * bloco de cor sólida) — templates só devem aplicar isso nos
+   * slides/variantes com `foto` já ativo. undefined = sem contorno
+   * (comportamento original de todos os outros presets).
+   */
+  textStroke?: {width: number; color: string};
+  /**
+   * Liga o selo de ícone de produto (`IconBadge.tsx`, "prova de contexto" —
+   * mesma função dos selos de ChatGPT/Claude na referência, mas com ícone
+   * PRÓPRIO da Norte, nunca logo de terceiro). Só `analogiaReal` usa.
+   */
+  showIconBadge?: boolean;
 };
 
 export const visualStyles: Record<VisualStyleName, VisualStyle> = {
@@ -224,6 +251,31 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     signatureGraphic: 'ghostSlash',
     canvasOverride: {background: '#faf9f5', ink: '#141413'},
   },
+
+  // ---- Round G (2026-09-03) — feed real de @thaleslaray puxado via
+  // instagram-control (35 posts, captions completas). Limitação real
+  // encontrada e documentada: as ferramentas disponíveis não expõem slide
+  // interno de carrossel (só metadado do post inteiro ou a capa) — a
+  // pesquisa cobre 1 imagem NATIVA real (foto única, não carrossel) baixada
+  // e inspecionada pixel a pixel. Ver
+  // `docs/referencias-visuais/thaleslaray-pesquisa.md` +
+  // `docs/referencias-visuais/thaleslaray-iceberg-meme.jpg`. ----
+
+  analogiaReal: {
+    name: 'analogiaReal',
+    label: 'Analogia Real',
+    quandoUsar:
+      'Formato "meme com propósito" — referência pesquisada de verdade: post NATIVO real de @thaleslaray (foto real de banco de imagem em tela cheia + tipografia com contorno preto grosso, texto flutuando livre sobre a foto em vez de bloco/card + selo pequeno de ícone de produto como "prova de contexto" + analogia/comparação relacionável no texto — ex. iceberg "o que eu mostro" vs "o que eu escondo"). SÓ usar em slides/variantes com foto real de fundo (`foto` já ativo) — o contorno existe pra ler sobre QUALQUER trecho da foto sem depender de overlay pesado; sobre cor sólida não faz sentido e o efeito fica solto. Texto recomendado: comparação/analogia curta, não afirmação didática longa (as outras 7 combinações já cobrem esse tom).',
+    spacingScale: 1,
+    texture: {enabled: false, opacityMultiplier: 0},
+    cardStyleOverride: 'flat',
+    headlineWeight: 'bold',
+    headlineScale: 0.85,
+    letterSpacingBoost: 0,
+    graphicSupport: false,
+    textStroke: {width: 3, color: '#000000'},
+    showIconBadge: true,
+  },
 };
 
 export function getVisualStyle(name: VisualStyleName): VisualStyle {
@@ -302,4 +354,20 @@ export function resolveCanvas(
 /** Resolve o Ghost* específico que o estilo pede (undefined = template decide sozinho, comportamento original). */
 export function resolveSignatureGraphic(vs: VS): 'ghostMarker' | 'ghostSlash' | undefined {
   return vs?.signatureGraphic;
+}
+
+/**
+ * Resolve o par de propriedades CSS do contorno de texto (`analogiaReal`,
+ * Round G) — objeto pronto pra espalhar num `style` de texto. undefined =
+ * sem contorno (comportamento original). Só o template decide QUANDO chamar
+ * isso (nunca sobre cor sólida, ver nota em `analogiaReal.quandoUsar`).
+ */
+export function textStrokeStyle(vs: VS): {WebkitTextStroke?: string; paintOrder?: string} {
+  if (!vs?.textStroke) return {};
+  return {WebkitTextStroke: `${vs.textStroke.width}px ${vs.textStroke.color}`, paintOrder: 'stroke fill'};
+}
+
+/** true = renderizar o `IconBadge` de prova de contexto (Round G). Default false — só `analogiaReal` liga isso. */
+export function showIconBadge(vs: VS): boolean {
+  return vs?.showIconBadge ?? false;
 }
