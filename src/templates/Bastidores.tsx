@@ -3,6 +3,7 @@ import {Frame} from '../lib/Frame';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {colors} from '../lib/tokens';
 import {GhostBars, GhostCheck} from '../lib/GhostGraphics';
+import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconCompass, IconCheck} from '../lib/icons';
 import {
   getVisualStyle,
@@ -32,6 +33,13 @@ import type {BastidoresData} from '../lib/types';
  * nao em rosto — se a Norte tiver fotografia real de bastidores no futuro,
  * cabe evoluir pra uma variante com PhotoBackground.
  *
+ * ATUALIZACAO (Round F, 2026-09-03): a previsao acima se confirmou — `foto`
+ * (opcional, so na variant `manifesto`) troca o fundo preto chapado por foto
+ * real (Pexels, banco de reuniao/escritorio — NAO e "o time real da Norte",
+ * e ambiente generico de trabalho, mesmo criterio de honestidade ja usado em
+ * Depoimento pra nao fingir cliente/pessoa que nao existe). Omitido = fundo
+ * preto original, identico a antes desta rodada.
+ *
  * DECISAO DE CTA (documentada, ver Checklist #2 da skill): este e o UNICO
  * tipo do catalogo SEM CtaBand cheio. Pesquisa 2026 e a logica do formato
  * concordam — bastidores constroi confianca pro fundo de funil, forcar CTA
@@ -60,6 +68,8 @@ export const Bastidores: React.FC<BastidoresData> = ({
   corpo,
   variant = 'manifesto',
   visualStyle,
+  foto,
+  fotoPosition,
 }) => {
   const vs = visualStyle ? getVisualStyle(visualStyle) : null;
   const tex = resolveTexture(vs, BASE_TEXTURE_OPACITY);
@@ -170,8 +180,24 @@ export const Bastidores: React.FC<BastidoresData> = ({
   // arquivo) — so tamanho/letter-spacing vem do preset.
   const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1);
   const tituloStyleManifesto = {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
+  const temFoto = Boolean(foto);
   return (
-    <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
+    <Frame
+      background={colors.black}
+      wordmarkColor={colors.white}
+      texture={temFoto ? false : tex.enabled}
+      textureOpacity={tex.opacity}
+    >
+      {temFoto ? (
+        // overlay 'full' (nao 'topAndBottom'): titulo+principios do manifesto
+        // ocupam justamente a faixa CENTRAL do frame — 'topAndBottom' deixa o
+        // meio respirar livre por design (bom pra foto sem texto no meio,
+        // como VitrineProduto/DicaPratica), mas aqui isso derrubou o
+        // contraste do texto (achado real de QA, Regra Inviolável #1).
+        // 'full' escurece uniforme + textShadow no titulo/principios abaixo
+        // garante legibilidade em qualquer trecho da foto.
+        <PhotoBackground src={foto!} position={fotoPosition ?? 'center'} overlay="full" strength={1.3} />
+      ) : null}
       <div
         style={{
           position: 'absolute',
@@ -220,6 +246,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
             letterSpacing: tituloStyleManifesto.letterSpacing,
             margin: 0,
             maxWidth: 900,
+            textShadow: temFoto ? '0 8px 28px rgba(0,0,0,0.6)' : undefined,
           }}
         >
           {titulo}
@@ -232,7 +259,15 @@ export const Bastidores: React.FC<BastidoresData> = ({
                 <div style={{marginTop: 3}}>
                   <IconCheck size={20} color={colors.accent} strokeWidth={3} />
                 </div>
-                <span style={{fontSize: 26, fontWeight: 400, color: 'rgba(255,255,255,0.85)', lineHeight: 1.32}}>
+                <span
+                  style={{
+                    fontSize: 26,
+                    fontWeight: 400,
+                    color: 'rgba(255,255,255,0.85)',
+                    lineHeight: 1.32,
+                    textShadow: temFoto ? '0 4px 16px rgba(0,0,0,0.7)' : undefined,
+                  }}
+                >
                   {p}
                 </span>
               </div>

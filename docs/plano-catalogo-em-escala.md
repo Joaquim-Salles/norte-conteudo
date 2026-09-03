@@ -26,6 +26,15 @@ Round E (não arredondado, não somado só de documentação):
   (login Instagram real, teste de Bark com Reels reais, curadoria de
   lançamento). Trabalho autônomo pausa aqui até revisão do fundador.
 
+**Atualização (Round F, 2026-09-03, conversa ao vivo com o fundador — não
+autônomo):** feedback direto foi "tá tudo no mesmo padrão". Resposta: 2
+presets novos de `visualStyle` (`marcador`/`papelQuente`, com símbolo gráfico
+próprio) + 3 fotos reais novas (mais que dobrando a presença de foto de
+fundo no catálogo). Cobertura parcial (2 de 8 tipos) por decisão — ver Round
+6 na lista de rounds abaixo e `src/templates/CATALOGO.md` §0.4 pro detalhe
+completo, incluindo uma ressalva de honestidade (foto+depoimento) que ainda
+depende de decisão do fundador, não resolvida sozinha aqui.
+
 ---
 
 Decidido 2026-09-01, execução autônoma overnight (fundador dormindo, "só faz").
@@ -182,6 +191,21 @@ precisamos de mais UMA dimensão combinável em cada lado:
    30 MP4s = 202, ver "Status final" no topo deste arquivo), sumário executivo
    reescrito no topo de `CATALOGO.md`, auditoria de qualidade por amostragem (17
    peças, zero regressões), `first-tasks.md` atualizado com T9/T10/T11 pós-catálogo.
+6. **Round F — CONCLUÍDO — pesquisa ampliada + fuga do "mesmo padrão"
+   (2026-09-03, pedido direto do fundador em conversa ao vivo)**: 2 presets
+   novos de `visualStyle` (`marcador` — ref. Thales Laray/tendência de hook
+   bold 2026; `papelQuente` — ref. identidade pública Anthropic/Claude), cada
+   um com símbolo gráfico PRÓPRIO (`GhostMarker`/`GhostSlash`), provados em 2
+   templates (`Depoimento`, `DadoVsAchismo`) — cobertura parcial por decisão,
+   não os 8 tipos ainda. +3 fotos reais novas (Pexels), presença de foto
+   passou de 3 usos em 3 templates pra 6 usos em 5 templates (`Bastidores` e
+   `Depoimento` ganharam a capacidade pela 1ª vez). Achado real: `instagram-control`
+   NÃO estava autenticado nesta sessão (o fundador achava que sim) — pesquisa
+   de referência feita via web pública, não via MCP. Detalhe completo,
+   incluindo ressalva de honestidade sobre foto+depoimento pendente de
+   decisão do fundador, em `src/templates/CATALOGO.md` §0.4 e §Fotografia
+   real. 8 PNGs de prova em `out/qa/round-f/`, revisados individualmente
+   (3 correções reais de QA aplicadas antes de aprovar).
 
 ## Regras inegociáveis (não mudam à noite)
 - Regra Inviolável #1: qualidade visual > volume. Nunca aprovar peça abaixo do padrão

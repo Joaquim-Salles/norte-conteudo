@@ -3,7 +3,7 @@ import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
-import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
+import {GhostBars, GhostQuote, GhostMarker, GhostSlash} from '../lib/GhostGraphics';
 import {IconAlert, IconChart} from '../lib/icons';
 import {Badge} from '../lib/Badge';
 import {getVisualStyle, headlineStyle, resolveTexture, scaleSpacing, showGraphicSupport} from '../lib/visualStyles';
@@ -27,6 +27,13 @@ import type {DadoVsAchismoData} from '../lib/types';
  * numero do dado e presenca de grafico de apoio (GhostBars/GhostQuote), SEM
  * mexer em cor. Omitido = aparencia original de cada variante, identica a
  * antes desta rodada.
+ *
+ * Round F (2026-09-03): na variant `padrao`, `visualStyle.signatureGraphic`
+ * (`marcador`/`papelQuente`) troca GhostQuote/GhostBars por GhostMarker/
+ * GhostSlash quando definido — undefined mantem os Ghost* originais. NAO usa
+ * `canvasOverride` aqui (os 2 blocos internos cobrem o frame 100% com cor
+ * propria — o override de fundo do estilo nao apareceria de verdade, ver
+ * nota de escopo em `papelQuente.quandoUsar`).
  */
 export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   achismo,
@@ -334,9 +341,15 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           {achismo}
         </p>
         {graphics ? (
-          <div style={{position: 'absolute', right: 24, top: 30}}>
-            <GhostQuote color="#54546a" opacity={0.1} size={150} />
-          </div>
+          vs?.signatureGraphic === 'ghostSlash' ? (
+            <div style={{position: 'absolute', right: 40, top: 26}}>
+              <GhostSlash color="#54546a" opacity={0.14} size={110} />
+            </div>
+          ) : vs?.signatureGraphic !== 'ghostMarker' ? (
+            <div style={{position: 'absolute', right: 24, top: 30}}>
+              <GhostQuote color="#54546a" opacity={0.1} size={150} />
+            </div>
+          ) : null
         ) : null}
       </div>
 
@@ -388,9 +401,19 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
           </span>
         ) : null}
         {graphics ? (
-          <div style={{position: 'absolute', right: 20, bottom: 210}}>
-            <GhostBars color={t.colors.light} opacity={0.12} width={300} />
-          </div>
+          vs?.signatureGraphic === 'ghostMarker' ? (
+            <div style={{position: 'absolute', right: -30, bottom: 195, transform: 'rotate(-8deg)'}}>
+              <GhostMarker color={colors.accent} opacity={0.55} width={280} height={46} rotate={0} />
+            </div>
+          ) : vs?.signatureGraphic === 'ghostSlash' ? (
+            <div style={{position: 'absolute', right: 30, bottom: 200}}>
+              <GhostSlash color={t.colors.light} opacity={0.16} size={140} />
+            </div>
+          ) : (
+            <div style={{position: 'absolute', right: 20, bottom: 210}}>
+              <GhostBars color={t.colors.light} opacity={0.12} width={300} />
+            </div>
+          )
         ) : null}
       </div>
 

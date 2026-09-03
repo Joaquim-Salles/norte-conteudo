@@ -197,7 +197,20 @@ export type CoverFotoRealData = {
  * os defaultProps abaixo sao so placeholder ilustrativo de QA.
  */
 export type DepoimentoSlide =
-  | {kind: 'capa'; citacao: string; cliente: string; empresa?: string}
+  | {
+      kind: 'capa';
+      citacao: string;
+      cliente: string;
+      empresa?: string;
+      /**
+       * Foto real de fundo (Round F, 2026-09-03) — opcional, substitui o
+       * degradê por foto real + overlay quando presente. Omitido = aparência
+       * original (degradê `theme.colors.light` → `theme.colors.dark`).
+       */
+      foto?: string;
+      /** object-position da foto (ver PhotoBackground) — só relevante se `foto` for passado. */
+      fotoPosition?: string;
+    }
   | {
       /** Variante que abre pelo numero (metrica) antes da citacao — pro caso em que o resultado e o gancho mais forte. */
       kind: 'capa-metrica';
@@ -207,7 +220,14 @@ export type DepoimentoSlide =
       cliente: string;
       empresa?: string;
     }
-  | {kind: 'contexto'; corpo: string}
+  | {
+      kind: 'contexto';
+      corpo: string;
+      /** Foto real de fundo (Round F, 2026-09-03) — opcional. Omitido = aparência original (fundo branco chapado). */
+      foto?: string;
+      /** object-position da foto — só relevante se `foto` for passado. */
+      fotoPosition?: string;
+    }
   | {kind: 'resultado'; corpo: string; metrica?: string; produto?: ProductKey}
   | {kind: 'cta'; headline?: string};
 
@@ -301,6 +321,17 @@ export type BastidoresData = {
    * princípio" que definiu esse variant desde a criação.
    */
   visualStyle?: VisualStyleName;
+  /**
+   * Foto real de fundo (Round F, 2026-09-03) — usada SÓ na variant `manifesto`.
+   * Quando o arquivo original documentava "não existe asset de time/escritório
+   * disponível nesta sessão, cabe evoluir pra PhotoBackground se surgir foto
+   * real" (ver comentário no topo de Bastidores.tsx) — surgiu (Pexels, ver
+   * public/photos/CREDITOS.md). Omitido = aparência original (fundo preto
+   * chapado, comportamento de antes desta rodada).
+   */
+  foto?: string;
+  /** object-position da foto (ver PhotoBackground) — só relevante se `foto` for passado. */
+  fotoPosition?: string;
 };
 
 /**

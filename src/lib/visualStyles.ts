@@ -25,6 +25,18 @@
  *  - Editorial/revista: hierarquia rica, textura de papel sutil, pode usar
  *    foto de fundo — informa `editorial`.
  *
+ * Round F (2026-09-03, pedido direto do fundador — "tá tudo no mesmo padrão,
+ * quero coisa mais chamativa/diferente"): pesquisa ampliada além de
+ * benchmarks genéricos B2B — 2 referências externas nomeadas (perfil
+ * Instagram real @thaleslaray, identidade visual pública Anthropic/Claude) +
+ * tendências gerais de carrossel 2026 (hook bold, "pattern interrupt",
+ * quebra deliberada do "corporate clean"). Resultou em `marcador` e
+ * `papelQuente` — os primeiros 2 presets com um symbol PRÓPRIO
+ * (`signatureGraphic`, ver tipo abaixo) em vez de reusar GhostBars/GhostQuote
+ * dos outros templates, e o primeiro caso em que um preset pode tocar cor
+ * (`canvasOverride`, exceção documentada e restrita). Detalhe completo de
+ * pesquisa/decisão em `src/templates/CATALOGO.md` §0.4.
+ *
  * Cada preset é um conjunto de KNOBS sistemáticos (não CSS solto por
  * template): densidade/espaçamento, textura, estilo de card, peso
  * tipográfico dominante do elemento hero, presença de gráfico de apoio
@@ -45,7 +57,9 @@ export type VisualStyleName =
   | 'dadoEmDestaque'
   | 'editorial'
   | 'boldTipografico'
-  | 'corporateClean';
+  | 'corporateClean'
+  | 'marcador'
+  | 'papelQuente';
 
 export type HeadlineWeight = 'bold' | 'boldItalic' | 'regularItalic';
 
@@ -80,6 +94,31 @@ export type VisualStyle = {
    * só de tipografia/espaço/cor.
    */
   graphicSupport: boolean;
+  /**
+   * Grafico de apoio ESPECIFICO que o estilo pede, sobrescrevendo a escolha
+   * hardcoded de cada template (GhostBars/GhostQuote/etc) quando
+   * `graphicSupport` = true. undefined = template decide sozinho — o
+   * comportamento ORIGINAL dos 5 presets Round A-C, nenhum deles usa este
+   * campo. Só `marcador`/`papelQuente` (Round F, 2026-09-03, ver
+   * `docs/plano-catalogo-em-escala.md` e CATALOGO.md) definem um valor —
+   * symbols genuinamente diferentes dos Ghost* que já existiam, pedido
+   * explícito do fundador pra fugir do "mesmo padrão visual".
+   */
+  signatureGraphic?: 'ghostMarker' | 'ghostSlash';
+  /**
+   * Override de CANVAS (fundo + tinta do texto) — EXCEÇÃO deliberada e
+   * restrita à regra de topo deste arquivo ("visualStyle nunca mexe em
+   * cor — isso é trabalho do `theme`"). Existe SÓ pra viabilizar
+   * `papelQuente` (referência pesquisada: paleta pública clara/quente da
+   * Anthropic/Claude — tinta escura sobre papel claro é O PRÓPRIO estilo,
+   * não dá pra fazer só variando espaçamento/tipografia). NÃO troca o
+   * accent de identidade do produto (CTA/badge continuam na cor do tema —
+   * o produto continua reconhecível), só o par fundo/tinta de base. Só usar
+   * em templates de canvas único (sem blocos internos com cor própria
+   * cobrindo 100% do frame) — ver nota de escopo em `resolveCanvas` abaixo.
+   * undefined = comportamento original (fundo 100% decidido pelo template/tema).
+   */
+  canvasOverride?: {background: string; ink: string};
 };
 
 export const visualStyles: Record<VisualStyleName, VisualStyle> = {
@@ -148,6 +187,43 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     letterSpacingBoost: 0.6,
     graphicSupport: false,
   },
+
+  // ---- Round F (2026-09-03) — pedido direto do fundador: catálogo "tudo no
+  // mesmo padrão", pesquisa mais ampla de referências (não só Thales
+  // Laray/Claude — também tendências gerais de carrossel 2026: hook bold,
+  // "pattern interrupt", quebra do "corporate clean"), símbolos novos
+  // (GhostMarker/GhostSlash, ver GhostGraphics.tsx) e mais presença de foto
+  // real de fundo. Detalhe de pesquisa e decisões em CATALOGO.md §0.4. ----
+
+  marcador: {
+    name: 'marcador',
+    label: 'Marcador',
+    quandoUsar:
+      'Energia de criador/educador de conteúdo — referência pesquisada de verdade (perfil público @thaleslaray, 132K seguidores, carrosséis educacionais) e tendência de mercado 2026 (hook curto de 5-8 palavras, alto contraste, "pattern interrupt" pra parar o scroll): a frase-chave ganha uma tarja de marca-texto atrás, como se fosse grifada à mão, em vez de decoração fantasma de baixa opacidade. Usar quando a peça depende de UMA frase de gancho carregando a atenção (não um número — pra isso já existe `dadoEmDestaque`). O marcador usa o accent do tema, nunca cor solta — produto continua identificável.',
+    spacingScale: 0.95,
+    texture: {enabled: false, opacityMultiplier: 0},
+    cardStyleOverride: 'flat',
+    headlineWeight: 'bold',
+    headlineScale: 1.2,
+    letterSpacingBoost: -1.2,
+    graphicSupport: true,
+    signatureGraphic: 'ghostMarker',
+  },
+  papelQuente: {
+    name: 'papelQuente',
+    label: 'Papel Quente',
+    quandoUsar:
+      'Tom calmo/premium — referência pesquisada de verdade (identidade visual pública da Anthropic: tinta escura #141413, papel claro/quente #faf9f5, muitíssimo espaço em branco, tipografia contida, zero ornamento competindo com o texto). NÃO usa a fonte nem o logotipo da Anthropic (ambos de terceiro) — só o princípio de calma/espaço/paleta terrosa, aplicado com a fonte de marca (Atkinson Hyperlegible) e um único traço geométrico (`GhostSlash`) no lugar do logotipo. Usar em peça institucional que quer parecer "feita com cuidado", sem tom de venda direta — o oposto de `marcador`. Só disponível em templates de canvas único (ver `resolveCanvas`); não force em templates com blocos internos de cor própria (ex. DadoVsAchismo padrão/impacto) — lá o override de fundo não apareceria de verdade.',
+    spacingScale: 1.35,
+    texture: {enabled: true, opacityMultiplier: 0.5},
+    cardStyleOverride: 'outline',
+    headlineWeight: 'regularItalic',
+    headlineScale: 0.98,
+    letterSpacingBoost: 0.2,
+    graphicSupport: true,
+    signatureGraphic: 'ghostSlash',
+    canvasOverride: {background: '#faf9f5', ink: '#141413'},
+  },
 };
 
 export function getVisualStyle(name: VisualStyleName): VisualStyle {
@@ -205,4 +281,25 @@ export function resolveCardStyle(vs: VS, themeCardStyle: CardStyle): CardStyle {
 /** true = renderizar elemento gráfico de apoio (Ghost*). Sem estilo aplicado, default é sempre true (comportamento original). */
 export function showGraphicSupport(vs: VS): boolean {
   return vs?.graphicSupport ?? true;
+}
+
+/**
+ * Resolve {background, ink} do canvas — só `papelQuente` define `canvasOverride`
+ * hoje (ver comentário no tipo `VisualStyle`). Sem override, retorna os
+ * valores originais do template/tema (comportamento ORIGINAL, nenhuma peça
+ * já aprovada muda). Usar só em templates de canvas único — ver nota em
+ * `papelQuente.quandoUsar`.
+ */
+export function resolveCanvas(
+  vs: VS,
+  fallbackBackground: string,
+  fallbackInk: string,
+): {background: string; ink: string} {
+  if (!vs?.canvasOverride) return {background: fallbackBackground, ink: fallbackInk};
+  return vs.canvasOverride;
+}
+
+/** Resolve o Ghost* específico que o estilo pede (undefined = template decide sozinho, comportamento original). */
+export function resolveSignatureGraphic(vs: VS): 'ghostMarker' | 'ghostSlash' | undefined {
+  return vs?.signatureGraphic;
 }

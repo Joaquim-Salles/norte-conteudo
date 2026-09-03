@@ -5,11 +5,13 @@ import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {colors} from '../lib/tokens';
 import {getTheme, type ThemeName} from '../lib/themes';
-import {GhostQuote, GhostBars} from '../lib/GhostGraphics';
+import {GhostQuote, GhostBars, GhostMarker, GhostSlash} from '../lib/GhostGraphics';
+import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconQuote, IconAlert, IconGrowth} from '../lib/icons';
 import {
   getVisualStyle,
   headlineStyle,
+  resolveCanvas,
   resolveCardStyle,
   resolveTexture,
   showGraphicSupport,
@@ -45,6 +47,13 @@ const productLabel: Record<string, string> = {
  * troca estilo de card do selo de atribuicao, textura, presenca de
  * GhostQuote/GhostBars decorativo, e peso/tamanho da citacao/metrica —
  * ortogonal ao `theme`. Omitido = aparencia original.
+ *
+ * Round F (2026-09-03): `slide.foto` (kinds `capa` e `contexto`) e opcional —
+ * quando presente, troca o degrade/fundo chapado por foto real (Pexels) com
+ * overlay, mesma logica ja usada em VitrineProduto/DicaPratica. `contexto`
+ * tambem e o unico slide que aplica `resolveCanvas` (papelQuente) — canvas
+ * unico, sem bloco interno de cor propria, exatamente o cenario que
+ * `canvasOverride` foi desenhado pra cobrir (ver visualStyles.ts).
  */
 export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; visualStyle?: VisualStyleName}> = ({
   slide,
@@ -67,13 +76,17 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
 
   if (slide.kind === 'capa') {
     const citacaoStyle = headlineStyle(vs, 54, 0);
+    const temFoto = Boolean(slide.foto);
     return (
       <Frame
-        background={`linear-gradient(165deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`}
+        background={temFoto ? t.colors.dark : `linear-gradient(165deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`}
         wordmarkColor={colors.white}
-        texture={tex.enabled}
+        texture={temFoto ? false : tex.enabled}
         textureOpacity={tex.opacity}
       >
+        {temFoto ? (
+          <PhotoBackground src={slide.foto!} position={slide.fotoPosition ?? 'center'} overlay="topAndBottom" strength={0.88} />
+        ) : null}
         {/* Aspas graficas grandes, abertura + fechamento espelhado — mesma
             gramatica do cover-quote do DicaPratica, da moldura visual real
             a citacao em vez de deixar o meio da peca vazio. */}
@@ -235,17 +248,39 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
 
   if (slide.kind === 'contexto') {
     const corpoStyle = headlineStyle(vs, 38, 0);
+    const temFoto = Boolean(slide.foto);
+    // canvasOverride (papelQuente) só se aplica quando NÃO há foto — com foto,
+    // a legibilidade exige texto branco sobre overlay escuro (mesma regra de
+    // PhotoBackground usada em VitrineProduto/DicaPratica), então a preferência
+    // de tinta clara do estilo não faria sentido (ver nota de escopo em
+    // `canvasOverride`, visualStyles.ts).
+    const canvas = temFoto ? {background: t.colors.dark, ink: colors.white} : resolveCanvas(vs, colors.white, colors.primaryDark);
+    const eyebrowColor = temFoto ? 'rgba(255,255,255,0.75)' : '#9a9aab';
+    const signature = vs?.signatureGraphic;
     return (
       <Frame
-        background={colors.white}
-        wordmarkColor={colors.black}
-        texture={tex.enabled}
+        background={canvas.background}
+        wordmarkColor={temFoto ? colors.white : canvas.ink}
+        texture={temFoto ? false : tex.enabled}
         textureOpacity={tex.opacity}
       >
-        {graphics ? (
-          <div style={{position: 'absolute', right: -70, bottom: -50}}>
-            <GhostQuote color={colors.primaryDark} opacity={0.05} size={420} />
-          </div>
+        {temFoto ? (
+          <PhotoBackground src={slide.foto!} position={slide.fotoPosition ?? 'center'} overlay="full" strength={0.6} />
+        ) : null}
+        {graphics && !temFoto ? (
+          signature === 'ghostMarker' ? (
+            <div style={{position: 'absolute', left: 56, bottom: 150}}>
+              <GhostMarker color={colors.accent} opacity={0.5} width={420} height={48} rotate={-2} />
+            </div>
+          ) : signature === 'ghostSlash' ? (
+            <div style={{position: 'absolute', right: 64, bottom: 260}}>
+              <GhostSlash color={canvas.ink} opacity={0.12} size={190} />
+            </div>
+          ) : (
+            <div style={{position: 'absolute', right: -70, bottom: -50}}>
+              <GhostQuote color={colors.primaryDark} opacity={0.05} size={420} />
+            </div>
+          )
         ) : null}
         <div
           style={{
@@ -259,26 +294,31 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
           }}
         >
           <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-            <IconAlert size={22} color="#9a9aab" strokeWidth={2.4} />
+            <IconAlert size={22} color={eyebrowColor} strokeWidth={2.4} />
             <span
               style={{
                 fontSize: 20,
                 fontWeight: 700,
                 letterSpacing: 2,
-                color: '#9a9aab',
+                color: eyebrowColor,
                 textTransform: 'uppercase',
               }}
             >
               Antes, nas palavras do cliente
             </span>
           </div>
-          <SurfaceCard variant={cardVariant} borderColor={cardVariant === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}>
+          <SurfaceCard
+            variant={cardVariant}
+            shellColor={temFoto ? 'rgba(255,255,255,0.08)' : undefined}
+            coreColor={temFoto ? 'rgba(255,255,255,0.12)' : undefined}
+            borderColor={cardVariant === 'outline' ? (temFoto ? 'rgba(255,255,255,0.35)' : 'rgba(20,20,30,0.18)') : undefined}
+          >
             <p
               style={{
                 fontSize: corpoStyle.fontSize,
                 fontWeight: corpoStyle.fontWeight,
                 fontStyle: corpoStyle.fontStyle,
-                color: colors.primaryDark,
+                color: canvas.ink,
                 lineHeight: 1.4,
                 margin: 0,
                 letterSpacing: corpoStyle.letterSpacing,

@@ -17,7 +17,16 @@ sem depender só de registro escrito).
 | Estilos visuais (`visualStyle`) | **5** (minimalista, dadoEmDestaque, editorial, boldTipografico, corporateClean) — combinam com os 8 de 8 tipos de post |
 | Tipos de vídeo (Reel) | **6** (DadoVsAchismo, Metodologia, Comparativo, Depoimento, Bastidores, Antes/Depois) |
 | Estilos de motion (`motionStyle`) | **7** (kineticForte, minimalFade, zoomPunch, typewriter, splitReveal, whipPanCut, matchCut) |
-| **Total de peças** | **172 PNGs + 30 MP4s = 202** |
+| **Total de peças (Round E)** | **172 PNGs + 30 MP4s = 202** |
+
+**Atualização Round F (2026-09-03, ver §0.4 e §Fotografia real):** +8 PNGs de
+prova em `out/qa/round-f/` — 2 presets de `visualStyle` novos (`marcador`,
+`papelQuente`, com símbolo próprio, não reusam GhostBars/GhostQuote) provados
+em 2 templates, e 3 fotos reais novas aumentando a presença de foto de fundo
+(antes 3 fotos em 3 templates, agora 6 usos em 5 templates). Cobertura
+DELIBERADAMENTE parcial (2 de 8 tipos de post, nenhum Reel) — não é
+reconsolidação de catálogo, é prova de conceito pra decisão do fundador sobre
+expandir ou não. Total físico em disco agora: **180 PNGs + 30 MP4s = 210**.
 
 **Principais achados/bugs corrigidos ao longo do processo** (todos com
 detalhe completo no corpo deste arquivo, referenciados por seção):
@@ -462,6 +471,91 @@ vídeo — maior escopo (device frame animado) do que os 3 Reels desta rodada.
 
 ---
 
+## 0.4 Round F — pesquisa ampliada + 2 presets novos + mais foto real (2026-09-03)
+
+Pedido direto do fundador, em conversa ao vivo (não madrugada autônoma):
+depois de ver as 202 peças do catálogo (Round E), o feedback foi "tá tudo no
+mesmo padrão, quero coisa mais chamativa/diferente" — e, num complemento
+logo em seguida, pediu pesquisa "gigante" (não só 2 referências), símbolos
+diferentes dos que já existiam, e uso real do MCP `instagram-control`
+(configurado na conta pessoal dele, @eujoaquimsalles) pra olhar perfis de
+referência de verdade.
+
+**O que a pesquisa encontrou:**
+
+1. **`instagram-control` não estava autenticado nesta sessão.** O fundador
+   acreditava que sim (configurado em sessão anterior) — `instagram_get_login_status`
+   retornou `{logged_in: false}` de fato, e não havia sessionid/credencial
+   disponível pra reautenticar sem pedir a ele diretamente. Contorno: pesquisa
+   pública via `WebSearch`/`WebFetch` (perfil público, bio, número de
+   posts/seguidores, site institucional do mesmo autor). **Isso é uma
+   limitação real, não contornada de verdade — se o fundador quiser a análise
+   completa de posts reais (composição pixel-a-pixel), precisa reautenticar o
+   MCP primeiro.**
+2. **Thales Laray (@thaleslaray, 132K seguidores)** — perfil educacional de
+   automação/IA. Pesquisa pública (bio do perfil + site
+   escoladeautomacao.com.br) + tendências gerais de carrossel 2026 (hook
+   curto de 5-8 palavras, alto contraste, "pattern interrupt", quebra
+   deliberada do "corporate clean" com elementos tipo scrapbook/marca-texto/
+   screenshot) — não deu pra inspecionar os POSTS pixel-a-pixel (limitação
+   acima), então o preset generaliza o padrão de mercado que essa referência
+   representa, não uma cópia 1:1 de um post específico.
+3. **Identidade visual pública da Anthropic** — confirmada em fontes
+   primárias/institucionais: tinta escura `#141413`, papel claro/quente
+   `#faf9f5`, accent laranja `#d97757`, tipografia Styrene/Tiempos (fontes
+   PAGAS de terceiro — Commercial Type/Klim — **não licenciadas nem usadas
+   aqui**, só o princípio de calma/espaço/paleta foi replicado, com a fonte
+   de marca Atkinson Hyperlegible).
+
+**2 presets novos em `src/lib/visualStyles.ts`** (`marcador`, `papelQuente`)
+— primeiros com um símbolo PRÓPRIO em vez de reusar GhostBars/GhostQuote dos
+5 presets anteriores:
+
+| Preset | Referência | Símbolo novo (`GhostGraphics.tsx`) | O que muda |
+|---|---|---|---|
+| `marcador` | Thales Laray / tendência de hook bold 2026 | `GhostMarker` — tarja de marca-texto cor cheia (não baixa opacidade como os outros Ghost*) | Headline maior (1.2x) e mais compacto, cardStyle `flat`, marker no lugar de GhostQuote/GhostBars |
+| `papelQuente` | Anthropic/Claude (paleta pública) | `GhostSlash` — traço diagonal único, contido (NÃO é o logotipo, é um princípio geométrico genérico) | `canvasOverride` (ver abaixo) pra papel `#faf9f5`/tinta `#141413`, muito mais espaço (spacingScale 1.35), itálico contido, cardStyle `outline` |
+
+**Exceção de arquitetura documentada:** `visualStyle` nunca mexia em cor até
+agora (regra de topo do arquivo — cor é trabalho do `theme`). `papelQuente`
+precisa disso pra existir de verdade (o "papel" claro/quente É o estilo), então
+criou-se `canvasOverride` — restrito, opcional, só usado por esse 1 preset,
+documentado como exceção deliberada. Só funciona em templates de **canvas
+único** (sem blocos internos com cor própria cobrindo 100% do frame): por
+isso foi ligado em `Depoimento` (`contexto`) mas **não** em `DadoVsAchismo`
+(seus 2 blocos internos cobrem o frame inteiro — o override de fundo não
+apareceria). Em `DadoVsAchismo`, os 2 presets novos só trocam o
+`signatureGraphic` (GhostMarker/GhostSlash no lugar de GhostBars/GhostQuote).
+
+**Cobertura atual (deliberadamente parcial, mesmo padrão do Round A→B):** os
+2 presets novos estão provados em 2 templates (`Depoimento`, `DadoVsAchismo`),
+não nos 8 — mesma decisão de escopo que o Round A tomou (3 templates primeiro,
+Round B expandiu pros 8). Expandir pros 6 tipos restantes fica pra uma
+rodada futura, se o fundador aprovar a direção.
+
+**Achados reais de QA corrigidos nesta rodada (Regra Inviolável #1):**
+- `GhostMarker` na 1ª tentativa foi posicionado SOBRE o início do headline em
+  `DadoVsAchismo` (colidiu com o texto "Restaurantes", ilegível) — corrigido
+  movendo pra um canto seguro (canto inferior direito, mesma zona onde
+  GhostBars já vivia), consistente com o padrão de todos os outros Ghost*
+  do catálogo (acento decorativo em zona garantidamente livre de texto
+  dinâmico, nunca tentando "sublinhar" uma palavra específica — o
+  posicionamento por coordenada fixa não tem como saber onde o texto real
+  vai terminar).
+- Overlay de foto do `Bastidores` (ver §Fotografia real abaixo) também foi
+  corrigido por achado real de QA.
+
+### Renders de prova (Round F)
+
+**8 PNGs novos** em `out/qa/round-f/` (`node scripts/qa-round-f.mjs`): 4
+provam os presets novos (`Depoimento`/`DadoVsAchismo` × `marcador`/
+`papelQuente`), 4 provam o aumento de foto real (próxima seção). Revisados
+individualmente (não só contact sheet) antes de aprovar — 3 correções reais
+aplicadas (2 de posição do `GhostMarker`, 1 de overlay+contraste no
+`Bastidores`).
+
+---
+
 ## Fotografia real (2026-08-31)
 
 Pedido explícito do fundador — "mais opções com fotos reais do restaurante,
@@ -506,6 +600,50 @@ DENTRO da zona de opacidade máxima do gradiente, não só perto da borda.
   `objectPosition` configurável) com overlay de gradiente escuro parametrizado
   (`'bottom' | 'top' | 'topAndBottom' | 'full' | 'none'`) pra legibilidade de
   texto. Usado pelas 3 peças acima; reutilizável em templates futuros.
+
+### Round F (2026-09-03) — mais presença de foto real
+
+Pedido do fundador: só 3 fotos em 202 peças era "praticamente exceção rara",
+queria bem mais presença. **3 fotos novas** (mesmo método Pexels/WebFetch já
+documentado acima — sem MCP de automação disponível nesta sessão), cobrindo
+temas/produtos que ainda não tinham NENHUMA foto real associada (Vendas já
+tinha 2, não precisava de mais):
+
+| Foto | Pexels | Onde entrou |
+|---|---|---|
+| `corredor-empilhadeira-estoque.jpg` | #5156696 | `DicaPratica` `cover-foto` (uso novo de infra já existente — NTB Estoque) |
+| `equipe-reuniao-escritorio.jpg` | #32082430 | `Bastidores` `manifesto` (novo, `foto?` opcional) + `Depoimento` `capa` (novo, `foto?` opcional) |
+| `analista-relatorios-mesa.jpg` | #6694475 | `Depoimento` `contexto` (novo, `foto?` opcional — Norte Avalia) |
+
+**2 templates ganharam a capacidade de foto que não tinham:**
+- **`Bastidores`** — o próprio arquivo já previa isso desde 2026-08-31
+  ("se a Norte tiver fotografia real de bastidores no futuro, cabe evoluir
+  pra PhotoBackground") — Round F entrega exatamente isso, `foto?` opcional
+  na variant `manifesto`, omitido preserva o fundo preto original.
+- **`Depoimento`** — `foto?` opcional nos slides `capa` e `contexto`, omitido
+  preserva o degradê/fundo branco original.
+
+**Achado real de QA corrigido:** a 1ª tentativa em `Bastidores` usou overlay
+`topAndBottom` (mesmo padrão de VitrineProduto/DicaPratica) — mas o
+`manifesto` tem título+princípios ocupando justamente a faixa CENTRAL do
+frame, exatamente onde esse overlay deixa a foto respirar livre por design.
+Resultado: texto de corpo (peso 400, sem sombra) ilegível em trechos
+claros da foto. Corrigido trocando pra overlay `full` (escurece uniforme) +
+`textShadow` no título e nos princípios — dupla camada de segurança de
+contraste, não só uma.
+
+**Ressalva de honestidade pro fundador decidir (não decidido sozinho aqui):**
+o `Depoimento` é especificamente sobre voz de CLIENTE real — o próprio
+arquivo já documentava a linha vermelha de não usar retrato genérico
+fingindo ser "o cliente" (por isso a atribuição usa iniciais num selo, nunca
+rosto). As fotos de `equipe-reuniao-escritorio.jpg`/`analista-relatorios-mesa.jpg`
+usadas como FUNDO AMBIENTE (desfocado, com overlay, sem alegar ser pessoa
+específica) são uma linha mais suave que um retrato-atribuição — mas os
+rostos ainda ficam bem reconhecíveis nos crops usados no QA. Antes de usar
+essas 2 combinações pra publicação real, o fundador deveria revisar se isso
+cruza a linha que o autor original já tinha traçado, ou se "ambiente
+genérico ao fundo" é diferente o suficiente de "retrato do cliente" pra ser
+aceitável — não é uma decisão técnica, é de tom/honestidade de marca.
 
 ---
 

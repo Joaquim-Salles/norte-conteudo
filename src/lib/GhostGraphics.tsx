@@ -98,3 +98,50 @@ export const GhostCycle: React.FC<{color?: string; opacity?: number; size?: numb
     <path d="M85 8l1 20-20-3z" fill={color} />
   </svg>
 );
+
+/**
+ * Marcador (highlighter) — tarja retangular levemente rotacionada, cor cheia
+ * (não baixa opacidade como os outros Ghost*, esse é o ponto: precisa ler
+ * como "caneta grifando", não como textura de fundo). Symbol novo do preset
+ * `marcador` (Round F, referência externa pesquisada: energia de carrossel
+ * de criador/educador — hook curto com frase-chave grifada). Posicionado
+ * manualmente pelo template, atrás do texto/card que quer destacar — mesma
+ * convenção dos outros Ghost* (decoração posicionada por quem usa, não
+ * auto-calculada).
+ */
+export const GhostMarker: React.FC<{
+  color?: string;
+  opacity?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+}> = ({color = '#f43f5e', opacity = 0.55, width = 560, height = 52, rotate = -1.6}) => (
+  <div
+    style={{
+      width,
+      height,
+      background: color,
+      opacity,
+      borderRadius: 6,
+      transform: `rotate(${rotate}deg)`,
+    }}
+  />
+);
+
+/**
+ * Slash único, contido — symbol novo do preset `papelQuente` (Round F,
+ * referência externa pesquisada: linguagem visual pública da Anthropic/Claude,
+ * NÃO o logotipo — aqui é só um traço diagonal genérico, mesmo princípio
+ * geométrico que qualquer marca tipográfica usa pra "corte"/progresso, sem
+ * reproduzir a marca de terceiro). Deliberadamente único e discreto — o
+ * oposto do `GhostMarker`: reforça calma, não grito.
+ */
+export const GhostSlash: React.FC<{color?: string; opacity?: number; size?: number}> = ({
+  color = '#141413',
+  opacity = 0.1,
+  size = 260,
+}) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" style={{opacity}}>
+    <line x1="72" y1="4" x2="26" y2="96" stroke={color} strokeWidth={6} strokeLinecap="round" />
+  </svg>
+);
