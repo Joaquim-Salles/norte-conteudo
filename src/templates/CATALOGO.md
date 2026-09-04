@@ -1300,3 +1300,118 @@ Notas de honestidade sobre esse número (pedido explícito da tarefa —
   possíveis (que seria bem maior, já que nem todo tema/estilo foi cruzado
   com toda variante de todo tipo; ver §0.1.1 pra critério de cobertura usado
   no Round B).
+
+---
+
+## Teste de volume real — 100 peças (2026-09-04)
+
+Pedido direto do fundador: ver o pipeline rodando em volume real (100
+peças), não mais amostra de poucas peças. Diferente dos rounds anteriores
+(que escalam a MATRIZ de combinações tipo×tema×estilo), este teste valida o
+pipeline de ponta a ponta com **conteúdo editorial distinto** — texto real
+baseado em `.claude/brand/products.md`/`voice.md` (estatísticas plausíveis
+de operação, features dos 3 produtos, bordões de marca), não placeholder
+repetido.
+
+### Como foi gerado
+
+O parser de brief mensal (`scripts/parse-brief.mjs`) ainda não suporta o
+formato final de um brief real (nenhum brief do fundador/marketing chegou
+ainda — ver comentário no topo daquele arquivo), então, por pragmatismo,
+este teste NÃO passou pelo parser: `scripts/gerar-teste-100.mjs` é um script
+novo, standalone, que declara os 100 itens de conteúdo inline (8 arrays,
+um por tipo) e chama `renderStill` (a mesma função que `scripts/render.mjs`
+e todos os scripts de QA já usam) diretamente pra cada um. Suporta
+`--start N --end N` pra rodar em lotes — usado aqui em 10 lotes de 10, em
+background, pra não travar num comando síncrono gigante.
+
+### Resultado real
+
+| Métrica | Valor |
+|---|---|
+| Peças pedidas | 100 |
+| Peças renderizadas com sucesso | **100/100** |
+| Falhas de render | **0** |
+| Tempo total | ~3-4min (10 lotes de 10, render em lote de `Still` é rápido — ~2-3s por peça incluindo bundling) |
+| Tamanho em disco (`out/teste-100/`) | ~84MB (100 PNGs 1080×1350) |
+
+### Distribuição (8 tipos, ~12-13 cada)
+
+| Tipo | Qtd | Cobertura de variante/kind |
+|---|---|---|
+| DadoVsAchismo | 13 | 3 variantes × 4 temas |
+| DicaPratica | 12 | 1 slide por item — cover/cover-grid/cover-quote/cover-foto/bridge/cta |
+| AntesDepois | 12 | 3 variantes × 4 temas |
+| VitrineProduto | 13 | padrao/hero/grid/print/contexto × 3 produtos (print/contexto usam screenshot/foto reais de `public/`) |
+| MetodologiaSemEnrolacao | 12 | 1 slide por item — cover/cover-roadmap/cover-editorial/passo/cta |
+| Depoimento | 13 | 1 slide por item — capa/capa-metrica/contexto/resultado/cta |
+| Comparativo | 13 | colunas/tabela × 3 produtos + genérico (tema `marca`) |
+| Bastidores | 12 | manifesto (6, com/sem foto) + regraDaCasa (6) |
+
+Tipos carrossel (DicaPratica/MetodologiaSemEnrolacao/Depoimento) renderizam
+1 `<Still>` por slide — pra manter a contagem em exatamente 100
+imagens/thumbnails, cada item da lista é 1 slide (não o carrossel completo),
+escolhidos pra cobrir os `kind` variados como itens distintos.
+
+### QA — contact sheet + amostragem individual
+
+Contact sheet gerado via `ffmpeg` (`tile=10x10`, thumbnails 200px) em
+`out/teste-100-contact-sheet.png` (2000×2500, ~2.1MB) — usado pra varredura
+visual rápida das 100 peças. Depois, 20 peças foram abertas em tamanho real
+(acima da amostra mínima de 15 pedida), cobrindo os casos de maior risco:
+fotos reais (`cover-foto`, `contexto`, `manifesto` com foto), screenshots
+reais (`print`/`contexto` da Vitrine), tabela do Comparativo, carrossel
+(bridge/passo/cta) e todos os 4 temas.
+
+**2 achados reais de QA, ambos corrigidos nesta rodada:**
+
+1. **Bug de conteúdo (6/100 peças) — `Bastidores` variante `regraDaCasa`
+   sem `titulo`.** `BastidoresData.titulo` é campo obrigatório do tipo
+   mesmo quando não é o principal (na variante `regraDaCasa` o headline
+   visual vem de `titulo`, não só de `corpo`) — os 6 itens regraDaCasa do
+   script foram escritos só com `numero`/`corpo`, omitindo `titulo`. Como o
+   Remotion faz merge de props ausentes com os `defaultProps` da
+   composição, as 6 peças caíram silenciosamente no título genérico do
+   default ("Não recomendamos nada antes de ver o dado.") em vez do texto
+   real da regra — só visível comparando os 6 lado a lado no contact sheet
+   (pareciam idênticos). Corrigido adicionando `titulo` distinto a cada uma
+   das 6 regras em `scripts/gerar-teste-100.mjs`, e as 6 peças foram
+   re-renderizadas.
+2. **Bug de template pré-existente — selo "VS" do `Comparativo` variante
+   `colunas` sobrepondo a 1ª letra do título da coluna B.** `top: 160` do
+   selo colidia com a área de título das colunas (que começa em
+   `colPaddingTop`, default 190px) tanto vertical quanto horizontalmente —
+   bug real mas discreto o bastante (a colisão cobre só a 1ª letra) pra
+   nunca ter sido pego nos QAs anteriores; confirmado que o preset default
+   salvo em `out/qa/Comparativo-colunas.png` (Round A) já tinha o mesmo
+   problema. Só ficou óbvio aqui com um título mais curto ("Método") no
+   teste de volume. Corrigido em `src/templates/Comparativo.tsx` (selo
+   subiu pra `top: 104`, acima da linha do título) — as 13 peças
+   `Comparativo` do lote foram re-renderizadas pra confirmar.
+
+Nenhum outro problema sistemático encontrado nas 20 peças revisadas
+individualmente nem na varredura do contact sheet.
+
+### Limite real do pipeline em volume
+
+- **Sem gargalo de performance real**: 100 `Still` renderizam em poucos
+  minutos rodando em lotes sequenciais simples (sem paralelização,
+  sem bundler compartilhado entre processos) — o pipeline aguenta volume
+  bem acima de 100 sem precisar de infraestrutura nova.
+- **Gargalo real é o parser de brief, não o render**: `parse-brief.mjs`
+  ainda espera o formato provisório documentado nele mesmo (nenhum brief
+  real chegou) — pra gerar 100 peças de um brief real do fundador/marketing
+  hoje, alguém ainda precisa escrever esse brief inteiro em markdown (ou o
+  parser precisa evoluir pra formato real quando ele chegar). O gargalo de
+  volume não é técnico, é editorial.
+- **Merge silencioso de defaultProps é uma armadilha real**: o achado #1
+  acima mostra que omitir um campo obrigatório não quebra o render (viraria
+  erro óbvio) — ele silenciosamente herda o valor do `defaultProps` da
+  composição, produzindo uma peça com texto ERRADO mas visualmente
+  "normal". Em volume, isso só é pego com QA visual de verdade (contact
+  sheet + amostragem), nunca só checando "renderizou sem erro" — reforça
+  por que a Regra Inviolável #1 exige QA visual antes de publicar, mesmo
+  em lote grande.
+- As 100 imagens individuais deste teste (`out/teste-100/`) NÃO foram
+  commitadas (gitignored via `out/`, ~84MB) — só o script gerador e o
+  contact sheet consolidado foram versionados.

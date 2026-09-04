@@ -249,11 +249,23 @@ export const Comparativo: React.FC<ComparativoData> = ({
         ) : null}
       </div>
 
-      {/* Selo VS na costura central */}
+      {/*
+        Selo VS na costura central. ACHADO REAL DE QA (teste de volume,
+        2026-09-04): com `top: 160` o selo colidia com a 1ª letra de
+        `tituloA`/`tituloB` (o texto do título começa em `colPaddingTop`,
+        default 190px, então a caixa do selo — que vai de ~160 a ~210 —
+        ficava por cima do início do texto tanto horizontal quanto
+        verticalmente). Confirmado que o bug é pré-existente (aparece até no
+        preset default "Com a Norte" salvo em out/qa/Comparativo-colunas.png),
+        só ficou visível com título mais curto ("Método"). Subindo o selo pra
+        `top: 104` ele fica inteiramente acima da linha do título (que só
+        começa em 190px), sem colidir com o eyebrow `Badge` (que é alinhado à
+        esquerda, não chega ao centro da peça).
+      */}
       <div
         style={{
           position: 'absolute',
-          top: 160,
+          top: 104,
           left: '50%',
           transform: 'translateX(-50%)',
           background: colors.accent,
