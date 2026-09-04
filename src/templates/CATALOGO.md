@@ -1,5 +1,37 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Peça FLAGSHIP — vídeo institucional (2026-09-03)
+
+Fora da contagem dos 8 tipos de post repetíveis abaixo: `NorteApresentacaoReel`
+(`src/templates/NorteApresentacaoReel.tsx`), pedido direto do fundador —
+"vídeo foda de exemplo apresentando o Norte Para Negócios em 30 segundos",
+não uma peça de calendário. Composição sob medida (não usa `theme`/`visualStyle`/
+`motionStyle` combinável como os 8 tipos), mas 100% reusando a infraestrutura
+de marca já validada (tokens, ícones Lucide, motion primitives, `DeviceFrame`,
+`CtaBand`).
+
+Estrutura (900 frames = 30,000s exatos, 1080x1920/30fps H.264/AAC):
+1. **Hook** (0–110f) — dor real de PME ("Estoque errado. Prato que não
+   vende. Decisão tomada no escuro.") resolvida na palavra "ACHISMO." em
+   punch de tela cheia.
+2. **Virada** (118–328f) — bordão da marca ("Não trabalhamos com
+   achismos."), posicionamento consultoria+software, chips dos 3 domínios
+   (Estoque/Vendas/Performance).
+3. **Vitrine** (338–718f) — os 3 produtos reais, ~4s cada, transições
+   whip-pan coloridas pelo tema de cada produto: NTB Vendas (print real
+   `screenshots/vendas-mobile.png` em `PhoneFrame`), NTB Estoque (print real
+   `screenshots/produto-desktop.png` em `BrowserFrame`), Norte Avalia (sem
+   screenshot real do produto — usa foto real `photos/analista-relatorios-mesa.jpg`
+   com tom de marca, em vez de fabricar uma UI que não existe).
+4. **CTA** (728–900f) — bordão de fechamento + `CtaBand` real (accent) +
+   assinatura de marca, com pulso sutil de respiro no final.
+
+QA visual: 28 frames extraídos via ffmpeg nos pontos de transição/conteúdo de
+cada bloco (Regra Inviolável #1), revisados um a um — zero regressão, zero
+ajuste necessário na primeira renderização completa. Áudio: track AAC
+silencioso (48kHz estéreo, -91dB) — narração via Bark é Fase 3, ainda não
+implementada (ver `.claude/agent-memory/rafael/first-tasks.md` T4/T10).
+
 ## Sumário executivo (Round E — consolidação final, 2026-09-01/02)
 
 **O catálogo fechou em 172 posts (PNG) + 30 vídeos (MP4) = 202 peças reais**,

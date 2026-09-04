@@ -43,6 +43,7 @@ import {
   antesDepoisReelDefaultProps,
   antesDepoisReelDurationInFrames,
 } from './templates/AntesDepoisReel';
+import {NorteApresentacaoReel, norteApresentacaoReelDurationInFrames} from './templates/NorteApresentacaoReel';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -230,6 +231,22 @@ export const RemotionRoot: React.FC = () => {
         calculateMetadata={({props}) => ({
           durationInFrames: antesDepoisReelDurationInFrames(props.motionStyle),
         })}
+      />
+
+      {/*
+        FLAGSHIP (2026-09-03) — vídeo institucional de apresentação da
+        empresa inteira, ~30s, pedido direto do fundador. Não é um dos 8
+        tipos de post repetíveis (não recebe brief nem `theme`/`motionStyle`
+        combinável) — composição sob medida, ver comentário no topo do
+        arquivo do componente.
+      */}
+      <Composition
+        id="NorteApresentacaoReel"
+        component={NorteApresentacaoReel}
+        width={formats.reel.width}
+        height={formats.reel.height}
+        fps={formats.reel.fps}
+        durationInFrames={norteApresentacaoReelDurationInFrames()}
       />
     </>
   );
