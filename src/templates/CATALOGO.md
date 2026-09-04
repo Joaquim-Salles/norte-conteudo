@@ -51,6 +51,57 @@ cada bloco (Regra Inviolável #1) em cada rodada (v1 e v2), revisados um a um
 AAC silencioso (48kHz estéreo, -91dB) — narração via Bark é Fase 3, ainda não
 implementada (ver `.claude/agent-memory/rafael/first-tasks.md` T4/T10).
 
+### v3 — 5 variações de HOOK (A/B test de headline, 2026-09-03)
+
+Pedido do fundador ("Sim, quero várias variações [de] ganchos.") depois de
+aprovar a v2: gerar múltiplas variações do HOOK de abertura (0–110f, os
+primeiros ~3,7s), mesmo princípio de A/B test de headline que o Remotion
+permite — mesma template (mesmo timing, mesmas 2 fotos de fundo em
+crossfade, mesma animação/posição de cada elemento), só o DADO (texto +
+ícone do eyebrow) muda. Isso é o que torna o teste válido: virada, vitrine
+dos 3 produtos e CTA continuam 100% idênticos entre as 5 variações — só a
+variável do gancho está sendo testada.
+
+**Implementação**: o conteúdo do hook foi extraído de dentro do componente
+pra `src/lib/hookVariants.ts` (tipo `HookContent` + registro `HOOK_VARIANTS`),
+e `NorteApresentacaoReel` passou a aceitar a prop `hookVariant` (default
+`'dor-direta'`, a v2 original — id da `Composition` no Root não mudou).
+Render de cada variação: `npx remotion render src/index.ts
+NorteApresentacaoReel out/arquivo.mp4 --props=arquivo-de-props.json` com
+`{"hookVariant": "<id>"}` no JSON — **usar arquivo, não `--props` inline no
+shell**, mesmo bug de encoding de acento já documentado em T3
+(`first-tasks.md`).
+
+As 5 variações, com o texto exato e a lógica retórica de cada uma:
+
+| Variação (id) | Eyebrow | Linha 1 (topo) | Linha 2 (base) | Linha 3 (base) | Punch | Ângulo retórico |
+|---|---|---|---|---|---|---|
+| **Dor Direta** (`dor-direta`) — controle do teste, é a v2 já aprovada, texto inalterado | ⚠ Sem dado real | Estoque errado. | Prato que não vende. | Decisão tomada no escuro. | **ACHISMO.** | Nomeia 2 dores operacionais concretas da ICP (estoque, vendas) em sequência antes de nomear o vilão comum às duas. Não interroga nem prova nada — descreve o que o espectador já vive. |
+| **Pergunta Retórica** (`pergunta-retorica`) | ⚠ Responda rápido | Quanto sobrou de lucro? | Se você não sabe de cabeça, | sua gestão roda no escuro. | **ACHISMO.** | Interpelação direta em 2ª pessoa — força autodiagnóstico. Quem hesita na resposta já sente o gancho na pele, em vez de apenas assistir a uma descrição de dor alheia. |
+| **Dado Real** (`dado-real`) | 📊 Dado real | 38% das PMEs | perdem margem no estoque. | E nem sabem quanto. | **ACHISMO.** | Abre com prova numérica em vez de dor genérica — reusa o MESMO dado já validado em `DadoVsAchismo.tsx` (fonte: "Norte Para Negócios, diagnóstico operacional"), condensado pro ritmo de ~2s. Não inventa estatística nova — seria irônico fabricar um "achismo" num vídeo que vende "decida com dado". Mira o público que reage mais a número do que a apelo emocional. |
+| **Provocação/Comparação** (`provocacao-comparacao`) | 📈 Compare | Seu concorrente cresce. | Ele não é mais sortudo. | Ele só parou de adivinhar. | **ACHISMO.** | Comparação social com concorrente — desloca a dor de "eu não sei gerir" pra "eu estou perdendo pra quem sabe". Gatilho competitivo em vez de autocrítico, mira o instinto de "não ficar pra trás" do dono de PME. |
+| **Afirmação de Marca** (`afirmacao-marca`) | 🧭 Norte Para Negócios | Gestão não é sorte. | É dado. É clareza. | É decisão de verdade. | **SEM ACHISMO.** | Único ângulo que não acusa nem pergunta — é declaração de posicionamento. O punch vira a PROMESSA da marca ("SEM achismo", callback direto ao bordão de `voice.md`), não o nome do vilão isolado. `fontSize` do punch recua de 128 pra 92 automaticamente quando o texto passa de 9 caracteres (`content.punch.length > 9` em `NorteApresentacaoReel.tsx`) — mesma posição/animação, só o tamanho respeita o dado mais longo pra não estourar a largura do frame. |
+
+4 das 5 variações mantêm "ACHISMO." como punch — decisão deliberada, não
+esquecimento: é a palavra-vilã central da marca (`voice.md`: "não trabalhamos
+com achismos"), reaparece em outros templates do catálogo (`DadoVsAchismo`),
+e trocá-la a cada variante quebraria a consistência de marca que não é o que
+está sendo testado aqui (o teste é sobre a ISCA/lead-in, não sobre o clímax).
+A variação "Afirmação de Marca" é a única exceção deliberada, porque seu
+ângulo inteiro é sobre declarar a promessa em vez de nomear o vilão.
+
+QA visual (Regra Inviolável #1): 4 frames-chave extraídos via ffmpeg do
+bloco de hook de cada uma das 5 variações (~0,7s eyebrow+linha1, ~2,0s
+entrada da linha2, ~2,5s linha3, ~3,2s punch) — 20 frames revisados um a
+um. Todas aprovadas sem necessidade de reduzir texto: nenhuma linha
+estourou a largura do frame (margens 64px esq/dir na base, 64/160px no
+topo) nem sobrepôs elemento nenhum. Único ajuste feito PROATIVAMENTE durante
+a implementação (antes mesmo do QA apontar problema, pela diferença de
+tamanho de texto entre "ACHISMO." e "SEM ACHISMO."): o fallback de
+`fontSize` do punch descrito na tabela acima — confirmado no QA que "SEM
+ACHISMO." (92px) ocupa a largura do frame com a mesma folga visual que
+"ACHISMO." (128px), sem parecer um degrau de qualidade entre variações.
+
 ## Sumário executivo (Round E — consolidação final, 2026-09-01/02)
 
 **O catálogo fechou em 172 posts (PNG) + 30 vídeos (MP4) = 202 peças reais**,

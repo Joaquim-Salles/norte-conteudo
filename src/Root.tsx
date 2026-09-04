@@ -43,7 +43,7 @@ import {
   antesDepoisReelDefaultProps,
   antesDepoisReelDurationInFrames,
 } from './templates/AntesDepoisReel';
-import {NorteApresentacaoReel, norteApresentacaoReelDurationInFrames} from './templates/NorteApresentacaoReel';
+import {NorteApresentacaoReel, norteApresentacaoReelDurationInFrames, norteApresentacaoReelDefaultProps} from './templates/NorteApresentacaoReel';
 
 /**
  * Os 5 tipos de post da Fase 0, cada um como <Still> (formato 4:5, 1080x1350).
@@ -247,6 +247,7 @@ export const RemotionRoot: React.FC = () => {
         height={formats.reel.height}
         fps={formats.reel.fps}
         durationInFrames={norteApresentacaoReelDurationInFrames()}
+        defaultProps={norteApresentacaoReelDefaultProps}
       />
     </>
   );

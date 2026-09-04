@@ -5,7 +5,8 @@ import {ensureBrandFontLoaded} from '../lib/fonts';
 import {GrainOverlay} from '../lib/Texture';
 import {systemColors} from '../lib/colorGuide';
 import {getVisualStyle, textStrokeStyle} from '../lib/visualStyles';
-import {IconAlert, IconCheck, IconChart, IconGrowth, IconCompass} from '../lib/icons';
+import {IconCheck, IconChart, IconGrowth, IconCompass} from '../lib/icons';
+import {HOOK_EYEBROW_ICONS, HOOK_VARIANTS, type HookContent, type HookVariantId} from '../lib/hookVariants';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconBadge} from '../lib/IconBadge';
@@ -42,10 +43,20 @@ ensureBrandFontLoaded();
  * na v1) — só a moldura ao redor deles virou foto real + selo de ícone, no
  * lugar do gradiente flat + badge-pílula.
  *
+ * VARIAÇÕES DE HOOK (2026-09-03, pedido do fundador: "Sim, quero várias
+ * variações [de] ganchos."): o texto/ícone do HookSegment (0–110f) foi
+ * extraído pra `src/lib/hookVariants.ts` (prop `hookVariant`) — mesmo
+ * princípio de A/B test de headline (mesma template/timing/fotos, dado
+ * diferente). Virada/vitrine/CTA continuam 100% fixos entre variações — só
+ * o hook muda, senão o teste deixa de isolar a variável certa. Ver
+ * `HOOK_VARIANTS` pra as 5 variações e a lógica retórica de cada uma, e
+ * `src/templates/CATALOGO.md` pra documentação voltada a humano.
+ *
  * Estrutura (900 frames = 30,000s exatos, 1080x1920/30fps H.264/AAC):
  *  1. HOOK (0–110f) — 2 fotos reais em crossfade (estoque → restaurante),
  *     texto stroked flutuando livre em cantos opostos (mesma composição do
- *     meme do iceberg pesquisado), punch final "ACHISMO." em accent+stroke.
+ *     meme do iceberg pesquisado), punch final em accent+stroke. Conteúdo
+ *     parametrizado por `hookVariant` (default `'dor-direta'`, a v2 original).
  *  2. VIRADA (118–328f) — foto real de equipe, bordão da marca stroked +
  *     selo `IconBadge` (fallback bússola, sem ícone de app próprio da
  *     marca-mãe) + os 3 domínios como ícone+texto livre (sem chip/pílula).
@@ -94,10 +105,11 @@ const textShadowStrong = '0 6px 22px rgba(0,0,0,0.65)';
 // 1. HOOK — 2 fotos reais em crossfade, texto stroked flutuando livre,
 //    punch final "ACHISMO." (composição inspirada no meme do iceberg).
 // ---------------------------------------------------------------------------
-const HookSegment: React.FC = () => {
+const HookSegment: React.FC<{content: HookContent}> = ({content}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const easing = getEasingFn('strong');
+  const EyebrowIcon = HOOK_EYEBROW_ICONS[content.eyebrowIcon];
 
   const beatBOpacity = interpolate(frame, [40, 54], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const line1FadeOut = interpolate(frame, [40, 52], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -121,13 +133,13 @@ const HookSegment: React.FC = () => {
       {/* Beat A — topo-esquerda, sobre a foto de estoque (some quando o beat B entra). */}
       <div style={{position: 'absolute', top: 110, left: 64, right: 160, opacity: line1Anim.opacity * line1FadeOut, transform: `${line1Anim.transform} rotate(-1deg)`}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, opacity: eyebrowAnim.opacity, transform: eyebrowAnim.transform}}>
-          <IconAlert size={30} color={colors.accent} strokeWidth={2.6} />
+          <EyebrowIcon size={30} color={colors.accent} strokeWidth={2.6} />
           <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
-            Sem dado real
+            {content.eyebrowText}
           </span>
         </div>
         <span style={{fontSize: 58, fontWeight: 700, color: colors.white, lineHeight: 1.16, display: 'inline-block', ...stroke}}>
-          Estoque errado.
+          {content.line1}
         </span>
       </div>
 
@@ -135,22 +147,25 @@ const HookSegment: React.FC = () => {
       <div style={{position: 'absolute', bottom: 130, left: 64, right: 64}}>
         <div style={{opacity: line2Anim.opacity, transform: `${line2Anim.transform} rotate(1deg)`}}>
           <span style={{fontSize: 58, fontWeight: 700, color: colors.white, lineHeight: 1.16, display: 'inline-block', ...stroke}}>
-            Prato que não vende.
+            {content.line2}
           </span>
         </div>
         <div style={{marginTop: 14, opacity: line3Anim.opacity, transform: line3Anim.transform}}>
           <span style={{fontSize: 40, fontWeight: 700, color: colors.white, lineHeight: 1.2, display: 'inline-block', ...stroke}}>
-            Decisão tomada no escuro.
+            {content.line3}
           </span>
         </div>
       </div>
 
-      {/* Punch final — a palavra que nomeia o vilão, estilo "carimbo de meme". */}
+      {/* Punch final — a palavra/frase que fecha o gancho, estilo "carimbo de meme".
+          fontSize recua um degrau quando o punch é uma frase (ex. "SEM ACHISMO.")
+          em vez de 1 palavra só (ex. "ACHISMO.") — mesmo slot/posição/animação,
+          só o tamanho respeita o dado mais longo, pra não estourar a largura do frame. */}
       <AbsoluteFill style={{background: '#000', opacity: punchCoverOpacity * 0.8}} />
       <AbsoluteFill style={{display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: punchTextOpacity}}>
         <span
           style={{
-            fontSize: 128,
+            fontSize: content.punch.length > 9 ? 92 : 128,
             fontWeight: 700,
             color: colors.accent,
             letterSpacing: -3,
@@ -159,7 +174,7 @@ const HookSegment: React.FC = () => {
             ...stroke,
           }}
         >
-          ACHISMO.
+          {content.punch}
         </span>
       </AbsoluteFill>
     </AbsoluteFill>
@@ -402,7 +417,19 @@ const CtaSegment: React.FC = () => {
 // ---------------------------------------------------------------------------
 // Composição principal
 // ---------------------------------------------------------------------------
-export const NorteApresentacaoReel: React.FC = () => {
+export type NorteApresentacaoReelProps = {
+  /** Qual variação de gancho usar nos 0-110f iniciais — ver `hookVariants.ts`. Default = a v2 original ("dor-direta"). */
+  hookVariant?: HookVariantId;
+};
+
+export const norteApresentacaoReelDefaultProps: Required<NorteApresentacaoReelProps> = {
+  hookVariant: 'dor-direta',
+};
+
+export const NorteApresentacaoReel: React.FC<NorteApresentacaoReelProps> = ({
+  hookVariant = norteApresentacaoReelDefaultProps.hookVariant,
+}) => {
+  const hookContent = HOOK_VARIANTS[hookVariant];
   let t = 0;
   const at = (key: keyof typeof D): number => {
     const start = t;
@@ -427,7 +454,7 @@ export const NorteApresentacaoReel: React.FC = () => {
   return (
     <AbsoluteFill style={{background: colors.black, fontFamily: `'${fontFamily.brand}', ${fontFamily.fallback}`}}>
       <Sequence from={hookStart} durationInFrames={D.hook}>
-        <HookSegment />
+        <HookSegment content={hookContent} />
       </Sequence>
       <Sequence from={t1Start} durationInFrames={D.t1}>
         <MotionTransition motionStyle={msWhip} durationInFrames={D.t1} accentColor={colors.accent} />
