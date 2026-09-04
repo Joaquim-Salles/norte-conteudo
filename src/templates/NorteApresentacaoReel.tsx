@@ -4,12 +4,12 @@ import {colors, fontFamily} from '../lib/tokens';
 import {ensureBrandFontLoaded} from '../lib/fonts';
 import {GrainOverlay} from '../lib/Texture';
 import {systemColors} from '../lib/colorGuide';
+import {getVisualStyle, textStrokeStyle} from '../lib/visualStyles';
 import {IconAlert, IconCheck, IconChart, IconGrowth, IconCompass} from '../lib/icons';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {IconBadge} from '../lib/IconBadge';
 import {CtaBand} from '../lib/CtaBand';
-import {Badge} from '../lib/Badge';
-import {GhostBars} from '../lib/GhostGraphics';
 import {KineticText} from '../lib/KineticText';
 import {MotionTransition} from '../lib/MotionTransition';
 import {getMotionStyle, getEasingFn} from '../lib/motionStyles';
@@ -22,32 +22,41 @@ ensureBrandFontLoaded();
  * repetíveis do catálogo (ver src/templates/CATALOGO.md). Pedido literal do
  * fundador (2026-09-03): "Gere um vídeo foda de exemplo apresentando o Norte
  * Para Negócios em 30 segundos" — o vídeo institucional de apresentação da
- * empresa inteira, não uma peça de calendário editorial.
+ * empresa inteira.
  *
- * Por isso é uma composição SOB MEDIDA (não reusa `motionStyle`/`visualStyle`
- * genérico dos 8 tipos): estrutura fixa, copy própria (não vem de brief do
- * marketing — não existe brief pra "vídeo institucional único"), mas reusa
- * TODA a infraestrutura de marca já validada (tokens, cores por produto de
- * `colorGuide.ts`, ícones Lucide de `icons.tsx`, primitivos de motion de
- * `motion.ts`/`motionStyles.ts`, `DeviceFrame`/`CtaBand`/`Badge`) — zero cor
- * hardcoded solta, zero ícone desenhado à mão.
+ * REFEITO (mesmo dia, revisão do fundador): a v1 saiu num estilo
+ * "corporate/device-frame limpo" (chips, gradiente flat, badge-pílula) — não
+ * é essa a linguagem visual pedida como referência. O fundador apontou o
+ * preset `analogiaReal` (`src/lib/visualStyles.ts`, Round G) — baseado em
+ * pesquisa REAL do feed de @thaleslaray via `instagram-control` (35 posts +
+ * 1 imagem nativa inspecionada pixel a pixel, ver
+ * `docs/referencias-visuais/thaleslaray-pesquisa.md`) — como a pele que essa
+ * peça deveria usar: foto real de fundo (não cor sólida), tipografia com
+ * CONTORNO GROSSO (`textStrokeStyle`, estilo "meme"/legenda viral) flutuando
+ * livre sobre a foto (não em card/bloco), e selo de ícone real de produto
+ * (`IconBadge`) como "prova de contexto" em vez de badge-pílula corporativa.
  *
- * Estrutura (900 frames = 30,000s exatos a 30fps):
- *  1. HOOK (0–110f, ~3,7s) — dor real de PME + a palavra "achismo" como
- *     vilão, estalando em accent.
- *  2. VIRADA (128–338f, ~7s) — a Norte responde: bordão da marca + a dupla
- *     consultoria+software + os 3 domínios de atuação.
- *  3. VITRINE (348–728f, ~12,7s) — os 3 produtos reais, cada um com PRINT
- *     REAL dentro de `DeviceFrame` (Vendas/Estoque) ou foto real com tema de
- *     marca (Avalia — não existe screenshot real do produto, então não se
- *     fabrica uma UI falsa: usa foto real + tokens de marca, mesmo princípio
- *     de "zero achismo" que o vídeo defende).
- *  4. CTA (738–900f, ~5,7s) — fechamento com `CtaBand` real (núcleo de
- *     lead-gen de toda peça Norte) + assinatura de marca.
+ * Esta v2 aplica essa pele nos 4 blocos da estrutura (que o fundador validou
+ * como boa e pediu pra manter): hook → virada → vitrine → CTA. Os prints
+ * reais dos produtos dentro de `DeviceFrame` foram mantidos (funcionaram bem
+ * na v1) — só a moldura ao redor deles virou foto real + selo de ícone, no
+ * lugar do gradiente flat + badge-pílula.
  *
- * Transições entre blocos usam `MotionTransition` (mesmo componente
- * compartilhado dos Reels do catálogo) com `whipPanCut`/`matchCut` — não é
- * efeito novo, é reuso do vocabulário de motion já testado.
+ * Estrutura (900 frames = 30,000s exatos, 1080x1920/30fps H.264/AAC):
+ *  1. HOOK (0–110f) — 2 fotos reais em crossfade (estoque → restaurante),
+ *     texto stroked flutuando livre em cantos opostos (mesma composição do
+ *     meme do iceberg pesquisado), punch final "ACHISMO." em accent+stroke.
+ *  2. VIRADA (118–328f) — foto real de equipe, bordão da marca stroked +
+ *     selo `IconBadge` (fallback bússola, sem ícone de app próprio da
+ *     marca-mãe) + os 3 domínios como ícone+texto livre (sem chip/pílula).
+ *  3. VITRINE (338–718f) — os 3 produtos reais: cada um com foto real de
+ *     contexto (mesmo princípio do `VitrineProduto` variant `contexto`) +
+ *     selo `IconBadge` com o ícone REAL do produto + headline stroked +
+ *     print real dentro de `DeviceFrame` sobreposto à foto. Norte Avalia não
+ *     tem screenshot de produto nem ícone de app dedicado — usa foto real +
+ *     `IconBadge` fallback, nunca fabrica UI/logo que não existe.
+ *  4. CTA (728–900f) — foto real, bordão de fechamento stroked (callback ao
+ *     "ACHISMO." do hook) + `CtaBand` real + assinatura de marca.
  */
 
 const D = {
@@ -73,57 +82,81 @@ const msSoft = getMotionStyle('minimalFade'); // slideFadeBlock — headlines lo
 const msWhip = getMotionStyle('whipPanCut');
 const msMatch = getMotionStyle('matchCut');
 
+// Pele visual (Round G, pesquisa real @thaleslaray) — contorno grosso de
+// texto, SÓ usado sobre foto real (nunca sobre cor sólida, ver nota em
+// `analogiaReal.quandoUsar`). Fonte única do knob, não hardcoda 3px/#000 de novo.
+const vs = getVisualStyle('analogiaReal');
+const stroke = textStrokeStyle(vs);
+const textShadowSoft = '0 4px 16px rgba(0,0,0,0.55)';
+const textShadowStrong = '0 6px 22px rgba(0,0,0,0.65)';
+
 // ---------------------------------------------------------------------------
-// 1. HOOK — dor real de PME, resolvida na palavra "achismo".
+// 1. HOOK — 2 fotos reais em crossfade, texto stroked flutuando livre,
+//    punch final "ACHISMO." (composição inspirada no meme do iceberg).
 // ---------------------------------------------------------------------------
 const HookSegment: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const easing = getEasingFn('strong');
+
+  const beatBOpacity = interpolate(frame, [40, 54], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const line1FadeOut = interpolate(frame, [40, 52], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+
   const eyebrowAnim = slideFadeIn(frame, fps, 0, {distance: 14, easing});
-  const iconScale = popIn(frame, fps, 0, POP_SPRING);
-  const punchCoverOpacity = interpolate(frame, [74, 80], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const punchTextOpacity = interpolate(frame, [78, 86], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const punchScale = zoomPunchIn(frame, 78, {fromScale: 0.25, toScale: 1, durationInFrames: 20});
+  const line1Anim = slideFadeIn(frame, fps, 8, {distance: 24, durationInFrames: 16, easing});
+  const line2Anim = slideFadeIn(frame, fps, 50, {distance: 24, durationInFrames: 16, easing});
+  const line3Anim = slideFadeIn(frame, fps, 66, {distance: 24, durationInFrames: 16, easing});
+
+  const punchCoverOpacity = interpolate(frame, [80, 88], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const punchTextOpacity = interpolate(frame, [86, 94], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const punchScale = zoomPunchIn(frame, 86, {fromScale: 0.3, toScale: 1, durationInFrames: 20});
 
   return (
-    <AbsoluteFill style={{background: '#0b0b10'}}>
-      <div style={{position: 'absolute', inset: 0, padding: '0 84px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 16, opacity: eyebrowAnim.opacity, transform: eyebrowAnim.transform}}>
-          <div style={{transform: `scale(${iconScale})`}}>
-            <IconAlert size={34} color={colors.accent} strokeWidth={2.4} />
-          </div>
-          <span style={{fontSize: 30, fontWeight: 700, letterSpacing: 3, color: colors.accent, textTransform: 'uppercase'}}>
+    <AbsoluteFill>
+      <PhotoBackground src="photos/corredor-empilhadeira-estoque.jpg" position="center 35%" overlay="top" strength={0.72} />
+      <AbsoluteFill style={{opacity: beatBOpacity}}>
+        <PhotoBackground src="photos/restaurante-ambiente-noturno.jpg" position="center 20%" overlay="bottom" strength={0.8} />
+      </AbsoluteFill>
+
+      {/* Beat A — topo-esquerda, sobre a foto de estoque (some quando o beat B entra). */}
+      <div style={{position: 'absolute', top: 110, left: 64, right: 160, opacity: line1Anim.opacity * line1FadeOut, transform: `${line1Anim.transform} rotate(-1deg)`}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, opacity: eyebrowAnim.opacity, transform: eyebrowAnim.transform}}>
+          <IconAlert size={30} color={colors.accent} strokeWidth={2.6} />
+          <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
             Sem dado real
           </span>
         </div>
-        <div style={{marginTop: 34}}>
-          <KineticText
-            text="Estoque errado. Prato que não vende."
-            ms={msEnergetic}
-            startFrame={10}
-            style={{fontSize: 52, fontWeight: 700, color: colors.white, lineHeight: 1.22}}
-          />
+        <span style={{fontSize: 58, fontWeight: 700, color: colors.white, lineHeight: 1.16, display: 'inline-block', ...stroke}}>
+          Estoque errado.
+        </span>
+      </div>
+
+      {/* Beat B — base, sobre a foto de restaurante (2 linhas empilhadas, cantos opostos ao Beat A — mesma lógica do meme do iceberg). */}
+      <div style={{position: 'absolute', bottom: 130, left: 64, right: 64}}>
+        <div style={{opacity: line2Anim.opacity, transform: `${line2Anim.transform} rotate(1deg)`}}>
+          <span style={{fontSize: 58, fontWeight: 700, color: colors.white, lineHeight: 1.16, display: 'inline-block', ...stroke}}>
+            Prato que não vende.
+          </span>
         </div>
-        <div style={{marginTop: 20}}>
-          <KineticText
-            text="Decisão tomada no escuro."
-            ms={msEnergetic}
-            startFrame={48}
-            style={{fontSize: 52, fontWeight: 700, color: 'rgba(255,255,255,0.5)', lineHeight: 1.22}}
-          />
+        <div style={{marginTop: 14, opacity: line3Anim.opacity, transform: line3Anim.transform}}>
+          <span style={{fontSize: 40, fontWeight: 700, color: colors.white, lineHeight: 1.2, display: 'inline-block', ...stroke}}>
+            Decisão tomada no escuro.
+          </span>
         </div>
       </div>
-      {/* Punch final — a palavra que nomeia o vilão, cobrindo a tela. */}
-      <AbsoluteFill style={{background: '#0b0b10', opacity: punchCoverOpacity}} />
+
+      {/* Punch final — a palavra que nomeia o vilão, estilo "carimbo de meme". */}
+      <AbsoluteFill style={{background: '#000', opacity: punchCoverOpacity * 0.8}} />
       <AbsoluteFill style={{display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: punchTextOpacity}}>
         <span
           style={{
-            fontSize: 148,
+            fontSize: 128,
             fontWeight: 700,
             color: colors.accent,
-            letterSpacing: -4,
-            transform: `scale(${punchScale})`,
+            letterSpacing: -3,
+            display: 'inline-block',
+            transform: `scale(${punchScale}) rotate(-2deg)`,
+            ...stroke,
           }}
         >
           ACHISMO.
@@ -134,7 +167,7 @@ const HookSegment: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// 2. VIRADA — bordão da marca + consultoria/software + domínios.
+// 2. VIRADA — foto real de equipe, bordão stroked + selo + domínios soltos.
 // ---------------------------------------------------------------------------
 const ViradaSegment: React.FC = () => {
   const frame = useCurrentFrame();
@@ -142,51 +175,53 @@ const ViradaSegment: React.FC = () => {
   const easing = getEasingFn('strong');
   const badgeAnim = slideFadeIn(frame, fps, 4, {distance: 16, easing});
   const badgeScale = popIn(frame, fps, 4, POP_SPRING);
-  const compassScale = popIn(frame, fps, 0, POP_SPRING);
   const subAnim = slideFadeIn(frame, fps, 92, {distance: 26, durationInFrames: 18, easing: getEasingFn('gentle')});
-  const chips = [
+  const domains = [
     {label: 'Estoque', Icon: IconChart},
     {label: 'Vendas', Icon: IconCheck},
     {label: 'Performance', Icon: IconGrowth},
   ];
-  const chipsAnim = chips.map((_, i) => slideFadeIn(frame, fps, 150 + i * 10, {distance: 20, easing}));
+  const domainsAnim = domains.map((_, i) => slideFadeIn(frame, fps, 150 + i * 10, {distance: 20, easing}));
 
   return (
-    <AbsoluteFill style={{background: colors.black}}>
-      <div style={{position: 'absolute', right: -60, top: 100, opacity: 0.06, transform: `scale(${compassScale})`}}>
-        <IconCompass size={520} color={colors.white} strokeWidth={1.1} />
-      </div>
-      <div style={{position: 'relative', height: '100%', padding: '0 84px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <div style={{opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`, display: 'inline-flex', alignSelf: 'flex-start'}}>
-          <Badge>Norte Para Negócios</Badge>
+    <AbsoluteFill>
+      <PhotoBackground src="photos/equipe-reuniao-escritorio.jpg" position="center 30%" overlay="topAndBottom" strength={0.82} />
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, padding: '110px 72px 0'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 16, opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`}}>
+          <IconBadge fallback={<IconCompass size={28} color={colors.primary} strokeWidth={2.4} />} size={58} />
+          <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
+            Norte Para Negócios
+          </span>
         </div>
-        <div style={{marginTop: 36, maxWidth: 920}}>
+        <div style={{marginTop: 30, maxWidth: 920}}>
           <KineticText
             text="Não trabalhamos com achismos."
             ms={msEnergetic}
             startFrame={14}
-            style={{fontSize: 64, fontWeight: 700, color: colors.white, lineHeight: 1.14}}
+            style={{fontSize: 60, fontWeight: 700, color: colors.white, lineHeight: 1.14, ...stroke}}
           />
         </div>
+      </div>
+      <div style={{position: 'absolute', left: 72, right: 72, bottom: 150}}>
         <p
           style={{
-            marginTop: 30,
-            maxWidth: 880,
-            fontSize: 32,
+            margin: '0 0 36px',
+            fontSize: 30,
             fontWeight: 400,
-            color: 'rgba(255,255,255,0.82)',
+            color: colors.white,
             lineHeight: 1.42,
+            textShadow: textShadowStrong,
             opacity: subAnim.opacity,
             transform: subAnim.transform,
           }}
         >
           Consultoria de verdade + software próprio pra rodar o que a consultoria recomenda.
         </p>
-        <div style={{marginTop: 54, display: 'flex', gap: 30}}>
-          {chips.map((c, i) => (
-            <div key={c.label} style={{display: 'flex', alignItems: 'center', gap: 10, opacity: chipsAnim[i].opacity, transform: chipsAnim[i].transform}}>
-              <c.Icon size={26} color={colors.accent} strokeWidth={2.4} />
-              <span style={{fontSize: 26, fontWeight: 700, color: colors.white}}>{c.label}</span>
+        <div style={{display: 'flex', gap: 30}}>
+          {domains.map((d, i) => (
+            <div key={d.label} style={{display: 'flex', alignItems: 'center', gap: 10, opacity: domainsAnim[i].opacity, transform: domainsAnim[i].transform}}>
+              <d.Icon size={24} color={colors.white} strokeWidth={2.6} />
+              <span style={{fontSize: 24, fontWeight: 700, color: colors.white, textShadow: textShadowSoft}}>{d.label}</span>
             </div>
           ))}
         </div>
@@ -196,19 +231,32 @@ const ViradaSegment: React.FC = () => {
 };
 
 // ---------------------------------------------------------------------------
-// 3. VITRINE — 3 produtos reais.
+// 3. VITRINE — 3 produtos reais: foto real de contexto + selo de ícone real
+//    + headline stroked + print real dentro de DeviceFrame.
 // ---------------------------------------------------------------------------
 type ProductSegmentProps = {
-  badgeLabel: string;
+  photo: string;
+  photoPosition?: string;
+  iconSrc: string;
+  nomeProduto: string;
   headline: string;
-  base: string;
-  dark: string;
-  light: string;
-  features: string[];
-  children: React.ReactNode;
+  benefit: string;
+  device: 'phone' | 'browser';
+  screenshotSrc: string;
+  screenshotAspect: number;
 };
 
-const ProductSegment: React.FC<ProductSegmentProps> = ({badgeLabel, headline, base, dark, light, features, children}) => {
+const ProductSegment: React.FC<ProductSegmentProps> = ({
+  photo,
+  photoPosition,
+  iconSrc,
+  nomeProduto,
+  headline,
+  benefit,
+  device,
+  screenshotSrc,
+  screenshotAspect,
+}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const easing = getEasingFn('strong');
@@ -216,46 +264,38 @@ const ProductSegment: React.FC<ProductSegmentProps> = ({badgeLabel, headline, ba
   const badgeScale = popIn(frame, fps, 0, POP_SPRING);
   const deviceScale = popIn(frame, fps, 6, POP_SPRING);
   const deviceFloat = Math.sin(frame / 18) * 6;
-  const featuresAnim = features.map((_, i) => slideFadeIn(frame, fps, 40 + i * 9, {distance: 24, easing}));
+  const benefitAnim = slideFadeIn(frame, fps, 42, {distance: 22, easing});
 
   return (
-    <AbsoluteFill style={{background: `linear-gradient(160deg, ${dark} 0%, ${base} 145%)`}}>
-      <div
-        style={{
-          position: 'absolute',
-          width: 900,
-          height: 900,
-          borderRadius: '50%',
-          background: light,
-          opacity: 0.16,
-          filter: 'blur(130px)',
-          top: -280,
-          right: -280,
-        }}
-      />
-      <div style={{position: 'relative', height: '100%', padding: '150px 72px 0'}}>
-        <div style={{opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`, display: 'inline-block'}}>
-          <Badge tone="white">{badgeLabel}</Badge>
+    <AbsoluteFill>
+      <PhotoBackground src={photo} position={photoPosition ?? 'center 25%'} overlay="topAndBottom" strength={0.84} />
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, padding: '110px 72px 0'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 16, opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`}}>
+          <IconBadge src={iconSrc} size={60} />
+          <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
+            {nomeProduto}
+          </span>
         </div>
-        <div style={{marginTop: 28, maxWidth: 900}}>
+        <div style={{marginTop: 26, maxWidth: 900}}>
           <KineticText
             text={headline}
             ms={msSoft}
             startFrame={10}
-            style={{fontSize: 54, fontWeight: 700, color: colors.white, lineHeight: 1.18}}
+            style={{fontSize: 50, fontWeight: 700, color: colors.white, lineHeight: 1.18, ...stroke}}
           />
         </div>
-        <div style={{position: 'absolute', left: 0, right: 0, top: 490, display: 'flex', justifyContent: 'center'}}>
-          <div style={{transform: `scale(${deviceScale}) translateY(${deviceFloat}px)`}}>{children}</div>
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 520, display: 'flex', justifyContent: 'center'}}>
+        <div style={{transform: `scale(${deviceScale}) translateY(${deviceFloat}px)`}}>
+          {device === 'phone' ? (
+            <PhoneFrame src={screenshotSrc} width={340} rotate={-5} aspectRatio={screenshotAspect} />
+          ) : (
+            <BrowserFrame src={screenshotSrc} width={760} rotate={2} aspectRatio={screenshotAspect} />
+          )}
         </div>
-        <div style={{position: 'absolute', left: 72, right: 72, bottom: 130, display: 'flex', flexDirection: 'column', gap: 18}}>
-          {features.map((f, i) => (
-            <div key={f} style={{display: 'flex', alignItems: 'center', gap: 14, opacity: featuresAnim[i].opacity, transform: featuresAnim[i].transform}}>
-              <IconCheck size={26} color={colors.white} strokeWidth={3} />
-              <span style={{fontSize: 27, fontWeight: 400, color: colors.white}}>{f}</span>
-            </div>
-          ))}
-        </div>
+      </div>
+      <div style={{position: 'absolute', left: 72, right: 72, bottom: 140, opacity: benefitAnim.opacity, transform: benefitAnim.transform}}>
+        <span style={{fontSize: 27, fontWeight: 400, color: colors.white, lineHeight: 1.4, textShadow: textShadowStrong}}>{benefit}</span>
       </div>
     </AbsoluteFill>
   );
@@ -267,52 +307,41 @@ const AvaliaSegment: React.FC = () => {
   const easing = getEasingFn('strong');
   const badgeAnim = slideFadeIn(frame, fps, 0, {distance: 16, easing});
   const badgeScale = popIn(frame, fps, 0, POP_SPRING);
-  const features = ['PDI automático a cada ciclo', 'Avaliação multidimensional, não só nota'];
-  const featuresAnim = features.map((_, i) => slideFadeIn(frame, fps, 42 + i * 9, {distance: 20, easing}));
-  const {norteAvalia} = systemColors;
+  const benefitAnim = slideFadeIn(frame, fps, 42, {distance: 22, easing});
 
   return (
     <AbsoluteFill>
       {/* Sem screenshot real do Avalia — foto real (Pexels, ver public/photos/CREDITOS.md) +
-          tom de marca, em vez de fabricar uma UI que não existe (mesmo princípio de
-          "zero achismo" que o vídeo defende). */}
-      <PhotoBackground src="photos/analista-relatorios-mesa.jpg" overlay="full" strength={0.5} position="center 30%" />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(165deg, ${norteAvalia.dark}d9 0%, ${norteAvalia.base}66 100%)`,
-        }}
-      />
-      <div style={{position: 'relative', height: '100%', padding: '150px 72px 140px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-        <div>
-          <div style={{opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`, display: 'inline-block'}}>
-            <Badge tone="white">Avaliação de Desempenho</Badge>
-          </div>
-          <div style={{marginTop: 28, maxWidth: 900}}>
-            <KineticText
-              text="Performance com dado, não com feeling."
-              ms={msSoft}
-              startFrame={10}
-              style={{fontSize: 54, fontWeight: 700, color: colors.white, lineHeight: 1.18}}
-            />
-          </div>
+          selo IconBadge fallback (sem ícone de app dedicado), em vez de fabricar uma UI que
+          não existe (mesmo princípio de "zero achismo" que o vídeo defende). */}
+      <PhotoBackground src="photos/analista-relatorios-mesa.jpg" overlay="topAndBottom" strength={0.84} position="center 30%" />
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, padding: '110px 72px 0'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 16, opacity: badgeAnim.opacity, transform: `${badgeAnim.transform} scale(${badgeScale})`}}>
+          <IconBadge fallback={<IconGrowth size={28} color={systemColors.norteAvalia.base} strokeWidth={2.6} />} size={60} />
+          <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
+            Avaliação de Desempenho
+          </span>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 18}}>
-          {features.map((f, i) => (
-            <div key={f} style={{display: 'flex', alignItems: 'center', gap: 14, opacity: featuresAnim[i].opacity, transform: featuresAnim[i].transform}}>
-              <IconGrowth size={26} color={colors.white} strokeWidth={2.6} />
-              <span style={{fontSize: 27, fontWeight: 400, color: colors.white}}>{f}</span>
-            </div>
-          ))}
+        <div style={{marginTop: 26, maxWidth: 900}}>
+          <KineticText
+            text="Performance com dado, não com feeling."
+            ms={msSoft}
+            startFrame={10}
+            style={{fontSize: 50, fontWeight: 700, color: colors.white, lineHeight: 1.18, ...stroke}}
+          />
         </div>
+      </div>
+      <div style={{position: 'absolute', left: 72, right: 72, bottom: 140, opacity: benefitAnim.opacity, transform: benefitAnim.transform}}>
+        <span style={{fontSize: 27, fontWeight: 400, color: colors.white, lineHeight: 1.4, textShadow: textShadowStrong}}>
+          PDI automático a cada ciclo + avaliação multidimensional, não só nota.
+        </span>
       </div>
     </AbsoluteFill>
   );
 };
 
 // ---------------------------------------------------------------------------
-// 4. CTA — fechamento com CtaBand real + assinatura de marca.
+// 4. CTA — foto real, bordão stroked (callback ao hook) + CtaBand real.
 // ---------------------------------------------------------------------------
 const CtaSegment: React.FC = () => {
   const frame = useCurrentFrame();
@@ -327,20 +356,29 @@ const CtaSegment: React.FC = () => {
   const wordmarkAnim = slideFadeIn(frame, fps, 70, {distance: 10, durationInFrames: 16, easing: getEasingFn('gentle')});
 
   return (
-    <AbsoluteFill style={{background: colors.black}}>
-      <div style={{position: 'absolute', left: -100, bottom: -80, opacity: 0.08}}>
-        <GhostBars color={colors.white} width={480} />
-      </div>
+    <AbsoluteFill>
+      <PhotoBackground src="photos/salao-moderno-movimento.jpg" position="center 35%" overlay="full" strength={0.55} />
+      {/* Reforço de contraste embaixo pro CtaBand/assinatura — a foto sozinha
+          (overlay 'full') já escurece uniforme, mas o botão precisa de um
+          plateau mais forte na base pra legibilidade máxima (peça mais
+          visível da empresa, Regra Inviolável #1 com rigor máximo aqui). */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 38%, rgba(0,0,0,0.78) 100%)',
+        }}
+      />
       <div style={{position: 'relative', height: '100%', padding: '0 72px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 44}}>
         <div>
           <div style={{display: 'flex', alignItems: 'center', gap: 14, opacity: eyebrowAnim.opacity, transform: `${eyebrowAnim.transform} scale(${iconScale})`}}>
-            <IconCompass size={30} color={colors.accent} strokeWidth={2.4} />
-            <span style={{fontSize: 26, fontWeight: 700, letterSpacing: 3, color: colors.accent, textTransform: 'uppercase'}}>
+            <IconBadge fallback={<IconCompass size={24} color={colors.accent} strokeWidth={2.6} />} size={50} />
+            <span style={{fontSize: 24, fontWeight: 700, letterSpacing: 2, color: colors.white, textTransform: 'uppercase', textShadow: textShadowSoft}}>
               Norte Para Negócios
             </span>
           </div>
           <div style={{marginTop: 26, opacity: titleAnim.opacity, transform: titleAnim.transform}}>
-            <span style={{fontSize: 58, fontWeight: 700, color: colors.white, lineHeight: 1.18}}>
+            <span style={{fontSize: 56, fontWeight: 700, color: colors.white, lineHeight: 1.18, display: 'inline-block', ...stroke}}>
               Decida com dado.
               <br />
               Não com achismo.
@@ -352,7 +390,7 @@ const CtaSegment: React.FC = () => {
         </div>
         <div style={{opacity: wordmarkAnim.opacity, transform: wordmarkAnim.transform, display: 'flex', alignItems: 'center', gap: 10}}>
           <div style={{width: 8, height: 8, borderRadius: 2, background: colors.accent, transform: 'rotate(45deg)'}} />
-          <span style={{fontSize: 22, fontWeight: 400, fontStyle: 'italic', letterSpacing: 0.8, color: colors.white, opacity: 0.72}}>
+          <span style={{fontSize: 22, fontWeight: 400, fontStyle: 'italic', letterSpacing: 0.8, color: colors.white, opacity: 0.88, textShadow: textShadowSoft}}>
             Norte Para Negocios
           </span>
         </div>
@@ -404,15 +442,16 @@ export const NorteApresentacaoReel: React.FC = () => {
 
       <Sequence from={vendasStart} durationInFrames={D.vendas}>
         <ProductSegment
-          badgeLabel="Cardápio Digital"
+          photo="photos/prato-gourmet-mesa-madeira.jpg"
+          photoPosition="center 22%"
+          iconSrc="logos/vendas-icon-192.png"
+          nomeProduto="Cardápio Digital"
           headline="Pedido no celular, sem espera."
-          base={ntbVendas.base}
-          dark={ntbVendas.dark}
-          light={ntbVendas.light}
-          features={['Comanda digital em tempo real', 'Gestão de mesas e status de ocupação']}
-        >
-          <PhoneFrame src="screenshots/vendas-mobile.png" width={370} rotate={-5} aspectRatio={1170 / 2532} />
-        </ProductSegment>
+          benefit="Comanda digital + gestão de mesas em tempo real."
+          device="phone"
+          screenshotSrc="screenshots/vendas-mobile.png"
+          screenshotAspect={1170 / 2532}
+        />
       </Sequence>
       <Sequence from={t3Start} durationInFrames={D.t3}>
         <MotionTransition motionStyle={msWhip} durationInFrames={D.t3} accentColor={ntbEstoque.base} />
@@ -420,15 +459,16 @@ export const NorteApresentacaoReel: React.FC = () => {
 
       <Sequence from={estoqueStart} durationInFrames={D.estoque}>
         <ProductSegment
-          badgeLabel="Gestão de Estoque"
+          photo="photos/corredor-empilhadeira-estoque.jpg"
+          photoPosition="center 35%"
+          iconSrc="logos/estoque-icon.svg"
+          nomeProduto="Gestão de Estoque"
           headline="Estoque sincronizado com o Omie, em tempo real."
-          base={ntbEstoque.base}
-          dark={ntbEstoque.dark}
-          light={ntbEstoque.light}
-          features={['Etiqueta inteligente de lote e validade', 'Inventário via leitura de QR code']}
-        >
-          <BrowserFrame src="screenshots/produto-desktop.png" width={780} rotate={2} aspectRatio={1440 / 900} />
-        </ProductSegment>
+          benefit="Etiqueta de lote/validade + QR code no inventário."
+          device="browser"
+          screenshotSrc="screenshots/produto-desktop.png"
+          screenshotAspect={1440 / 900}
+        />
       </Sequence>
       <Sequence from={t4Start} durationInFrames={D.t4}>
         <MotionTransition motionStyle={msWhip} durationInFrames={D.t4} accentColor={norteAvalia.base} />

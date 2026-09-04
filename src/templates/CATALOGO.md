@@ -15,21 +15,40 @@ Estrutura (900 frames = 30,000s exatos, 1080x1920/30fps H.264/AAC):
    vende. Decisão tomada no escuro.") resolvida na palavra "ACHISMO." em
    punch de tela cheia.
 2. **Virada** (118–328f) — bordão da marca ("Não trabalhamos com
-   achismos."), posicionamento consultoria+software, chips dos 3 domínios
+   achismos."), posicionamento consultoria+software, os 3 domínios
    (Estoque/Vendas/Performance).
 3. **Vitrine** (338–718f) — os 3 produtos reais, ~4s cada, transições
    whip-pan coloridas pelo tema de cada produto: NTB Vendas (print real
    `screenshots/vendas-mobile.png` em `PhoneFrame`), NTB Estoque (print real
    `screenshots/produto-desktop.png` em `BrowserFrame`), Norte Avalia (sem
    screenshot real do produto — usa foto real `photos/analista-relatorios-mesa.jpg`
-   com tom de marca, em vez de fabricar uma UI que não existe).
+   com selo `IconBadge` fallback, em vez de fabricar uma UI que não existe).
 4. **CTA** (728–900f) — bordão de fechamento + `CtaBand` real (accent) +
    assinatura de marca, com pulso sutil de respiro no final.
 
+**v2 (mesmo dia, revisão do fundador — "ainda não tá no estilo dos perfis
+que eu te mandei")**: a v1 saiu num estilo "corporate/device-frame limpo"
+(chips-pílula, gradiente flat, badge corporativa) — não era a linguagem
+pedida como referência. Reaplicada a pele do preset `analogiaReal` (Round G,
+pesquisa real de @thaleslaray) nos 4 blocos: FOTO REAL de fundo na quase
+totalidade dos 30s (só as transições/punch usam tela sólida), tipografia com
+CONTORNO GROSSO (`textStrokeStyle`) flutuando livre sobre a foto (sem
+card/bloco), e `IconBadge` (selo de ícone real do produto, ou fallback pra
+marca/Avalia) no lugar do badge-pílula corporativo. Hook agora usa 2 fotos
+reais em crossfade (`corredor-empilhadeira-estoque.jpg` →
+`restaurante-ambiente-noturno.jpg`) com texto em cantos opostos — mesma
+composição do meme do iceberg pesquisado. Vitrine usa o mesmo princípio do
+`VitrineProduto` variant `contexto` (foto real de ambiente + device frame
+sobreposto): `prato-gourmet-mesa-madeira.jpg` (Vendas),
+`corredor-empilhadeira-estoque.jpg` (Estoque), `analista-relatorios-mesa.jpg`
+(Avalia). CTA fecha com `salao-moderno-movimento.jpg`. Prints reais dos
+produtos dentro de `DeviceFrame` mantidos da v1 (funcionaram bem, fundador
+não pediu mudança nessa parte).
+
 QA visual: 28 frames extraídos via ffmpeg nos pontos de transição/conteúdo de
-cada bloco (Regra Inviolável #1), revisados um a um — zero regressão, zero
-ajuste necessário na primeira renderização completa. Áudio: track AAC
-silencioso (48kHz estéreo, -91dB) — narração via Bark é Fase 3, ainda não
+cada bloco (Regra Inviolável #1) em cada rodada (v1 e v2), revisados um a um
+— zero regressão em nenhuma das duas renderizações completas. Áudio: track
+AAC silencioso (48kHz estéreo, -91dB) — narração via Bark é Fase 3, ainda não
 implementada (ver `.claude/agent-memory/rafael/first-tasks.md` T4/T10).
 
 ## Sumário executivo (Round E — consolidação final, 2026-09-01/02)
