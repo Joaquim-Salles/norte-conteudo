@@ -58,7 +58,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   const graphics = showGraphicSupport(vs);
 
   if (slide.kind === 'cover') {
-    const tituloStyle = headlineStyle(vs, 76, -1.5);
+    const tituloStyle = headlineStyle(vs, 76, -1.5, 1.04);
     return (
       <Frame background={colors.primary} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
@@ -78,7 +78,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontWeight: tituloStyle.fontWeight,
               fontStyle: tituloStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.04,
+              lineHeight: tituloStyle.lineHeight,
               letterSpacing: tituloStyle.letterSpacing,
               margin: '32px 0 0',
             }}
@@ -107,7 +107,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   }
 
   if (slide.kind === 'cover-grid') {
-    const tituloStyleGrid = headlineStyle(vs, 62, -1.3);
+    const tituloStyleGrid = headlineStyle(vs, 62, -1.3, 1.06);
     return (
       <Frame background={colors.primary} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
@@ -126,7 +126,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontWeight: tituloStyleGrid.fontWeight,
               fontStyle: tituloStyleGrid.fontStyle,
               color: colors.white,
-              lineHeight: 1.06,
+              lineHeight: tituloStyleGrid.lineHeight,
               letterSpacing: tituloStyleGrid.letterSpacing,
               margin: '28px 0 0',
             }}
@@ -199,7 +199,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
     // mesma logica documentada no manifesto de Bastidores) — visualStyle so
     // varia tamanho/letter-spacing/textura/gráfico de apoio/estilo de card,
     // nunca a fonte da citacao em si.
-    const citacaoStyleRaw = headlineStyle(vs, 66, -1);
+    const citacaoStyleRaw = headlineStyle(vs, 66, -1, 1.14);
     const citacaoStyle = {...citacaoStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
     const cardVariantQuote = resolveCardStyle(vs, 'bezel');
     return (
@@ -232,7 +232,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontWeight: citacaoStyle.fontWeight,
               fontStyle: citacaoStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.14,
+              lineHeight: citacaoStyle.lineHeight,
               letterSpacing: citacaoStyle.letterSpacing,
               margin: 0,
             }}
@@ -269,7 +269,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
     // afeta o headline aqui. justifyContent:'flex-end' faz o bloco crescer
     // pra CIMA sobre a foto, entao nao ha risco de colisao com elemento
     // fixo abaixo — sem necessidade de clamp.
-    const tituloStyleFoto = headlineStyle(vs, 72, -1.5);
+    const tituloStyleFoto = headlineStyle(vs, 72, -1.5, 1.05);
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
         <PhotoBackground src={slide.foto} position={slide.fotoPosition ?? 'center 15%'} overlay="bottom" />
@@ -295,7 +295,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontWeight: tituloStyleFoto.fontWeight,
               fontStyle: tituloStyleFoto.fontStyle,
               color: colors.white,
-              lineHeight: 1.05,
+              lineHeight: tituloStyleFoto.lineHeight,
               letterSpacing: tituloStyleFoto.letterSpacing,
               margin: '28px 0 0',
               textShadow: '0 10px 34px rgba(0,0,0,0.55)',
@@ -321,7 +321,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   }
 
   if (slide.kind === 'bridge') {
-    const tituloStyleBridge = headlineStyle(vs, 58, -1);
+    const tituloStyleBridge = headlineStyle(vs, 58, -1, 1.1);
     const cardVariantBridge = resolveCardStyle(vs, 'bezel');
     return (
       <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
@@ -397,7 +397,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontWeight: tituloStyleBridge.fontWeight,
               fontStyle: tituloStyleBridge.fontStyle,
               color: colors.primaryDark,
-              lineHeight: 1.1,
+              lineHeight: tituloStyleBridge.lineHeight,
               letterSpacing: tituloStyleBridge.letterSpacing,
               margin: 0,
             }}
@@ -413,7 +413,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   }
 
   // slide.kind === 'cta'
-  const headlineStyleCta = headlineStyle(vs, 60, -1);
+  const headlineStyleCta = headlineStyle(vs, 60, -1, 1.1);
   return (
     <Frame background={colors.primaryDark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
       {graphics ? (
@@ -438,7 +438,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
             fontWeight: headlineStyleCta.fontWeight,
             fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
-            lineHeight: 1.1,
+            lineHeight: headlineStyleCta.lineHeight,
             letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}

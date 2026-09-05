@@ -48,6 +48,19 @@ export const SurfaceCard: React.FC<SurfaceCardProps> = ({
           background: 'transparent',
           borderRadius: Math.max(radius - padding, 8),
           border: `1.5px solid ${borderColor ?? 'rgba(255,255,255,0.35)'}`,
+          // REFINAMENTO DE CRAFT (2026-09-04): 'outline' e 'flat' nao tinham
+          // NENHUMA sombra — border de 1-1.5px sozinha, numa peca vista em
+          // miniatura de feed (thumbnail), quase some contra fundos de tom
+          // parecido, e o card lê como caixa "sem estilizar" (placeholder),
+          // nao como restrição deliberada. Elevação premium/flat de verdade
+          // (ver skill high-end-visual-design: "double-bezel"/soft ambient
+          // shadow mesmo em superfícies flat) usa uma sombra quase
+          // imperceptível — aqui um sopro (`boxShadow` bem mais suave que o
+          // da variant 'bezel', 14px/-16 offset lá vs. 20px/-18 aqui com
+          // opacidade quase metade) só pra descolar o card do fundo sem
+          // reintroduzir a profundidade física que 'outline'/'flat' existem
+          // pra evitar.
+          boxShadow: '0 10px 24px -18px rgba(0,0,0,0.4)',
         }}
       >
         {children}
@@ -62,6 +75,7 @@ export const SurfaceCard: React.FC<SurfaceCardProps> = ({
           background: coreColor,
           borderRadius: Math.max(radius - padding, 8),
           border: '1px solid rgba(255,255,255,0.16)',
+          boxShadow: '0 10px 24px -18px rgba(0,0,0,0.4)',
         }}
       >
         {children}

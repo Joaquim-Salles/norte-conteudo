@@ -96,6 +96,22 @@ export type VisualStyle = {
   /** letter-spacing (px) somado ao base do elemento hero. */
   letterSpacingBoost: number;
   /**
+   * REFINAMENTO DE CRAFT (2026-09-04, revisão de design sênior — ver
+   * "Refinamentos de craft" no CATALOGO.md): line-height do elemento hero.
+   * Até aqui nenhum preset controlava isso — cada template hardcodava o
+   * MESMO lineHeight (tipicamente 1.3, calibrado pra headlineScale 1.0)
+   * independente do `headlineScale` do estilo. Isso é fisicamente errado:
+   * tipografia grande/pesada (boldTipografico 1.65x, dadoEmDestaque 1.45x)
+   * precisa de MENOS espaço vertical relativo entre linhas pra não parecer
+   * "solta" — o próprio peso visual do traço já ocupa a régua; tipografia
+   * pequena/leve (editorial itálico, papelQuente) precisa de MAIS espaço pra
+   * não sufocar. É MULTIPLICADOR do lineHeight que cada template já define
+   * pro seu elemento hero (mesmo princípio de `headlineScale` sobre
+   * fontSize) — 1.0 = não muda nada (compatibilidade quando `vs` é
+   * undefined, ver `headlineStyle`), <1 = mais apertado, >1 = mais solto.
+   */
+  heroLineHeightScale: number;
+  /**
    * Liga/desliga elemento gráfico de apoio decorativo (GhostBars/GhostQuote/
    * GhostArrowUp). false = "quase sem gráfico de apoio", a composição depende
    * só de tipografia/espaço/cor.
@@ -160,6 +176,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'bold',
     headlineScale: 1.0,
     letterSpacingBoost: -0.5,
+    heroLineHeightScale: 1.0,
     graphicSupport: false,
   },
   dadoEmDestaque: {
@@ -173,6 +190,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'bold',
     headlineScale: 1.45,
     letterSpacingBoost: -2.5,
+    heroLineHeightScale: 0.82,
     graphicSupport: true,
   },
   editorial: {
@@ -186,6 +204,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'regularItalic',
     headlineScale: 1.05,
     letterSpacingBoost: 0,
+    heroLineHeightScale: 1.08,
     graphicSupport: true,
   },
   boldTipografico: {
@@ -199,6 +218,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'bold',
     headlineScale: 1.65,
     letterSpacingBoost: -3,
+    heroLineHeightScale: 0.75,
     graphicSupport: false,
   },
   corporateClean: {
@@ -210,8 +230,16 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     texture: {enabled: false, opacityMultiplier: 0},
     cardStyleOverride: 'outline',
     headlineWeight: 'bold',
-    headlineScale: 0.92,
+    // REFINAMENTO DE CRAFT (2026-09-04): era 0.92 (encolhia o hero ABAIXO do
+    // baseline) — combinado com spacingScale 1.15 (mais respiro), a peça lia
+    // como tímida/rarefeita, não "restrita com intenção". Restrição premium
+    // vem de CORTAR ornamento (sem grain, borda fina, sem gráfico de apoio —
+    // já cobre isso), não de encolher o próprio protagonista da peça. Subiu
+    // pra 1.0 (tamanho do baseline) — o mesmo peso do headline, só sem
+    // decoração ao redor. Ver "Refinamentos de craft" no CATALOGO.md.
+    headlineScale: 1.0,
     letterSpacingBoost: 0.6,
+    heroLineHeightScale: 1.05,
     graphicSupport: false,
   },
 
@@ -233,6 +261,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'bold',
     headlineScale: 1.2,
     letterSpacingBoost: -1.2,
+    heroLineHeightScale: 0.92,
     graphicSupport: true,
     signatureGraphic: 'ghostMarker',
   },
@@ -247,6 +276,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'regularItalic',
     headlineScale: 0.98,
     letterSpacingBoost: 0.2,
+    heroLineHeightScale: 1.18,
     graphicSupport: true,
     signatureGraphic: 'ghostSlash',
     canvasOverride: {background: '#faf9f5', ink: '#141413'},
@@ -272,6 +302,7 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     headlineWeight: 'bold',
     headlineScale: 0.85,
     letterSpacingBoost: 0,
+    heroLineHeightScale: 1.1,
     graphicSupport: false,
     textStroke: {width: 3, color: '#000000'},
     showIconBadge: true,
@@ -300,14 +331,32 @@ export function scaleSpacing(vs: VS, px: number, opts?: {min?: number; max?: num
   return Math.max(min, Math.min(max, scaled));
 }
 
-/** Resolve fontWeight/fontStyle/fontSize/letterSpacing do elemento hero a partir do estilo (ou do valor base, se vs ausente). */
+/**
+ * Resolve fontWeight/fontStyle/fontSize/letterSpacing/lineHeight do elemento
+ * hero a partir do estilo (ou do valor base, se vs ausente).
+ *
+ * `baseLineHeight` (REFINAMENTO DE CRAFT, 2026-09-04): opcional, pro template
+ * informar o lineHeight que ele mesmo já usava pra esse elemento antes do
+ * sistema de `visualStyle` existir — o helper devolve esse valor multiplicado
+ * por `heroLineHeightScale` do preset (1.0 sem preset = idêntico ao original).
+ * Sem passar `baseLineHeight`, `lineHeight` volta `undefined` e o template
+ * continua controlando isso sozinho (comportamento anterior, nunca quebra
+ * template que não foi atualizado pra usar o knob novo).
+ */
 export function headlineStyle(
   vs: VS,
   baseFontSize: number,
   baseLetterSpacing = 0,
-): {fontWeight: 400 | 700; fontStyle: 'normal' | 'italic'; fontSize: number; letterSpacing: number} {
+  baseLineHeight?: number,
+): {fontWeight: 400 | 700; fontStyle: 'normal' | 'italic'; fontSize: number; letterSpacing: number; lineHeight: number | undefined} {
   if (!vs) {
-    return {fontWeight: 700, fontStyle: 'normal', fontSize: baseFontSize, letterSpacing: baseLetterSpacing};
+    return {
+      fontWeight: 700,
+      fontStyle: 'normal',
+      fontSize: baseFontSize,
+      letterSpacing: baseLetterSpacing,
+      lineHeight: baseLineHeight,
+    };
   }
   const italic = vs.headlineWeight !== 'bold';
   const fontWeight = vs.headlineWeight === 'regularItalic' ? 400 : 700;
@@ -316,6 +365,7 @@ export function headlineStyle(
     fontStyle: italic ? 'italic' : 'normal',
     fontSize: Math.round(baseFontSize * vs.headlineScale),
     letterSpacing: baseLetterSpacing + vs.letterSpacingBoost,
+    lineHeight: baseLineHeight === undefined ? undefined : baseLineHeight * vs.heroLineHeightScale,
   };
 }
 

@@ -53,7 +53,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
   const graphics = showGraphicSupport(vs);
 
   if (slide.kind === 'cover') {
-    const tituloStyle = headlineStyle(vs, 72, -1.5);
+    const tituloStyle = headlineStyle(vs, 72, -1.5, 1.05);
     const cardVariantCover = resolveCardStyle(vs, 'bezel');
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
@@ -74,7 +74,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
               fontWeight: tituloStyle.fontWeight,
               fontStyle: tituloStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.05,
+              lineHeight: tituloStyle.lineHeight,
               letterSpacing: tituloStyle.letterSpacing,
               margin: '32px 0 0',
             }}
@@ -140,7 +140,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
   }
 
   if (slide.kind === 'cover-roadmap') {
-    const tituloStyleRoadmap = headlineStyle(vs, 60, -1.3);
+    const tituloStyleRoadmap = headlineStyle(vs, 60, -1.3, 1.06);
     const cardVariantRoadmap = resolveCardStyle(vs, 'bezel');
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
@@ -160,7 +160,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
               fontWeight: tituloStyleRoadmap.fontWeight,
               fontStyle: tituloStyleRoadmap.fontStyle,
               color: colors.white,
-              lineHeight: 1.06,
+              lineHeight: tituloStyleRoadmap.lineHeight,
               letterSpacing: tituloStyleRoadmap.letterSpacing,
               margin: '28px 0 0',
             }}
@@ -233,7 +233,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
     // do proprio slide desde a criacao, mesma logica ja documentada no
     // cover-quote do DicaPratica/manifesto de Bastidores) — visualStyle so
     // varia tamanho/letter-spacing/espacamento/gráfico de apoio.
-    const tituloStyleRaw = headlineStyle(vs, 78, -1.5);
+    const tituloStyleRaw = headlineStyle(vs, 78, -1.5, 1.05);
     const tituloStyleEditorial = {...tituloStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
     return (
       <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
@@ -282,7 +282,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
                 fontWeight: tituloStyleEditorial.fontWeight,
                 fontStyle: tituloStyleEditorial.fontStyle,
                 color: colors.primaryDark,
-                lineHeight: 1.05,
+                lineHeight: tituloStyleEditorial.lineHeight,
                 letterSpacing: tituloStyleEditorial.letterSpacing,
                 margin: '22px 0 0',
               }}
@@ -312,7 +312,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
     // -6 + -2.5) faz os 2 digitos se SOBREPOREM de verdade nesse tamanho de
     // fonte — nao e estetica, e bug de legibilidade. Floor em -6: visualStyle
     // pode deixar o numero mais espaçado que o base, nunca mais compacto.
-    const numeroStyleRaw = headlineStyle(vs, 140, -6);
+    const numeroStyleRaw = headlineStyle(vs, 140, -6, 0.82);
     const numeroStyle = {
       ...numeroStyleRaw,
       fontSize: Math.min(numeroStyleRaw.fontSize, 158),
@@ -369,7 +369,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
                   fontWeight: numeroStyle.fontWeight,
                   fontStyle: numeroStyle.fontStyle,
                   color: colors.black,
-                  lineHeight: 0.82,
+                  lineHeight: numeroStyle.lineHeight,
                   letterSpacing: numeroStyle.letterSpacing,
                   textShadow: '0 16px 34px rgba(0,0,0,0.14)',
                 }}
@@ -468,7 +468,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
   }
 
   // slide.kind === 'cta'
-  const headlineStyleCta = headlineStyle(vs, 58, -1);
+  const headlineStyleCta = headlineStyle(vs, 58, -1, 1.1);
   return (
     <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
       {graphics ? (
@@ -494,7 +494,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
             fontWeight: headlineStyleCta.fontWeight,
             fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
-            lineHeight: 1.1,
+            lineHeight: headlineStyleCta.lineHeight,
             letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}

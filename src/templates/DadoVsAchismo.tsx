@@ -49,7 +49,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   const graphics = showGraphicSupport(vs);
 
   if (variant === 'impacto') {
-    const dadoStyle = headlineStyle(vs, 92, -2.8);
+    const dadoStyle = headlineStyle(vs, 92, -2.8, 0.98);
     const tarjaHeight = scaleSpacing(vs, 200, {min: 140, max: 260});
     return (
       <Frame
@@ -126,7 +126,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
               fontWeight: dadoStyle.fontWeight,
               fontStyle: dadoStyle.fontStyle,
               color: colors.white,
-              lineHeight: 0.98,
+              lineHeight: dadoStyle.lineHeight,
               margin: '30px 0 0',
               letterSpacing: dadoStyle.letterSpacing,
             }}
@@ -153,7 +153,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   }
 
   if (variant === 'ladoALado') {
-    const dadoStyle = headlineStyle(vs, 52, -1);
+    const dadoStyle = headlineStyle(vs, 52, -1, 1.14);
     const achismoColWidth = scaleSpacing(vs, 400, {min: 300, max: 500});
     return (
       <Frame
@@ -246,7 +246,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
               fontWeight: dadoStyle.fontWeight,
               fontStyle: dadoStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.14,
+              lineHeight: dadoStyle.lineHeight,
               margin: '20px 0 0',
               letterSpacing: dadoStyle.letterSpacing,
             }}
@@ -287,7 +287,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
   }
 
   // variant === 'padrao'
-  const dadoStylePadrao = headlineStyle(vs, 68, -1);
+  const dadoStylePadrao = headlineStyle(vs, 68, -1, 1.08);
   const splitHeight = scaleSpacing(vs, 420, {min: 260, max: 560});
   return (
     <Frame
@@ -388,7 +388,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             fontWeight: dadoStylePadrao.fontWeight,
             fontStyle: dadoStylePadrao.fontStyle,
             color: colors.white,
-            lineHeight: 1.08,
+            lineHeight: dadoStylePadrao.lineHeight,
             margin: '18px 0 0',
             letterSpacing: dadoStylePadrao.letterSpacing,
           }}

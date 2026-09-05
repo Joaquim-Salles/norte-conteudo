@@ -76,7 +76,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
   const graphics = showGraphicSupport(vs);
 
   if (variant === 'regraDaCasa') {
-    const tituloStyleRegra = headlineStyle(vs, 50, -1);
+    const tituloStyleRegra = headlineStyle(vs, 50, -1, 1.16);
     const cardVariantRegra = resolveCardStyle(vs, 'bezel');
     return (
       <Frame background={colors.primaryDark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
@@ -142,7 +142,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
                   fontWeight: tituloStyleRegra.fontWeight,
                   fontStyle: tituloStyleRegra.fontStyle,
                   color: colors.white,
-                  lineHeight: 1.16,
+                  lineHeight: tituloStyleRegra.lineHeight,
                   letterSpacing: tituloStyleRegra.letterSpacing,
                   margin: '14px 0 0',
                 }}
@@ -178,7 +178,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
   // variant === 'manifesto' (default)
   // Titulo mantem SEMPRE bold+italic (ver decisao documentada no topo do
   // arquivo) — so tamanho/letter-spacing vem do preset.
-  const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1);
+  const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1, 1.16);
   const tituloStyleManifesto = {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
   const temFoto = Boolean(foto);
   return (
@@ -242,7 +242,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
             fontWeight: tituloStyleManifesto.fontWeight,
             fontStyle: tituloStyleManifesto.fontStyle,
             color: colors.white,
-            lineHeight: 1.16,
+            lineHeight: tituloStyleManifesto.lineHeight,
             letterSpacing: tituloStyleManifesto.letterSpacing,
             margin: 0,
             maxWidth: 900,

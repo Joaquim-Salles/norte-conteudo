@@ -52,9 +52,9 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
     // de boldTipografico (1.65x) em cima de 158px estourava a largura segura
     // do quadro. Cap em 215px preserva o efeito "numero gigante" sem colidir
     // com a margem.
-    const metricaStyleRaw = headlineStyle(vs, 158, -4);
+    const metricaStyleRaw = headlineStyle(vs, 158, -4, 0.92);
     const metricaStyle = {...metricaStyleRaw, fontSize: Math.min(metricaStyleRaw.fontSize, 215)};
-    const depoisStyle = headlineStyle(vs, 36, 0);
+    const depoisStyle = headlineStyle(vs, 36, 0, 1.22);
     return (
       <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         <div
@@ -112,7 +112,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
                     fontWeight: metricaStyle.fontWeight,
                     fontStyle: metricaStyle.fontStyle,
                     color: colors.accent,
-                    lineHeight: 0.92,
+                    lineHeight: metricaStyle.lineHeight,
                     letterSpacing: metricaStyle.letterSpacing,
                     textShadow: '0 20px 50px rgba(244,63,94,0.35)',
                   }}
@@ -144,7 +144,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               fontWeight: depoisStyle.fontWeight,
               fontStyle: depoisStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.22,
+              lineHeight: depoisStyle.lineHeight,
               margin: '10px 0 0',
               letterSpacing: depoisStyle.letterSpacing,
               maxWidth: 800,
@@ -168,7 +168,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   }
 
   if (variant === 'ladoALado') {
-    const depoisStyle = headlineStyle(vs, 38, 0);
+    const depoisStyle = headlineStyle(vs, 38, 0, 1.28);
     return (
       <Frame
         background={colors.white}
@@ -252,7 +252,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
               fontWeight: depoisStyle.fontWeight,
               fontStyle: depoisStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.28,
+              lineHeight: depoisStyle.lineHeight,
               margin: '18px 0 0',
               letterSpacing: depoisStyle.letterSpacing,
             }}
@@ -311,7 +311,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
   }
 
   // variant === 'padrao'
-  const depoisStylePadrao = headlineStyle(vs, 44, 0);
+  const depoisStylePadrao = headlineStyle(vs, 44, 0, 1.2);
   return (
     <Frame
       background={colors.white}
@@ -396,7 +396,7 @@ export const AntesDepois: React.FC<AntesDepoisData> = ({
             fontWeight: depoisStylePadrao.fontWeight,
             fontStyle: depoisStylePadrao.fontStyle,
             color: colors.white,
-            lineHeight: 1.2,
+            lineHeight: depoisStylePadrao.lineHeight,
             margin: '18px 0 0',
             letterSpacing: depoisStylePadrao.letterSpacing,
             maxWidth: 880,

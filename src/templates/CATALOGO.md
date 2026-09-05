@@ -1,5 +1,137 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Honestidade de foto — Depoimento (RESOLVIDO, 2026-09-04)
+
+Pendência sinalizada nos Rounds F e G (ver "Fotografia real" e "Round G" mais
+abaixo) e deixada em aberto por 2 rodadas: as fotos reais usadas em
+`Depoimento` (`equipe-reuniao-escritorio.jpg`, `analista-relatorios-mesa.jpg`
+— pessoas genéricas de banco de imagem) tinham rostos reconhecíveis
+aparecendo ao lado da citação/atribuição de um cliente real (nome, empresa,
+selo de iniciais) — dá a falsa impressão de que aquela pessoa fotografada É
+o cliente citado. Decisão de design (cabe ao Rafael, não precisou voltar ao
+fundador — ver SKILL.md, "qualidade visual acima de tudo"):
+
+**Opções consideradas:**
+1. Remover foto de pessoa em Depoimento (só ambiente/produto, sem rosto) —
+   descartada: exige curadoria manual de "essa foto tem gente, aquela não"
+   pra cada asset novo que um brief futuro anexar — frágil, quebra
+   silenciosamente na primeira vez que alguém esquecer a regra.
+2. Trocar as 2 fotos por alternativas sem pessoa — descartada pelo mesmo
+   motivo: resolve o sintoma de hoje, não a causa (o próximo brief pode
+   anexar outra foto com gente).
+3. **Escolhida: tratamento visual estrutural.** `Depoimento` sempre renderiza
+   `slide.foto` com `PhotoBackground treatment="ambient"` (novo,
+   `src/lib/PhotoBackground.tsx`) em vez do `'documentary'` (foto crua) usado
+   por Vitrine/DicaPratica/Bastidores/CoverFotoReal — duotone dessaturado
+   (`grayscale(1) contrast(0.92) brightness(0.5)`) + blur pesado (`blur(20px)`,
+   com `scale(1.12)` compensando a borda que o blur revela) + tint na cor do
+   tema (`mixBlendMode: 'multiply'`, opacidade 0.6). A garantia deixa de
+   depender de julgamento por foto e passa a ser da FUNÇÃO: qualquer imagem
+   que entrar em `Depoimento` vira atmosfera abstrata, nunca retrato legível
+   — mesmo a foto mais nítida e mais "de frente" que existir no banco.
+
+**Achado real de QA (Regra Inviolável #1 — não bastou implementar e afirmar
+que resolveu, foi preciso comparar e corrigir):** a 1ª tentativa usava só
+`blur(6px)` + tint em `mixBlendMode: 'color'` (que preserva luminância, só
+muda matiz) — insuficiente pro crop mais fechado (`analista-relatorios-mesa.jpg`,
+slide `contexto`): olhos, óculos e contorno do rosto continuavam nítidos o
+bastante pra reconhecer a pessoa, só com uma cor por cima. Comparação
+lado a lado revelou o problema (ver `out/qa/craft-2026-09-04/B-after.png` da
+1ª tentativa vs. a versão final) — corrigido subindo o blur pra `20px`
+(destrói detalhe fino de rosto em qualquer crop) e trocando o blend mode pra
+`'multiply'` (mais escuro, menos definição de borda). Renders de prova finais
+em `out/qa/craft-2026-09-04/` (`A-before/after.png` = capa com
+`equipe-reuniao-escritorio.jpg`, tema marca; `B-before/after.png` = contexto
+com `analista-relatorios-mesa.jpg`, tema avalia) — "before" = código antes
+desta rodada (`treatment` não existia, foto crua), "after" = estado final.
+Em ambos, a pessoa deixa de ser reconhecível e a foto passa a funcionar como
+"clima"/atmosfera de marca (tingida na cor do produto), nunca como prova de
+identidade.
+
+**Efeito colateral aceito conscientemente:** o preset `analogiaReal` (Round
+G), wired em `Depoimento` `capa`, foi pesquisado com a premissa de foto NÍTIDA
+(referência: post real de @thaleslaray, foto de banco em tela cheia sem
+blur). Com `treatment="ambient"` agora obrigatório em Depoimento, a
+combinação `Depoimento` + `analogiaReal` perde a nitidez "meme realista" e
+ganha uma leitura mais abstrata/premium — o `textStroke` (contorno de texto)
+continua funcionando igual ou melhor (a robustez de contraste dele independe
+de quão nítida a foto está por baixo). Avaliação: troca aceitável — a
+garantia de honestidade tem prioridade sobre preservar 100% do efeito
+estético de um preset em UM template específico; o preset continua
+funcionando como pesquisado em `DicaPratica` (que usa `treatment="documentary"`,
+sem essa restrição).
+
+## Refinamentos de craft (2026-09-04)
+
+Segunda rodada de revisão pedida pelo fundador ("melhorar em qual frente
+agora? — o designer, ué"): releitura crítica dos 8 presets de `visualStyle`
+já existentes, com olho de designer sênior — fundamentado em
+`high-end-visual-design` (double-bezel/elevação mesmo em superfícies flat,
+tipografia como hero, respiro macro) — não gosto pessoal solto. 3 refinamentos
+concretos, cada um com comparação antes/depois renderizada em
+`out/qa/craft-2026-09-04/` (git-ignorado, prova local — método idêntico ao já
+usado nos Rounds C/D/F/G: git stash das mudanças, render "before" no código
+anterior, stash pop, render "after" no código novo).
+
+### 1. Line-height do elemento hero nunca escalava com `headlineScale`
+
+Achado: os 8 templates usam `headlineStyle()` pra resolver
+fontSize/fontWeight/letterSpacing do elemento hero a partir do
+`visualStyle`, mas cada um hardcodava um `lineHeight` FIXO no JSX,
+independente do preset. Isso é fisicamente errado — tipografia grande/pesada
+(`boldTipografico`, `headlineScale: 1.65`) precisa de MENOS espaço vertical
+relativo entre linhas (o próprio traço já ocupa a régua), e tipografia
+pequena/leve (`papelQuente`, `editorial`) precisa de MAIS espaço pra não
+sufocar. Corrigido: novo knob `heroLineHeightScale` em `VisualStyle`
+(multiplicador, 1.0 = comportamento original) + `headlineStyle()` agora
+aceita um 4º parâmetro `baseLineHeight` opcional e devolve `lineHeight`
+calculado — os 8 templates (30 pontos de chamada) foram atualizados pra ler
+esse valor em vez do número fixo. Valores calibrados por preset: `boldTipografico`
+0.75 (mais apertado — maior escala), `dadoEmDestaque` 0.82, `marcador` 0.92,
+`minimalista`/`corporateClean` 1.0/1.05, `analogiaReal` 1.1 (fica sobre foto,
+precisa de uma folga pro contorno de texto não colidir entre linhas),
+`editorial` 1.08, `papelQuente` 1.18 (mais solto — tom calmo/premium).
+Comparação real: `out/qa/craft-2026-09-04/D-before.png` vs. `D-after.png`
+(`DicaPratica` `cover-grid`, `visualStyle="boldTipografico"`) — as 3 linhas do
+título ficam visivelmente mais coesas/compactas no "after", lendo como um
+bloco de manchete só, não 3 linhas soltas com respiro genérico entre elas.
+
+### 2. `corporateClean` encolhia o hero em vez de só cortar ornamento
+
+Achado: `corporateClean` tinha `headlineScale: 0.92` (hero MENOR que o
+baseline) combinado com `spacingScale: 1.15` (mais respiro ao redor) — a
+combinação lia como tímida/rarefeita, não como restrição deliberada.
+Restrição premium de verdade vem de CORTAR ornamento (zero grain, borda fina
+em vez de bezel, sem gráfico de apoio — isso já estava certo), não de
+encolher o protagonista da peça abaixo do tamanho normal. Corrigido:
+`headlineScale` voltou pra `1.0` (tamanho baseline, mesmo peso que qualquer
+outro preset sem opinião), `heroLineHeightScale: 1.05` adicionado (leitura
+confortável, tom formal). Comparação real: `out/qa/craft-2026-09-04/C-before.png`
+vs. `C-after.png` (`Depoimento` `capa`, `visualStyle="corporateClean"`, sem
+foto) — o headline no "after" ocupa mais espaço com confiança, linhas mais
+coesas, sem perder a sobriedade (zero grain/gráfico decorativo continua
+igual).
+
+### 3. `SurfaceCard` variants `flat`/`outline` sem NENHUMA sombra
+
+Achado: só a variant `bezel` tinha elevação (double-bezel com sombra —
+já documentado como o padrão "premium" do catálogo). `flat` e `outline`
+(usadas por `minimalista`, `boldTipografico`, `marcador`, `analogiaReal`,
+`corporateClean`) tinham ZERO `boxShadow` — só uma borda de 1-1.5px. Numa
+peça vista em miniatura de feed, essa borda quase some contra um fundo de
+tom parecido (ex: card sobre gradiente `marca`), e o card lê como caixa "sem
+estilizar"/placeholder, não como restrição deliberada — o oposto do efeito
+que esses presets querem. Corrigido (`src/lib/SurfaceCard.tsx`): ambas as
+variantes ganharam um `boxShadow` bem mais suave que o de `bezel`
+(`0 10px 24px -18px rgba(0,0,0,0.4)` vs. o `0 14px 30px -16px rgba(0,0,0,0.5)`
+de `bezel`) — um "sopro" de elevação que descola o card do fundo sem
+reintroduzir a profundidade física que `flat`/`outline` existem pra evitar.
+Efeito é deliberadamente sutil (ver `out/qa/craft-2026-09-04/F-before.png`
+vs. `F-after.png`, `Depoimento` `capa` com `visualStyle="minimalista"`) —
+funciona junto com o refinamento #2 no mesmo par C-before/C-after
+(`corporateClean` usa `outline`), onde a sombra nova é mais visível por causa
+do fundo mais escuro na base do gradiente.
+
 ## Peça FLAGSHIP — vídeo institucional (2026-09-03)
 
 Fora da contagem dos 8 tipos de post repetíveis abaixo: `NorteApresentacaoReel`
@@ -732,8 +864,11 @@ primeira, ao contrário do `GhostMarker`/overlay do Round F).
 
 **A mesma ressalva de honestidade do Round F (ver §Fotografia real) se
 aplica aqui igualmente** — o render de `Depoimento` usa a mesma foto de
-ambiente genérico sob o badge "Cliente Norte", decisão que segue pendente do
-fundador, não resolvida aqui.
+ambiente genérico sob o badge "Cliente Norte". **RESOLVIDO em 2026-09-04**
+(ver "Honestidade de foto — Depoimento" no topo deste arquivo) —
+`Depoimento` agora sempre aplica `PhotoBackground treatment="ambient"`,
+que descaracteriza qualquer rosto estruturalmente, independente de qual foto
+entrar.
 
 ### Sugestão pro fundador (NÃO decidida — anotada conforme pedido)
 
@@ -829,18 +964,19 @@ claros da foto. Corrigido trocando pra overlay `full` (escurece uniforme) +
 `textShadow` no título e nos princípios — dupla camada de segurança de
 contraste, não só uma.
 
-**Ressalva de honestidade pro fundador decidir (não decidido sozinho aqui):**
-o `Depoimento` é especificamente sobre voz de CLIENTE real — o próprio
-arquivo já documentava a linha vermelha de não usar retrato genérico
-fingindo ser "o cliente" (por isso a atribuição usa iniciais num selo, nunca
-rosto). As fotos de `equipe-reuniao-escritorio.jpg`/`analista-relatorios-mesa.jpg`
-usadas como FUNDO AMBIENTE (desfocado, com overlay, sem alegar ser pessoa
-específica) são uma linha mais suave que um retrato-atribuição — mas os
-rostos ainda ficam bem reconhecíveis nos crops usados no QA. Antes de usar
-essas 2 combinações pra publicação real, o fundador deveria revisar se isso
-cruza a linha que o autor original já tinha traçado, ou se "ambiente
-genérico ao fundo" é diferente o suficiente de "retrato do cliente" pra ser
-aceitável — não é uma decisão técnica, é de tom/honestidade de marca.
+**Ressalva de honestidade — RESOLVIDA em 2026-09-04 (ver "Honestidade de
+foto — Depoimento" no topo deste arquivo):** o `Depoimento` é
+especificamente sobre voz de CLIENTE real — o próprio arquivo já documentava
+a linha vermelha de não usar retrato genérico fingindo ser "o cliente" (por
+isso a atribuição usa iniciais num selo, nunca rosto). As fotos de
+`equipe-reuniao-escritorio.jpg`/`analista-relatorios-mesa.jpg` usadas como
+fundo ambiente ficaram 2 rodadas em aberto porque os rostos continuavam
+reconhecíveis nos crops usados no QA — em vez de decidir caso a caso se
+"ambiente genérico ao fundo" cruzava ou não a linha, a solução foi
+estrutural: `PhotoBackground treatment="ambient"` (duotone + blur pesado +
+tint de marca) garante que NENHUMA foto usada em `Depoimento`, dessa ou de
+qualquer brief futuro, produza um rosto reconhecível — a decisão não depende
+mais de julgamento por asset.
 
 ---
 

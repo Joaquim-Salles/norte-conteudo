@@ -44,6 +44,22 @@ const productLabel: Record<string, string> = {
  * enganoso (mesmo espirito da regra de nao usar IA generativa pra simular
  * pessoa real). Atribuicao usa iniciais num selo colorido em vez de rosto.
  *
+ * RESOLVIDO (2026-09-04, pendencia sinalizada nos Rounds F/G e ate entao em
+ * aberto): `slide.foto`, quando presente neste template, SEMPRE renderiza com
+ * `PhotoBackground treatment="ambient"` (ver src/lib/PhotoBackground.tsx) —
+ * duotone dessaturado + blur + tint na cor do tema, nunca a foto crua
+ * ('documentary', usada em Vitrine/DicaPratica/Bastidores/CoverFotoReal).
+ * Decisao de design, nao pedida ao fundador de novo: a garantia precisa ser
+ * ESTRUTURAL, nao uma curadoria manual de "essa foto tem rosto reconhecivel,
+ * aquela nao" — julgamento caso a caso quebra no proximo brief que anexar
+ * uma foto de pessoa sem ninguem perceber. Com o treatment 'ambient', mesmo
+ * a foto de pessoas mais nitida vira atmosfera abstrata (grayscale + blur de
+ * 6px + tint), estruturalmente incapaz de ler como "retrato do cliente" ao
+ * lado da citacao/atribuicao — a foto passa a comunicar clima/ambiente, nunca
+ * identidade. Isso substitui a ressalva anterior ("revisar antes de publicar
+ * de verdade") por uma regra que vale sempre, sem depender de revisao manual
+ * a cada peca nova.
+ *
  * `visualStyle` (novo, 2026-09-01, opcional — ver src/lib/visualStyles.ts):
  * troca estilo de card do selo de atribuicao, textura, presenca de
  * GhostQuote/GhostBars decorativo, e peso/tamanho da citacao/metrica —
@@ -82,7 +98,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
       .join('');
 
   if (slide.kind === 'capa') {
-    const citacaoStyle = headlineStyle(vs, 54, 0);
+    const citacaoStyle = headlineStyle(vs, 54, 0, 1.3);
     const temFoto = Boolean(slide.foto);
     return (
       <Frame
@@ -92,7 +108,14 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
         textureOpacity={tex.opacity}
       >
         {temFoto ? (
-          <PhotoBackground src={slide.foto!} position={slide.fotoPosition ?? 'center'} overlay="topAndBottom" strength={0.88} />
+          <PhotoBackground
+            src={slide.foto!}
+            position={slide.fotoPosition ?? 'center'}
+            overlay="topAndBottom"
+            strength={0.88}
+            treatment="ambient"
+            tint={t.colors.base}
+          />
         ) : null}
         {/* Aspas graficas grandes, abertura + fechamento espelhado — mesma
             gramatica do cover-quote do DicaPratica, da moldura visual real
@@ -126,7 +149,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
               fontWeight: citacaoStyle.fontWeight,
               fontStyle: citacaoStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.3,
+              lineHeight: citacaoStyle.lineHeight,
               margin: '40px 0 0',
               letterSpacing: citacaoStyle.letterSpacing,
               maxWidth: 900,
@@ -173,7 +196,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
   }
 
   if (slide.kind === 'capa-metrica') {
-    const metricaStyle = headlineStyle(vs, 120, -3);
+    const metricaStyle = headlineStyle(vs, 120, -3, 0.95);
     return (
       <Frame background={t.colors.dark} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
         {graphics ? (
@@ -208,7 +231,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
                 fontWeight: metricaStyle.fontWeight,
                 fontStyle: metricaStyle.fontStyle,
                 color: colors.accent,
-                lineHeight: 0.95,
+                lineHeight: metricaStyle.lineHeight,
                 letterSpacing: metricaStyle.letterSpacing,
                 textShadow: '0 20px 50px rgba(244,63,94,0.35)',
               }}
@@ -255,7 +278,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
   }
 
   if (slide.kind === 'contexto') {
-    const corpoStyle = headlineStyle(vs, 38, 0);
+    const corpoStyle = headlineStyle(vs, 38, 0, 1.4);
     const temFoto = Boolean(slide.foto);
     // canvasOverride (papelQuente) só se aplica quando NÃO há foto — com foto,
     // a legibilidade exige texto branco sobre overlay escuro (mesma regra de
@@ -273,7 +296,14 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
         textureOpacity={tex.opacity}
       >
         {temFoto ? (
-          <PhotoBackground src={slide.foto!} position={slide.fotoPosition ?? 'center'} overlay="full" strength={0.6} />
+          <PhotoBackground
+            src={slide.foto!}
+            position={slide.fotoPosition ?? 'center'}
+            overlay="full"
+            strength={0.6}
+            treatment="ambient"
+            tint={t.colors.base}
+          />
         ) : null}
         {graphics && !temFoto ? (
           signature === 'ghostMarker' ? (
@@ -327,7 +357,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
                 fontWeight: corpoStyle.fontWeight,
                 fontStyle: corpoStyle.fontStyle,
                 color: canvas.ink,
-                lineHeight: 1.4,
+                lineHeight: corpoStyle.lineHeight,
                 margin: 0,
                 letterSpacing: corpoStyle.letterSpacing,
                 padding: '38px 34px',
@@ -343,7 +373,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
 
   if (slide.kind === 'resultado') {
     const produtoTag = slide.produto ? productLabel[slide.produto] : undefined;
-    const corpoStyle = headlineStyle(vs, 40, 0);
+    const corpoStyle = headlineStyle(vs, 40, 0, 1.32);
     return (
       <Frame
         background={`linear-gradient(160deg, ${t.colors.light} 0%, ${t.colors.dark} 100%)`}
@@ -369,7 +399,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
               fontWeight: corpoStyle.fontWeight,
               fontStyle: corpoStyle.fontStyle,
               color: colors.white,
-              lineHeight: 1.32,
+              lineHeight: corpoStyle.lineHeight,
               margin: 0,
               letterSpacing: corpoStyle.letterSpacing,
               maxWidth: 880,
@@ -421,7 +451,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
   }
 
   // slide.kind === 'cta'
-  const headlineStyleCta = headlineStyle(vs, 56, -1);
+  const headlineStyleCta = headlineStyle(vs, 56, -1, 1.12);
   return (
     <Frame background={colors.black} wordmarkColor={colors.white} texture={tex.enabled} textureOpacity={tex.opacity}>
       {graphics ? (
@@ -447,7 +477,7 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
             fontWeight: headlineStyleCta.fontWeight,
             fontStyle: headlineStyleCta.fontStyle,
             color: colors.white,
-            lineHeight: 1.12,
+            lineHeight: headlineStyleCta.lineHeight,
             letterSpacing: headlineStyleCta.letterSpacing,
             margin: 0,
           }}

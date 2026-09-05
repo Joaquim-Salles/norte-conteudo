@@ -81,7 +81,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
     // achado real de QA (mesmo padrao do Comparativo/AntesDepois): 1.65x
     // (boldTipografico) em cima de 62px ja fica pesado o bastante; cap em 84px
     // evita colidir com as pilulas de feature logo abaixo.
-    const headlineStyleRaw = headlineStyle(vs, 62, -1);
+    const headlineStyleRaw = headlineStyle(vs, 62, -1, 1.08);
     const headlineStyleHero = {...headlineStyleRaw, fontSize: Math.min(headlineStyleRaw.fontSize, 84)};
     return (
       <Frame
@@ -142,7 +142,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               fontWeight: headlineStyleHero.fontWeight,
               fontStyle: headlineStyleHero.fontStyle,
               color: colors.white,
-              lineHeight: 1.08,
+              lineHeight: headlineStyleHero.lineHeight,
               letterSpacing: headlineStyleHero.letterSpacing,
               margin: '20px 0 0',
               maxWidth: 880,
@@ -192,7 +192,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
     // headlineScale de boldTipografico/dadoEmDestaque (1.45-1.65x) faz um
     // headline de 2+ linhas estourar a altura fixa e invadir visualmente a
     // grade. Cap em 62px preserva o peso extra sem quebrar a grade.
-    const headlineStyleGridRaw = headlineStyle(vs, 50, -1);
+    const headlineStyleGridRaw = headlineStyle(vs, 50, -1, 1.1);
     const headlineStyleGrid = {...headlineStyleGridRaw, fontSize: Math.min(headlineStyleGridRaw.fontSize, 62)};
     return (
       <Frame
@@ -249,7 +249,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               fontWeight: headlineStyleGrid.fontWeight,
               fontStyle: headlineStyleGrid.fontStyle,
               color: colors.white,
-              lineHeight: 1.1,
+              lineHeight: headlineStyleGrid.lineHeight,
               letterSpacing: headlineStyleGrid.letterSpacing,
               margin: 0,
               maxWidth: 900,
@@ -320,7 +320,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
     // Mesmo clamp do variant 'grid' — faixa de identidade com altura FIXA
     // (300px, ainda mais compacta que a do grid), device frame comeca logo
     // abaixo (top:340/400). Cap mais apertado (54px) porque a faixa e menor.
-    const headlineStylePrintRaw = headlineStyle(vs, 42, -0.6);
+    const headlineStylePrintRaw = headlineStyle(vs, 42, -0.6, 1.14);
     const headlineStylePrint = {...headlineStylePrintRaw, fontSize: Math.min(headlineStylePrintRaw.fontSize, 54)};
     return (
       <Frame
@@ -380,7 +380,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               fontWeight: headlineStylePrint.fontWeight,
               fontStyle: headlineStylePrint.fontStyle,
               color: colors.white,
-              lineHeight: 1.14,
+              lineHeight: headlineStylePrint.lineHeight,
               letterSpacing: headlineStylePrint.letterSpacing,
               margin: 0,
               maxWidth: 880,
@@ -439,7 +439,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
     // Cap em 66px preserva a variacao sem risco de sobreposicao. Textura e
     // GhostCheck ficam de fora aqui de proposito — ver comentario no topo
     // do arquivo (foto real full-bleed).
-    const headlineStyleContextoRaw = headlineStyle(vs, 50, -1);
+    const headlineStyleContextoRaw = headlineStyle(vs, 50, -1, 1.1);
     const headlineStyleContexto = {...headlineStyleContextoRaw, fontSize: Math.min(headlineStyleContextoRaw.fontSize, 66)};
     return (
       <Frame background={productColor.dark} wordmarkColor={colors.white} texture={false}>
@@ -497,7 +497,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               fontWeight: headlineStyleContexto.fontWeight,
               fontStyle: headlineStyleContexto.fontStyle,
               color: colors.white,
-              lineHeight: 1.1,
+              lineHeight: headlineStyleContexto.lineHeight,
               letterSpacing: headlineStyleContexto.letterSpacing,
               margin: 0,
               maxWidth: 820,
@@ -538,7 +538,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // variant === 'padrao'
   // Mesmo clamp de 'grid'/'print': a lista de features comeca em top:480,
   // fixa, sobre o fim do bloco de identidade (altura 620) — cap em 78px.
-  const headlineStylePadraoRaw = headlineStyle(vs, 60, -1);
+  const headlineStylePadraoRaw = headlineStyle(vs, 60, -1, 1.08);
   const headlineStylePadrao = {...headlineStylePadraoRaw, fontSize: Math.min(headlineStylePadraoRaw.fontSize, 78)};
   return (
     <Frame
@@ -596,7 +596,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             fontWeight: headlineStylePadrao.fontWeight,
             fontStyle: headlineStylePadrao.fontStyle,
             color: colors.white,
-            lineHeight: 1.08,
+            lineHeight: headlineStylePadrao.lineHeight,
             letterSpacing: headlineStylePadrao.letterSpacing,
             margin: 0,
             maxWidth: 900,
