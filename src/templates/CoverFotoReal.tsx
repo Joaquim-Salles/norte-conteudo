@@ -3,6 +3,7 @@ import {Frame} from '../lib/Frame';
 import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {StatusChip} from '../lib/StatusChip';
 import {getVisualStyle, headlineStyle, isMinimalDecoration, type VisualStyleName} from '../lib/visualStyles';
 import type {CoverFotoRealData} from '../lib/types';
 
@@ -27,6 +28,7 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
   fotoPosition = 'center 15%',
   theme = 'marca',
   visualStyle,
+  statusVerbo,
 }) => {
   const themeColors = getTheme(theme).colors;
   const vs = visualStyle ? getVisualStyle(visualStyle) : null;
@@ -48,6 +50,15 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
     // posição/peso, ambos hardcoded aqui porque são específicos do formato
     // "texto sobre foto", não do preset como um todo (Bastidores/DicaPratica
     // sobre CARTÃO DE COR continuam serifado bold, que é certo lá).
+    //
+    // SISTEMA DE 2 FONTES (2026-09-06, relatório do fundador §3): "sans BOLD
+    // pra dado/título + SERIFADA ITÁLICA pra overlay em foto" — papéis
+    // DIFERENTES, não "uma serifada" só. `headlineWeight: 'bold'` do preset
+    // resolve `fontStyle: 'normal'` (correto pro card de cor sólida, ver
+    // Bastidores/DicaPratica-bridge) — mas ESTE formato específico
+    // (overlay-em-foto) é o único onde a referência real usa itálico, então
+    // `fontStyle` é hardcoded aqui, mesmo raciocínio já aplicado ao
+    // `fontWeight: 500` na linha abaixo.
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
         <PhotoBackground src={foto} position={fotoPosition} overlay="bottom" strength={0.42} />
@@ -67,7 +78,7 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
               style={{
                 fontSize: tituloStyle.fontSize,
                 fontWeight: 500,
-                fontStyle: tituloStyle.fontStyle,
+                fontStyle: 'italic',
                 fontFamily: tituloStyle.fontFamily,
                 color: colors.white,
                 lineHeight: tituloStyle.lineHeight,
@@ -81,6 +92,19 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
             </p>
           ) : null}
         </div>
+
+        {/* StatusChip (2026-09-06, relatório do fundador §3) — pílula
+            discreta num canto, contextualizando a cena com verbo no
+            gerúndio ("a marca narrando a cena"). Canto SUPERIOR-esquerdo:
+            não compete com o título centralizado nem colide com o wordmark
+            de marca (Frame desenha o wordmark em bottom:56/left:64 — ver
+            Frame.tsx). Cor do tema aparece só no círculo do ícone — nunca
+            como bloco de fundo do chip inteiro. */}
+        {statusVerbo ? (
+          <div style={{position: 'absolute', left: 64, top: 64}}>
+            <StatusChip verbo={statusVerbo} accentColor={themeColors.base} tone="dark" />
+          </div>
+        ) : null}
       </Frame>
     );
   }

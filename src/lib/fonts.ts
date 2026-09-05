@@ -61,9 +61,11 @@ export const ensureBrandFontLoaded = (): void => {
  *
  * Não dá pra licenciar a serifada real da Anthropic (Tiempos/Copernicus,
  * "Anthropic Serif" — pagas, de terceiro). Escolhida **Source Serif 4**
- * (Google Fonts / Adobe, licença OFL, embutida localmente via
- * @fontsource/source-serif-4 — mesmo padrão de embedding local já usado
- * pra Atkinson Hyperlegible, constraint de determinismo de render).
+ * (Google Fonts / Adobe, licença OFL, embutida localmente — arquivos
+ * .woff2 baixados diretamente do CDN estático do Google Fonts
+ * (fonts.gstatic.com, subset "latin") e copiados pra `public/fonts/`,
+ * mesmo padrão de embedding local já usado pra Atkinson Hyperlegible,
+ * constraint de determinismo de render).
  * Por quê essa e não outra: é uma serifada de TEXTO (transitional/old-style,
  * mesma família genealógica de Times/Caslon que informa o desenho da
  * Tiempos real da Anthropic) — traços com contraste alto/baixo moderado,
@@ -72,10 +74,25 @@ export const ensureBrandFontLoaded = (): void => {
  * foto em vez de coexistir discretamente, o oposto do que a referência
  * real mostra). Pesos 400 (corpo/legenda) e 700 (headline) cobrem os dois
  * usos vistos nos 3 screenshots.
+ *
+ * SISTEMA DE 2 FONTES (2026-09-06, ver relatório completo do fundador —
+ * `docs/referencias-visuais/claude-instagram/relatorio-completo-fundador.md`,
+ * §3): a referência real não usa só "uma serifada" — é sans BOLD pra
+ * dado/título + serifada ITÁLICA especificamente pra overlay em foto/vídeo.
+ * O par 400/700 acima (normal, reto) já cobria títulos/cards de cor sólida;
+ * faltava o peso ITÁLICO pra overlay de foto (que `CoverFotoReal`/`DicaPratica`
+ * `cover-foto` estavam simulando com `fontStyle: tituloStyle.fontStyle`
+ * apontando pra uma variante que nunca tinha sido carregada — o navegador
+ * caía num "itálico sintético" do peso reto, não a fonte itálica real
+ * desenhada). Adicionado `SourceSerif4-400-italic.woff2` (mesma fonte,
+ * mesma fonte-face `'Source Serif 4'`, `style: 'italic'` — é assim que o
+ * CSS escolhe a variante certa sozinho quando `fontStyle: 'italic'` é
+ * aplicado, sem precisar de um `fontFamily` diferente).
  */
-const SERIF_FONT_FILES: Array<[number, string]> = [
-  [400, 'SourceSerif4-400.woff2'],
-  [700, 'SourceSerif4-700.woff2'],
+const SERIF_FONT_FILES: Array<[number, 'normal' | 'italic', string]> = [
+  [400, 'normal', 'SourceSerif4-400.woff2'],
+  [700, 'normal', 'SourceSerif4-700.woff2'],
+  [400, 'italic', 'SourceSerif4-400-italic.woff2'],
 ];
 
 export const ensureEditorialSerifLoaded = (): void => {
@@ -85,10 +102,10 @@ export const ensureEditorialSerifLoaded = (): void => {
 
   const handle = delayRender('Carregando fonte serifada (Source Serif 4, preset editorialClaude)');
 
-  const loadPromises = SERIF_FONT_FILES.map(([weight, file]) => {
+  const loadPromises = SERIF_FONT_FILES.map(([weight, style, file]) => {
     const face = new FontFace('Source Serif 4', `url("${staticFile(`fonts/${file}`)}")`, {
       weight: String(weight),
-      style: 'normal',
+      style,
     });
     document.fonts.add(face);
     return face.load();

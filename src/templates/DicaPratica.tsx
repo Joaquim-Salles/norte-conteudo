@@ -8,6 +8,7 @@ import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconBadge} from '../lib/IconBadge';
+import {StatusChip} from '../lib/StatusChip';
 import {
   getVisualStyle,
   headlineStyle,
@@ -277,6 +278,11 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
     // continuam com o layout original (canto inferior, bold, overlay forte).
     if (minimalFoto) {
       const tituloStyleFotoMinimal = headlineStyle(vs, 44, 0, 1.2);
+      // SISTEMA DE 2 FONTES (2026-09-06, relatório do fundador §3): mesmo
+      // raciocínio de CoverFotoReal.tsx — a serifada ITÁLICA é específica do
+      // formato "overlay em foto", `fontStyle` hardcoded aqui (não vem de
+      // `headlineStyle`, que resolveria 'normal' porque `headlineWeight` do
+      // preset é 'bold').
       return (
         <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
           <PhotoBackground src={slide.foto} position={slide.fotoPosition ?? 'center 15%'} overlay="bottom" strength={0.42} />
@@ -295,7 +301,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               style={{
                 fontSize: tituloStyleFotoMinimal.fontSize,
                 fontWeight: 500,
-                fontStyle: tituloStyleFotoMinimal.fontStyle,
+                fontStyle: 'italic',
                 fontFamily: tituloStyleFotoMinimal.fontFamily,
                 color: colors.white,
                 lineHeight: tituloStyleFotoMinimal.lineHeight,
@@ -308,6 +314,18 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               {slide.titulo}
             </p>
           </div>
+
+          {/* StatusChip (2026-09-06, relatório do fundador §3) — mesmo
+              raciocínio de CoverFotoReal: canto superior-esquerdo, livre do
+              wordmark (bottom:56) e do título centralizado. Sem `theme`
+              neste template (nunca teve, ver comentário de topo do
+              arquivo) — usa a cor de marca (`colors.accent`) no círculo do
+              ícone, default do `StatusChip`. */}
+          {slide.statusVerbo ? (
+            <div style={{position: 'absolute', left: 64, top: 64}}>
+              <StatusChip verbo={slide.statusVerbo} />
+            </div>
+          ) : null}
         </Frame>
       );
     }

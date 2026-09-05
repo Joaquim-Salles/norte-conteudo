@@ -53,6 +53,13 @@ export type DicaPraticaSlide =
        * `analogiaReal` em visualStyles.ts). Omitido = sem selo.
        */
       iconeBadge?: string;
+      /**
+       * Verbo no gerúndio pro `StatusChip` (2026-09-06, ver relatório do
+       * fundador §3) — ex: "Organizando", "Sincronizando". Omitido = sem
+       * chip (comportamento original preservado). Só tem efeito quando
+       * `visualStyle` é `editorialClaude` (layout "overlay em cena real").
+       */
+      statusVerbo?: string;
     }
   | {kind: 'bridge'; numero: number; total: number; titulo: string; corpo: string}
   | {kind: 'cta'; headline?: string};
@@ -194,6 +201,14 @@ export type CoverFotoRealData = {
   theme?: ThemeName;
   /** Opcional (2026-09-05, ver visualStyles.ts) — `editorialClaude` troca badge/título grande+sombra pesada por legenda serifada pequena, discreta, num canto (referência real: 3 screenshots @claudeai). */
   visualStyle?: VisualStyleName;
+  /**
+   * Verbo no gerúndio pro `StatusChip` (2026-09-06, ver relatório do
+   * fundador §3 — "chips de status... como se a marca estivesse narrando a
+   * cena"). Ex: "Organizando", "Sincronizando", "Analisando" — adaptar pro
+   * contexto do produto/cena. Omitido = sem chip. Só tem efeito no modo
+   * `editorialClaude` (layout "overlay em cena real").
+   */
+  statusVerbo?: string;
 };
 
 /**

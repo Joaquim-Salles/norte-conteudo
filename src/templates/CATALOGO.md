@@ -1,5 +1,85 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Estilo Claude — 6ª rodada: execução do relatório completo do fundador (2026-09-06)
+
+O fundador fez a pesquisa ele mesmo desta vez — varredura completa de ~120
+posts reais do @claudeai, documentada em
+`docs/referencias-visuais/claude-instagram/relatorio-completo-fundador.md`
+(o "documento definitivo", substitui toda suposição das 5 rodadas
+anteriores). Pedido literal: *"eu quero posts alguns de fotos no fundo com
+algo simples"* — dos 4 layouts que o relatório identifica (poster de dado,
+overlay em cena real, colagem scrapbook, capa de cor chapada), o
+PRIORITÁRIO agora é só o **overlay em cena real** (foto de fundo + texto
+simples por cima) — os outros 3 ficam de fora por enquanto, decisão
+deliberada do fundador, não do Rafael.
+
+O relatório nomeou 3 gaps concretos que as 5 rodadas anteriores erravam
+(§3 do relatório) — cada um corrigido em código:
+
+1. **Sistema de 2 fontes, não 1.** `editorialClaude` já tinha a serifada
+   (Source Serif 4, pesos 400/700 retos) desde a 3ª tentativa, mas o
+   headline sobre foto herdava `fontStyle` de `headlineStyle(vs, ...)`, que
+   resolve `'normal'` porque `headlineWeight` do preset é `'bold'` (correto
+   pro card de cor sólida — Bastidores/DicaPratica-bridge — mas errado pro
+   overlay em foto). Faltava fisicamente a fonte itálica: só existiam
+   `SourceSerif4-{400,700}.woff2` (retos). Baixado
+   `SourceSerif4-400-italic.woff2` direto do CDN estático do Google Fonts
+   (`fonts.gstatic.com`, subset "latin", mesmo arquivo que o navegador serve
+   pro `@font-face` real de `Source Serif 4` itálico — sem `@fontsource`
+   instalado no projeto, então baixado o `.woff2` bruto em vez do pacote
+   npm) pra `public/fonts/`, registrado em `src/lib/fonts.ts`
+   (`ensureEditorialSerifLoaded`, 3ª entrada em `SERIF_FONT_FILES` com
+   `style: 'italic'`). `CoverFotoReal.tsx` e `DicaPratica.tsx` (`cover-foto`
+   minimal) agora hardcodam `fontStyle: 'italic'` no headline sobre foto —
+   mesmo raciocínio já documentado ali pro `fontWeight: 500` (specific do
+   formato, não do preset inteiro). Sans BOLD (Atkinson Hyperlegible, peso
+   700) continua pro `StatusChip`/título fora de foto — o PAR agora existe
+   de verdade, cada fonte cumprindo o papel que o relatório descreve.
+2. **`StatusChip` novo** (`src/lib/StatusChip.tsx`) — pílula arredondada,
+   sombra leve (`0 8px 22px -12px rgba(0,0,0,0.55)`), círculo de ícone
+   (`IconSpark`, Lucide `Sparkles` — deliberadamente genérico/abstrato, não
+   uma recriação do "sunburst" da Anthropic, que é marca registrada deles;
+   mesma lógica já aplicada ao `IconChat` no lugar do glifo do WhatsApp) +
+   verbo no GERÚNDIO + reticências (`{verbo}…`). Diferente do `Badge`
+   (rótulo de categoria, ex: "CARDÁPIO DIGITAL") — funciona como legenda de
+   CONTEXTO flutuante, "a marca narrando a cena", nunca como selo de
+   destaque. Novo campo opcional `statusVerbo` em `CoverFotoRealData` e no
+   slide `cover-foto` de `DicaPraticaSlide` (`src/lib/types.ts`) — omitido =
+   sem chip, comportamento anterior preservado.
+3. **Cor da cena, não decoração aplicada.** O `StatusChip` só usa a cor do
+   tema (`themeColors.base`/produto) no círculo pequeno do ícone — nunca
+   como fundo do chip inteiro (que é sempre `rgba(12,12,11,0.55)` translúcido
+   com blur, neutro). `CoverFotoReal` passa `accentColor={themeColors.base}`;
+   `DicaPratica` (que nunca teve `theme`, ver comentário de topo do arquivo)
+   usa o default do componente (`colors.accent`, cor de marca).
+
+**Posição do chip:** canto SUPERIOR-esquerdo (`left: 64, top: 64`) — não
+`bottom: 64` como cogitado inicialmente, porque colidiria com o wordmark de
+marca que `Frame.tsx` já desenha em `bottom: 56, left: 64`. Título continua
+centralizado no meio do frame (correção já feita na 5ª rodada, mantida).
+
+**5 variações renderizadas** em `out/estilo-claude-v5/`
+(`node scripts/qa-estilo-claude-v5.mjs`) — times de foto e verbo do chip
+diferentes em cada uma, priorizando a foto mais atmosférica/contemplativa
+disponível no banco (`montanha-neblina-caminhante.jpg`, já curada na 5ª
+rodada) e usando as demais fotos reais do repo onde a atmosférica não
+fazia sentido de contexto:
+
+| # | Template | Foto | Tema | Chip |
+|---|---|---|---|---|
+| 1 | `CoverFotoReal` | `montanha-neblina-caminhante.jpg` (contemplativa, P&B) | marca | "Refletindo…" |
+| 2 | `CoverFotoReal` | `corredor-empilhadeira-estoque.jpg` | estoque | "Organizando o estoque…" |
+| 3 | `CoverFotoReal` | `salao-moderno-movimento.jpg` | vendas | "Sincronizando pedidos…" |
+| 4 | `DicaPratica` (`cover-foto`) | `prato-gourmet-mesa-madeira.jpg` | — (sem theme, cor de marca) | "Analisando o cardápio…" |
+| 5 | `DicaPratica` (`cover-foto`) | `analista-relatorios-mesa.jpg` | — (sem theme, cor de marca) | "Calculando a margem…" |
+
+QA visual (Regra Inviolável #1): as 5 imagens lidas uma a uma antes de
+aprovar — serifada itálica renderizando de verdade (não itálico sintético
+do peso reto — confirmado visualmente, traços da "a"/"g" com a forma
+cursiva característica da fonte real), chip legível em todos os fundos
+(claro e escuro), círculo de ícone na cor certa do tema em cada uma, sem
+colisão com wordmark/título em nenhuma. `npx tsc --noEmit` limpo.
+
 ## Estilo Claude — 5ª rodada: 4 gaps concretos de QA rigoroso (2026-09-05)
 
 Fundador seguiu insatisfeito depois da 4ª rodada: "ainda uma merda e os

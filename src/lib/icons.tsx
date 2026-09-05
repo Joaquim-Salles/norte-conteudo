@@ -10,6 +10,7 @@ import {
   X as LucideX,
   Quote as LucideQuote,
   Compass as LucideCompass,
+  Sparkles as LucideSparkles,
 } from 'lucide-react';
 
 /**
@@ -102,3 +103,17 @@ export const IconQuote = wrapIcon(LucideQuote, 30, 2);
  * Norte). Usado em Bastidores.tsx (2026-09-01) pro selo "como pensamos".
  */
 export const IconCompass = wrapIcon(LucideCompass, 36, 2.2);
+
+/**
+ * Sparkles/brilho — ícone do `StatusChip` (2026-09-06, ver relatório do
+ * fundador §3: "chip de status", pílula com ícone pequeno + verbo no
+ * gerúndio, "como se a marca estivesse narrando a cena"). Escolhido
+ * DELIBERADAMENTE genérico/abstrato (Lucide `Sparkles`, dual ISC/MIT, mesma
+ * licença já usada no resto do wrapper) em vez de tentar recriar o
+ * "sunburst" da Anthropic — aquele é o ícone de marca registrada deles,
+ * recriar o contorno seria o mesmo risco de uso indevido de marca de
+ * terceiro já documentado pro WhatsApp (ver nota acima). `Sparkles` cumpre o
+ * mesmo PAPEL funcional (selo pequeno "algo está acontecendo agora" dentro
+ * do chip) sem copiar o glifo específico de ninguém.
+ */
+export const IconSpark = wrapIcon(LucideSparkles, 14, 2.4);
