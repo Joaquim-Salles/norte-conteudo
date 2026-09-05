@@ -5,6 +5,7 @@ import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {getThemeForProduct} from '../lib/themes';
 import {GhostCheck} from '../lib/GhostGraphics';
+import {IllustrationNegocioReal} from '../lib/HandDrawn';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import {PhotoBackground} from '../lib/PhotoBackground';
@@ -547,6 +548,11 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // preservando reconhecimento de marca (regra documentada do canvasOverride).
   const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white, headline);
   const minimal = isMinimalDecoration(vs);
+  // editorialClaude (correção 2026-09-05, ver src/lib/HandDrawn.tsx): reserva
+  // o canto superior direito do bloco de identidade pra ilustração própria
+  // (fachada de negócio, conceito "produto que vive numa loja de verdade") —
+  // maxWidth cai um pouco só nesse preset pra não colidir com headline longo.
+  const headlineMaxWidthPadrao = minimal ? 700 : 900;
   return (
     <Frame
       background={canvasPadrao.background}
@@ -612,7 +618,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             lineHeight: headlineStylePadrao.lineHeight,
             letterSpacing: headlineStylePadrao.letterSpacing,
             margin: 0,
-            maxWidth: 900,
+            maxWidth: headlineMaxWidthPadrao,
           }}
         >
           {headline}
@@ -622,6 +628,15 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
       {graphics ? (
         <div style={{position: 'absolute', right: -50, bottom: 210, zIndex: 0}}>
           <GhostCheck color={canvasPadrao.ink} opacity={0.06} size={340} />
+        </div>
+      ) : null}
+
+      {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx):
+          fachada de negócio no canto superior direito do bloco de identidade,
+          reforçando "o produto vive num negócio real", não decoração solta. */}
+      {minimal ? (
+        <div style={{position: 'absolute', right: 56, top: 108, zIndex: 0}}>
+          <IllustrationNegocioReal color={colors.white} opacity={0.9} size={128} />
         </div>
       ) : null}
 

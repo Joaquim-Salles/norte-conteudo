@@ -3,6 +3,7 @@ import {Frame} from '../lib/Frame';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {colors} from '../lib/tokens';
 import {GhostBars, GhostCheck} from '../lib/GhostGraphics';
+import {IllustrationFluxo} from '../lib/HandDrawn';
 import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconCompass, IconCheck} from '../lib/icons';
 import {
@@ -306,6 +307,17 @@ export const Bastidores: React.FC<BastidoresData> = ({
             <GhostCheck color={canvas.ink} opacity={0.04} size={280} />
           </div>
         </>
+      ) : null}
+
+      {/* Ilustração própria à mão (editorialClaude, 2026-09-05, correção da
+          4ª rodada — ver src/lib/HandDrawn.tsx): diagrama de nós/setas no
+          canto superior direito, reforçando "processo" (o eyebrow "Como
+          trabalhamos" é literalmente sobre isso). Só sem foto — com foto o
+          canto já está ocupado pelo overlay/textShadow do título. */}
+      {minimal && !temFoto ? (
+        <div style={{position: 'absolute', right: 56, top: 84}}>
+          <IllustrationFluxo color={canvas.ink} opacity={canvas.ink === colors.white ? 0.85 : 0.8} size={180} />
+        </div>
       ) : null}
 
       <div style={{position: 'absolute', left: 72, right: 72, bottom: 130, textAlign: 'left'}}>

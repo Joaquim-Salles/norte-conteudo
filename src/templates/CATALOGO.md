@@ -1,5 +1,57 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Estilo Claude — 4ª rodada: ilustração própria à mão (2026-09-05)
+
+Feedback do fundador na 3ª tentativa (ver seção abaixo): "isso tá ruim, sem
+desenhos, sem identidade própria, diferente, não tem identidade, desenhos,
+uma coisa melhor." Ele tinha razão em parte — a 3ª tentativa pediu restrição
+radical (`graphicSupport: false`, zero ícone/badge) copiando o vocabulário
+tipográfico/paleta da grade real do @claudeai, mas foi longe demais: releitura
+crítica de `docs/referencias-visuais/claude-instagram/grid-{1,2,3}.png` (pedida
+explicitamente, "onde tem ilustração/diagrama à mão, não só foto+texto")
+confirma que pelo menos 2 posts reais da grade TÊM ilustração própria
+desenhada à mão, estilo sketch informal, não ícone de biblioteca:
+- **"Follow your track"** (Undergrads/Grad students/PhDs) — diagrama de
+  nós/setas com linhas de espessura variável, círculos levemente
+  ovais/imperfeitos.
+- **"Safeguards 101"** — ícone line-art de casa com uma mão saindo dela,
+  traço monoline único, também imperfeito, não geometria de Figma/Lucide.
+
+**2 componentes novos** em `src/lib/HandDrawn.tsx` (`IllustrationFluxo` —
+diagrama de nós/setas, conceito "processo/direção"; `IllustrationNegocioReal`
+— fachada de loja simples, conceito "negócio real") recriam a TÉCNICA das 2
+referências (SVG com círculos de raio irregular via jitter determinístico,
+conectores levemente assimétricos, seta em V desalinhado, só stroke nunca
+fill) — não copiam os desenhos literais (recriar "casa com mão" seria cópia
+de uma ilustração específica da Anthropic; a técnica aplicada a 2 conceitos
+do negócio da Norte, não).
+
+**Aplicado em 3 das 8 peças** (não nas 8 — decisão deliberada pra não virar
+decoração repetitiva, mesmo espírito de restrição que a 3ª tentativa já
+tinha, só devolvendo identidade onde fazia falta):
+- `Bastidores` `manifesto` — `IllustrationFluxo` no canto superior direito
+  (só sem foto) — eyebrow é literalmente "Como trabalhamos", o diagrama de
+  processo reforça o conceito, não é decoração solta.
+- `DicaPratica` `bridge` — mesmo `IllustrationFluxo`, menor, canto superior
+  direito — reforça "1 ideia dentro de um processo maior" e repete a peça
+  gráfica entre templates de propósito, pra virar identidade reconhecível
+  (mesmo raciocínio do ícone reaproveitado em vários posts do @claudeai:
+  Sonnet/Opus/Fable, a "flor" da Anthropic).
+- `VitrineProduto` `padrao` — `IllustrationNegocioReal` no canto superior
+  direito do bloco de identidade do produto (headline ganha `maxWidth`
+  menor, 700 em vez de 900, só em `editorialClaude`, pra reservar o canto) —
+  reforça "o produto vive numa loja de verdade", papel direto pra um
+  template de vitrine de produto.
+
+Os outros 5 tipos (`Depoimento`, `MetodologiaSemEnrolacao`, `AntesDepois`,
+`Comparativo`, `DadoVsAchismo`, `CoverFotoReal`) ficam como estavam —
+restrição tipográfica/paleta preservada integralmente, sem ilustração nova.
+
+Renders de comparação em `out/estilo-claude-v3/` (`node
+scripts/qa-estilo-claude-v3.mjs`), só as 3 peças afetadas — comparadas de
+novo contra `docs/referencias-visuais/claude-instagram/grid-{1,2,3}.png`
+antes de aprovar (Regra Inviolável #1).
+
 ## Estilo Claude — 3ª tentativa, preset novo `editorialClaude` (2026-09-05)
 
 As 2 tentativas anteriores (ver "Round H" mais abaixo e o Round F que o

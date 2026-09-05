@@ -3,6 +3,7 @@ import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
+import {IllustrationFluxo} from '../lib/HandDrawn';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhotoBackground} from '../lib/PhotoBackground';
@@ -348,6 +349,17 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
         {graphics ? (
           <div style={{position: 'absolute', right: -70, bottom: -50}}>
             <GhostCheck color={canvas.ink} opacity={0.05} size={420} />
+          </div>
+        ) : null}
+
+        {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx):
+            mesmo diagrama de fluxo do Bastidores, aqui menor e no canto
+            superior direito — reforça "1 ideia dentro de um processo maior",
+            e repete a mesma peça gráfica entre templates pra virar identidade
+            reconhecível, não decoração pontual. */}
+        {minimal ? (
+          <div style={{position: 'absolute', right: 60, top: 156}}>
+            <IllustrationFluxo color={canvas.ink} opacity={0.85} size={130} />
           </div>
         ) : null}
 
