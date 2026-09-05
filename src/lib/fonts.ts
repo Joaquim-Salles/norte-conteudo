@@ -20,6 +20,7 @@ import {continueRender, delayRender, staticFile} from 'remotion';
  * embutida no projeto.
  */
 let loaded = false;
+let serifLoaded = false;
 
 const FONT_FILES: Array<[number, 'normal' | 'italic', string]> = [
   [400, 'normal', 'AtkinsonHyperlegible-400.woff2'],
@@ -49,6 +50,55 @@ export const ensureBrandFontLoaded = (): void => {
     .catch((err) => {
       // eslint-disable-next-line no-console
       console.error('Falha ao carregar fonte da marca:', err);
+      continueRender(handle);
+    });
+};
+
+/**
+ * Serifada pro preset `editorialClaude` (2026-09-05, ver visualStyles.ts —
+ * 3ª tentativa do estilo "editorial documental" do @claudeai, referência
+ * agora são 3 screenshots REAIS da grade, não mais pesquisa por texto).
+ *
+ * Não dá pra licenciar a serifada real da Anthropic (Tiempos/Copernicus,
+ * "Anthropic Serif" — pagas, de terceiro). Escolhida **Source Serif 4**
+ * (Google Fonts / Adobe, licença OFL, embutida localmente via
+ * @fontsource/source-serif-4 — mesmo padrão de embedding local já usado
+ * pra Atkinson Hyperlegible, constraint de determinismo de render).
+ * Por quê essa e não outra: é uma serifada de TEXTO (transitional/old-style,
+ * mesma família genealógica de Times/Caslon que informa o desenho da
+ * Tiempos real da Anthropic) — traços com contraste alto/baixo moderado,
+ * terminais discretos, nada "de exibição"/decorativo (descarta opções tipo
+ * Playfair/Fraunces, que teriam personalidade DEMAIS e competiriam com a
+ * foto em vez de coexistir discretamente, o oposto do que a referência
+ * real mostra). Pesos 400 (corpo/legenda) e 700 (headline) cobrem os dois
+ * usos vistos nos 3 screenshots.
+ */
+const SERIF_FONT_FILES: Array<[number, string]> = [
+  [400, 'SourceSerif4-400.woff2'],
+  [700, 'SourceSerif4-700.woff2'],
+];
+
+export const ensureEditorialSerifLoaded = (): void => {
+  if (serifLoaded) return;
+  serifLoaded = true;
+  if (typeof document === 'undefined') return;
+
+  const handle = delayRender('Carregando fonte serifada (Source Serif 4, preset editorialClaude)');
+
+  const loadPromises = SERIF_FONT_FILES.map(([weight, file]) => {
+    const face = new FontFace('Source Serif 4', `url("${staticFile(`fonts/${file}`)}")`, {
+      weight: String(weight),
+      style: 'normal',
+    });
+    document.fonts.add(face);
+    return face.load();
+  });
+
+  Promise.all(loadPromises)
+    .then(() => continueRender(handle))
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error('Falha ao carregar fonte serifada editorialClaude:', err);
       continueRender(handle);
     });
 };

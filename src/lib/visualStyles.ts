@@ -57,6 +57,7 @@
  */
 
 import type {CardStyle} from './themes';
+import {colors} from './tokens';
 
 export type VisualStyleName =
   | 'minimalista'
@@ -66,7 +67,8 @@ export type VisualStyleName =
   | 'corporateClean'
   | 'marcador'
   | 'papelQuente'
-  | 'analogiaReal';
+  | 'analogiaReal'
+  | 'editorialClaude';
 
 export type HeadlineWeight = 'bold' | 'boldItalic' | 'regularItalic';
 
@@ -162,6 +164,25 @@ export type VisualStyle = {
    * PRÓPRIO da Norte, nunca logo de terceiro). Só `analogiaReal` usa.
    */
   showIconBadge?: boolean;
+  /**
+   * Paleta de fundos SÓLIDOS pra rotacionar entre peças — 3ª tentativa do
+   * "estilo Claude" (2026-09-05, ver `editorialClaude` abaixo). Diferente de
+   * `canvasOverride` (papelQuente — 1 par fixo papel/tinta): aqui são N cores
+   * chapadas, a tinta é resolvida por CONTRASTE (luminância), não hardcoded.
+   * `resolveCanvas` escolhe uma da lista de forma determinística a partir de
+   * um `seed` (texto da própria peça, ex. o headline) — mesma peça sempre cai
+   * na mesma cor (render reproduzível), peças diferentes variam. undefined =
+   * sem palette (comportamento de `canvasOverride`/fallback, inalterado).
+   */
+  canvasPalette?: string[];
+  /**
+   * Fonte do elemento hero, sobrescrevendo `fontFamily.brand` (Atkinson
+   * Hyperlegible, sans) só nesse elemento — o resto da peça continua sans
+   * (mesmo padrão visto nos 3 screenshots reais do @claudeai: eyebrow/corpo
+   * em sans, headline/citação em serifada). undefined = comportamento
+   * original (hero herda a sans da marca via `Frame`).
+   */
+  headlineFontFamily?: string;
 };
 
 export const visualStyles: Record<VisualStyleName, VisualStyle> = {
@@ -326,6 +347,49 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     textStroke: {width: 3, color: '#000000'},
     showIconBadge: true,
   },
+
+  // ---- 2026-09-05 — 3ª TENTATIVA do "estilo Claude" (as 2 anteriores, ambas
+  // sob o nome `papelQuente`, foram REJEITADAS pelo fundador: "ainda não é o
+  // que eu quero" / "uma merda... quero um estilo Claude, porra"). Desta vez
+  // a referência não é mais pesquisa por texto/paleta pública — são 3
+  // screenshots REAIS da grade do Instagram @claudeai, lidos e comparados
+  // pixel a pixel (ver docs/referencias-visuais/claude-instagram/grid-{1,2,3}.png).
+  //
+  // Diagnóstico do que estava ERRADO em `papelQuente` (por isso um preset
+  // NOVO, não outro refino em cima do mesmo): a referência real é muito mais
+  // EDITORIAL/DOCUMENTAL do que "design gráfico" — 1 único tom "papel quente"
+  // com um traço geométrico de assinatura (`GhostSlash`) e badge/eyebrow em
+  // pílula ainda é vocabulário de peça de marketing. A grade real usa: (1)
+  // cards de cor CHAPADA em paleta variada (verde-sálvia, azul-acinzentado,
+  // creme, preto — não um tom só), (2) tipografia SERIFADA grande carregando
+  // a peça SOZINHA, sem contorno/badge/ícone de apoio nenhum, (3) foto real
+  // tratada como documento (sem device frame, sem overlay pesado), texto
+  // pequeno num canto, respirando — muitos posts da grade real são só foto +
+  // legenda mínima, ou nem têm texto nenhum.
+  // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+  editorialClaude: {
+    name: 'editorialClaude',
+    label: 'Editorial Claude',
+    quandoUsar:
+      'Tom editorial/documental de revista — referência REAL (3 screenshots da grade pública @claudeai, não mais pesquisa por texto): fundo de cor sólida (rotaciona entre creme/sálvia/preto/azul-acinzentado) OU foto documental crua, tipografia serifada grande carregando a peça sozinha, ZERO badge/ícone/contorno/gráfico de apoio. Usar quando a peça quer parecer "editorial de marca séria", nunca "post de venda" — troca `papelQuente` nesse papel (as 2 tentativas anteriores do papel único foram rejeitadas pelo fundador por ainda lerem como peça de marketing).',
+    spacingScale: 1.4,
+    texture: {enabled: false, opacityMultiplier: 0},
+    cardStyleOverride: 'flat',
+    headlineWeight: 'bold',
+    headlineScale: 1.0,
+    letterSpacingBoost: -0.3,
+    heroLineHeightScale: 1.08,
+    // O CORTE mais importante do preset: nenhum Ghost*/selo/ícone de apoio,
+    // em template nenhum — a composição depende só de tipografia+cor+espaço.
+    graphicSupport: false,
+    canvasPalette: ['#F1ECDE', '#7C8863', '#151310', '#5B7C93'],
+    // Aspas obrigatórias: "4" sozinho não é um custom-ident CSS válido
+    // (idents não podem ser só dígito) — sem aspas, o navegador descarta a
+    // declaração inteira e o texto herda a sans do Frame (achado real de QA,
+    // 1ª tentativa deste preset renderizou tudo em Atkinson Hyperlegible
+    // apesar do knob estar setado certo).
+    headlineFontFamily: '"Source Serif 4"',
+  },
 };
 
 export function getVisualStyle(name: VisualStyleName): VisualStyle {
@@ -367,7 +431,14 @@ export function headlineStyle(
   baseFontSize: number,
   baseLetterSpacing = 0,
   baseLineHeight?: number,
-): {fontWeight: 400 | 700; fontStyle: 'normal' | 'italic'; fontSize: number; letterSpacing: number; lineHeight: number | undefined} {
+): {
+  fontWeight: 400 | 700;
+  fontStyle: 'normal' | 'italic';
+  fontSize: number;
+  letterSpacing: number;
+  lineHeight: number | undefined;
+  fontFamily: string | undefined;
+} {
   if (!vs) {
     return {
       fontWeight: 700,
@@ -375,6 +446,7 @@ export function headlineStyle(
       fontSize: baseFontSize,
       letterSpacing: baseLetterSpacing,
       lineHeight: baseLineHeight,
+      fontFamily: undefined,
     };
   }
   const italic = vs.headlineWeight !== 'bold';
@@ -385,6 +457,7 @@ export function headlineStyle(
     fontSize: Math.round(baseFontSize * vs.headlineScale),
     letterSpacing: baseLetterSpacing + vs.letterSpacingBoost,
     lineHeight: baseLineHeight === undefined ? undefined : baseLineHeight * vs.heroLineHeightScale,
+    fontFamily: vs.headlineFontFamily,
   };
 }
 
@@ -411,13 +484,73 @@ export function showGraphicSupport(vs: VS): boolean {
  * já aprovada muda). Usar só em templates de canvas único — ver nota em
  * `papelQuente.quandoUsar`.
  */
+/**
+ * Contraste simples (luminância relativa aproximada, sRGB) — decide tinta
+ * branca ou preta por cima de uma cor sólida qualquer. Usado por
+ * `canvasPalette` (editorialClaude), que — diferente de `canvasOverride`
+ * (papelQuente, 1 par fixo) — tem N cores e não faz sentido hardcodar a
+ * tinta de cada uma à mão.
+ */
+function contrastInk(hex: string): string {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16) / 255;
+  const g = parseInt(h.substring(2, 4), 16) / 255;
+  const b = parseInt(h.substring(4, 6), 16) / 255;
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  // Retorna exatamente colors.black/colors.white (não um tom aproximado) —
+  // achado real de QA: vários templates fazem `canvas.ink === colors.white`
+  // pra decidir cor de texto secundário/tint (Bastidores `inkSoft`,
+  // DicaPratica, VitrineProduto) — um tom "quase branco" aprovava a
+  // comparação de contraste mas falhava a igualdade estrita, deixando texto
+  // secundário quase invisível (renderizava rgba(20,20,19,x) sobre fundo
+  // escuro). Igualdade estrita com os tokens existentes é o que garante
+  // compatibilidade com esse código já escrito.
+  return luminance > 0.5 ? colors.black : colors.white;
+}
+
+/** Hash simples e determinístico (mesma peça = mesma cor sempre) pra indexar `canvasPalette`. */
+function seedIndex(seed: string, length: number): number {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % length;
+}
+
+/**
+ * Resolve {background, ink} do canvas — `papelQuente` define `canvasOverride`
+ * (1 par fixo, ver comentário no tipo `VisualStyle`); `editorialClaude`
+ * define `canvasPalette` (N cores sólidas, tinta resolvida por contraste,
+ * `seed` escolhe qual da lista de forma determinística — sem seed, cai
+ * sempre na primeira). Sem nenhum dos dois, retorna os valores ORIGINAIS do
+ * template/tema (comportamento ORIGINAL, nenhuma peça já aprovada muda). Usar
+ * só em templates de canvas único — ver nota em `papelQuente.quandoUsar`.
+ */
 export function resolveCanvas(
   vs: VS,
   fallbackBackground: string,
   fallbackInk: string,
+  seed?: string,
 ): {background: string; ink: string} {
+  if (vs?.canvasPalette && vs.canvasPalette.length > 0) {
+    const idx = seed ? seedIndex(seed, vs.canvasPalette.length) : 0;
+    const background = vs.canvasPalette[idx];
+    return {background, ink: contrastInk(background)};
+  }
   if (!vs?.canvasOverride) return {background: fallbackBackground, ink: fallbackInk};
   return vs.canvasOverride;
+}
+
+/**
+ * true = suprimir badge/pílula/ícone-de-apoio-em-círculo pontual (editorialClaude,
+ * 2026-09-05) — diferente de `showGraphicSupport` (que já desliga os Ghost*
+ * em TODOS os presets que pedem isso), este helper existe pra remover
+ * elementos que os templates renderizam INCONDICIONALMENTE hoje (Badge em
+ * pílula, ícone circular de eyebrow) e que a referência real (@claudeai) não
+ * usa. Só `editorialClaude` liga — nenhum outro preset muda de aparência.
+ */
+export function isMinimalDecoration(vs: VS): boolean {
+  return vs?.name === 'editorialClaude';
 }
 
 /** Resolve o Ghost* específico que o estilo pede (undefined = template decide sozinho, comportamento original). */

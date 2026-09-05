@@ -1,5 +1,125 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Estilo Claude — 3ª tentativa, preset novo `editorialClaude` (2026-09-05)
+
+As 2 tentativas anteriores (ver "Round H" mais abaixo e o Round F que o
+precedeu), ambas em cima do preset `papelQuente`, foram REJEITADAS pelo
+fundador: "ainda não é o que eu quero" / "uma merda... quero um estilo
+Claude, porra". Desta vez a referência deixou de ser pesquisa por texto —
+o fundador mandou 3 screenshots REAIS da grade pública do Instagram
+@claudeai (`docs/referencias-visuais/claude-instagram/grid-{1,2,3}.png`),
+lidos com `Read` e comparados pixel a pixel antes de qualquer decisão de
+design.
+
+**Diagnóstico do que estava errado em `papelQuente`** (por isso um preset
+NOVO — `editorialClaude` — em vez de outro refino em cima do mesmo nome):
+mesmo depois de 2 rodadas de ajuste fino, o preset continuava com
+vocabulário de "peça de marketing" — 1 tom "papel quente" único, um traço
+geométrico de assinatura (`GhostSlash`) fazendo às vezes de logo, badge de
+eyebrow em pílula. A grade real do @claudeai é muito mais restrita:
+
+1. **Paleta variada de cor CHAPADA**, não um tom só — os cards sólidos reais
+   observados nos 3 screenshots são creme/paper (`#F1ECDE`), verde-sálvia
+   (`#7C8863`), preto quase puro (`#151310`) e azul-acinzentado médio
+   (`#5B7C93`, o card "Safeguards 101"). Extraído por aproximação visual
+   (não há acesso a hex exato do post real), documentado como tal.
+2. **Tipografia serifada grande carregando a peça sozinha** — sem contorno
+   de texto, sem badge, sem ícone de apoio nenhum. Fonte real da Anthropic
+   (Tiempos/Copernicus, "Anthropic Serif") é paga/de terceiro — mesma
+   restrição já documentada pra `papelQuente`. Escolhida **Source Serif 4**
+   (Google Fonts/Adobe, OFL, embutida localmente via
+   `@fontsource/source-serif-4` — mesmo padrão de embedding local já usado
+   pra Atkinson Hyperlegible, ver `src/lib/fonts.ts`): é uma serifada de
+   TEXTO (transitional/old-style, mesma genealogia de Times/Caslon que
+   informa a Tiempos real), traços de contraste moderado, terminais
+   discretos — descarta opções "de exibição" (Playfair, Fraunces) que
+   teriam personalidade demais e competiriam com a foto/cor em vez de
+   coexistir discretamente, o oposto do que a referência real mostra. Pesos
+   400/700 (arquivos `public/fonts/SourceSerif4-{400,700}.woff2`) cobrem
+   corpo e headline. Só o elemento HERO troca de fonte (headline/citação) —
+   eyebrow/corpo continuam na sans de marca (Atkinson Hyperlegible), mesmo
+   padrão visto nos 3 screenshots reais (eyebrow "ANTHROPIC INSIGHTS" é sans
+   pequeno, só o headline é serifado).
+3. **Foto tratada como documento**, nunca "peça de marketing" — sem device
+   frame, sem overlay pesado, texto pequeno num canto respirando. Boa parte
+   da grade real (~metade dos posts nos 3 screenshots) é só isso: foto
+   documental crua ou card de cor sólida, com texto mínimo ou nenhum.
+
+**O que foi REMOVIDO** (não só adicionado) pra chegar nesse nível de
+restrição — lista exaustiva, porque a Regra Inviolável #1 exige comparar
+antes de aprovar, não só afirmar:
+
+- Badge/pílula colorida — a citação de `Depoimento` `contexto` deixou de
+  vir dentro de um `SurfaceCard`, passou a ficar direto sobre o fundo.
+- Ícone circular de eyebrow (`IconCompass` em `Bastidores` `manifesto`,
+  `IconAlert` em `Depoimento` `contexto`) — ambos suprimidos, sobra só o
+  texto do eyebrow.
+- Barra vertical de "pull-quote" (`MetodologiaSemEnrolacao` `cover-editorial`)
+  — suprimida, o texto carrega a peça sozinho.
+- Selo circular numerado nas features (`VitrineProduto` `padrao`) — vira
+  texto puro, sem círculo colorido antes de cada linha.
+- Card double-bezel do número da ideia (`DicaPratica` `bridge`) — vira
+  numeral sans simples ao lado de "Ideia X de Y", sem card/sombra.
+- Itálico forçado no headline dos slides "pull-quote"/manifesto
+  (`Bastidores` `manifesto`, `MetodologiaSemEnrolacao` `cover-editorial`,
+  ambos tinham uma decisão hardcoded de "sempre bold+italic") — a
+  referência real usa serifada RETA, então esses 2 slides passaram a
+  respeitar o peso que o próprio preset já define, em vez de forçar itálico
+  por cima.
+- Todo `Ghost*`/`signatureGraphic` (o que `papelQuente` já desligava
+  parcialmente) — `editorialClaude` desliga por completo (`graphicSupport:
+  false`, sem `signatureGraphic` nenhum).
+- Badge de tag/tema-numero (`CoverFotoReal`) e o `textShadow` pesado do
+  título grande — a peça de foto ganhou um MODO PRÓPRIO pro preset (ver
+  abaixo), não é mais reaproveitado o layout antigo com decoração cortada
+  por cima.
+
+**Mecanismos novos em `src/lib/visualStyles.ts`** (documentados no arquivo,
+resumo aqui): `canvasPalette` (N cores sólidas, tinta resolvida por
+contraste de luminância — `resolveCanvas` agora aceita um `seed`, texto da
+própria peça, que escolhe determinística mas variadamente entre as cores,
+então peças diferentes do mesmo template caem em tons diferentes) e
+`headlineFontFamily` (só o hero troca de fonte). Achado real de QA #1: o
+nome da fonte precisa vir ENTRE ASPAS (`'"Source Serif 4"'`) — `"4"` sozinho
+não é um custom-ident CSS válido (idents não podem ser só dígito), sem
+aspas o navegador descarta a declaração inteira e o texto silenciosamente
+volta a herdar a sans do `Frame` (1ª renderização de teste saiu inteira em
+Atkinson Hyperlegible apesar do knob estar setado certo — só percebido
+comparando com a referência, não por inspeção de código). Achado real de QA
+#2: a cor de contraste da paleta precisa retornar exatamente
+`colors.white`/`colors.black` (não um tom aproximado tipo `#F8F6EF`) —
+vários templates fazem `canvas.ink === colors.white` pra decidir cor de
+texto secundário (`Bastidores` `inkSoft`, `DicaPratica`, `VitrineProduto`);
+um tom "quase branco" passava no contraste visual mas falhava a igualdade
+estrita, deixando os 3 princípios do manifesto renderizando com texto quase
+invisível (`rgba(20,20,19,x)` sobre fundo preto) — só os ícones de check
+apareciam. Corrigido fazendo `contrastInk` devolver os tokens exatos.
+
+**`CoverFotoReal` ganhou um modo dedicado** pra `editorialClaude`: overlay
+muito mais fraco (`strength: 0.42` vs. `0.9` do modo original) só na base,
+sem badge/tag, título serifado pequeno (44px vs. 74px) sem `textShadow`
+pesado — literalmente o formato mais comum da grade real (foto documental +
+legenda mínima).
+
+**3 templates de CONTRASTE ficam FORA do tratamento completo** (mesma
+decisão já tomada pro `papelQuente` no Round H, mesmo motivo):
+`AntesDepois`, `Comparativo` e `DadoVsAchismo` são 2 blocos de cor cobrindo
+o frame inteiro por design — forçar um fundo único de paleta destruiria o
+próprio conceito. Recebem os knobs genéricos do preset (tipografia/
+espaçamento/zero Ghost*) mas mantêm badges/ícones/pílulas originais — não
+levaram o mesmo corte de decoração dos outros 6. Isso é uma lacuna
+conhecida, não descoberta agora: mesmo escopo already fechado no Round H.
+
+**9 PNGs de prova** em `out/estilo-claude-v2/`
+(`node scripts/qa-estilo-claude-v2.mjs`) — os mesmos 8 tipos de post do
+Round H (`papelQuente`) recriados em `editorialClaude`, pra comparação
+direta lado a lado, + 1 peça NOVA (`09-FotoDocumental`, `CoverFotoReal`) que
+não existia no lote anterior — o formato foto+legenda pequena, mais comum
+na grade real, não tinha prova nenhuma até agora. Cada render foi lido e
+comparado visualmente contra os 3 screenshots reais antes de aprovar
+(Regra Inviolável #1) — 2 achados de QA reais catalogados acima só
+apareceram nessa comparação, não em inspeção de código.
+
 ## Honestidade de foto — Depoimento (RESOLVIDO, 2026-09-04)
 
 Pendência sinalizada nos Rounds F e G (ver "Fotografia real" e "Round G" mais

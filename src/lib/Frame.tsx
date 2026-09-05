@@ -1,10 +1,14 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {colors, fontFamily} from './tokens';
-import {ensureBrandFontLoaded} from './fonts';
+import {ensureBrandFontLoaded, ensureEditorialSerifLoaded} from './fonts';
 import {GrainOverlay} from './Texture';
 
 ensureBrandFontLoaded();
+// Carregada sempre junto (custo desprezível, ~40KB) — evita que o preset
+// `editorialClaude` precise de um gate de carregamento próprio espalhado
+// por template; ver fonts.ts.
+ensureEditorialSerifLoaded();
 
 type FrameProps = {
   children: React.ReactNode;

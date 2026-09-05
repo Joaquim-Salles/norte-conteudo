@@ -11,6 +11,7 @@ import {IconQuote, IconAlert, IconGrowth} from '../lib/icons';
 import {
   getVisualStyle,
   headlineStyle,
+  isMinimalDecoration,
   resolveCanvas,
   resolveCardStyle,
   resolveTexture,
@@ -285,9 +286,12 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
     // PhotoBackground usada em VitrineProduto/DicaPratica), então a preferência
     // de tinta clara do estilo não faria sentido (ver nota de escopo em
     // `canvasOverride`, visualStyles.ts).
-    const canvas = temFoto ? {background: t.colors.dark, ink: colors.white} : resolveCanvas(vs, colors.white, colors.primaryDark);
+    const canvas = temFoto
+      ? {background: t.colors.dark, ink: colors.white}
+      : resolveCanvas(vs, colors.white, colors.primaryDark, slide.corpo);
     const eyebrowColor = temFoto ? 'rgba(255,255,255,0.75)' : '#9a9aab';
     const signature = vs?.signatureGraphic;
+    const minimal = isMinimalDecoration(vs);
     return (
       <Frame
         background={canvas.background}
@@ -338,7 +342,9 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
           }}
         >
           <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-            <IconAlert size={22} color={eyebrowColor} strokeWidth={2.4} />
+            {/* Ícone de eyebrow — decoração de apoio ausente na referência
+                real (@claudeai); suprimido em editorialClaude (2026-09-05). */}
+            {!minimal ? <IconAlert size={22} color={eyebrowColor} strokeWidth={2.4} /> : null}
             <span
               style={{
                 fontSize: 20,
@@ -351,27 +357,50 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
               Antes, nas palavras do cliente
             </span>
           </div>
-          <SurfaceCard
-            variant={cardVariant}
-            shellColor={temFoto ? 'rgba(255,255,255,0.08)' : undefined}
-            coreColor={temFoto ? 'rgba(255,255,255,0.12)' : undefined}
-            borderColor={cardVariant === 'outline' ? (temFoto ? 'rgba(255,255,255,0.35)' : 'rgba(20,20,30,0.18)') : undefined}
-          >
+          {/* EXCECAO editorialClaude (2026-09-05): a referencia real
+              (@claudeai) nunca poe citacao dentro de um card — o texto
+              carrega a peca sozinho, direto sobre o fundo solido. Card
+              double-bezel/outline mantido nos outros presets. */}
+          {minimal ? (
             <p
               style={{
                 fontSize: corpoStyle.fontSize,
                 fontWeight: corpoStyle.fontWeight,
                 fontStyle: corpoStyle.fontStyle,
+                fontFamily: corpoStyle.fontFamily,
                 color: canvas.ink,
                 lineHeight: corpoStyle.lineHeight,
                 margin: 0,
                 letterSpacing: corpoStyle.letterSpacing,
-                padding: '38px 34px',
+                maxWidth: 880,
               }}
             >
               &ldquo;{slide.corpo}&rdquo;
             </p>
-          </SurfaceCard>
+          ) : (
+            <SurfaceCard
+              variant={cardVariant}
+              shellColor={temFoto ? 'rgba(255,255,255,0.08)' : undefined}
+              coreColor={temFoto ? 'rgba(255,255,255,0.12)' : undefined}
+              borderColor={cardVariant === 'outline' ? (temFoto ? 'rgba(255,255,255,0.35)' : 'rgba(20,20,30,0.18)') : undefined}
+            >
+              <p
+                style={{
+                  fontSize: corpoStyle.fontSize,
+                  fontWeight: corpoStyle.fontWeight,
+                  fontStyle: corpoStyle.fontStyle,
+                  fontFamily: corpoStyle.fontFamily,
+                  color: canvas.ink,
+                  lineHeight: corpoStyle.lineHeight,
+                  margin: 0,
+                  letterSpacing: corpoStyle.letterSpacing,
+                  padding: '38px 34px',
+                }}
+              >
+                &ldquo;{slide.corpo}&rdquo;
+              </p>
+            </SurfaceCard>
+          )}
         </div>
       </Frame>
     );

@@ -192,6 +192,8 @@ export type CoverFotoRealData = {
   fotoPosition?: string;
   /** Tema de paleta (sistema/produto ou marca geral) — define a cor do badge/eyebrow. Default: 'marca'. */
   theme?: ThemeName;
+  /** Opcional (2026-09-05, ver visualStyles.ts) — `editorialClaude` troca badge/título grande+sombra pesada por legenda serifada pequena, discreta, num canto (referência real: 3 screenshots @claudeai). */
+  visualStyle?: VisualStyleName;
 };
 
 /**

@@ -11,6 +11,7 @@ import {PhotoBackground} from '../lib/PhotoBackground';
 import {
   getVisualStyle,
   headlineStyle,
+  isMinimalDecoration,
   resolveCanvas,
   resolveCardStyle,
   resolveTexture,
@@ -544,7 +545,8 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // papelQuente troca só o CANVAS BASE (onde ficam as features/CTA) — o bloco
   // de identidade do produto no topo (620px) mantém a cor própria do produto,
   // preservando reconhecimento de marca (regra documentada do canvasOverride).
-  const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white);
+  const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white, headline);
+  const minimal = isMinimalDecoration(vs);
   return (
     <Frame
       background={canvasPadrao.background}
@@ -605,6 +607,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             fontSize: headlineStylePadrao.fontSize,
             fontWeight: headlineStylePadrao.fontWeight,
             fontStyle: headlineStylePadrao.fontStyle,
+            fontFamily: headlineStylePadrao.fontFamily,
             color: colors.white,
             lineHeight: headlineStylePadrao.lineHeight,
             letterSpacing: headlineStylePadrao.letterSpacing,
@@ -644,23 +647,28 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             radius={20}
           >
             <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '22px 22px'}}>
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 999,
-                  background: colors.accent,
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: colors.white,
-                }}
-              >
-                {i + 1}
-              </div>
+              {/* Selo circular numerado — decoração de apoio ausente na
+                  referência real (@claudeai); suprimido em editorialClaude
+                  (2026-09-05), mantido nos outros presets. */}
+              {!minimal ? (
+                <div
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 999,
+                    background: colors.accent,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: colors.white,
+                  }}
+                >
+                  {i + 1}
+                </div>
+              ) : null}
               <span style={{fontSize: 28, fontWeight: 400, color: canvasPadrao.ink}}>{f}</span>
             </div>
           </SurfaceCard>

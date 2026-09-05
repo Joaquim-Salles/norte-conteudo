@@ -8,6 +8,7 @@ import {IconCompass, IconCheck} from '../lib/icons';
 import {
   getVisualStyle,
   headlineStyle,
+  isMinimalDecoration,
   resolveCanvas,
   resolveCardStyle,
   resolveTexture,
@@ -180,11 +181,21 @@ export const Bastidores: React.FC<BastidoresData> = ({
   // Titulo mantem SEMPRE bold+italic (ver decisao documentada no topo do
   // arquivo) — so tamanho/letter-spacing vem do preset.
   const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1, 1.16);
-  const tituloStyleManifesto = {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
+  // DECISAO original: titulo do manifesto mantem SEMPRE bold+italic (voz de
+  // "afirmacao falada"). EXCECAO (2026-09-05, editorialClaude): a referencia
+  // real (@claudeai) usa serifada reta, nao italico — forcar italico em cima
+  // da serifada destruiria o efeito que o preset busca, entao esse preset
+  // especifico usa o peso/estilo que o proprio preset ja define.
+  const minimal = isMinimalDecoration(vs);
+  const tituloStyleManifesto = minimal
+    ? tituloStyleManifestoRaw
+    : {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
   const temFoto = Boolean(foto);
-  // papelQuente (canvasOverride) só faz sentido sem foto — com foto o canvas
-  // já é a imagem, não a cor de fundo (mesma regra do Depoimento/DadoVsAchismo).
-  const canvas = temFoto ? {background: colors.black, ink: colors.white} : resolveCanvas(vs, colors.black, colors.white);
+  // papelQuente/editorialClaude (canvasOverride/canvasPalette) só fazem sentido
+  // sem foto — com foto o canvas já é a imagem, não a cor de fundo (mesma
+  // regra do Depoimento/DadoVsAchismo). `seed` (titulo) varia a cor da
+  // palette de forma determinística entre peças diferentes.
+  const canvas = temFoto ? {background: colors.black, ink: colors.white} : resolveCanvas(vs, colors.black, colors.white, titulo);
   const inkSoft = (a: number) => (canvas.ink === colors.white ? `rgba(255,255,255,${a})` : `rgba(20,20,19,${a})`);
   return (
     <Frame
@@ -215,19 +226,23 @@ export const Bastidores: React.FC<BastidoresData> = ({
         }}
       >
         <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: '50%',
-              border: `2px solid ${inkSoft(0.25)}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <IconCompass size={26} color={canvas.ink} strokeWidth={2} />
-          </div>
+          {/* Selo circular de ícone — decoração de apoio que a referência real
+              (@claudeai) não usa; suprimido em editorialClaude (2026-09-05). */}
+          {!minimal ? (
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: '50%',
+                border: `2px solid ${inkSoft(0.25)}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <IconCompass size={26} color={canvas.ink} strokeWidth={2} />
+            </div>
+          ) : null}
           <span
             style={{
               fontSize: 21,
@@ -246,6 +261,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
             fontSize: tituloStyleManifesto.fontSize,
             fontWeight: tituloStyleManifesto.fontWeight,
             fontStyle: tituloStyleManifesto.fontStyle,
+            fontFamily: tituloStyleManifesto.fontFamily,
             color: canvas.ink,
             lineHeight: tituloStyleManifesto.lineHeight,
             letterSpacing: tituloStyleManifesto.letterSpacing,

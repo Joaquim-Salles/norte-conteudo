@@ -3,6 +3,7 @@ import {Frame} from '../lib/Frame';
 import {colors} from '../lib/tokens';
 import {getTheme} from '../lib/themes';
 import {PhotoBackground} from '../lib/PhotoBackground';
+import {getVisualStyle, headlineStyle, isMinimalDecoration, type VisualStyleName} from '../lib/visualStyles';
 import type {CoverFotoRealData} from '../lib/types';
 
 /**
@@ -25,8 +26,55 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
   foto,
   fotoPosition = 'center 15%',
   theme = 'marca',
+  visualStyle,
 }) => {
   const themeColors = getTheme(theme).colors;
+  const vs = visualStyle ? getVisualStyle(visualStyle) : null;
+  const minimal = isMinimalDecoration(vs);
+
+  // editorialClaude (2026-09-05): formato mais comum da grade real do
+  // @claudeai é justamente ESTE — foto documental crua (sem badge, sem
+  // device frame, sem overlay pesado) + legenda serifada pequena discreta
+  // num canto, "respirando". Overlay muito mais fraco (0.42 vs. 0.9 do
+  // original) e só na base — o suficiente pra legibilidade do texto PEQUENO,
+  // nunca um escurecimento dramático que "peso de peça de marketing" pede.
+  if (minimal) {
+    const tituloStyle = headlineStyle(vs, 44, 0, 1.2);
+    return (
+      <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
+        <PhotoBackground src={foto} position={fotoPosition} overlay="bottom" strength={0.42} />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '0 72px 96px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-start',
+          }}
+        >
+          {titulo ? (
+            <p
+              style={{
+                fontSize: tituloStyle.fontSize,
+                fontWeight: tituloStyle.fontWeight,
+                fontStyle: tituloStyle.fontStyle,
+                fontFamily: tituloStyle.fontFamily,
+                color: colors.white,
+                lineHeight: tituloStyle.lineHeight,
+                letterSpacing: tituloStyle.letterSpacing,
+                margin: 0,
+                maxWidth: 620,
+              }}
+            >
+              {titulo}
+            </p>
+          ) : null}
+        </div>
+      </Frame>
+    );
+  }
 
   return (
     <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>

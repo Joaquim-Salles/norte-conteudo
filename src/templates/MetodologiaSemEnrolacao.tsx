@@ -9,6 +9,7 @@ import {SurfaceCard} from '../lib/SurfaceCard';
 import {
   getVisualStyle,
   headlineStyle,
+  isMinimalDecoration,
   resolveCanvas,
   resolveCardStyle,
   resolveTexture,
@@ -235,8 +236,13 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
     // cover-quote do DicaPratica/manifesto de Bastidores) — visualStyle so
     // varia tamanho/letter-spacing/espacamento/gráfico de apoio.
     const tituloStyleRaw = headlineStyle(vs, 78, -1.5, 1.05);
-    const tituloStyleEditorial = {...tituloStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
-    const canvas = resolveCanvas(vs, colors.white, colors.black);
+    // EXCECAO editorialClaude (2026-09-05, mesmo raciocinio de Bastidores):
+    // a referencia real usa serifada reta, forcar italico destruiria o efeito.
+    const minimal = isMinimalDecoration(vs);
+    const tituloStyleEditorial = minimal
+      ? tituloStyleRaw
+      : {...tituloStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
+    const canvas = resolveCanvas(vs, colors.white, colors.black, slide.titulo);
     return (
       <Frame background={canvas.background} wordmarkColor={canvas.ink} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Aspas graficas grandes reforcam o tom "quote-like" pedido no design —
@@ -263,9 +269,12 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
             justifyContent: 'center',
           }}
         >
-          {/* Barra vertical tipo "pull-quote" — da moldura de apoio ao bloco de
-              texto, que antes ficava so com titulo + linha fina flutuando */}
-          <div style={{width: 6, background: colors.accent, borderRadius: 999, flexShrink: 0, marginRight: 40}} />
+          {/* Barra vertical tipo "pull-quote" — decoração de apoio que a
+              referência real (@claudeai) não usa; suprimida em
+              editorialClaude (2026-09-05), mantida nos outros presets. */}
+          {!minimal ? (
+            <div style={{width: 6, background: colors.accent, borderRadius: 999, flexShrink: 0, marginRight: 40}} />
+          ) : null}
           <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <span
               style={{
@@ -283,6 +292,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
                 fontSize: tituloStyleEditorial.fontSize,
                 fontWeight: tituloStyleEditorial.fontWeight,
                 fontStyle: tituloStyleEditorial.fontStyle,
+                fontFamily: tituloStyleEditorial.fontFamily,
                 color: canvas.ink,
                 lineHeight: tituloStyleEditorial.lineHeight,
                 letterSpacing: tituloStyleEditorial.letterSpacing,

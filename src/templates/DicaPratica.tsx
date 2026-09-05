@@ -10,6 +10,7 @@ import {IconBadge} from '../lib/IconBadge';
 import {
   getVisualStyle,
   headlineStyle,
+  isMinimalDecoration,
   resolveCanvas,
   resolveCardStyle,
   resolveTexture,
@@ -324,7 +325,8 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   if (slide.kind === 'bridge') {
     const tituloStyleBridge = headlineStyle(vs, 58, -1, 1.1);
     const cardVariantBridge = resolveCardStyle(vs, 'bezel');
-    const canvas = resolveCanvas(vs, colors.white, colors.black);
+    const canvas = resolveCanvas(vs, colors.white, colors.black, slide.titulo);
+    const minimal = isMinimalDecoration(vs);
     return (
       <Frame background={canvas.background} wordmarkColor={canvas.ink} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Tracker de progresso no topo — mesma linguagem do "passo" do
@@ -360,35 +362,55 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
             gap: scaleSpacing(vs, 32, {min: 20, max: 44}),
           }}
         >
-          {/* Numero da ideia agora vive num card double-bezel — nao e mais um
-              numero solto flutuando no espaco em branco */}
+          {/* Numero da ideia vive num card double-bezel — nao e mais um
+              numero solto flutuando no espaco em branco. EXCECAO
+              editorialClaude (2026-09-05): a referencia real nao usa selo/
+              card nenhum pra numeracao — vira so um numeral sans pequeno,
+              mesmo espirito do "Ideia X de Y" que ja existia ao lado. */}
           <div style={{display: 'flex', alignItems: 'center', gap: 24}}>
-            <SurfaceCard
-              variant={cardVariantBridge}
-              shellColor="rgba(244,63,94,0.08)"
-              coreColor="rgba(244,63,94,0.13)"
-              borderColor={cardVariantBridge === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}
-              radius={28}
-            >
-              <div style={{width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <span
-                  style={{
-                    fontSize: 92,
-                    fontWeight: 700,
-                    color: colors.accent,
-                    letterSpacing: -4,
-                    textShadow: '0 10px 24px rgba(244,63,94,0.25)',
-                  }}
-                >
-                  {String(slide.numero).padStart(2, '0')}
-                </span>
-              </div>
-            </SurfaceCard>
+            {!minimal ? (
+              <SurfaceCard
+                variant={cardVariantBridge}
+                shellColor="rgba(244,63,94,0.08)"
+                coreColor="rgba(244,63,94,0.13)"
+                borderColor={cardVariantBridge === 'outline' ? 'rgba(20,20,30,0.18)' : undefined}
+                radius={28}
+              >
+                <div style={{width: 150, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <span
+                    style={{
+                      fontSize: 92,
+                      fontWeight: 700,
+                      color: colors.accent,
+                      letterSpacing: -4,
+                      textShadow: '0 10px 24px rgba(244,63,94,0.25)',
+                    }}
+                  >
+                    {String(slide.numero).padStart(2, '0')}
+                  </span>
+                </div>
+              </SurfaceCard>
+            ) : null}
             <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
-              <span style={{fontSize: 20, fontWeight: 700, color: '#9a9aab', letterSpacing: 2, textTransform: 'uppercase'}}>
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: canvas.ink === colors.black ? '#9a9aab' : canvas.ink,
+                  opacity: minimal ? 0.6 : 1,
+                  letterSpacing: 2,
+                  textTransform: 'uppercase',
+                }}
+              >
                 Ideia
               </span>
-              <span style={{fontSize: 30, fontWeight: 400, color: '#9a9aab'}}>
+              <span
+                style={{
+                  fontSize: minimal ? 44 : 30,
+                  fontWeight: minimal ? 700 : 400,
+                  color: minimal ? canvas.ink : '#9a9aab',
+                }}
+              >
                 {slide.numero} de {slide.total}
               </span>
             </div>
@@ -398,6 +420,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontSize: tituloStyleBridge.fontSize,
               fontWeight: tituloStyleBridge.fontWeight,
               fontStyle: tituloStyleBridge.fontStyle,
+              fontFamily: tituloStyleBridge.fontFamily,
               color: canvas.ink,
               lineHeight: tituloStyleBridge.lineHeight,
               letterSpacing: tituloStyleBridge.letterSpacing,
