@@ -11,6 +11,7 @@ import {PhotoBackground} from '../lib/PhotoBackground';
 import {
   getVisualStyle,
   headlineStyle,
+  resolveCanvas,
   resolveCardStyle,
   resolveTexture,
   scaleSpacing,
@@ -540,10 +541,14 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // fixa, sobre o fim do bloco de identidade (altura 620) — cap em 78px.
   const headlineStylePadraoRaw = headlineStyle(vs, 60, -1, 1.08);
   const headlineStylePadrao = {...headlineStylePadraoRaw, fontSize: Math.min(headlineStylePadraoRaw.fontSize, 78)};
+  // papelQuente troca só o CANVAS BASE (onde ficam as features/CTA) — o bloco
+  // de identidade do produto no topo (620px) mantém a cor própria do produto,
+  // preservando reconhecimento de marca (regra documentada do canvasOverride).
+  const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white);
   return (
     <Frame
-      background={productColor.dark}
-      wordmarkColor={colors.white}
+      background={canvasPadrao.background}
+      wordmarkColor={canvasPadrao.ink}
       texture={tex.enabled}
       textureOpacity={tex.opacity}
     >
@@ -555,7 +560,12 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           left: 0,
           right: 0,
           height: 620,
-          background: `linear-gradient(160deg, ${productColor.base} 0%, ${productColor.dark} 100%)`,
+          // achado real de QA (papelQuente): quando canvasOverride troca a
+          // base pro papel claro, terminar o degradê em productColor.dark
+          // cria uma costura dura contra o fundo claro — o degradê agora
+          // sempre termina na cor do canvas (= productColor.dark quando não
+          // há override, comportamento 100% original preservado).
+          background: `linear-gradient(160deg, ${productColor.base} 0%, ${canvasPadrao.background} 100%)`,
           padding: '96px 64px 0',
           display: 'flex',
           flexDirection: 'column',
@@ -608,7 +618,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
 
       {graphics ? (
         <div style={{position: 'absolute', right: -50, bottom: 210, zIndex: 0}}>
-          <GhostCheck color={colors.white} opacity={0.06} size={340} />
+          <GhostCheck color={canvasPadrao.ink} opacity={0.06} size={340} />
         </div>
       ) : null}
 
@@ -629,8 +639,8 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           <SurfaceCard
             key={i}
             variant={cardStyle}
-            shellColor="rgba(255,255,255,0.04)"
-            coreColor="rgba(255,255,255,0.08)"
+            shellColor={canvasPadrao.ink === colors.white ? 'rgba(255,255,255,0.04)' : 'rgba(20,20,19,0.04)'}
+            coreColor={canvasPadrao.ink === colors.white ? 'rgba(255,255,255,0.08)' : 'rgba(20,20,19,0.06)'}
             radius={20}
           >
             <div style={{display: 'flex', alignItems: 'center', gap: 18, padding: '22px 22px'}}>
@@ -651,7 +661,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
               >
                 {i + 1}
               </div>
-              <span style={{fontSize: 28, fontWeight: 400, color: colors.white}}>{f}</span>
+              <span style={{fontSize: 28, fontWeight: 400, color: canvasPadrao.ink}}>{f}</span>
             </div>
           </SurfaceCard>
         ))}

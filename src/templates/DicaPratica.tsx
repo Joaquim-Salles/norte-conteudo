@@ -10,6 +10,7 @@ import {IconBadge} from '../lib/IconBadge';
 import {
   getVisualStyle,
   headlineStyle,
+  resolveCanvas,
   resolveCardStyle,
   resolveTexture,
   scaleSpacing,
@@ -323,8 +324,9 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   if (slide.kind === 'bridge') {
     const tituloStyleBridge = headlineStyle(vs, 58, -1, 1.1);
     const cardVariantBridge = resolveCardStyle(vs, 'bezel');
+    const canvas = resolveCanvas(vs, colors.white, colors.black);
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
+      <Frame background={canvas.background} wordmarkColor={canvas.ink} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Tracker de progresso no topo — mesma linguagem do "passo" do
             Metodologia, da continuidade visual entre os 2 carrosseis */}
         <div style={{position: 'absolute', top: 140, left: 72, display: 'flex', gap: 10}}>
@@ -343,7 +345,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
 
         {graphics ? (
           <div style={{position: 'absolute', right: -70, bottom: -50}}>
-            <GhostCheck color={colors.primaryDark} opacity={0.05} size={420} />
+            <GhostCheck color={canvas.ink} opacity={0.05} size={420} />
           </div>
         ) : null}
 
@@ -396,7 +398,7 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
               fontSize: tituloStyleBridge.fontSize,
               fontWeight: tituloStyleBridge.fontWeight,
               fontStyle: tituloStyleBridge.fontStyle,
-              color: colors.primaryDark,
+              color: canvas.ink,
               lineHeight: tituloStyleBridge.lineHeight,
               letterSpacing: tituloStyleBridge.letterSpacing,
               margin: 0,

@@ -9,6 +9,7 @@ import {SurfaceCard} from '../lib/SurfaceCard';
 import {
   getVisualStyle,
   headlineStyle,
+  resolveCanvas,
   resolveCardStyle,
   resolveTexture,
   scaleSpacing,
@@ -235,18 +236,19 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
     // varia tamanho/letter-spacing/espacamento/gráfico de apoio.
     const tituloStyleRaw = headlineStyle(vs, 78, -1.5, 1.05);
     const tituloStyleEditorial = {...tituloStyleRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
+    const canvas = resolveCanvas(vs, colors.white, colors.black);
     return (
-      <Frame background={colors.white} wordmarkColor={colors.black} texture={tex.enabled} textureOpacity={tex.opacity}>
+      <Frame background={canvas.background} wordmarkColor={canvas.ink} texture={tex.enabled} textureOpacity={tex.opacity}>
         {/* Aspas graficas grandes reforcam o tom "quote-like" pedido no design —
             no lugar das barras de crescimento (que combinam mais com dado/resultado
             do que com um cover editorial). Bleed parcial pra fora do quadro. */}
         {graphics ? (
           <>
             <div style={{position: 'absolute', right: -60, top: -70}}>
-              <GhostQuote color={colors.primaryDark} opacity={0.06} size={480} />
+              <GhostQuote color={canvas.ink} opacity={0.06} size={480} />
             </div>
             <div style={{position: 'absolute', left: 30, bottom: 40, transform: 'rotate(180deg)'}}>
-              <GhostQuote color={colors.primaryDark} opacity={0.045} size={260} />
+              <GhostQuote color={canvas.ink} opacity={0.045} size={260} />
             </div>
           </>
         ) : null}
@@ -281,7 +283,7 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
                 fontSize: tituloStyleEditorial.fontSize,
                 fontWeight: tituloStyleEditorial.fontWeight,
                 fontStyle: tituloStyleEditorial.fontStyle,
-                color: colors.primaryDark,
+                color: canvas.ink,
                 lineHeight: tituloStyleEditorial.lineHeight,
                 letterSpacing: tituloStyleEditorial.letterSpacing,
                 margin: '22px 0 0',

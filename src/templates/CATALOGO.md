@@ -1551,3 +1551,81 @@ individualmente nem na varredura do contact sheet.
 - As 100 imagens individuais deste teste (`out/teste-100/`) NÃO foram
   commitadas (gitignored via `out/`, ~84MB) — só o script gerador e o
   contact sheet consolidado foram versionados.
+
+---
+
+## Round H — `papelQuente` cobrindo os 8 tipos + refino contra o site real (2026-09-05)
+
+Pedido direto do fundador, com histórico de insatisfação repetida ("uma
+merda... quero um estilo Claude, porra"): validar/refinar `papelQuente`
+contra a identidade visual REAL do produto claude.ai (não só a paleta
+pública já pesquisada no Round F) e provar o preset nos 8 tipos de post,
+não só nos 2 templates onde ele nasceu (Depoimento, DadoVsAchismo).
+
+**Pesquisa (2 buscas, validação rápida — não é a pesquisa de origem)**:
+confirmado que o site usa uma serifada paga (Tiempos/Copernicus, rebatizada
+"Anthropic Serif") pra headline e uma sans paga (Styrene/"Anthropic Sans")
+pro resto — nenhuma licenciada aqui, mesma restrição já documentada, efeito
+replicado só com itálico regular contido na fonte de marca (Atkinson
+Hyperlegible). Confirmado também que o site tem praticamente zero grain, e
+que o elemento gráfico do logo real é deliberadamente ambíguo
+(asterisco/estrela/pinwheel) e SEMPRE aparece na cor de marca (laranja),
+nunca neutro — o `GhostSlash` (traço único, não o logotipo) passou a usar
+`#d97757` fixo em vez de tinta neutra/tema nos 2 usos existentes
+(Depoimento, DadoVsAchismo).
+
+**Ajustes no preset** (`src/lib/visualStyles.ts`): `spacingScale` 1.35 →
+1.42 (mais espaço, mais perto do respiro real do site), `texture.
+opacityMultiplier` 0.5 → 0.32 (menos grain — o site real quase não usa).
+Resto do preset mantido (já estava bem calibrado).
+
+**Cobertura expandida de `canvasOverride` pra 4 templates novos**
+(antes só `Depoimento` suportava o fundo papel/tinta de verdade):
+`Bastidores` (variant `manifesto`, sem foto), `MetodologiaSemEnrolacao`
+(variant `cover-editorial`), `DicaPratica` (variant `bridge`),
+`VitrineProduto` (variant `padrao`). Em cada um: `background`/
+`wordmarkColor` do `Frame` e as cores de texto hardcoded que assumiam o
+fundo original (branco ou escuro) passaram a ler de `resolveCanvas(vs,
+<original>, <original>)` — com `vs` diferente de `papelQuente`,
+`resolveCanvas` devolve os valores originais inalterados (zero regressão
+nas peças já aprovadas nesses 4 templates).
+
+**3 templates deliberadamente FORA do `canvasOverride`** (mesma decisão já
+documentada pro `DadoVsAchismo` no Round F): `AntesDepois`, `Comparativo` e
+`DadoVsAchismo` são templates de CONTRASTE — 2 blocos de cor cobrindo o
+frame inteiro por design (antes/depois, coluna A/B, achismo/dado). Forçar
+um fundo único de papel nesses destruiria o próprio conceito do template
+(a comparação lado a lado É o formato). Recebem só os knobs genéricos do
+preset (espaçamento, tipografia, textura, `signatureGraphic` nos 2 que já
+suportavam) — não ficam com o fundo papel, e isso é intencional, não uma
+lacuna.
+
+**Achado real de QA corrigido (Regra Inviolável #1)**: primeira tentativa
+em `VitrineProduto` criou uma costura dura — o bloco de identidade do
+produto (620px, degradê `productColor.base → productColor.dark`) terminava
+abruptamente contra o novo fundo de papel, uma linha reta feia na
+transição. Corrigido fazendo o degradê terminar em `canvasPadrao.
+background` em vez de `productColor.dark` — quando não há `canvasOverride`
+(qualquer outro preset), `canvasPadrao.background` é literalmente
+`productColor.dark` (fallback), então o comportamento original não muda;
+só quando `papelQuente` está ativo o degradê passa a se fundir suavemente
+na cor do canvas. Confirmado visualmente no re-render antes de aprovar.
+
+**8 PNGs de prova** em `out/estilo-claude/` (`node scripts/qa-estilo-
+claude.mjs`) — 1 de cada tipo de post (`Depoimento`, `Bastidores`,
+`MetodologiaSemEnrolacao`, `DicaPratica`, `VitrineProduto`, `AntesDepois`,
+`Comparativo`, `DadoVsAchismo`), todos em `papelQuente`. Revisados
+individualmente (não só contact sheet) — coerência de cor/tipografia
+confirmada nos 5 templates com `canvasOverride` novo + Depoimento; os 3
+templates de contraste ficam consistentes em tipografia/espaçamento mas
+mantêm suas cores de bloco próprias por design (ver acima).
+
+**1 MP4 bônus**: `NorteApresentacaoReel` (flagship de 30s) renderizado
+como está em `out/estilo-claude/09-NorteApresentacaoReel.mp4` — NÃO
+reestilizado em `papelQuente`. É uma composição sob medida (900 frames,
+cores hardcoded direto no componente, não usa `theme`/`visualStyle`
+combinável — decisão de arquitetura já documentada na criação dela).
+Reestilizar essa peça de verdade exigiria reescrever cores em toda a
+timeline, incompatível com o escopo de "refino rápido" desta rodada —
+fica como próximo passo se o fundador aprovar a direção pro flagship
+também.

@@ -343,7 +343,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
         {graphics ? (
           vs?.signatureGraphic === 'ghostSlash' ? (
             <div style={{position: 'absolute', right: 40, top: 26}}>
-              <GhostSlash color="#54546a" opacity={0.14} size={110} />
+              <GhostSlash color="#d97757" opacity={0.16} size={110} />
             </div>
           ) : vs?.signatureGraphic !== 'ghostMarker' ? (
             <div style={{position: 'absolute', right: 24, top: 30}}>
@@ -407,7 +407,7 @@ export const DadoVsAchismo: React.FC<DadoVsAchismoData> = ({
             </div>
           ) : vs?.signatureGraphic === 'ghostSlash' ? (
             <div style={{position: 'absolute', right: 30, bottom: 200}}>
-              <GhostSlash color={t.colors.light} opacity={0.16} size={140} />
+              <GhostSlash color="#d97757" opacity={0.22} size={140} />
             </div>
           ) : (
             <div style={{position: 'absolute', right: 20, bottom: 210}}>

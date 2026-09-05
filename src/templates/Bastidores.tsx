@@ -8,6 +8,7 @@ import {IconCompass, IconCheck} from '../lib/icons';
 import {
   getVisualStyle,
   headlineStyle,
+  resolveCanvas,
   resolveCardStyle,
   resolveTexture,
   scaleSpacing,
@@ -181,10 +182,14 @@ export const Bastidores: React.FC<BastidoresData> = ({
   const tituloStyleManifestoRaw = headlineStyle(vs, 58, -1, 1.16);
   const tituloStyleManifesto = {...tituloStyleManifestoRaw, fontWeight: 700 as const, fontStyle: 'italic' as const};
   const temFoto = Boolean(foto);
+  // papelQuente (canvasOverride) só faz sentido sem foto — com foto o canvas
+  // já é a imagem, não a cor de fundo (mesma regra do Depoimento/DadoVsAchismo).
+  const canvas = temFoto ? {background: colors.black, ink: colors.white} : resolveCanvas(vs, colors.black, colors.white);
+  const inkSoft = (a: number) => (canvas.ink === colors.white ? `rgba(255,255,255,${a})` : `rgba(20,20,19,${a})`);
   return (
     <Frame
-      background={colors.black}
-      wordmarkColor={colors.white}
+      background={canvas.background}
+      wordmarkColor={canvas.ink}
       texture={temFoto ? false : tex.enabled}
       textureOpacity={tex.opacity}
     >
@@ -215,20 +220,20 @@ export const Bastidores: React.FC<BastidoresData> = ({
               width: 56,
               height: 56,
               borderRadius: '50%',
-              border: '2px solid rgba(255,255,255,0.25)',
+              border: `2px solid ${inkSoft(0.25)}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <IconCompass size={26} color={colors.white} strokeWidth={2} />
+            <IconCompass size={26} color={canvas.ink} strokeWidth={2} />
           </div>
           <span
             style={{
               fontSize: 21,
               fontWeight: 700,
               letterSpacing: 2,
-              color: 'rgba(255,255,255,0.65)',
+              color: inkSoft(0.65),
               textTransform: 'uppercase',
             }}
           >
@@ -241,7 +246,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
             fontSize: tituloStyleManifesto.fontSize,
             fontWeight: tituloStyleManifesto.fontWeight,
             fontStyle: tituloStyleManifesto.fontStyle,
-            color: colors.white,
+            color: canvas.ink,
             lineHeight: tituloStyleManifesto.lineHeight,
             letterSpacing: tituloStyleManifesto.letterSpacing,
             margin: 0,
@@ -263,7 +268,7 @@ export const Bastidores: React.FC<BastidoresData> = ({
                   style={{
                     fontSize: 26,
                     fontWeight: 400,
-                    color: 'rgba(255,255,255,0.85)',
+                    color: inkSoft(0.85),
                     lineHeight: 1.32,
                     textShadow: temFoto ? '0 4px 16px rgba(0,0,0,0.7)' : undefined,
                   }}
@@ -279,16 +284,16 @@ export const Bastidores: React.FC<BastidoresData> = ({
       {graphics ? (
         <>
           <div style={{position: 'absolute', right: -90, bottom: -70}}>
-            <GhostBars color={colors.white} opacity={0.07} width={560} />
+            <GhostBars color={canvas.ink} opacity={0.07} width={560} />
           </div>
           <div style={{position: 'absolute', left: -60, top: -50}}>
-            <GhostCheck color={colors.white} opacity={0.04} size={280} />
+            <GhostCheck color={canvas.ink} opacity={0.04} size={280} />
           </div>
         </>
       ) : null}
 
       <div style={{position: 'absolute', left: 72, right: 72, bottom: 130, textAlign: 'left'}}>
-        <span style={{fontSize: 20, fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.5)'}}>
+        <span style={{fontSize: 20, fontWeight: 400, fontStyle: 'italic', color: inkSoft(0.5)}}>
           Assim a gente trabalha — link na bio
         </span>
       </div>

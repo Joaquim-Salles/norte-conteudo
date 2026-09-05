@@ -312,7 +312,13 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
             </div>
           ) : signature === 'ghostSlash' ? (
             <div style={{position: 'absolute', right: 64, bottom: 260}}>
-              <GhostSlash color={canvas.ink} opacity={0.12} size={190} />
+              {/* #d97757 (laranja pesquisado da paleta pública Anthropic,
+                  NÃO o accent rosa/vermelho da Norte — CTA/badge continuam
+                  na cor do tema, regra documentada do canvasOverride) em vez
+                  de tinta neutra: ecoa o único traço colorido do símbolo
+                  ambíguo real da marca (sempre em cor quente, nunca cinza) —
+                  refinamento 2026-09-05. */}
+              <GhostSlash color="#d97757" opacity={0.18} size={190} />
             </div>
           ) : (
             <div style={{position: 'absolute', right: -70, bottom: -50}}>

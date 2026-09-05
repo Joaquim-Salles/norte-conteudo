@@ -270,8 +270,27 @@ export const visualStyles: Record<VisualStyleName, VisualStyle> = {
     label: 'Papel Quente',
     quandoUsar:
       'Tom calmo/premium — referência pesquisada de verdade (identidade visual pública da Anthropic: tinta escura #141413, papel claro/quente #faf9f5, muitíssimo espaço em branco, tipografia contida, zero ornamento competindo com o texto). NÃO usa a fonte nem o logotipo da Anthropic (ambos de terceiro) — só o princípio de calma/espaço/paleta terrosa, aplicado com a fonte de marca (Atkinson Hyperlegible) e um único traço geométrico (`GhostSlash`) no lugar do logotipo. Usar em peça institucional que quer parecer "feita com cuidado", sem tom de venda direta — o oposto de `marcador`. Só disponível em templates de canvas único (ver `resolveCanvas`); não force em templates com blocos internos de cor própria (ex. DadoVsAchismo padrão/impacto) — lá o override de fundo não apareceria de verdade.',
-    spacingScale: 1.35,
-    texture: {enabled: true, opacityMultiplier: 0.5},
+    // Refinado 2026-09-05 (pedido direto do fundador, "quero estilo Claude
+    // de verdade") contra a identidade REAL do site claude.ai (2 buscas,
+    // não é a pesquisa completa de origem — só validação/ajuste fino):
+    // (1) o site usa uma serifada (Tiempos/Copernicus, hoje rebatizada
+    // "Anthropic Serif") pra headline/pull-quote e sans (Styrene/"Anthropic
+    // Sans") pro resto — SEM equivalente livre aqui (fontes pagas de
+    // terceiro, mesma restrição já documentada), então o efeito é replicado
+    // com o único recurso que a fonte de marca (Atkinson Hyperlegible)
+    // permite: itálico regular contido, não bold — mantido como estava.
+    // (2) o site praticamente não usa grain/textura — reduzido de 0.5 para
+    // 0.32 (antes ainda lia "papel áspero", agora lê mais perto do branco
+    // limpo real do produto). (3) espaço em branco é ainda maior do que o
+    // valor anterior sugeria — spacingScale 1.35 → 1.42. (4) o elemento
+    // gráfico ambíguo do logo real (asterisco/estrela/pinwheel, sempre em
+    // laranja `accent`, nunca neutro) não tem forma livre pra copiar sem
+    // risco de marca — mantido o `GhostSlash` genérico (1 traço, não o
+    // logotipo), mas nos templates que o desenham o tom passou a poder
+    // usar `colors.accent` (laranja `#d97757`) em vez de cinza neutro, pra
+    // pelo menos ecoar a paleta calorosa real (ver DadoVsAchismo/Depoimento).
+    spacingScale: 1.42,
+    texture: {enabled: true, opacityMultiplier: 0.32},
     cardStyleOverride: 'outline',
     headlineWeight: 'regularItalic',
     headlineScale: 0.98,
