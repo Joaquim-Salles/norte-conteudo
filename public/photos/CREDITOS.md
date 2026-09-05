@@ -15,6 +15,7 @@ requisito legal.
 | `corredor-empilhadeira-estoque.jpg` | Pexels, foto #5156696 (Maor Attias) | https://www.pexels.com/photo/boxes-on-shelves-inside-a-warehouse-5156696/ | `VitrineProduto` — variante `contexto` (NTB Estoque), Round F |
 | `equipe-reuniao-escritorio.jpg` | Pexels, foto #32082430 (Specht GmbH) | https://www.pexels.com/photo/collaborative-team-meeting-in-modern-office-32082430/ | `Bastidores` (`manifesto`, foto opcional) + `Depoimento` (`capa`, foto opcional) — Round F |
 | `analista-relatorios-mesa.jpg` | Pexels, foto #6694475 (Tima Miroshnichenko) | https://www.pexels.com/photo/businessman-man-woman-desk-6694475/ | `Depoimento` — variante `contexto` (Norte Avalia), Round F |
+| `montanha-neblina-caminhante.jpg` | Pexels, foto #32984804 (Robert So) | https://www.pexels.com/photo/foggy-mountain-landscape-with-lone-hiker-32984804/ | `CoverFotoReal` (`editorialClaude`) — 5ª rodada (2026-09-05), substitui `corredor-empilhadeira-estoque.jpg` no formato foto documental: gap de curadoria (foto de banco genérica/bem-iluminada vs. atmosférica/contemplativa) achado comparando contra `docs/referencias-visuais/claude-instagram/grid-1.png` |
 
 Downloads feitos via `images.pexels.com` (CDN pública, sem chave de API —
 não havia MCP/skill de automação Pexels/Unsplash disponível no ambiente desta

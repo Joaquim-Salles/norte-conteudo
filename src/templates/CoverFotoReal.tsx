@@ -40,6 +40,14 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
   // nunca um escurecimento dramático que "peso de peça de marketing" pede.
   if (minimal) {
     const tituloStyle = headlineStyle(vs, 44, 0, 1.2);
+    // Gap 3 do QA rigoroso 2026-09-05 (comparação direta vs. "There's hope in
+    // hard questions", grid-1 real do @claudeai): texto sobre foto na
+    // referência é CENTRALIZADO (não canto inferior esquerdo) e tem peso
+    // médio/regular — nunca o preto/bold que headlineWeight:'bold' do preset
+    // resolveria por padrão. Overlay fraco (0.42) fica igual; muda só
+    // posição/peso, ambos hardcoded aqui porque são específicos do formato
+    // "texto sobre foto", não do preset como um todo (Bastidores/DicaPratica
+    // sobre CARTÃO DE COR continuam serifado bold, que é certo lá).
     return (
       <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
         <PhotoBackground src={foto} position={fotoPosition} overlay="bottom" strength={0.42} />
@@ -47,25 +55,26 @@ export const CoverFotoReal: React.FC<CoverFotoRealData> = ({
           style={{
             position: 'absolute',
             inset: 0,
-            padding: '0 72px 96px',
+            padding: '0 96px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-end',
-            alignItems: 'flex-start',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           {titulo ? (
             <p
               style={{
                 fontSize: tituloStyle.fontSize,
-                fontWeight: tituloStyle.fontWeight,
+                fontWeight: 500,
                 fontStyle: tituloStyle.fontStyle,
                 fontFamily: tituloStyle.fontFamily,
                 color: colors.white,
                 lineHeight: tituloStyle.lineHeight,
                 letterSpacing: tituloStyle.letterSpacing,
                 margin: 0,
-                maxWidth: 620,
+                maxWidth: 640,
+                textAlign: 'center',
               }}
             >
               {titulo}

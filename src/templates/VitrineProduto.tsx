@@ -78,6 +78,15 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   const tex = resolveTexture(vs, theme.textureOpacity);
   const graphics = showGraphicSupport(vs);
   const logo = productLogo[produto];
+  // Gap 1 do QA rigoroso 2026-09-05 (comparação direta vs. grid-1/grid-2 reais
+  // do @claudeai): a referência NUNCA usa gradiente vibrante de cor de
+  // produto — sempre bloco de cor sólida única e desaturada. editorialClaude
+  // troca todo `linear-gradient(160deg, productColor.base → …)` por
+  // `productColor.dark` sólido nas 4 variantes que tinham esse gradiente
+  // (as outras variantes não tinham opinião de `minimal` até agora).
+  const minimal = isMinimalDecoration(vs);
+  const identityBackground = (endColor: string) =>
+    minimal ? productColor.dark : `linear-gradient(160deg, ${productColor.base} 0%, ${endColor} 100%)`;
 
   if (variant === 'hero') {
     // Clamp: headline centralizada de ate 2-3 linhas dentro de maxWidth 880 —
@@ -211,7 +220,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             left: 0,
             right: 0,
             height: 400,
-            background: `linear-gradient(160deg, ${productColor.base} 0%, ${productColor.dark} 100%)`,
+            background: identityBackground(productColor.dark),
             padding: '92px 64px 0',
             display: 'flex',
             flexDirection: 'column',
@@ -341,7 +350,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
             left: 0,
             right: 0,
             height: 300,
-            background: `linear-gradient(160deg, ${productColor.base} 0%, ${productColor.dark} 100%)`,
+            background: identityBackground(productColor.dark),
             padding: '76px 64px 0',
             display: 'flex',
             flexDirection: 'column',
@@ -547,7 +556,6 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // de identidade do produto no topo (620px) mantém a cor própria do produto,
   // preservando reconhecimento de marca (regra documentada do canvasOverride).
   const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white, headline);
-  const minimal = isMinimalDecoration(vs);
   // editorialClaude (correção 2026-09-05, ver src/lib/HandDrawn.tsx): reserva
   // o canto superior direito do bloco de identidade pra ilustração própria
   // (fachada de negócio, conceito "produto que vive numa loja de verdade") —
@@ -573,7 +581,7 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
           // cria uma costura dura contra o fundo claro — o degradê agora
           // sempre termina na cor do canvas (= productColor.dark quando não
           // há override, comportamento 100% original preservado).
-          background: `linear-gradient(160deg, ${productColor.base} 0%, ${canvasPadrao.background} 100%)`,
+          background: identityBackground(canvasPadrao.background),
           padding: '96px 64px 0',
           display: 'flex',
           flexDirection: 'column',

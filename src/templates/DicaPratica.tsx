@@ -267,6 +267,51 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
   }
 
   if (slide.kind === 'cover-foto') {
+    const minimalFoto = isMinimalDecoration(vs);
+
+    // Gap 3 do QA rigoroso 2026-09-05 (comparação vs. grid-1 real do
+    // @claudeai, "There's hope in hard questions"): mesma correção aplicada
+    // em CoverFotoReal — texto sobre foto CENTRALIZADO, peso médio/regular,
+    // overlay fraco, sem badge/tag/seta de swipe (decoração que a referência
+    // não usa). Único modo que muda comportamento; os outros 4 presets
+    // continuam com o layout original (canto inferior, bold, overlay forte).
+    if (minimalFoto) {
+      const tituloStyleFotoMinimal = headlineStyle(vs, 44, 0, 1.2);
+      return (
+        <Frame background={colors.black} wordmarkColor={colors.white} texture={false}>
+          <PhotoBackground src={slide.foto} position={slide.fotoPosition ?? 'center 15%'} overlay="bottom" strength={0.42} />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              padding: '0 96px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <p
+              style={{
+                fontSize: tituloStyleFotoMinimal.fontSize,
+                fontWeight: 500,
+                fontStyle: tituloStyleFotoMinimal.fontStyle,
+                fontFamily: tituloStyleFotoMinimal.fontFamily,
+                color: colors.white,
+                lineHeight: tituloStyleFotoMinimal.lineHeight,
+                letterSpacing: tituloStyleFotoMinimal.letterSpacing,
+                margin: 0,
+                maxWidth: 640,
+                textAlign: 'center',
+              }}
+            >
+              {slide.titulo}
+            </p>
+          </div>
+        </Frame>
+      );
+    }
+
     // Foto real full-bleed: textura/GhostQuote ficam de fora por decisao
     // (mesmo raciocinio documentado no topo do arquivo) — visualStyle so
     // afeta o headline aqui. justifyContent:'flex-end' faz o bloco crescer
@@ -357,9 +402,13 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
             superior direito — reforça "1 ideia dentro de um processo maior",
             e repete a mesma peça gráfica entre templates pra virar identidade
             reconhecível, não decoração pontual. */}
+        {/* Gap 4 do QA rigoroso 2026-09-05 (mesma correção de Bastidores
+            manifesto, comparação vs. "Safeguards 101"): ícone GRANDE
+            preenchendo o vazio abaixo do bloco de texto, não acento pequeno
+            de canto perto do tracker de progresso. */}
         {minimal ? (
-          <div style={{position: 'absolute', right: 60, top: 156}}>
-            <IllustrationFluxo color={canvas.ink} opacity={0.85} size={130} />
+          <div style={{position: 'absolute', right: 64, top: 680}}>
+            <IllustrationFluxo color={canvas.ink} opacity={0.85} size={300} />
           </div>
         ) : null}
 
@@ -367,10 +416,14 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
           style={{
             position: 'absolute',
             inset: 0,
-            padding: '0 72px 220px',
+            // Gap 4 do QA rigoroso 2026-09-05 (mesma correção de Bastidores
+            // manifesto): referência real ancora texto no topo do card, não
+            // centraliza no meio do frame — centralizar cria vazio enorme
+            // entre o texto e o rodapé fixo, o oposto da densidade real.
+            padding: minimal ? '220px 72px 220px' : '0 72px 220px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: minimal ? 'flex-start' : 'center',
             gap: scaleSpacing(vs, 32, {min: 20, max: 44}),
           }}
         >

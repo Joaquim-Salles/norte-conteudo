@@ -219,10 +219,18 @@ export const Bastidores: React.FC<BastidoresData> = ({
         style={{
           position: 'absolute',
           inset: 0,
-          padding: '0 72px 200px',
+          // Gap 4 do QA rigoroso 2026-09-05 (comparação vs. "How we study
+          // Claude"/"Safeguards 101", grid-1 real do @claudeai): a referência
+          // ancora eyebrow+headline+apoio no TOPO do card, sobrando espaço
+          // embaixo pra ilustração/respiro — nunca centraliza o bloco de
+          // texto no meio do frame inteiro. `justifyContent: 'center'`
+          // deixava um vazio enorme entre o texto e o rodapé fixo; minimal
+          // ancora no topo (padding-top maior, sem centralizar) pra igualar
+          // a densidade texto-por-área da referência.
+          padding: minimal ? '220px 72px 200px' : '0 72px 200px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: minimal ? 'flex-start' : 'center',
           gap: scaleSpacing(vs, 40, {min: 26, max: 54}),
         }}
       >
@@ -309,14 +317,19 @@ export const Bastidores: React.FC<BastidoresData> = ({
         </>
       ) : null}
 
-      {/* Ilustração própria à mão (editorialClaude, 2026-09-05, correção da
-          4ª rodada — ver src/lib/HandDrawn.tsx): diagrama de nós/setas no
-          canto superior direito, reforçando "processo" (o eyebrow "Como
-          trabalhamos" é literalmente sobre isso). Só sem foto — com foto o
-          canto já está ocupado pelo overlay/textShadow do título. */}
+      {/* Ilustração própria à mão (editorialClaude) — diagrama de nós/setas,
+          reforçando "processo" (o eyebrow "Como trabalhamos" é literalmente
+          sobre isso). Só sem foto — com foto o canto já está ocupado pelo
+          overlay/textShadow do título.
+          Gap 4 do QA rigoroso 2026-09-05 (comparação vs. "Safeguards 101",
+          grid-2 real do @claudeai): a referência usa esse ícone GRANDE
+          preenchendo o vazio abaixo do texto, não um acento pequeno de
+          canto — corrigido aumentando o tamanho (180→320) e movendo pra
+          baixo do bloco de texto, ocupando o meio do card que antes ficava
+          vazio, em vez de duplicar como decoração de canto solta. */}
       {minimal && !temFoto ? (
-        <div style={{position: 'absolute', right: 56, top: 84}}>
-          <IllustrationFluxo color={canvas.ink} opacity={canvas.ink === colors.white ? 0.85 : 0.8} size={180} />
+        <div style={{position: 'absolute', right: 64, top: 700}}>
+          <IllustrationFluxo color={canvas.ink} opacity={canvas.ink === colors.white ? 0.85 : 0.8} size={320} />
         </div>
       ) : null}
 

@@ -1,5 +1,69 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Estilo Claude — 5ª rodada: 4 gaps concretos de QA rigoroso (2026-09-05)
+
+Fundador seguiu insatisfeito depois da 4ª rodada: "ainda uma merda e os
+modelos tão ruim". Desta vez o Rafael (não o fundador) fez a comparação lado
+a lado, releu `docs/referencias-visuais/claude-instagram/grid-1.png` e
+`grid-2.png` com atenção e identificou **4 gaps concretos e específicos**
+(não "chegar mais perto" vago) comparando contra os renders da v3
+(`out/estilo-claude-v3/*.png`):
+
+1. **Gradiente vibrante remanescente em `VitrineProduto`** — a referência
+   real NUNCA usa gradiente de cor de produto, sempre bloco sólido único
+   desaturado; `padrao`/`grid`/`print` ainda tinham
+   `linear-gradient(160deg, productColor.base → …)` mesmo em
+   `editorialClaude`. Corrigido em `src/templates/VitrineProduto.tsx`: novo
+   helper `identityBackground()` — quando `isMinimalDecoration(vs)` é true,
+   devolve `productColor.dark` sólido nas 3 variantes que tinham o
+   gradiente; nas outras continua gradiente normal (comportamento não muda
+   fora de `editorialClaude`).
+2. **Foto de banco genérica em vez de fotografia atmosférica/cinematográfica**
+   — `09-FotoDocumental` (`CoverFotoReal`) usava
+   `corredor-empilhadeira-estoque.jpg`: armazém bem iluminado, informativo,
+   "stock" corporativo. A referência real (praia com neblina/pessoa de
+   costas, montanha com neblina) é contemplativa, luz difusa, pouca gente ou
+   1 pessoa pequena na cena, dessaturada/fria — diferença de CURADORIA de
+   foto, não de tratamento de código. Pesquisada e baixada foto NOVA via
+   Pexels (`WebFetch` na busca/página do Pexels, sem MCP de automação
+   disponível nesta sessão — mesmo método documentado em
+   `public/photos/CREDITOS.md` pros Rounds anteriores):
+   `montanha-neblina-caminhante.jpg` (Pexels #32984804, Robert So) — montanha
+   coberta de neblina, caminhante pequeno de costas, preto-e-branco. Ver
+   `public/photos/CREDITOS.md` pra crédito completo.
+3. **Posição/peso do texto sobre foto** — `CoverFotoReal` e `DicaPratica`
+   (`cover-foto`) em `editorialClaude` renderizavam texto no canto inferior
+   esquerdo, peso bold (herdado de `headlineWeight:'bold'` do preset). A
+   referência usa texto CENTRALIZADO, peso médio/regular. Corrigido nos 2
+   templates: `justifyContent`/`alignItems`/`textAlign` viram `center`,
+   `fontWeight` fixado em `500` (hardcoded — específico do formato "texto
+   sobre foto", não do preset como um todo; Bastidores/DicaPratica sobre
+   CARTÃO DE COR continuam serifado bold, que está certo lá). `DicaPratica`
+   `cover-foto` não tinha NENHUM tratamento `minimal` até agora — ganhou um
+   branch novo dedicado, mesmo padrão do `CoverFotoReal`.
+4. **Estrutura do card de cor sólida — vazio demais no meio** —
+   `Bastidores` `manifesto` e `DicaPratica` `bridge` centralizavam o bloco
+   de texto (`justifyContent:'center'`) no meio do FRAME INTEIRO, criando um
+   vão enorme entre o texto e o rodapé fixo (`bottom: 130`) — o oposto da
+   densidade texto-por-área da referência ("How we study Claude"/"Safeguards
+   101": eyebrow+headline+apoio ancorados no TOPO do card). Corrigido:
+   `justifyContent` vira `flex-start` com padding-top maior em
+   `editorialClaude` (ancora no topo). Isso sozinho não bastava — ainda
+   sobrava vão abaixo do texto por causa da altura do frame (1080×1350,
+   maior que o crop quadrado do grid do Instagram) — então a ilustração à
+   mão (`IllustrationFluxo`, já existente da 4ª rodada) foi AUMENTADA
+   (180px→320px em Bastidores, 130px→300px em DicaPratica) e MOVIDA do
+   canto superior (acento pequeno perto do eyebrow) pro meio-baixo do card
+   (mesmo raciocínio do ícone "casa com mão" de "Safeguards 101": preenche
+   deliberadamente o espaço abaixo do texto, não é decoração de canto
+   solta).
+
+QA visual: os 3 PNGs da v3 (Bastidores/DicaPratica/VitrineProduto)
+re-renderizados + 1 PNG NOVO (`09-FotoDocumental` com a foto atmosférica) em
+`out/estilo-claude-v4/` (`node scripts/qa-estilo-claude-v4.mjs`) — cada um
+lido e comparado de novo contra as referências reais antes de aprovar
+(Regra Inviolável #1). `npx tsc --noEmit` limpo depois das mudanças.
+
 ## Estilo Claude — 4ª rodada: ilustração própria à mão (2026-09-05)
 
 Feedback do fundador na 3ª tentativa (ver seção abaixo): "isso tá ruim, sem
