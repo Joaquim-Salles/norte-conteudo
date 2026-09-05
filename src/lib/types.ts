@@ -3,6 +3,7 @@
 import type {ThemeName} from './themes';
 import type {VisualStyleName} from './visualStyles';
 import type {MotionStyleName} from './motionStyles';
+import type {HandDrawnIllustrationName} from './HandDrawn';
 
 export type ProductKey = 'ntbEstoque' | 'ntbVendas' | 'norteAvalia' | null;
 
@@ -61,7 +62,22 @@ export type DicaPraticaSlide =
        */
       statusVerbo?: string;
     }
-  | {kind: 'bridge'; numero: number; total: number; titulo: string; corpo: string}
+  | {
+      kind: 'bridge';
+      numero: number;
+      total: number;
+      titulo: string;
+      corpo: string;
+      /**
+       * Ilustração à mão em destaque (7ª rodada, 2026-09-05 — ver
+       * `src/lib/HandDrawn.tsx`) — layout "capa de cor chapada" com a
+       * ilustração como protagonista, não detalhe de canto. Omitido =
+       * `'fluxo'` (comportamento original preservado).
+       */
+      illustration?: HandDrawnIllustrationName;
+      /** Verbo no gerúndio pro `StatusChip`, mesmo campo já usado em `cover-foto`. Omitido = sem chip. Só efeito em `editorialClaude`. */
+      statusVerbo?: string;
+    }
   | {kind: 'cta'; headline?: string};
 
 export type DicaPraticaData = {
@@ -133,12 +149,28 @@ export type VitrineProdutoData = {
    * apoio são deliberadamente ignorados — ver comentário no componente.
    */
   visualStyle?: VisualStyleName;
+  /**
+   * Ilustração à mão em destaque, protagonista da composição na variant
+   * `padrao` (7ª rodada, 2026-09-05 — ver `src/lib/HandDrawn.tsx`). Omitido
+   * = `'negocioReal'` (comportamento original preservado).
+   */
+  illustration?: HandDrawnIllustrationName;
+  /** Verbo no gerúndio pro `StatusChip` na variant `padrao`. Omitido = sem chip. Só efeito em `editorialClaude`. */
+  statusVerbo?: string;
 };
 
 export type MetodologiaSlide =
   | {kind: 'cover'; titulo: string; metodo?: string}
   | {kind: 'cover-roadmap'; titulo: string; metodo?: string; etapas: string[]}
-  | {kind: 'cover-editorial'; titulo: string; subtitulo?: string}
+  | {
+      kind: 'cover-editorial';
+      titulo: string;
+      subtitulo?: string;
+      /** Ilustração à mão em destaque (7ª rodada, ver `src/lib/HandDrawn.tsx`) — só efeito em `editorialClaude`. Omitido = sem ilustração. */
+      illustration?: HandDrawnIllustrationName;
+      /** Verbo no gerúndio pro `StatusChip`. Omitido = sem chip. Só efeito em `editorialClaude`. */
+      statusVerbo?: string;
+    }
   | {kind: 'passo'; numero: number; total: number; titulo: string; descricao: string}
   | {kind: 'cta'; headline?: string};
 
@@ -251,6 +283,10 @@ export type DepoimentoSlide =
       foto?: string;
       /** object-position da foto — só relevante se `foto` for passado. */
       fotoPosition?: string;
+      /** Ilustração à mão em destaque (7ª rodada, ver `src/lib/HandDrawn.tsx`) — só sem foto, só `editorialClaude`. Omitido = sem ilustração. */
+      illustration?: HandDrawnIllustrationName;
+      /** Verbo no gerúndio pro `StatusChip`. Omitido = sem chip. Só efeito em `editorialClaude`, só sem foto. */
+      statusVerbo?: string;
     }
   | {kind: 'resultado'; corpo: string; metrica?: string; produto?: ProductKey}
   | {kind: 'cta'; headline?: string};
@@ -356,6 +392,17 @@ export type BastidoresData = {
   foto?: string;
   /** object-position da foto (ver PhotoBackground) — só relevante se `foto` for passado. */
   fotoPosition?: string;
+  /**
+   * Ilustração à mão em destaque na variant `manifesto` (7ª rodada,
+   * 2026-09-05 — ver `src/lib/HandDrawn.tsx`). Só sem foto, só efeito em
+   * `editorialClaude`. Omitido = `'fluxo'` (comportamento original).
+   */
+  illustration?: HandDrawnIllustrationName;
+  /**
+   * Verbo no gerúndio pro `StatusChip` na variant `manifesto`. Omitido = sem
+   * chip. Só efeito em `editorialClaude`, só sem foto.
+   */
+  statusVerbo?: string;
 };
 
 /**

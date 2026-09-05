@@ -3,7 +3,7 @@ import {Frame} from '../lib/Frame';
 import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {GhostCheck, GhostQuote} from '../lib/GhostGraphics';
-import {IllustrationFluxo} from '../lib/HandDrawn';
+import {HAND_DRAWN_ILLUSTRATIONS} from '../lib/HandDrawn';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhotoBackground} from '../lib/PhotoBackground';
@@ -409,24 +409,35 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
           ))}
         </div>
 
+        {/* StatusChip (7ª rodada, 2026-09-05) — "a marca narrando a cena",
+            posicionado ao lado do tracker, sem competir com a ilustração
+            grande que carrega a composição abaixo do texto. */}
+        {minimal && slide.statusVerbo ? (
+          <div style={{position: 'absolute', top: 128, right: 72}}>
+            <StatusChip verbo={slide.statusVerbo} accentColor={colors.accent} tone={canvas.ink === colors.white ? 'light' : 'dark'} />
+          </div>
+        ) : null}
+
         {graphics ? (
           <div style={{position: 'absolute', right: -70, bottom: -50}}>
             <GhostCheck color={canvas.ink} opacity={0.05} size={420} />
           </div>
         ) : null}
 
-        {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx):
-            mesmo diagrama de fluxo do Bastidores, aqui menor e no canto
-            superior direito — reforça "1 ideia dentro de um processo maior",
-            e repete a mesma peça gráfica entre templates pra virar identidade
-            reconhecível, não decoração pontual. */}
-        {/* Gap 4 do QA rigoroso 2026-09-05 (mesma correção de Bastidores
-            manifesto, comparação vs. "Safeguards 101"): ícone GRANDE
-            preenchendo o vazio abaixo do bloco de texto, não acento pequeno
-            de canto perto do tracker de progresso. */}
+        {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx)
+            como PROTAGONISTA (7ª rodada, 2026-09-05: antes 300px no canto
+            superior direito — pedido do fundador é "não detalhe de canto
+            pequeno", a ilustração precisa ocupar espaço real na composição,
+            como "Safeguards 101"/"How we study Claude" fazem). Agora 400px,
+            centralizada, ocupando o vão abaixo do texto — `illustration`
+            (prop nova) escolhe qual das 6 ilustrações combina com a ideia do
+            slide. */}
         {minimal ? (
-          <div style={{position: 'absolute', right: 64, top: 680}}>
-            <IllustrationFluxo color={canvas.ink} opacity={0.85} size={300} />
+          <div style={{position: 'absolute', left: 0, right: 0, bottom: 220, display: 'flex', justifyContent: 'center'}}>
+            {(() => {
+              const Illustration = HAND_DRAWN_ILLUSTRATIONS[slide.illustration ?? 'fluxo'];
+              return <Illustration color={canvas.ink} opacity={canvas.ink === colors.white ? 0.9 : 0.85} size={400} />;
+            })()}
           </div>
         ) : null}
 
@@ -512,7 +523,19 @@ export const DicaPratica: React.FC<{slide: DicaPraticaSlide; visualStyle?: Visua
           >
             {slide.titulo}
           </h2>
-          <p style={{fontSize: 34, fontWeight: 400, color: '#3c3c46', lineHeight: 1.45, margin: 0}}>
+          <p
+            style={{
+              fontSize: 34,
+              fontWeight: 400,
+              // Achado real de QA (7ª rodada, 2026-09-05): cor fixa '#3c3c46'
+              // (cinza escuro) ficava ilegível quando editorialClaude sorteia
+              // um fundo escuro da canvasPalette (preto/azul-acinzentado) —
+              // corpo agora segue o contraste do canvas, igual ao título.
+              color: minimal ? (canvas.ink === colors.white ? 'rgba(255,255,255,0.82)' : '#3c3c46') : '#3c3c46',
+              lineHeight: 1.45,
+              margin: 0,
+            }}
+          >
             {slide.corpo}
           </p>
         </div>

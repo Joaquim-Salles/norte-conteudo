@@ -8,6 +8,8 @@ import {getTheme, type ThemeName} from '../lib/themes';
 import {GhostQuote, GhostBars, GhostMarker, GhostSlash} from '../lib/GhostGraphics';
 import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconQuote, IconAlert, IconGrowth} from '../lib/icons';
+import {HAND_DRAWN_ILLUSTRATIONS} from '../lib/HandDrawn';
+import {StatusChip} from '../lib/StatusChip';
 import {
   getVisualStyle,
   headlineStyle,
@@ -341,21 +343,28 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
             gap: 28,
           }}
         >
-          <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-            {/* Ícone de eyebrow — decoração de apoio ausente na referência
-                real (@claudeai); suprimido em editorialClaude (2026-09-05). */}
-            {!minimal ? <IconAlert size={22} color={eyebrowColor} strokeWidth={2.4} /> : null}
-            <span
-              style={{
-                fontSize: 20,
-                fontWeight: 700,
-                letterSpacing: 2,
-                color: eyebrowColor,
-                textTransform: 'uppercase',
-              }}
-            >
-              Antes, nas palavras do cliente
-            </span>
+          <div style={{display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+              {/* Ícone de eyebrow — decoração de apoio ausente na referência
+                  real (@claudeai); suprimido em editorialClaude (2026-09-05). */}
+              {!minimal ? <IconAlert size={22} color={eyebrowColor} strokeWidth={2.4} /> : null}
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                  letterSpacing: 2,
+                  color: eyebrowColor,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Antes, nas palavras do cliente
+              </span>
+            </div>
+            {/* StatusChip (7ª rodada, 2026-09-05) — só sem foto (com foto o
+                template já usa PhotoBackground ambient, outro layout). */}
+            {minimal && !temFoto && slide.statusVerbo ? (
+              <StatusChip verbo={slide.statusVerbo} accentColor={colors.accent} tone={canvas.ink === colors.white ? 'light' : 'dark'} />
+            ) : null}
           </div>
           {/* EXCECAO editorialClaude (2026-09-05): a referencia real
               (@claudeai) nunca poe citacao dentro de um card — o texto
@@ -401,6 +410,20 @@ export const Depoimento: React.FC<{slide: DepoimentoSlide; theme?: ThemeName; vi
               </p>
             </SurfaceCard>
           )}
+
+          {/* Ilustração própria à mão (editorialClaude — 7ª rodada,
+              2026-09-05) como PROTAGONISTA abaixo da citação — reforça
+              confiança/aprovação/parceria do depoimento com peso visual
+              real, não decoração de canto. Só sem foto (com foto o espaço
+              já é ocupado pelo tratamento `ambient` da imagem). */}
+          {minimal && !temFoto && slide.illustration ? (
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: 12}}>
+              {(() => {
+                const Illustration = HAND_DRAWN_ILLUSTRATIONS[slide.illustration];
+                return <Illustration color={canvas.ink} opacity={canvas.ink === colors.white ? 0.9 : 0.85} size={300} />;
+              })()}
+            </div>
+          ) : null}
         </div>
       </Frame>
     );

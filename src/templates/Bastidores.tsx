@@ -3,7 +3,8 @@ import {Frame} from '../lib/Frame';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {colors} from '../lib/tokens';
 import {GhostBars, GhostCheck} from '../lib/GhostGraphics';
-import {IllustrationFluxo} from '../lib/HandDrawn';
+import {HAND_DRAWN_ILLUSTRATIONS} from '../lib/HandDrawn';
+import {StatusChip} from '../lib/StatusChip';
 import {PhotoBackground} from '../lib/PhotoBackground';
 import {IconCompass, IconCheck} from '../lib/icons';
 import {
@@ -73,6 +74,8 @@ export const Bastidores: React.FC<BastidoresData> = ({
   visualStyle,
   foto,
   fotoPosition,
+  illustration = 'fluxo',
+  statusVerbo,
 }) => {
   const vs = visualStyle ? getVisualStyle(visualStyle) : null;
   const tex = resolveTexture(vs, BASE_TEXTURE_OPACITY);
@@ -234,35 +237,44 @@ export const Bastidores: React.FC<BastidoresData> = ({
           gap: scaleSpacing(vs, 40, {min: 26, max: 54}),
         }}
       >
-        <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-          {/* Selo circular de ícone — decoração de apoio que a referência real
-              (@claudeai) não usa; suprimido em editorialClaude (2026-09-05). */}
-          {!minimal ? (
-            <div
+        <div style={{display: 'flex', alignItems: 'center', gap: 14, justifyContent: 'space-between'}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
+            {/* Selo circular de ícone — decoração de apoio que a referência real
+                (@claudeai) não usa; suprimido em editorialClaude (2026-09-05). */}
+            {!minimal ? (
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  border: `2px solid ${inkSoft(0.25)}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <IconCompass size={26} color={canvas.ink} strokeWidth={2} />
+              </div>
+            ) : null}
+            <span
               style={{
-                width: 56,
-                height: 56,
-                borderRadius: '50%',
-                border: `2px solid ${inkSoft(0.25)}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                fontSize: 21,
+                fontWeight: 700,
+                letterSpacing: 2,
+                color: inkSoft(0.65),
+                textTransform: 'uppercase',
               }}
             >
-              <IconCompass size={26} color={canvas.ink} strokeWidth={2} />
-            </div>
+              {eyebrow}
+            </span>
+          </div>
+          {/* StatusChip (7ª rodada, 2026-09-05) — "a marca narrando a cena",
+              mesmo componente já usado no layout "overlay em foto"; aqui o
+              foco continua sendo a ilustração grande + texto, o chip é só
+              legenda de contexto discreta ao lado do eyebrow. */}
+          {minimal && statusVerbo && !temFoto ? (
+            <StatusChip verbo={statusVerbo} accentColor={colors.accent} tone={canvas.ink === colors.white ? 'light' : 'dark'} />
           ) : null}
-          <span
-            style={{
-              fontSize: 21,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: inkSoft(0.65),
-              textTransform: 'uppercase',
-            }}
-          >
-            {eyebrow}
-          </span>
         </div>
 
         <h2
@@ -317,19 +329,22 @@ export const Bastidores: React.FC<BastidoresData> = ({
         </>
       ) : null}
 
-      {/* Ilustração própria à mão (editorialClaude) — diagrama de nós/setas,
-          reforçando "processo" (o eyebrow "Como trabalhamos" é literalmente
-          sobre isso). Só sem foto — com foto o canto já está ocupado pelo
-          overlay/textShadow do título.
-          Gap 4 do QA rigoroso 2026-09-05 (comparação vs. "Safeguards 101",
-          grid-2 real do @claudeai): a referência usa esse ícone GRANDE
-          preenchendo o vazio abaixo do texto, não um acento pequeno de
-          canto — corrigido aumentando o tamanho (180→320) e movendo pra
-          baixo do bloco de texto, ocupando o meio do card que antes ficava
-          vazio, em vez de duplicar como decoração de canto solta. */}
+      {/* Ilustração própria à mão (editorialClaude) — PROTAGONISTA da
+          composição (7ª rodada, 2026-09-05: pedido do fundador "quero os sem
+          foto com desenhos... não só detalhe de canto pequeno"). Antes: 320px
+          espremida no canto superior direito. Agora: 440px, centralizada na
+          largura do card, ocupando o espaço abaixo do texto como elemento
+          visual de peso equivalente ao próprio título — mesmo princípio de
+          "Safeguards 101" (ícone grande dividindo a composição com o texto,
+          não decoração de canto). `illustration` (prop nova) deixa o brief
+          escolher qual das 6 ilustrações combina com o conceito da peça — só
+          sem foto (com foto o espaço já está ocupado pelo overlay/título). */}
       {minimal && !temFoto ? (
-        <div style={{position: 'absolute', right: 64, top: 700}}>
-          <IllustrationFluxo color={canvas.ink} opacity={canvas.ink === colors.white ? 0.85 : 0.8} size={320} />
+        <div style={{position: 'absolute', left: 0, right: 0, bottom: 200, display: 'flex', justifyContent: 'center'}}>
+          {(() => {
+            const Illustration = HAND_DRAWN_ILLUSTRATIONS[illustration];
+            return <Illustration color={canvas.ink} opacity={canvas.ink === colors.white ? 0.92 : 0.88} size={440} />;
+          })()}
         </div>
       ) : null}
 

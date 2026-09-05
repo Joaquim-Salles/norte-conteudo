@@ -6,6 +6,8 @@ import {GhostBars, GhostQuote} from '../lib/GhostGraphics';
 import {IconCycle} from '../lib/icons';
 import {Badge} from '../lib/Badge';
 import {SurfaceCard} from '../lib/SurfaceCard';
+import {HAND_DRAWN_ILLUSTRATIONS} from '../lib/HandDrawn';
+import {StatusChip} from '../lib/StatusChip';
 import {
   getVisualStyle,
   headlineStyle,
@@ -258,6 +260,13 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
             </div>
           </>
         ) : null}
+        {/* StatusChip (7ª rodada, 2026-09-05) — canto superior, "a marca
+            narrando a cena", sem competir com a ilustração/texto abaixo. */}
+        {minimal && slide.statusVerbo ? (
+          <div style={{position: 'absolute', top: 96, left: 96}}>
+            <StatusChip verbo={slide.statusVerbo} accentColor={colors.accent} tone={canvas.ink === colors.white ? 'light' : 'dark'} />
+          </div>
+        ) : null}
         <div
           style={{
             position: 'absolute',
@@ -265,8 +274,9 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
             padding: '220px 96px 220px',
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'stretch',
+            alignItems: 'center',
             justifyContent: 'center',
+            gap: minimal && slide.illustration ? 56 : 0,
           }}
         >
           {/* Barra vertical tipo "pull-quote" — decoração de apoio que a
@@ -297,16 +307,39 @@ export const MetodologiaSemEnrolacao: React.FC<{slide: MetodologiaSlide; visualS
                 lineHeight: tituloStyleEditorial.lineHeight,
                 letterSpacing: tituloStyleEditorial.letterSpacing,
                 margin: '22px 0 0',
+                maxWidth: minimal && slide.illustration ? 520 : undefined,
               }}
             >
               {slide.titulo}
             </h1>
             {slide.subtitulo ? (
-              <p style={{fontSize: 30, fontWeight: 400, color: '#54546a', lineHeight: 1.4, margin: '28px 0 0', maxWidth: 780}}>
+              <p
+                style={{
+                  fontSize: 30,
+                  fontWeight: 400,
+                  color: minimal ? (canvas.ink === colors.white ? 'rgba(255,255,255,0.75)' : '#54546a') : '#54546a',
+                  lineHeight: 1.4,
+                  margin: '28px 0 0',
+                  maxWidth: minimal && slide.illustration ? 520 : 780,
+                }}
+              >
                 {slide.subtitulo}
               </p>
             ) : null}
           </div>
+          {/* Ilustração própria à mão (editorialClaude — 7ª rodada,
+              2026-09-05) como PROTAGONISTA ao lado do texto — mesma técnica
+              do "Follow your track" real (diagrama/desenho companheiro do
+              texto, não decoração de canto solta). Só quando o brief pede
+              (`illustration`), pra não obrigar toda cover-editorial a levar
+              desenho — headline recua pra 520px de largura pra abrir espaço
+              de verdade pro desenho, não só um acento pequeno ao lado. */}
+          {minimal && slide.illustration ? (
+            (() => {
+              const Illustration = HAND_DRAWN_ILLUSTRATIONS[slide.illustration];
+              return <Illustration color={canvas.ink} opacity={canvas.ink === colors.white ? 0.92 : 0.88} size={340} />;
+            })()
+          ) : null}
         </div>
       </Frame>
     );

@@ -1,5 +1,124 @@
 # Catálogo de templates e variações — 8 tipos de post
 
+## Estilo Claude — 7ª rodada: ilustração como protagonista no "sem foto" (2026-09-05)
+
+Fundador aprovou o layout "overlay em foto" da 6ª rodada e pediu o próximo
+passo: *"quero os sem foto com desenhos, versões, vários"* — o LAYOUT 4 do
+relatório (`docs/referencias-visuais/claude-instagram/relatorio-completo-fundador.md`,
+"capa de cor chapada: fundo sólido, sem foto"), mas com a ilustração à mão
+como ELEMENTO CENTRAL da composição, não detalhe pequeno de canto (que é
+como as rodadas 4ª/5ª tinham aplicado). Regra Inviolável #1 revisitada
+explicitamente pelo fundador ("releia o relatório de novo se tiver dúvida")
+— releitura confirmou: "Safeguards 101" e "How we study Claude" (referências
+reais do relatório) usam ícone/diagrama GRANDE dividindo a composição com o
+texto, nunca um acento de canto.
+
+**Achado real de QA antes de qualquer render** (comparação código × relatório,
+não só releitura de texto): `VitrineProduto` `padrao` desde a 4ª rodada tinha
+a ilustração (`IllustrationNegocioReal`) em **128px**, espremida no canto
+superior direito do bloco de identidade — o pior caso do catálogo do que o
+fundador está criticando. `Bastidores` `manifesto` e `DicaPratica` `bridge`
+já estavam melhor (300-320px, posição meio-inferior, não canto), mas ainda
+proporcionalmente pequenos frente ao texto. `MetodologiaSemEnrolacao`
+`cover-editorial` e `Depoimento` `contexto` (sem foto) não tinham NENHUMA
+ilustração ainda, apesar de já suportarem `editorialClaude`.
+
+**4 ilustrações NOVAS** em `src/lib/HandDrawn.tsx` (mesma técnica monoline
+imperfeita das 2 já existentes — wobble determinístico via seed, seta em V
+desalinhado, só stroke, nunca fill), escolhidas cruzando os 8 tipos de post
+com os produtos reais da Norte (não decoração genérica de ícone de banco):
+- `IllustrationCrescimento` — gráfico de barras ascendente + traço de
+  tendência com seta: conceito "resultado/crescimento mensurável" (Vitrine,
+  Dado vs. Achismo, Depoimento — o produto gera número que sobe).
+- `IllustrationParceria` — aperto de mão, 2 mangas + entrelaçado de traço
+  único: conceito "trabalhamos JUNTO com o cliente" (Bastidores, Vitrine,
+  Depoimento, Metodologia — a Norte não é só fornecedor).
+- `IllustrationTempo` — ampulheta com grãos caindo: conceito "tempo
+  economizado" (Dica Prática, Bastidores — benefício central de automatizar
+  Estoque/Vendas).
+- `IllustrationAprovado` — selo dentado + check de 2 traços: conceito
+  "validado/aprovado" (Dica Prática, Vitrine, Depoimento — prova de
+  qualidade testada, não ícone utilitário de lista como `IconCheck`).
+
+6 ilustrações no total agora, registradas em `HAND_DRAWN_ILLUSTRATIONS`
+(`Record<HandDrawnIllustrationName, FC>`) — cada template que já suportava
+`editorialClaude` ganhou uma prop nova `illustration` (default preserva a
+ilustração hardcoded original de cada um: `fluxo` em Bastidores/DicaPratica,
+`negocioReal` em VitrineProduto) pra o brief escolher qual das 6 combina com
+o conceito da peça, em vez de 1 única fixa por template.
+
+**Ilustração virou PROTAGONISTA, não decoração — mudança concreta por
+template:**
+1. `Bastidores` `manifesto`: 320px→**440px**, saiu do canto (`right:64,
+   top:700`) e passou a CENTRALIZADA na largura do card, ocupando o vão
+   abaixo do texto como elemento de peso equivalente ao título.
+2. `DicaPratica` `bridge`: 300px→**400px**, mesmo tratamento — centralizada,
+   não mais no canto superior direito perto do tracker de progresso.
+3. `VitrineProduto` `padrao` (o pior caso, ver achado de QA acima):
+   **128px→260px** — de detalhe de canto pra elemento que divide a metade
+   direita do bloco de identidade com o headline, peso visual equivalente
+   (`headlineMaxWidthPadrao` caiu de 700 pra 600 só nesse preset, pra abrir
+   espaço de verdade, não só reservar um cantinho).
+4. `MetodologiaSemEnrolacao` `cover-editorial`: ilustração NOVA (não existia
+   antes) — 340px, ao lado do texto na mesma linha (row), companheira direta
+   do headline, mesma técnica do "Follow your track" real (diagrama ao lado
+   do texto, não decoração de canto).
+5. `Depoimento` `contexto` (sem foto): ilustração NOVA — 300px, centralizada
+   abaixo da citação, reforçando confiança/aprovação com peso visual real.
+
+**`StatusChip` reaplicado** (componente já existente da 6ª rodada) em todos
+os 5 templates, sempre em segundo plano — perto do eyebrow/tracker, nunca
+competindo com a ilustração grande que carrega a composição. Novo campo
+`statusVerbo` opcional em `BastidoresData`, `DicaPraticaSlide` (`bridge`),
+`VitrineProdutoData`, `MetodologiaSlide` (`cover-editorial`) e
+`DepoimentoSlide` (`contexto`) — omitido = sem chip.
+
+**2 bugs de legibilidade achados no QA visual (Regra Inviolável #1 — 15
+peças lidas uma a uma, não só renderizadas)** antes desta rodada, ambos
+corrigidos:
+1. `DicaPratica` `bridge`: o corpo do slide (`<p>`) tinha `color: '#3c3c46'`
+   FIXO (cinza escuro) — ilegível quando `editorialClaude` sorteia um fundo
+   escuro da `canvasPalette` (preto/azul-acinzentado). Corrigido pra seguir
+   o contraste do canvas, igual ao título, só quando `minimal`.
+2. `VitrineProduto` `padrao`: o headline de teste inicial ("Feito pra loja de
+   verdade, não pra planilha de exemplo.") quebrava em 4 linhas com
+   `headlineMaxWidthPadrao: 560` e colidia com o primeiro card de feature
+   (`top: 480` fixo, sobrepõe de propósito o fim do bloco de identidade de
+   620px — ver comentário original do arquivo). Corrigido em 2 frentes: largura
+   subiu pra 600 e o headline de exemplo foi encurtado ("Feito pra loja real,
+   não pra demo.") — achado real de QA, não hipotético: renderizado, visto
+   colidindo, corrigido, re-renderizado e comparado de novo.
+
+**15 peças novas renderizadas** em `out/estilo-claude-v7/`
+(`node scripts/qa-estilo-claude-v7.mjs`) + 1 contact sheet
+(`out/estilo-claude-v7/_contact-sheet.png`, grid 5×3 via ffmpeg) — cobertura:
+
+| # | Template | Ilustração | Tema/produto | Chip |
+|---|---|---|---|---|
+| 01 | Bastidores (manifesto) | fluxo | — | — |
+| 02 | Bastidores (manifesto) | parceria | — | "Diagnosticando junto" |
+| 03 | Bastidores (manifesto) | tempo | — | — |
+| 04 | DicaPratica (bridge) | crescimento | — | — |
+| 05 | DicaPratica (bridge) | tempo | — | "Calculando o fechamento" |
+| 06 | DicaPratica (bridge) | aprovado | — | — |
+| 07 | VitrineProduto (padrao) | crescimento | estoque | — |
+| 08 | VitrineProduto (padrao) | parceria | vendas | "Sincronizando pedidos" |
+| 09 | VitrineProduto (padrao) | aprovado | avalia | — |
+| 10 | VitrineProduto (padrao) | negocioReal | estoque | — |
+| 11 | MetodologiaSemEnrolacao (cover-editorial) | fluxo | — | — |
+| 12 | MetodologiaSemEnrolacao (cover-editorial) | parceria | — | "Organizando o processo" |
+| 13 | Depoimento (contexto) | parceria | marca | — |
+| 14 | Depoimento (contexto) | aprovado | estoque | — |
+| 15 | Depoimento (contexto) | crescimento | vendas | "Medindo o ticket médio" |
+
+Distribuição: **6 ilustrações** (as 2 originais + as 4 novas, todas usadas
+pelo menos 1x) × **5 tipos de post** (Bastidores, DicaPratica, VitrineProduto,
+MetodologiaSemEnrolacao, Depoimento) × **4 temas/produtos** cobertos onde faz
+sentido (marca, estoque, vendas, avalia — VitrineProduto cobre 3 dos 4
+porque o 4º, marca, não é um produto vendável) × **4 peças com StatusChip**
+(minoria deliberada — chip é reforço pontual, não obrigatório em toda peça).
+`npx tsc --noEmit` limpo depois de todas as mudanças.
+
 ## Estilo Claude — 6ª rodada: execução do relatório completo do fundador (2026-09-06)
 
 O fundador fez a pesquisa ele mesmo desta vez — varredura completa de ~120

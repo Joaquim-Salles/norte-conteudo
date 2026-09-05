@@ -5,7 +5,8 @@ import {CtaBand} from '../lib/CtaBand';
 import {colors} from '../lib/tokens';
 import {getThemeForProduct} from '../lib/themes';
 import {GhostCheck} from '../lib/GhostGraphics';
-import {IllustrationNegocioReal} from '../lib/HandDrawn';
+import {HAND_DRAWN_ILLUSTRATIONS} from '../lib/HandDrawn';
+import {StatusChip} from '../lib/StatusChip';
 import {SurfaceCard} from '../lib/SurfaceCard';
 import {PhoneFrame, BrowserFrame} from '../lib/DeviceFrame';
 import {PhotoBackground} from '../lib/PhotoBackground';
@@ -70,6 +71,8 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   foto,
   fotoPosition,
   visualStyle,
+  illustration = 'negocioReal',
+  statusVerbo,
 }) => {
   const theme = getThemeForProduct(produto);
   const productColor = theme.colors;
@@ -556,11 +559,15 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
   // de identidade do produto no topo (620px) mantém a cor própria do produto,
   // preservando reconhecimento de marca (regra documentada do canvasOverride).
   const canvasPadrao = resolveCanvas(vs, productColor.dark, colors.white, headline);
-  // editorialClaude (correção 2026-09-05, ver src/lib/HandDrawn.tsx): reserva
-  // o canto superior direito do bloco de identidade pra ilustração própria
-  // (fachada de negócio, conceito "produto que vive numa loja de verdade") —
-  // maxWidth cai um pouco só nesse preset pra não colidir com headline longo.
-  const headlineMaxWidthPadrao = minimal ? 700 : 900;
+  // editorialClaude — 7ª rodada (2026-09-05): a ilustração deixou de ser
+  // detalhe de canto (128px, achado real de QA apontado pelo fundador —
+  // "quero desenhos, não decoração pequena de canto") e virou PROTAGONISTA
+  // real da metade direita do bloco de identidade, tamanho equivalente ao
+  // peso do headline (mesmo princípio de "Safeguards 101": ícone grande
+  // dividindo a composição com o texto). maxWidth cai mais (560, era 700)
+  // pra abrir espaço de verdade pra ilustração de 260px, não só reservar um
+  // cantinho.
+  const headlineMaxWidthPadrao = minimal ? 600 : 900;
   return (
     <Frame
       background={canvasPadrao.background}
@@ -639,12 +646,30 @@ export const VitrineProduto: React.FC<VitrineProdutoData> = ({
         </div>
       ) : null}
 
-      {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx):
-          fachada de negócio no canto superior direito do bloco de identidade,
-          reforçando "o produto vive num negócio real", não decoração solta. */}
+      {/* Ilustração própria à mão (editorialClaude — ver src/lib/HandDrawn.tsx)
+          como PROTAGONISTA da metade direita do bloco de identidade (7ª
+          rodada, 2026-09-05 — era 128px/canto, achado real de QA apontado
+          pelo fundador: "quero desenhos... não decoração pequena de
+          canto"). Agora 260px, vertical-centralizada no bloco, dividindo a
+          composição com o headline como peso visual equivalente —
+          `illustration` (prop nova) escolhe qual das 6 combina com o
+          conceito da peça (ex. crescimento/parceria/aprovado pra reforçar
+          resultado do produto, não só "negócio real" fixo). */}
       {minimal ? (
-        <div style={{position: 'absolute', right: 56, top: 108, zIndex: 0}}>
-          <IllustrationNegocioReal color={colors.white} opacity={0.9} size={128} />
+        <div style={{position: 'absolute', right: 40, top: 150, zIndex: 0}}>
+          {(() => {
+            const Illustration = HAND_DRAWN_ILLUSTRATIONS[illustration];
+            return <Illustration color={colors.white} opacity={0.95} size={260} />;
+          })()}
+        </div>
+      ) : null}
+
+      {/* StatusChip (7ª rodada, 2026-09-05) — "a marca narrando a cena",
+          canto superior esquerdo do bloco de identidade, acima do
+          logo/nome, sem competir com a ilustração grande à direita. */}
+      {minimal && statusVerbo ? (
+        <div style={{position: 'absolute', left: 64, top: 40, zIndex: 1}}>
+          <StatusChip verbo={statusVerbo} accentColor={colors.accent} tone="light" />
         </div>
       ) : null}
 
