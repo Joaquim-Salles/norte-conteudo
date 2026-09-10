@@ -11,10 +11,10 @@ import path from 'node:path';
  * encoding na passagem via argv, nao no Remotion. Sempre escrever os props num
  * arquivo .json temporario e passar --props=/caminho/arquivo.json.
  */
-export function renderStill({compositionId, props, outPath}) {
+export function renderStill({compositionId, props, outPath, entry = 'src/index.ts'}) {
   mkdirSync(path.dirname(outPath), {recursive: true});
 
-  const args = ['remotion', 'still', 'src/index.ts', compositionId, outPath, '--overwrite'];
+  const args = ['remotion', 'still', entry, compositionId, outPath, '--overwrite'];
 
   // Sem `props` -> usa o defaultProps registrado no Root.tsx pra essa composicao.
   if (props !== undefined) {

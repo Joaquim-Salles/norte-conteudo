@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "name": "Norte Para Negócios — Instagram Design DNA v2",
+    "description": "Sistema de identidade visual pro gerador de conteúdo Instagram (Remotion), pós-reset de 2026-09-04. Baseado em: relatório de 120 posts reais do @claudeai (fundador), exemplos concretos de vídeo/carrossel enviados na mesma rodada, e cores/fontes reais já validadas da Norte Para Negócios.",
+    "source_references": [
+      "docs/referencias-visuais/claude-instagram/relatorio-completo-fundador.md",
+      "docs/referencias-visuais/claude-instagram/exemplos-formatos-2026-09-04.md",
+      "https://norteparanegocios.com.br (mascote foguete real, bundle JS)",
+      "archive/v1-visual-2026-09-04/lib/themes.ts (valores de cor confirmados)"
+    ],
+    "created_at": "2026-09-05"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "analogous com acentos de produto",
+      "primary": { "hex": "#6b71f2", "role": "marca-mãe — institucional, assinatura, fechamento" },
+      "secondary": { "hex": "#2eb5c3", "role": "NTB Estoque — carrosséis educacionais de estoque" },
+      "accent": { "hex": "#f43f5e", "role": "accent fixo de marca — destaque pontual, nunca dominante" },
+      "neutral": {
+        "scale": ["#0a0a0a", "#1c1c1c", "#4a4a4a", "#8a8a8a", "#e8e4dc", "#f7f4ee"],
+        "usage": "quase-preto pra texto/fundo escuro, bege quente (#f7f4ee) como fundo claro dominante — não branco puro"
+      },
+      "semantic": { "success": "#2eb5c3", "warning": "#f8a41a", "error": "#ea2840", "info": "#484db5" },
+      "surface": { "background": "#f7f4ee", "card": "#ffffff", "elevated": "#1c1c1c" },
+      "contrast_strategy": "alto contraste texto/fundo (preto quase puro sobre bege, ou branco sobre cor chapada do produto) — nunca texto sobre foto sem overlay/scrim"
+    },
+    "typography": {
+      "type_scale": {
+        "display": { "size": "72-96px", "weight": "700 (serif itálico p/ overlay, sans bold p/ dado)", "line_height": "1.0", "tracking": "-0.02em" },
+        "heading_1": { "size": "56px", "weight": "700", "line_height": "1.05", "tracking": "-0.01em" },
+        "heading_2": { "size": "40px", "weight": "700", "line_height": "1.1", "tracking": "0" },
+        "heading_3": { "size": "28px", "weight": "700", "line_height": "1.2", "tracking": "0" },
+        "body": { "size": "22px", "weight": "400", "line_height": "1.4", "tracking": "0" },
+        "body_small": { "size": "18px", "weight": "400", "line_height": "1.4", "tracking": "0" },
+        "caption": { "size": "14px", "weight": "700", "line_height": "1.2", "tracking": "0.04em" },
+        "overline": { "size": "12px", "weight": "700", "line_height": "1", "tracking": "0.08em" }
+      },
+      "font_families": {
+        "heading": "Source Serif 4 (regular + italic) — headline, citação, overlay sobre foto/cena",
+        "body": "Atkinson Hyperlegible classic 400/700 — dado, corpo, UI, chips, legenda",
+        "mono": "n/a — não usado neste sistema"
+      },
+      "font_style_notes": "par fechado e definitivo (não testar outras fontes): serifada humanista pra emoção/narrativa, sans geométrica-humanista pra clareza/dado. Papéis NUNCA se misturam — serif não vira corpo, sans não vira citação."
+    },
+    "spacing": {
+      "base_unit": "8px",
+      "scale": [8, 16, 24, 32, 48, 64, 96, 128],
+      "content_density": "espaçoso — respiro generoso, 1 ideia por slide",
+      "section_rhythm": "margem externa fixa de 64-96px em todos os slides 1080x1350/1080x1080"
+    },
+    "layout": {
+      "grid_system": "sem grid rígido de colunas — composição por blocos assimétricos (texto + 1 elemento gráfico/foto)",
+      "max_content_width": "1080px (post) / 1080x1920 (vídeo)",
+      "columns": "1 (mobile-first, carrossel vertical de slides, não colunas)",
+      "gutter": "n/a",
+      "breakpoints": "n/a — formato fixo Instagram (1080x1350 feed, 1080x1920 vídeo)",
+      "alignment_tendency": "assimétrico deliberado — texto ancorado a um canto, elemento gráfico contrapondo"
+    },
+    "shape": {
+      "border_radius": { "small": "8px (chip)", "medium": "16px (card)", "large": "24px (foto/moldura)", "pill": "999px (StatusChip)" },
+      "border_usage": "nenhuma borda decorativa — separação por cor de fundo/contraste, não por linha",
+      "divider_style": "a linha conectora colorida É o divisor estrutural entre slides de um carrossel (única exceção)"
+    },
+    "elevation": {
+      "shadow_style": "soft diffused, muito sutil — só em StatusChip e QuoteCard (leve elevação pra parecer 'colado' na cena)",
+      "levels": { "low": "0 2px 8px rgba(0,0,0,.08)", "medium": "0 4px 16px rgba(0,0,0,.12)", "high": "não usado — sistema é flat" },
+      "depth_cues": "sobreposição de camadas (chip sobre foto) e contraste de cor — não sombra 3D nem gradiente"
+    },
+    "iconography": {
+      "style": "geométrico limpo (formas preenchidas, sem gradiente) para diagramas/mapa-mental; traço grosso monocromático simples (1-3 traços) só para ícones-objeto (lâmpada, óculos, mão) — nunca os dois estilos misturados numa mesma peça",
+      "stroke_weight": "traço grosso constante (~8-12px em escala 1080px) quando é ícone-objeto",
+      "size_scale": "pequeno (48-64px, canto/assinatura) e grande (300px+, protagonista de slide)",
+      "preferred_set": "custom SVG (mascote foguete + diagrama geométrico) — não usar biblioteca de ícone genérica (Lucide) como protagonista, só como apoio de UI/produto"
+    },
+    "motion": {
+      "easing": "cubic-bezier suave, sem bounce/elastic — 'confiável', não 'divertido'",
+      "duration_scale": { "micro": "150-250ms (chip/texto entrando)", "normal": "400-600ms (transição de slide/elemento)", "macro": "800-1200ms (mascote/animação de assinatura)" },
+      "entrance_pattern": "fade + leve deslocamento (12-24px), nunca zoom agressivo ou slide brusco",
+      "exit_pattern": "fade simples ou corte direto (sem exit elaborado)",
+      "philosophy": "1 elemento animado por vez, resto estático — economia de movimento (confirmado nos exemplos reais: vídeo da lâmpada, vídeo do card de meses)"
+    },
+    "components": {
+      "button_style": "n/a (Instagram não tem botão nativo — CTA é texto+seta, nunca 'botão' desenhado)",
+      "input_style": "n/a",
+      "card_style": "QuoteCard (citação+foto circular+nome+cargo) e post-it rotacionado levemente (referência Campus Ambassador) — cantos suaves, sombra leve",
+      "navigation_pattern": "linha conectora colorida atravessando bordas dos slides, cortada — sinaliza 'continue arrastando'",
+      "modal_style": "n/a",
+      "list_style": "n/a — conteúdo sempre em prosa curta ou dado plotado, nunca bullet genérico",
+      "component_notes": "StatusChip (pílula+ícone mascote+verbo gerúndio+reticências) é o componente de assinatura mais recorrente — aparece em quase todo formato"
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": ["direto", "confiável", "acolhedor", "moderno", "sem-frescura"],
+      "visual_metaphor": "caderno de anotação de quem entende de operação — não painel corporativo genérico",
+      "era_influence": "editorial contemporâneo (2024-2026), influência de relatório de pesquisa + revista impressa",
+      "genre": "B2B software editorial — não 'SaaS genérico', não 'agência de marketing'",
+      "personality_traits": ["competente", "acessível", "não-vendedor", "levemente lúdico (mascote)"],
+      "adjectives": ["claro", "quente", "honesto", "técnico-sem-ser-frio"]
+    },
+    "visual_language": {
+      "complexity": "moderada — 1 ideia central por slide, mas o carrossel inteiro é rico em variação de layout",
+      "ornamentation": "subtle accents — mascote e linha conectora são os únicos ornamentos recorrentes",
+      "whitespace_usage": "generoso, é parte da mensagem ('não estamos gritando pra vender')",
+      "visual_weight_distribution": "assimétrica — 70% do peso visual num elemento (texto grande OU foto OU diagrama), nunca dividido igualmente",
+      "focal_strategy": "single hero element por slide, progressive reveal ao longo do carrossel",
+      "contrast_level": "alto (texto/fundo), moderado (entre slides — cor muda, mas família tipográfica e mascote seguram a unidade)",
+      "texture_usage": "nenhuma textura decorativa artificial — a 'textura' real vem de foto documental quando usada"
+    },
+    "composition": {
+      "hierarchy_method": "escala tipográfica + isolamento espacial",
+      "balance_type": "asimétrico",
+      "flow_direction": "horizontal entre slides (carrossel), vertical dentro do slide (título → corpo → assinatura)",
+      "grouping_strategy": "por cor de tema (cada carrossel tem 1 cor de produto dominante, mascote sempre na cor da marca-mãe #6b71f2 quando é assinatura solo)",
+      "negative_space_role": "ativo — comunica calma/confiança, não é 'espaço vazio a preencher'"
+    },
+    "imagery": {
+      "photo_treatment": "documental honesto (sem preset artificial), scrim escuro sutil só quando texto sobrepõe",
+      "illustration_style": "geométrico chapado (diagramas/mascote) — NUNCA sketch/traço trêmulo à mão (erro já cometido e rejeitado no v1)",
+      "graphic_elements": "linha conectora colorida, StatusChip, mascote foguete, diagrama de nós geométrico",
+      "pattern_usage": "nenhum padrão decorativo repetido de fundo",
+      "image_shape": "retângulo cheio (sem moldura arredondada em foto de fundo); circular só pra foto de perfil em QuoteCard"
+    },
+    "interaction_feel": {
+      "feedback_style": "n/a (conteúdo estático/vídeo, não interface)",
+      "hover_behavior": "n/a",
+      "transition_personality": "smooth glide, nunca bouncy",
+      "loading_style": "n/a",
+      "microinteraction_density": "baixa — 1 elemento animado por vídeo, não múltiplos microdetalhes"
+    },
+    "brand_voice_in_ui": {
+      "tone": "professor que já operou loja de verdade — direto, sem jargão de consultoria",
+      "formality": "informal-competente (você, não 'o senhor'; mas nunca gíria de venda)",
+      "cta_style": "subtle suggestion — 'saiba mais', nunca urgência/escassez",
+      "empty_state_approach": "n/a",
+      "error_tone": "n/a"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "subtle-accent",
+      "performance_tier": "lightweight",
+      "fallback_strategy": "n/a — renderização é offline (Remotion → PNG/MP4), não runtime de usuário",
+      "primary_technology": "SVG + Remotion (interpolate/spring), sem Canvas/WebGL/shader"
+    },
+    "background_effects": { "type": "none", "description": "fundo é sempre cor chapada real do tema ou foto documental — nunca gradiente/mesh/generativo", "technology": "n/a", "params": {} },
+    "particle_systems": { "enabled": false },
+    "3d_elements": { "enabled": false },
+    "shader_effects": { "enabled": false },
+    "scroll_effects": {
+      "parallax": { "enabled": false },
+      "scroll_triggered_animations": { "enabled": false },
+      "scroll_morphing": { "enabled": false }
+    },
+    "text_effects": {
+      "type": "none como padrão; 'typewriter' ou 'reveal por linha' pontual em vídeo quando o conteúdo pede ritmo de leitura",
+      "description": "texto normalmente estático/fade-in simples — efeito só quando reforça o roteiro do vídeo",
+      "technology": "Remotion interpolate",
+      "params": { "split_strategy": "by-line", "animation_per_unit": "opacity+translateY", "stagger": "60-100ms", "effect_style": "fade-subtle" }
+    },
+    "cursor_effects": { "enabled": false },
+    "image_effects": { "type": "none", "description": "sem distorção/hover — é mídia estática/vídeo linear, não interface", "technology": "n/a", "params": {} },
+    "glassmorphism_neumorphism": { "enabled": false },
+    "canvas_drawings": { "enabled": false },
+    "svg_animations": {
+      "enabled": true,
+      "type": "path-draw (linha conectora 'desenhando' entre slides em vídeo) + decorative-loop (mascote foguete com leve flutuação/pulso quando é assinatura de fechamento)",
+      "description": "único uso de animação SVG: a linha conectora e o mascote — nunca em ícones de apoio",
+      "params": { "animation_method": "Remotion spring + strokeDashoffset", "path_morphing": false, "stroke_animation": true, "filter_effects": "none" }
+    },
+    "composite_notes": "Sistema deliberadamente pobre em 'efeito' — a identidade vem de REPETIÇÃO de 3 elementos simples (linha conectora, StatusChip, mascote) através de formatos variados, não de riqueza de efeito visual por peça. Isso é o oposto do v1, que tentava impressionar por peça isolada (ilustração elaborada) e falhou em consistência."
+  }
+}
