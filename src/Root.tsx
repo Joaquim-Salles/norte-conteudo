@@ -20,12 +20,7 @@ import {
   ArgumentoComplementa,
   ArgumentoFechamento,
 } from './templates/ArgumentoOmieNtb';
-import {
-  PilaresCapa,
-  PilaresProblema,
-  PilaresSolucao,
-  PilaresFechamento,
-} from './templates/PilaresApresentacao';
+import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
   AntesDepoisAntes,
   AntesDepoisPonte,
@@ -232,11 +227,13 @@ export const RemotionRoot: React.FC = () => {
       <Still id="ArgumentoComplementa" component={ArgumentoComplementa} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="ArgumentoFechamento" component={ArgumentoFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
-      {/* PILARES — carrossel fixado #1, apresentação institucional da NTB (2026-09-09): capa com diagrama hub-and-spoke das 6 palavras-pilar, problema, ecossistema de 4 partes, fechamento com mascote como assinatura. Ver CATALOGO.md pra decisões de composição. */}
-      <Still id="PilaresCapa" component={PilaresCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="PilaresProblema" component={PilaresProblema} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="PilaresSolucao" component={PilaresSolucao} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="PilaresFechamento" component={PilaresFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      {/* NORTE — apresentação institucional da NTB: posicionamento, soluções, Vendas, Estoque e fechamento. */}
+      <Still id="CarrosselCapa" component={CarrosselCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="CarrosselSolucoes" component={CarrosselSolucoes} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="CarrosselVendas" component={CarrosselVendas} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="CarrosselEstoque" component={CarrosselEstoque} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="CarrosselFechamento" component={CarrosselFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+
     </>
   );
 };

@@ -1,5 +1,38 @@
 # Catálogo de Templates — pós-reset v2 (2026-09-05)
 
+## Rodada 29 — Reset da peça Pilares (2026-09-10)
+
+O design anterior do carrossel institucional `Pilares` foi removido do laboratório por decisão do
+fundador. As seis composições (`PilaresCapa`, `PilaresProblema`, `PilaresVendas`, `PilaresEstoque`,
+`PilaresSolucao` e `PilaresFechamento`) e seus registros no `Root.tsx` não fazem mais parte do
+catálogo ativo. As anotações abaixo permanecem somente como histórico de tentativas e não devem
+guiar a nova criação. A próxima etapa é reconstruir a copy e a estrutura do carrossel antes de
+voltar ao design.
+
+## Rodada 27 — Pilares: carrossel fixado expandido para 6 telas (2026-09-10)
+
+### Direcionamento recebido
+
+O briefing do fixado 1 foi fechado com seis telas: capa com a ideia central, problema de
+conexão entre áreas, uma tela própria para NTB Vendas, uma tela própria para NTB Estoque,
+ecossistema NTB e CTA. A expansão dá espaço para os dois produtos serem explicados com prints
+reais, sem concentrar tudo no card de ecossistema.
+
+### Mudanças
+
+- `PilaresCapa` foi reconstruída com fundo azul profundo exclusivo, headline editorial, sinal gráfico de conexão e seis pilares ancorados ao redor;
+- `PilaresProblema` foi diversificada em quatro sintomas: retrabalho, informação espalhada, processo na memória e decisão no achismo;
+- `PilaresVendas` foi criado com headline, resumo, pontos de leitura e `vendas-mesas-comandas.png` emoldurado em tamanho maior;
+- `PilaresEstoque` foi criado com headline, resumo, pontos de leitura e `home-desktop.png` emoldurado;
+- `PilaresSolucao` agora funciona como visão do ecossistema em linguagem editorial: uma afirmação dominante e os três pilares organizados em sequência, sem cards/quadrados espalhados;
+- `Root.tsx` passou a registrar seis composições na ordem do carrossel.
+
+### Regra de publicação
+
+As telas existentes podem conter nomes ou dados de ambientes de teste/clientes. Antes de publicar,
+validar autorização e, se necessário, substituir por capturas limpas. O briefing editorial está
+em `conteudo ntb/01-fixados/01-pilares-apresentacao.md`.
+
 ## Rodada 26 — Pilares/Solução: prints reais NTB Vendas/Estoque, correção direta do fundador (2026-09-09)
 
 ### Correção do fundador (sobrepõe o briefing original de marketing)
