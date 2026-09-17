@@ -3,7 +3,6 @@ import {AbsoluteFill, staticFile} from 'remotion';
 import {ensureSansLoaded, ensureNewsreaderLoaded, FONT_SANS, FONT_SERIF_ROTAS} from '../lib/fonts';
 import {GridTexture} from '../lib/GridTexture';
 import {BrowserFrame} from '../lib/DeviceFrame';
-import {Monitor3DFrame} from '../lib/Monitor3DFrame';
 import {productColors, neutral, brand} from '../lib/themes';
 import {Mascote} from '../lib/Mascote';
 
@@ -136,9 +135,15 @@ export const CarrosselVendas: React.FC = () => {
           </div>
         </div>
         <div style={{marginTop: 46, display: 'flex', justifyContent: 'center'}}>
-          <Monitor3DFrame screenshot={staticFile('screenshots/vendas-mesas-comandas.png')} width={874} sourceWidth={1910} sourceHeight={984} />
+          <BrowserFrame
+            screenshot={staticFile('screenshots/vendas-mesas-comandas.png')}
+            width={908}
+            addressLabel="testvendase.norteparanegocios.com.br/loja"
+            sourceWidth={1910}
+            sourceHeight={984}
+          />
         </div>
-        <div style={{position: 'absolute', left: 0, bottom: 74, display: 'flex', gap: 14, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.10em', textTransform: 'uppercase', color: neutral.cinzaEscuro}}>
+        <div style={{marginTop: 30, display: 'flex', gap: 14, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.10em', textTransform: 'uppercase', color: neutral.cinzaEscuro}}>
           <span style={{color: productColors.vendas}}>Mesas e comandas</span><span>·</span><span>Pedidos na cozinha</span><span>·</span><span>Funcionamento offline</span>
         </div>
         <div style={{position: 'absolute', left: 0, right: 0, bottom: 0}}><FooterMark /></div>
