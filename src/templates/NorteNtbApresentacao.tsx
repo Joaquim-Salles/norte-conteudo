@@ -20,7 +20,7 @@ function loadFonts(): void {
 
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (
   <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 16, letterSpacing: '-0.01em', color: light ? WHITE : INK}}>
-    <Img src={staticFile('logos/norte-mark.svg')} style={{width: 36, height: 36, display: 'block'}} />
+    <Img src={staticFile(light ? 'logos/norte-mark-white.png' : 'logos/norte-mark.svg')} style={{width: 36, height: 36, display: 'block', objectFit: 'contain'}} />
     Norte para Negócios
   </div>
 );
