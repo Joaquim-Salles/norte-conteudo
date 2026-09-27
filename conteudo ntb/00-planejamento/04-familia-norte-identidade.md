@@ -50,11 +50,11 @@ A tipografia da família é Atkinson Hyperlegible. O símbolo oficial é o N em 
 
 ## Aplicação no primeiro carrossel
 
-Manter a estrutura já aprovada de cinco telas, com Norte Vendas antecipado para o segundo slide:
+Manter a estrutura já aprovada de cinco telas, com a visão das soluções como segundo slide:
 
 1. posicionamento da Norte para Negócios;
-2. Norte Vendas;
-3. visão das soluções;
+2. visão das soluções;
+3. Norte Vendas;
 4. Norte Estoque;
 5. fechamento e próximo passo.
 

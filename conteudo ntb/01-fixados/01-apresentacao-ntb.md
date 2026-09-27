@@ -2,8 +2,8 @@
 
 **Status:** copy aprovada para a primeira implementação visual  
 **Formato:** carrossel de 5 telas  
-**Ordem do feed:** `01 - Capa`, `02 - Norte Vendas`, `03 - Soluções`, `04 - Norte Estoque`, `05 - Fechamento`
-**Composições:** `CarrosselCapa`, `CarrosselVendas`, `CarrosselSolucoes`, `CarrosselEstoque`, `CarrosselFechamento`
+**Ordem do feed:** `01 - Capa`, `02 - Soluções`, `03 - Norte Vendas`, `04 - Norte Estoque`, `05 - Fechamento`
+**Composições:** `CarrosselCapa`, `CarrosselSolucoes`, `CarrosselVendas`, `CarrosselEstoque`, `CarrosselFechamento`
 **Objetivo:** posicionar a Norte para Negócios como consultoria de operação e apresentar Norte Vendas e Norte Estoque.
 
 **Direção visual atualizada:** manter a estrutura do carrossel, usando o azul principal da Norte na capa e no fechamento, azul profundo no Norte Vendas e verde-azulado no Norte Estoque. A capa passa a apresentar visualmente os dois produtos. As telas reais recebem moldura de navegador e mascaramento de dados de demonstração.
@@ -22,15 +22,7 @@ Assinatura visual: símbolo oficial N da Família Norte. O foguete não deve apa
 
 **Estratégia · Processos · Tecnologia**
 
-### Tela 2 — Norte Vendas
-
-**Pedido, cozinha, caixa e nota fiscal. Num sistema só.**
-
-*O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.*
-
-Elementos confirmados: mesas e comandas, pedidos na cozinha, nota fiscal e funcionamento offline.
-
-### Tela 3 — Visão das soluções
+### Tela 2 — Visão das soluções
 
 **A Norte transforma problemas da operação em soluções práticas.**
 
@@ -40,6 +32,14 @@ Elementos confirmados: mesas e comandas, pedidos na cozinha, nota fiscal e funci
 Do inventário à movimentação.
 
 **Estratégia · Processos · Tecnologia**
+
+### Tela 3 — Norte Vendas
+
+**Pedido, cozinha, caixa e nota fiscal. Num sistema só.**
+
+*O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.*
+
+Elementos confirmados: mesas e comandas, pedidos na cozinha, nota fiscal e funcionamento offline.
 
 ### Tela 4 — Norte Estoque
 

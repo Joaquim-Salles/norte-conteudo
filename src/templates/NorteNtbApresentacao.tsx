@@ -8,7 +8,9 @@ import {productColors, neutral, brand} from '../lib/themes';
 const INK = neutral.quasePreto;
 const PAPER = '#F5F5F9';
 const BLUE = '#484DB5';
+const NAVY = '#14163A';
 const DEEP = '#0A091E';
+const STOCK_PAPER = '#EAF7F7';
 const WHITE = '#FBFBFE';
 
 function loadFonts(): void {
@@ -37,34 +39,6 @@ const FooterMark: React.FC<{light?: boolean}> = ({light = false}) => (
   </div>
 );
 
-const CoverProductCard: React.FC<{
-  label: string;
-  accent: string;
-  screenshot: string;
-  style?: React.CSSProperties;
-}> = ({label, accent, screenshot, style}) => (
-  <div
-    style={{
-      position: 'absolute',
-      width: 330,
-      padding: 12,
-      borderRadius: 18,
-      background: `${WHITE}f2`,
-      boxShadow: '0 28px 55px rgba(10, 9, 30, 0.26)',
-      transformOrigin: 'center',
-      ...style,
-    }}
-  >
-    <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '4px 7px 11px', fontFamily: FONT_SANS, fontWeight: 700, fontSize: 12, letterSpacing: '0.10em', textTransform: 'uppercase', color: accent}}>
-      <span style={{width: 8, height: 8, borderRadius: '50%', background: accent}} />
-      {label}
-    </div>
-    <div style={{height: 142, overflow: 'hidden', borderRadius: 10, background: '#fff'}}>
-      <Img src={screenshot} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block'}} />
-    </div>
-  </div>
-);
-
 const DataMask: React.FC<{left: number; top: number; width: number; height: number; dark?: boolean}> = ({left, top, width, height, dark = false}) => (
   <div
     style={{
@@ -85,23 +59,19 @@ const DataMask: React.FC<{left: number; top: number; width: number; height: numb
 export const CarrosselCapa: React.FC = () => {
   loadFonts();
   return (
-    <AbsoluteFill style={{background: BLUE, padding: 86, color: WHITE}}>
-      <GridTexture id="grid-norte-capa" color={WHITE} opacity={0.065} />
-      <div style={{position: 'absolute', right: -220, top: 130, width: 700, height: 700, border: `1px solid ${WHITE}24`, borderRadius: '50%'}} />
-      <div style={{position: 'absolute', right: -130, top: 220, width: 510, height: 510, border: `1px solid ${WHITE}20`, borderRadius: '50%'}} />
-      <div style={{position: 'absolute', right: 70, bottom: -220, width: 520, height: 520, background: `${DEEP}20`, borderRadius: '50%'}} />
+    <AbsoluteFill style={{background: NAVY, padding: 86, color: WHITE}}>
+      <GridTexture id="grid-norte-capa" color={WHITE} opacity={0.08} />
+      <div style={{position: 'absolute', right: 70, top: 170, fontFamily: FONT_SERIF_ROTAS, fontSize: 560, lineHeight: 0.75, color: WHITE, opacity: 0.045}}>N</div>
       <div style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Wordmark light />
-        <CoverProductCard label="Norte Vendas" accent="#D9DBFF" screenshot={staticFile('screenshots/vendas-mesas-comandas.png')} style={{right: 16, top: 188, transform: 'rotate(4deg)'}} />
-        <CoverProductCard label="Norte Estoque" accent="#57D1D0" screenshot={staticFile('screenshots/ntb-estoque-dashboard-donana-brotas.jpg')} style={{right: 58, top: 560, transform: 'rotate(-4deg)'}} />
-        <div style={{marginTop: 210, maxWidth: 615}}>
+        <div style={{marginTop: 254, maxWidth: 850}}>
           <Overline light color={productColors.vendas}>Norte para Negócios · consultoria e sistemas</Overline>
           <div style={{height: 30}} />
           <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 92, lineHeight: 0.98, letterSpacing: '-0.045em', margin: 0}}>
             Damos o norte para a sua operação.
           </h1>
           <div style={{height: 34}} />
-          <p style={{fontFamily: FONT_SANS, fontSize: 24, lineHeight: 1.4, maxWidth: 550, margin: 0, color: `${WHITE}d9`}}>
+          <p style={{fontFamily: FONT_SANS, fontSize: 24, lineHeight: 1.4, maxWidth: 610, margin: 0, color: `${WHITE}d9`}}>
             Consultoria que entra na operação e sistemas feitos para acompanhar o chão de loja.
           </p>
         </div>
@@ -204,8 +174,13 @@ export const CarrosselVendas: React.FC = () => {
 export const CarrosselEstoque: React.FC = () => {
   loadFonts();
   return (
-    <AbsoluteFill style={{background: PAPER, padding: 86, color: INK}}>
-      <GridTexture id="grid-norte-estoque" color={INK} opacity={0.07} />
+    <AbsoluteFill style={{background: STOCK_PAPER, padding: 86, color: INK}}>
+      <GridTexture id="grid-norte-estoque" color={productColors.estoque} opacity={0.11} />
+      <div style={{position: 'absolute', right: -160, top: -115, width: 510, height: 510, borderRadius: '50%', background: `${productColors.estoque}22`}} />
+      <div style={{position: 'absolute', right: 86, top: 88, display: 'flex', alignItems: 'center', gap: 10, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.14em', textTransform: 'uppercase', color: productColors.estoque}}>
+        <span style={{width: 28, height: 4, borderRadius: 4, background: productColors.estoque}} />
+        Norte Estoque
+      </div>
       <div style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Wordmark />
         <div style={{marginTop: 132, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>

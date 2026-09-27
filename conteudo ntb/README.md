@@ -8,7 +8,7 @@ Este é o espaço de planejamento, redação e organização dos conteúdos da N
 - **Norte Vendas** — pedidos, mesas, cozinha, caixa e nota fiscal para restaurantes.
 - **Norte Estoque** — estoque, insumos, produção, etiquetas, inventários e transferências.
 
-O primeiro carrossel fixado será atualizado para essa Família Norte. A estrutura aprovada permanece, com a ordem de publicação: capa, Norte Vendas, soluções, Norte Estoque e fechamento;
+O primeiro carrossel fixado será atualizado para essa Família Norte. A estrutura aprovada permanece, com a ordem de publicação: capa, soluções, Norte Vendas, Norte Estoque e fechamento;
 mudam a apresentação, a nomenclatura, as cores e as assinaturas visuais.
 
 ## Fase atual
