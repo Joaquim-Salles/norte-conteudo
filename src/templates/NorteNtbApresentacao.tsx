@@ -21,7 +21,7 @@ function loadFonts(): void {
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (
   <Img
     src={staticFile(light ? 'logos/norte-wordmark-white.png' : 'logos/norte-wordmark-dark.png')}
-    style={{width: 174, height: 'auto', display: 'block', objectFit: 'contain'}}
+    style={{width: 150, height: 'auto', display: 'block', objectFit: 'contain'}}
   />
 );
 
