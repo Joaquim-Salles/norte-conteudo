@@ -1,44 +1,43 @@
 /**
- * Tokens de cor — extraídos de docs/design-dna.json (sistema definitivo v2,
- * pós-reset 2026-09-04). Conferidos contra archive/v1-visual-2026-09-04/lib/themes.ts
- * pra garantir que os hex batem com o que já estava validado.
+ * Tokens da Família Norte — alinhados à apresentação institucional de
+ * 27/09/2026: Norte para Negócios, Norte Vendas e Norte Estoque.
  */
 
 export type ThemeName = 'marca' | 'estoque' | 'vendas' | 'avalia';
 
 export const brand = {
-  primary: '#6b71f2', // marca-mãe — institucional, assinatura, fechamento
-  accent: '#f43f5e', // accent fixo — destaque pontual, nunca dominante
+  primary: '#14163A', // Norte para Negócios — marca-mãe
+  accent: '#EA2840', // vermelho do símbolo — destaque pontual
 };
 
 export const productColors: Record<ThemeName, string> = {
   marca: brand.primary,
-  estoque: '#2eb5c3', // NTB Estoque
-  vendas: '#f8a41a', // NTB Vendas (laranja das aletas do foguete — reservado p/ vitrine)
-  avalia: '#484db5', // Norte Avalia
+  estoque: '#168E9A', // Norte Estoque
+  vendas: '#484DB5', // Norte Vendas
+  avalia: '#484DB5', // Norte Avalia
 };
 
 export const neutral = {
-  scale: ['#0a0a0a', '#1c1c1c', '#4a4a4a', '#8a8a8a', '#e8e4dc', '#f7f4ee'] as const,
-  quasePreto: '#0a0a0a',
-  cinzaEscuro: '#1c1c1c',
+  scale: ['#0B0B0F', '#14163A', '#4a4a4a', '#8a8a8a', '#e7e9f5', '#FBFBFE'] as const,
+  quasePreto: '#0B0B0F',
+  cinzaEscuro: '#14163A',
   cinzaMedio: '#4a4a4a',
   cinzaClaro: '#8a8a8a',
-  bege: '#e8e4dc',
-  begeClaro: '#f7f4ee',
+  bege: '#e7e9f5',
+  begeClaro: '#FBFBFE',
 };
 
 export const semantic = {
-  success: '#2eb5c3',
+  success: '#168E9A',
   warning: '#f8a41a',
   error: '#ea2840',
-  info: '#484db5',
+  info: '#484DB5',
 };
 
 export const surface = {
-  background: '#f7f4ee',
-  card: '#ffffff',
-  elevated: '#1c1c1c',
+  background: '#FBFBFE',
+  card: '#FFFFFF',
+  elevated: '#14163A',
 };
 
 /** Cores reais do mascote foguete, extraídas do bundle do site (não inventar). */
@@ -64,8 +63,8 @@ export type Theme = {
 
 export const themes: Record<ThemeName, Theme> = {
   marca: {name: 'marca', label: 'Marca (institucional)', color: productColors.marca},
-  estoque: {name: 'estoque', label: 'NTB Estoque', color: productColors.estoque},
-  vendas: {name: 'vendas', label: 'NTB Vendas', color: productColors.vendas},
+  estoque: {name: 'estoque', label: 'Norte Estoque', color: productColors.estoque},
+  vendas: {name: 'vendas', label: 'Norte Vendas', color: productColors.vendas},
   avalia: {name: 'avalia', label: 'Norte Avalia', color: productColors.avalia},
 };
 

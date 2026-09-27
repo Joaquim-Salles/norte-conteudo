@@ -1,43 +1,43 @@
-# Fixado 01 — Apresentação da NTB
+# Fixado 01 — Apresentação da Família Norte
 
 **Status:** copy aprovada para a primeira implementação visual  
 **Formato:** carrossel de 5 telas  
 **Composições:** `CarrosselCapa`, `CarrosselSolucoes`, `CarrosselVendas`, `CarrosselEstoque`, `CarrosselFechamento`  
-**Objetivo:** posicionar a NTB como consultoria e ecossistema próprio de soluções antes de apresentar os dois sistemas.
+**Objetivo:** posicionar a Norte para Negócios como consultoria de operação e apresentar Norte Vendas e Norte Estoque.
 
-**Direção visual aprovada:** o NTB Vendas será apresentado dentro de um monitor desktop levemente inclinado; o NTB Estoque permanecerá em uma moldura de navegador, criando diferenciação visual entre os produtos.
+**Direção visual atualizada:** manter a estrutura do carrossel, usando a marca oficial da Família Norte, azul-noite na marca-mãe, azul Norte no Vendas e verde-azulado no Estoque. Os dois produtos usam telas reais em moldura de navegador.
 
 ## Copy final da primeira versão
 
 ### Tela 1 — Posicionamento
 
-**O norte de um negócio começa na operação.**
+**Damos o norte para a sua operação.**
 
 **Norte para Negócios · consultoria e tecnologia**
 
-*A NTB ajuda negócios a transformar a complexidade da rotina em uma operação mais clara, organizada e preparada para crescer.*
+*A Norte para Negócios entra na operação para conectar consultoria, processos e sistemas feitos para acompanhar o chão de loja.*
 
-Assinatura visual: foguete real da NTB em escala maior, em pé, com rotação discreta para a direita e no canto inferior direito da capa, mantendo suas cores originais.
+Assinatura visual: símbolo oficial N da Família Norte. O foguete não deve aparecer isolado como mascote.
 
 **Estratégia · Processos · Tecnologia**
 
 ### Tela 2 — Visão das soluções
 
-**A NTB transforma problemas da operação em soluções práticas.**
+**A Norte transforma problemas da operação em soluções práticas.**
 
-*A NTB começa entendendo como o negócio funciona: onde a informação se perde, onde o retrabalho aparece e o que precisa ser conectado.*
+*A Norte começa entendendo como o negócio funciona: onde a informação se perde, onde o retrabalho aparece e o que precisa ser conectado.*
 
-**NTB Vendas**  
+**Norte Vendas**
 Do atendimento ao fechamento.
 
 Mesas, comandas e pedidos organizados para a equipe acompanhar o que precisa acontecer.
 
-**NTB Estoque**  
+**Norte Estoque**
 Do inventário à movimentação.
 
 **Estratégia · Processos · Tecnologia**
 
-### Tela 3 — NTB Vendas
+### Tela 3 — Norte Vendas
 
 **O pedido não para na mesa.**
 
@@ -45,11 +45,11 @@ O pedido nasce no atendimento e continua visível para quem precisa agir — da 
 
 Elementos confirmados: mesas e comandas, pedidos na cozinha e funcionamento offline.
 
-### Tela 4 — NTB Estoque
+### Tela 4 — Norte Estoque
 
 **O estoque acompanha o que acontece na operação.**
 
-O NTB Estoque organiza o controle físico para que a equipe acompanhe o que entrou, saiu e precisa ser conferido.
+O Norte Estoque organiza o controle físico para que a equipe acompanhe o que entrou, saiu e precisa ser conferido.
 
 Elementos confirmados: emissão de etiquetas, inventários online, transferências em massa e rastreabilidade.
 
@@ -57,11 +57,11 @@ Elementos confirmados: emissão de etiquetas, inventários online, transferênci
 
 **Organização é o que dá direção ao negócio.**
 
-*A NTB une consultoria, processos e tecnologia para transformar a complexidade da operação em uma rotina mais clara e bem cuidada.*
+*A Norte une consultoria, processos e sistemas para transformar a complexidade da operação em uma rotina mais clara e bem cuidada.*
 
 Começamos entendendo o negócio. A solução vem depois.
 
-**Conheça a NTB.**
+**Conheça a Norte.**
 
 ## Nota de validação
 
