@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
-import {ensureSansLoaded, ensureMonoLoaded, ensureNewsreaderLoaded, FONT_SANS, FONT_MONO, FONT_SERIF_ROTAS} from '../lib/fonts';
+import {ensureSansLoaded, ensureMonoLoaded, FONT_SANS, FONT_MONO} from '../lib/fonts';
 import {GridTexture} from '../lib/GridTexture';
 import {BrowserFrame} from '../lib/DeviceFrame';
 import {productColors, neutral, brand} from '../lib/themes';
@@ -16,7 +16,6 @@ const WHITE = '#FBFBFE';
 function loadFonts(): void {
   ensureSansLoaded();
   ensureMonoLoaded();
-  ensureNewsreaderLoaded();
 }
 
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (
@@ -75,7 +74,7 @@ export const CarrosselCapa: React.FC = () => {
         <div style={{marginTop: 254, maxWidth: 850}}>
           <Overline light color={productColors.vendas}>Norte para Negócios · consultoria e sistemas</Overline>
           <div style={{height: 30}} />
-          <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 92, lineHeight: 0.98, letterSpacing: '-0.045em', margin: 0}}>
+          <h1 style={{fontFamily: FONT_SANS, fontWeight: 650, fontSize: 76, lineHeight: 1.02, letterSpacing: '-0.035em', maxWidth: 820, margin: 0}}>
             Damos o norte para a sua operação.
           </h1>
           <div style={{height: 34}} />
@@ -103,7 +102,7 @@ export const CarrosselSolucoes: React.FC = () => {
         <div style={{marginTop: 190}}>
           <Overline>Soluções Norte</Overline>
           <div style={{height: 30}} />
-          <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 70, lineHeight: 1.02, letterSpacing: '-0.04em', maxWidth: 820, margin: 0}}>
+          <h1 style={{fontFamily: FONT_SANS, fontWeight: 650, fontSize: 64, lineHeight: 1.04, letterSpacing: '-0.035em', maxWidth: 820, margin: 0}}>
             A Norte transforma problemas da operação em soluções práticas.
           </h1>
           <p style={{fontFamily: FONT_SANS, fontSize: 20, lineHeight: 1.35, maxWidth: 690, margin: '24px 0 0', color: neutral.cinzaMedio}}>
@@ -116,7 +115,7 @@ export const CarrosselSolucoes: React.FC = () => {
             <div style={{height: 16}} />
             <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.vendas}}>01 · solução para a operação de vendas</div>
             <div style={{height: 18}} />
-            <div style={{fontFamily: FONT_SERIF_ROTAS, fontSize: 38, lineHeight: 1.05}}>Do atendimento ao fechamento.</div>
+            <div style={{fontFamily: FONT_SANS, fontWeight: 600, fontSize: 32, lineHeight: 1.08, letterSpacing: '-0.025em'}}>Do atendimento ao fechamento.</div>
             <div style={{height: 18}} />
             <div style={{fontFamily: FONT_SANS, fontSize: 17, lineHeight: 1.35, color: neutral.cinzaMedio}}>Mesas, comandas e pedidos organizados para a equipe acompanhar o que precisa acontecer.</div>
           </div>
@@ -125,7 +124,7 @@ export const CarrosselSolucoes: React.FC = () => {
             <div style={{height: 16}} />
             <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.estoque}}>02 · solução para a operação de estoque</div>
             <div style={{height: 18}} />
-            <div style={{fontFamily: FONT_SERIF_ROTAS, fontSize: 38, lineHeight: 1.05}}>Do inventário à movimentação.</div>
+            <div style={{fontFamily: FONT_SANS, fontWeight: 600, fontSize: 32, lineHeight: 1.08, letterSpacing: '-0.025em'}}>Do inventário à movimentação.</div>
             <div style={{height: 18}} />
             <div style={{fontFamily: FONT_SANS, fontSize: 17, lineHeight: 1.35, color: neutral.cinzaMedio}}>Mais visibilidade sobre o estoque físico, as etiquetas, os inventários e as transferências.</div>
           </div>
@@ -154,7 +153,7 @@ export const CarrosselVendas: React.FC = () => {
           <div>
             <Overline light color={productColors.vendas}>Norte Vendas · restaurantes, bares e lanchonetes</Overline>
             <div style={{height: 26}} />
-            <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 72, lineHeight: 0.98, letterSpacing: '-0.045em', maxWidth: 630, margin: 0}}>
+            <h1 style={{fontFamily: FONT_SANS, fontWeight: 650, fontSize: 64, lineHeight: 1.02, letterSpacing: '-0.035em', maxWidth: 630, margin: 0}}>
               Pedido, cozinha, caixa e nota fiscal. Num sistema só.
             </h1>
           </div>
@@ -199,7 +198,7 @@ export const CarrosselEstoque: React.FC = () => {
           <div>
             <Overline color={productColors.estoque}>Norte Estoque</Overline>
             <div style={{height: 26}} />
-            <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 76, lineHeight: 0.98, letterSpacing: '-0.045em', maxWidth: 650, margin: 0}}>
+            <h1 style={{fontFamily: FONT_SANS, fontWeight: 650, fontSize: 64, lineHeight: 1.02, letterSpacing: '-0.035em', maxWidth: 650, margin: 0}}>
               Estoque, insumos e produção no mesmo fluxo.
             </h1>
           </div>
@@ -235,7 +234,7 @@ export const CarrosselFechamento: React.FC = () => {
         <div style={{marginTop: 236}}>
           <Overline light color={productColors.estoque}>Norte para Negócios</Overline>
           <div style={{height: 30}} />
-          <h1 style={{fontFamily: FONT_SERIF_ROTAS, fontWeight: 400, fontSize: 88, lineHeight: 0.98, letterSpacing: '-0.045em', maxWidth: 820, margin: 0}}>
+          <h1 style={{fontFamily: FONT_SANS, fontWeight: 650, fontSize: 72, lineHeight: 1.02, letterSpacing: '-0.035em', maxWidth: 820, margin: 0}}>
             Organização é o que dá direção à operação.
           </h1>
           <div style={{height: 34}} />

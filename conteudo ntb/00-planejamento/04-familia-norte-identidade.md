@@ -39,14 +39,52 @@ Pontos confirmados para comunicação:
 
 | Uso | Cor |
 |---|---|
-| Norte para Negócios | `#484DB5` — azul principal |
+| Norte para Negócios | `#14163A` — azul-noite |
 | Norte Vendas | `#484DB5` — azul Norte |
 | Norte Estoque | `#168E9A` — verde-azulado |
-| Fundo profundo | `#0A091E` — Norte Vendas |
-| Fundo claro | `#F5F5F9` |
+| Fundo profundo | `#14163A` — azul-noite |
+| Fundo claro | `#FBFBFE` |
 | Preto | `#0B0B0F` |
 
-A tipografia da família é Atkinson Hyperlegible. O símbolo oficial é o N em perspectiva com o traço integrado da trajetória; o foguete não deve mais aparecer como mascote isolado nos posts.
+O símbolo oficial é o N em perspectiva com o traço integrado da trajetória; o foguete não deve mais aparecer como mascote isolado nos posts.
+
+## Regras completas da Família Norte
+
+### Qual marca entra em cada peça
+
+- **Norte para Negócios** é a marca-mãe e deve aparecer em peças institucionais, de posicionamento, consultoria, processos e visão de operação. Sua expressão é mais sóbria e usa o azul-noite `#14163A`.
+- **Norte Vendas** é a solução para restaurantes, bares e lanchonetes. Entra quando o conteúdo falar de pedidos, mesas, comandas, cozinha, caixa, fechamento ou NFC-e. Sua cor é o Azul Norte `#484DB5`.
+- **Norte Estoque** é a solução para estoque, insumos e produção. Entra quando o conteúdo falar de etiquetas, inventários, transferências, fichas técnicas, produção ou integração com o Omie. Sua cor é o verde-azulado `#168E9A`.
+
+### Versões do logo
+
+- **Horizontal:** usar em cabeçalhos de site, sistemas, propostas e apresentações. É a versão preferencial no topo dos carrosséis.
+- **Vertical:** usar em peças mais estreitas ou composições em que a assinatura horizontal não tenha espaço suficiente.
+- **Ícone N:** usar em foto de perfil, favicon, aplicativo, navegador ou como elemento de apoio. Não substituir o nome da marca por um N genérico.
+- Em fundo claro, usar o N oficial escuro ou a assinatura escura.
+- Em fundo azul-noite ou produto, usar a versão branca correspondente.
+- Não colocar a logo dentro de um quadrado adicional, placa ou moldura que não faça parte do arquivo oficial.
+
+### Cores de fundo
+
+- Norte para Negócios: azul-noite `#14163A`, branco `#FBFBFE` e preto `#0B0B0F`.
+- Norte Vendas: Azul Norte `#484DB5`, branco e preto.
+- Norte Estoque: verde-azulado `#168E9A`, branco e preto.
+- Em um slide claro, o N deve ser escuro. Em um slide escuro ou colorido, o N deve ser branco.
+- O produto apresentado deve manter sua cor própria mesmo quando aparece dentro de um carrossel institucional.
+
+### Tipografia
+
+O PDF oficial registra **Atkinson Hyperlegible** como tipografia da família. O site institucional publicado atualmente carrega **Geist Variable** para textos e títulos, além de **Geist Mono Variable** para rótulos e informações técnicas. Como os posts precisam conversar com o site vigente, os exports atuais seguem Geist: títulos e textos em Geist Variable, rótulos em Geist Mono Variable. Atkinson fica registrado como referência histórica do material de identidade e só deve ser usado se a marca decidir padronizar novamente essa fonte em todos os canais.
+
+### Direção de composição
+
+- Priorizar hierarquia editorial, bastante respiro e frases que expressem a visão da marca.
+- Usar o N como assinatura ou textura discreta, nunca como elemento decorativo sem função.
+- Mostrar os sistemas quando a mensagem for sobre produto, usando capturas reais e dados mascarados.
+- Não usar o foguete isolado como mascote, ilustração principal ou atalho visual da marca.
+- Não misturar o azul do Norte Vendas com o verde-azulado do Norte Estoque no mesmo produto.
+- Evitar travessões artificiais nas copies e evitar promessas não confirmadas.
 
 ## Aplicação no primeiro carrossel
 
