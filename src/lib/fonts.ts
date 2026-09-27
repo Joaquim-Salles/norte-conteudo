@@ -1,8 +1,8 @@
 import {continueRender, delayRender, staticFile} from 'remotion';
 
 /**
- * Par tipográfico definitivo da marca (design-dna.json, fechado 2026-09-05):
- * Source Serif 4 (headline/citação/overlay) + Atkinson Hyperlegible (corpo/dado/UI).
+ * Par tipográfico alinhado ao site oficial: Newsreader (headline/citação/overlay)
+ * + Geist Variable (corpo/dado/UI).
  * Fontes DEVEM estar embutidas no projeto (não CDN) — senão o render fica
  * não-determinístico (constraint documentada em constraints-plataforma.md).
  *
@@ -13,11 +13,11 @@ import {continueRender, delayRender, staticFile} from 'remotion';
 let sansLoaded = false;
 let serifLoaded = false;
 
-const SANS_FONT_FILES: Array<[number, 'normal' | 'italic', string]> = [
-  [400, 'normal', 'AtkinsonHyperlegible-400.woff2'],
-  [400, 'italic', 'AtkinsonHyperlegible-400-italic.woff2'],
-  [700, 'normal', 'AtkinsonHyperlegible-700.woff2'],
-  [700, 'italic', 'AtkinsonHyperlegible-700-italic.woff2'],
+type FontFile = [number | string, 'normal' | 'italic', string];
+
+const SANS_FONT_FILES: FontFile[] = [
+  [400, 'normal', 'GeistVariable-latin-ext.woff2'],
+  [700, 'normal', 'GeistVariable-latin-ext.woff2'],
 ];
 
 /**
@@ -40,10 +40,18 @@ const SERIF_FONT_FILES: Array<[number, 'normal' | 'italic', string]> = [
 //   [400, 'italic', 'Newsreader-400-italic.woff2'],
 // ];
 
-export const FONT_SANS = 'Atkinson Hyperlegible';
+const MONO_FONT_FILES: FontFile[] = [
+  [400, 'normal', 'GeistMonoVariable-latin-ext.woff2'],
+  [700, 'normal', 'GeistMonoVariable-latin-ext.woff2'],
+];
+
+const SANS_FAMILY = 'Geist Variable';
+const MONO_FAMILY = 'Geist Mono Variable';
+export const FONT_SANS = 'Geist Variable, Arial, sans-serif';
+export const FONT_MONO = 'Geist Mono Variable, Consolas, monospace';
 export const FONT_SERIF = 'Fraunces';
 
-function loadFamily(files: Array<[number, 'normal' | 'italic', string]>, family: string, label: string): void {
+function loadFamily(files: FontFile[], family: string, label: string): void {
   if (typeof document === 'undefined') return;
   const handle = delayRender(`Carregando fonte ${label}`);
 
@@ -68,7 +76,14 @@ function loadFamily(files: Array<[number, 'normal' | 'italic', string]>, family:
 export const ensureSansLoaded = (): void => {
   if (sansLoaded) return;
   sansLoaded = true;
-  loadFamily(SANS_FONT_FILES, FONT_SANS, 'Atkinson Hyperlegible');
+  loadFamily(SANS_FONT_FILES, SANS_FAMILY, 'Geist Variable');
+};
+
+let monoLoaded = false;
+export const ensureMonoLoaded = (): void => {
+  if (monoLoaded) return;
+  monoLoaded = true;
+  loadFamily(MONO_FONT_FILES, MONO_FAMILY, 'Geist Mono Variable');
 };
 
 export const ensureSerifLoaded = (): void => {
@@ -79,6 +94,7 @@ export const ensureSerifLoaded = (): void => {
 
 export const ensureFontsLoaded = (): void => {
   ensureSansLoaded();
+  ensureMonoLoaded();
   ensureSerifLoaded();
 };
 

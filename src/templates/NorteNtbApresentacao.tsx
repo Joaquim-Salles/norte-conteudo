@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
-import {ensureSansLoaded, ensureNewsreaderLoaded, FONT_SANS, FONT_SERIF_ROTAS} from '../lib/fonts';
+import {ensureSansLoaded, ensureMonoLoaded, ensureNewsreaderLoaded, FONT_SANS, FONT_MONO, FONT_SERIF_ROTAS} from '../lib/fonts';
 import {GridTexture} from '../lib/GridTexture';
 import {BrowserFrame} from '../lib/DeviceFrame';
 import {productColors, neutral, brand} from '../lib/themes';
@@ -15,6 +15,7 @@ const WHITE = '#FBFBFE';
 
 function loadFonts(): void {
   ensureSansLoaded();
+  ensureMonoLoaded();
   ensureNewsreaderLoaded();
 }
 
@@ -33,14 +34,14 @@ const ProductLogo: React.FC<{kind: 'vendas' | 'estoque'; width?: number}> = ({ki
 );
 
 const Overline: React.FC<{children: React.ReactNode; color?: string; light?: boolean}> = ({children, color = brand.primary, light = false}) => (
-  <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.12em', textTransform: 'uppercase', color: light ? WHITE : INK}}>
+  <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONT_MONO, fontWeight: 500, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: light ? WHITE : INK}}>
     <span style={{display: 'block', width: 34, height: 2, background: color}} />
     {children}
   </div>
 );
 
 const FooterMark: React.FC<{light?: boolean}> = ({light = false}) => (
-  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: FONT_SANS, fontSize: 13, letterSpacing: '0.10em', textTransform: 'uppercase', color: light ? `${WHITE}aa` : `${INK}88`}}>
+  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: FONT_MONO, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: light ? `${WHITE}aa` : `${INK}88`}}>
     <span>Norte para Negócios</span>
     <span>Deslize →</span>
   </div>
@@ -159,7 +160,7 @@ export const CarrosselVendas: React.FC = () => {
           </div>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 22, fontFamily: FONT_SANS, fontSize: 18, lineHeight: 1.35, maxWidth: 270, paddingBottom: 6, color: `${WHITE}d0`}}>
             <ProductLogo kind="vendas" width={244} />
-            <div>O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.</div>
+            <div>O pedido nasce no atendimento e continua visível para quem precisa agir, da mesa à cozinha, até o fechamento.</div>
           </div>
         </div>
         <div style={{marginTop: 46, display: 'flex', justifyContent: 'center', position: 'relative'}}>
