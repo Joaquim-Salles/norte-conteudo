@@ -82,6 +82,8 @@ O PDF oficial registra **Atkinson Hyperlegible** como tipografia da família. O 
 - Priorizar hierarquia editorial, bastante respiro e frases que expressem a visão da marca.
 - Usar o N como assinatura ou textura discreta, nunca como elemento decorativo sem função.
 - Mostrar os sistemas quando a mensagem for sobre produto, usando capturas reais e dados mascarados.
+- Nas capturas, seguir o padrão do site: desfocar apenas nomes, identificadores, valores e outros dados sensíveis, preservando a leitura da interface.
+- A máscara deve ser translúcida e integrada à tela, sem retângulos pretos, faixas sólidas ou blocos com borda aparente.
 - Não usar o foguete isolado como mascote, ilustração principal ou atalho visual da marca.
 - Não misturar o azul do Norte Vendas com o verde-azulado do Norte Estoque no mesmo produto.
 - Evitar travessões artificiais nas copies e evitar promessas não confirmadas.

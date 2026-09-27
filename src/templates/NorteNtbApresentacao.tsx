@@ -55,9 +55,9 @@ const DataMask: React.FC<{left: number; top: number; width: number; height: numb
       width,
       height,
       borderRadius: 6,
-      background: dark ? 'rgba(10, 9, 30, 0.78)' : 'rgba(245, 245, 249, 0.82)',
-      border: dark ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(72,77,181,0.12)',
-      backdropFilter: 'blur(7px)',
+      background: dark ? 'rgba(255, 255, 255, 0.13)' : 'rgba(255, 255, 255, 0.30)',
+      border: 'none',
+      backdropFilter: 'blur(8px) saturate(0.72)',
     }}
   />
 );
