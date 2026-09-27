@@ -39,22 +39,23 @@ Pontos confirmados para comunicação:
 
 | Uso | Cor |
 |---|---|
-| Norte para Negócios | `#14163A` — azul-noite |
+| Norte para Negócios | `#484DB5` — azul principal |
 | Norte Vendas | `#484DB5` — azul Norte |
 | Norte Estoque | `#168E9A` — verde-azulado |
-| Fundo claro | `#FBFBFE` |
+| Fundo profundo | `#0A091E` — Norte Vendas |
+| Fundo claro | `#F5F5F9` |
 | Preto | `#0B0B0F` |
 
 A tipografia da família é Atkinson Hyperlegible. O símbolo oficial é o N em perspectiva com o traço integrado da trajetória; o foguete não deve mais aparecer como mascote isolado nos posts.
 
 ## Aplicação no primeiro carrossel
 
-Manter a estrutura já aprovada de cinco telas:
+Manter a estrutura já aprovada de cinco telas, com Norte Vendas antecipado para o segundo slide:
 
 1. posicionamento da Norte para Negócios;
-2. visão das soluções;
-3. Norte Vendas;
+2. Norte Vendas;
+3. visão das soluções;
 4. Norte Estoque;
 5. fechamento e próximo passo.
 
-Atualizar apenas a identidade, os nomes, as cores, a assinatura visual e as cópias necessárias para refletir a Família Norte.
+Atualizar apenas a identidade, os nomes, as cores, a assinatura visual e as cópias necessárias para refletir a Família Norte. A capa deve mostrar visualmente os dois produtos, e as telas devem usar dados de demonstração mascarados quando houver nomes, lojas ou valores identificáveis.

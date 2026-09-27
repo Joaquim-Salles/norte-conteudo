@@ -2,10 +2,11 @@
 
 **Status:** copy aprovada para a primeira implementação visual  
 **Formato:** carrossel de 5 telas  
-**Composições:** `CarrosselCapa`, `CarrosselSolucoes`, `CarrosselVendas`, `CarrosselEstoque`, `CarrosselFechamento`  
+**Ordem do feed:** `01 - Capa`, `02 - Norte Vendas`, `03 - Soluções`, `04 - Norte Estoque`, `05 - Fechamento`
+**Composições:** `CarrosselCapa`, `CarrosselVendas`, `CarrosselSolucoes`, `CarrosselEstoque`, `CarrosselFechamento`
 **Objetivo:** posicionar a Norte para Negócios como consultoria de operação e apresentar Norte Vendas e Norte Estoque.
 
-**Direção visual atualizada:** manter a estrutura do carrossel, usando a marca oficial da Família Norte, azul-noite na marca-mãe, azul Norte no Vendas e verde-azulado no Estoque. Os dois produtos usam telas reais em moldura de navegador.
+**Direção visual atualizada:** manter a estrutura do carrossel, usando o azul principal da Norte na capa e no fechamento, azul profundo no Norte Vendas e verde-azulado no Norte Estoque. A capa passa a apresentar visualmente os dois produtos. As telas reais recebem moldura de navegador e mascaramento de dados de demonstração.
 
 ## Copy final da primeira versão
 
@@ -21,29 +22,24 @@ Assinatura visual: símbolo oficial N da Família Norte. O foguete não deve apa
 
 **Estratégia · Processos · Tecnologia**
 
-### Tela 2 — Visão das soluções
+### Tela 2 — Norte Vendas
+
+**Pedido, cozinha, caixa e nota fiscal. Num sistema só.**
+
+*O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.*
+
+Elementos confirmados: mesas e comandas, pedidos na cozinha, nota fiscal e funcionamento offline.
+
+### Tela 3 — Visão das soluções
 
 **A Norte transforma problemas da operação em soluções práticas.**
 
 *A Norte começa entendendo como o negócio funciona: onde a informação se perde, onde o retrabalho aparece e o que precisa ser conectado.*
 
-**Norte Vendas**
-Do atendimento ao fechamento.
-
-Mesas, comandas e pedidos organizados para a equipe acompanhar o que precisa acontecer.
-
 **Norte Estoque**
 Do inventário à movimentação.
 
 **Estratégia · Processos · Tecnologia**
-
-### Tela 3 — Norte Vendas
-
-**O pedido não para na mesa.**
-
-O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha.
-
-Elementos confirmados: mesas e comandas, pedidos na cozinha e funcionamento offline.
 
 ### Tela 4 — Norte Estoque
 
@@ -65,6 +61,6 @@ Começamos entendendo o negócio. A solução vem depois.
 
 ## Nota de validação
 
-Os slides de produto usam prints reais disponíveis em `public/screenshots/`. Antes da publicação,
-validar se nomes de pessoas, lojas, valores ou outros dados visíveis podem permanecer na imagem;
-se necessário, substituir por uma captura limpa ou aplicar uma versão autorizada.
+Os slides de produto usam prints reais disponíveis em `public/screenshots/`, com dados de demonstração mascarados
+nos pontos sensíveis. Antes da publicação, validar se nomes de pessoas, lojas, valores ou outros dados visíveis
+podem permanecer na imagem; se necessário, substituir por uma captura limpa ou aplicar uma versão autorizada.

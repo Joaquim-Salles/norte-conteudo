@@ -227,10 +227,10 @@ export const RemotionRoot: React.FC = () => {
       <Still id="ArgumentoComplementa" component={ArgumentoComplementa} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="ArgumentoFechamento" component={ArgumentoFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
-      {/* NORTE — apresentação institucional da NTB: posicionamento, soluções, Vendas, Estoque e fechamento. */}
+      {/* NORTE — apresentação institucional da Família Norte: capa, Vendas, soluções, Estoque e fechamento. */}
       <Still id="CarrosselCapa" component={CarrosselCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="CarrosselSolucoes" component={CarrosselSolucoes} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselVendas" component={CarrosselVendas} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="CarrosselSolucoes" component={CarrosselSolucoes} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselEstoque" component={CarrosselEstoque} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselFechamento" component={CarrosselFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
