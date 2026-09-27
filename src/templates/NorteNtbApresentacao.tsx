@@ -20,10 +20,10 @@ function loadFonts(): void {
 }
 
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (
-  <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 16, letterSpacing: '-0.01em', color: light ? WHITE : INK}}>
-    <Img src={staticFile(light ? 'logos/norte-mark-white.png' : 'logos/norte-mark-dark.png')} style={{width: 36, height: 36, display: 'block', objectFit: 'contain'}} />
-    Norte para Negócios
-  </div>
+  <Img
+    src={staticFile(light ? 'logos/norte-wordmark-white.png' : 'logos/norte-wordmark-dark.png')}
+    style={{width: 214, height: 'auto', display: 'block', objectFit: 'contain'}}
+  />
 );
 
 const ProductLogo: React.FC<{kind: 'vendas' | 'estoque'; width?: number}> = ({kind, width = 230}) => (
@@ -69,7 +69,7 @@ export const CarrosselCapa: React.FC = () => {
   return (
     <AbsoluteFill style={{background: NAVY, padding: 86, color: WHITE}}>
       <GridTexture id="grid-norte-capa" color={WHITE} opacity={0.08} />
-      <div style={{position: 'absolute', right: 70, top: 170, fontFamily: FONT_SERIF_ROTAS, fontSize: 560, lineHeight: 0.75, color: WHITE, opacity: 0.045}}>N</div>
+      <Img src={staticFile('logos/norte-mark-white-hi.png')} style={{position: 'absolute', right: 54, top: 170, width: 560, height: 'auto', opacity: 0.055, objectFit: 'contain'}} />
       <div style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Wordmark light />
         <div style={{marginTop: 254, maxWidth: 850}}>
