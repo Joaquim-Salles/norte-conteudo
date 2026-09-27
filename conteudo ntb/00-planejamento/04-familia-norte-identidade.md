@@ -59,3 +59,11 @@ Manter a estrutura já aprovada de cinco telas, com a visão das soluções como
 5. fechamento e próximo passo.
 
 Atualizar apenas a identidade, os nomes, as cores, a assinatura visual e as cópias necessárias para refletir a Família Norte. A capa deve mostrar visualmente os dois produtos, e as telas devem usar dados de demonstração mascarados quando houver nomes, lojas ou valores identificáveis.
+
+## Regra de aplicação do símbolo
+
+- Em fundo claro, usar o N oficial escuro, sem quadrado ou placa colorida atrás.
+- Em fundo azul ou escuro, usar o N oficial branco, também sem fundo próprio.
+- O Norte Vendas deve aparecer com sua marca azul oficial nos slides do produto.
+- O Norte Estoque deve aparecer com sua marca verde-azulada oficial nos slides do produto.
+- As versões horizontais coloridas usadas no carrossel foram extraídas da apresentação oficial da Família Norte e ficam em `public/logos/`.

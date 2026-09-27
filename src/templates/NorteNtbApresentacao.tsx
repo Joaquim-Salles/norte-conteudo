@@ -20,9 +20,16 @@ function loadFonts(): void {
 
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (
   <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 16, letterSpacing: '-0.01em', color: light ? WHITE : INK}}>
-    <Img src={staticFile(light ? 'logos/norte-mark-white.png' : 'logos/norte-mark.svg')} style={{width: 36, height: 36, display: 'block', objectFit: 'contain'}} />
+    <Img src={staticFile(light ? 'logos/norte-mark-white.png' : 'logos/norte-mark-dark.png')} style={{width: 36, height: 36, display: 'block', objectFit: 'contain'}} />
     Norte para Negócios
   </div>
+);
+
+const ProductLogo: React.FC<{kind: 'vendas' | 'estoque'; width?: number}> = ({kind, width = 230}) => (
+  <Img
+    src={staticFile(kind === 'vendas' ? 'logos/norte-vendas-logo.png' : 'logos/norte-estoque-logo.png')}
+    style={{width, height: 'auto', display: 'block', objectFit: 'contain'}}
+  />
 );
 
 const Overline: React.FC<{children: React.ReactNode; color?: string; light?: boolean}> = ({children, color = brand.primary, light = false}) => (
@@ -104,14 +111,18 @@ export const CarrosselSolucoes: React.FC = () => {
         </div>
         <div style={{marginTop: 82, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 54, borderTop: `1px solid ${INK}28`, borderBottom: `1px solid ${INK}28`, padding: '38px 0 44px'}}>
           <div style={{borderRight: `1px solid ${INK}28`, paddingRight: 44}}>
-            <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 15, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.vendas}}>01 · Norte Vendas</div>
+            <ProductLogo kind="vendas" width={230} />
+            <div style={{height: 16}} />
+            <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.vendas}}>01 · solução para a operação de vendas</div>
             <div style={{height: 18}} />
             <div style={{fontFamily: FONT_SERIF_ROTAS, fontSize: 38, lineHeight: 1.05}}>Do atendimento ao fechamento.</div>
             <div style={{height: 18}} />
             <div style={{fontFamily: FONT_SANS, fontSize: 17, lineHeight: 1.35, color: neutral.cinzaMedio}}>Mesas, comandas e pedidos organizados para a equipe acompanhar o que precisa acontecer.</div>
           </div>
           <div>
-            <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 15, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.estoque}}>02 · Norte Estoque</div>
+            <ProductLogo kind="estoque" width={230} />
+            <div style={{height: 16}} />
+            <div style={{fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.11em', textTransform: 'uppercase', color: productColors.estoque}}>02 · solução para a operação de estoque</div>
             <div style={{height: 18}} />
             <div style={{fontFamily: FONT_SERIF_ROTAS, fontSize: 38, lineHeight: 1.05}}>Do inventário à movimentação.</div>
             <div style={{height: 18}} />
@@ -146,8 +157,9 @@ export const CarrosselVendas: React.FC = () => {
               Pedido, cozinha, caixa e nota fiscal. Num sistema só.
             </h1>
           </div>
-          <div style={{fontFamily: FONT_SANS, fontSize: 18, lineHeight: 1.35, maxWidth: 260, paddingBottom: 6, color: `${WHITE}d0`}}>
-            O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 22, fontFamily: FONT_SANS, fontSize: 18, lineHeight: 1.35, maxWidth: 270, paddingBottom: 6, color: `${WHITE}d0`}}>
+            <ProductLogo kind="vendas" width={244} />
+            <div>O pedido nasce no atendimento e continua visível para quem precisa agir — da mesa à cozinha, até o fechamento.</div>
           </div>
         </div>
         <div style={{marginTop: 46, display: 'flex', justifyContent: 'center', position: 'relative'}}>
@@ -177,9 +189,8 @@ export const CarrosselEstoque: React.FC = () => {
     <AbsoluteFill style={{background: STOCK_PAPER, padding: 86, color: INK}}>
       <GridTexture id="grid-norte-estoque" color={productColors.estoque} opacity={0.11} />
       <div style={{position: 'absolute', right: -160, top: -115, width: 510, height: 510, borderRadius: '50%', background: `${productColors.estoque}22`}} />
-      <div style={{position: 'absolute', right: 86, top: 88, display: 'flex', alignItems: 'center', gap: 10, fontFamily: FONT_SANS, fontWeight: 700, fontSize: 13, letterSpacing: '0.14em', textTransform: 'uppercase', color: productColors.estoque}}>
-        <span style={{width: 28, height: 4, borderRadius: 4, background: productColors.estoque}} />
-        Norte Estoque
+      <div style={{position: 'absolute', right: 86, top: 76}}>
+        <ProductLogo kind="estoque" width={230} />
       </div>
       <div style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Wordmark />
