@@ -1,21 +1,20 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
-import {ensureSansLoaded, ensureMonoLoaded, FONT_SANS, FONT_MONO} from '../lib/fonts';
+import {ensurePostLoaded, FONT_POST as FONT_SANS, FONT_POST_MONO as FONT_MONO} from '../lib/fonts';
 import {GridTexture} from '../lib/GridTexture';
 import {BrowserFrame} from '../lib/DeviceFrame';
 import {productColors, neutral, brand} from '../lib/themes';
 
 const INK = neutral.quasePreto;
 const PAPER = '#F5F5F9';
-const BLUE = '#484DB5';
+const BLUE = '#14163A';
 const NAVY = '#14163A';
-const DEEP = '#0A091E';
+const DEEP = '#484DB5';
 const STOCK_PAPER = '#EAF7F7';
 const WHITE = '#FBFBFE';
 
 function loadFonts(): void {
-  ensureSansLoaded();
-  ensureMonoLoaded();
+  ensurePostLoaded();
 }
 
 const Wordmark: React.FC<{light?: boolean}> = ({light = false}) => (

@@ -1,5 +1,9 @@
 # Posts fixados iniciais
 
+## Referência visual aprovada
+
+O carrossel animado de cinco telas fornecido em 27/09/2026 está arquivado em `Carrossel fixado/Referencia animada aprovada/`. É a referência atual para o acabamento dos próximos posts: três telas animadas e duas estáticas. O conjunto anterior permanece como histórico e não deve ser confundido com esse material.
+
 > **Nota de estado (2026-09-10):** o design e a estrutura visual anteriores do fixado 01 foram
 > removidos do laboratório. Este briefing está preservado como histórico; a copy será reconstruída
 > antes de qualquer nova implementação visual.

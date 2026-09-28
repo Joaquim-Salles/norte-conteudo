@@ -51,6 +51,21 @@ export const FONT_SANS = 'Geist Variable, Arial, sans-serif';
 export const FONT_MONO = 'Geist Mono Variable, Consolas, monospace';
 export const FONT_SERIF = 'Fraunces';
 
+// Fonte oficial do kit Norte para peças, posts, animações e papelaria.
+// Geist/Newsreader permanecem disponíveis para site e interface web.
+const POST_FAMILY = 'Atkinson Hyperlegible';
+const POST_MONO_FAMILY = 'Atkinson Hyperlegible Mono';
+const POST_FONT_FILES: FontFile[] = [
+  [400, 'normal', 'AtkinsonHyperlegible-400.woff2'],
+  [700, 'normal', 'AtkinsonHyperlegible-700.woff2'],
+];
+const POST_MONO_FONT_FILES: FontFile[] = [
+  [400, 'normal', 'AtkinsonHyperlegibleMono-Variavel.ttf'],
+  [700, 'normal', 'AtkinsonHyperlegibleMono-Variavel.ttf'],
+];
+export const FONT_POST = 'Atkinson Hyperlegible, Arial, sans-serif';
+export const FONT_POST_MONO = 'Atkinson Hyperlegible Mono, Consolas, monospace';
+
 function loadFamily(files: FontFile[], family: string, label: string): void {
   if (typeof document === 'undefined') return;
   const handle = delayRender(`Carregando fonte ${label}`);
@@ -96,6 +111,22 @@ export const ensureFontsLoaded = (): void => {
   ensureSansLoaded();
   ensureMonoLoaded();
   ensureSerifLoaded();
+};
+
+let postLoaded = false;
+let postMonoLoaded = false;
+export const ensurePostMonoLoaded = (): void => {
+  if (postMonoLoaded) return;
+  postMonoLoaded = true;
+  loadFamily(POST_MONO_FONT_FILES, POST_MONO_FAMILY, 'Atkinson Hyperlegible Mono');
+};
+
+export const ensurePostLoaded = (): void => {
+  if (!postLoaded) {
+    postLoaded = true;
+    loadFamily(POST_FONT_FILES, POST_FAMILY, 'Atkinson Hyperlegible');
+  }
+  ensurePostMonoLoaded();
 };
 
 /**

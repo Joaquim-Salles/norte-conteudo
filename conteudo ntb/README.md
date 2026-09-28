@@ -7,13 +7,15 @@ Este é o espaço de planejamento, redação e organização dos conteúdos da N
 - **Norte para Negócios** — marca-mãe de consultoria de operação.
 - **Norte Vendas** — pedidos, mesas, cozinha, caixa e nota fiscal para restaurantes.
 - **Norte Estoque** — estoque, insumos, produção, etiquetas, inventários e transferências.
+- **Norte Avalia** — avaliação e acompanhamento de desempenho.
+- **Norte Pisos** — orçamentos e operação de pisos.
 
 O primeiro carrossel fixado será atualizado para essa Família Norte. A estrutura aprovada permanece, com a ordem de publicação: capa, soluções, Norte Vendas, Norte Estoque e fechamento;
-mudam a apresentação, a nomenclatura, as cores e as assinaturas visuais.
+mudam a apresentação, a nomenclatura, as cores e as assinaturas visuais. O exemplo atual de linguagem visual e animação está em `01-fixados/Carrossel fixado/Referencia animada aprovada/`.
 
 ## Fase atual
 
-Estamos construindo primeiro os posts que ficarão fixados no Instagram. A partir de segunda-feira, **14/09/2026**, começa a rotina de publicações diárias.
+O laboratório começou priorizando os posts fixados do Instagram. O calendário de publicações diárias deve ser alinhado com a equipe antes de cada ciclo; datas antigas de planejamento não são uma agenda vigente.
 
 O perfil deve apresentar a Norte para Negócios como uma consultoria que conecta:
 
@@ -48,3 +50,5 @@ O público prioritário inicial são donos e gestores de restaurantes, bares, ca
 `ideia → briefing → copy → criativo → revisão NTB → aprovação → publicação → análise`
 
 Os arquivos em Markdown são os briefings e textos de trabalho. Os componentes em `src/` e as imagens em `public/` formam a base visual e técnica já existente no repositório.
+
+Para novos posts, usar Atkinson Hyperlegible e seguir o kit oficial em `public/brand-kit/`. Geist/Newsreader são reservadas a sites e interfaces. A referência animada aprovada orienta o acabamento e o movimento, não autoriza inventar funcionalidades, dados ou resultados.

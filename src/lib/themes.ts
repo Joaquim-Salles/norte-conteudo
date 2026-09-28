@@ -3,18 +3,19 @@
  * 27/09/2026: Norte para Negócios, Norte Vendas e Norte Estoque.
  */
 
-export type ThemeName = 'marca' | 'estoque' | 'vendas' | 'avalia';
+export type ThemeName = 'marca' | 'estoque' | 'vendas' | 'avalia' | 'pisos';
 
 export const brand = {
   primary: '#14163A', // Norte para Negócios — marca-mãe
-  accent: '#EA2840', // vermelho do símbolo — destaque pontual
+  accent: '#B9BCEB', // lavanda de apoio da identidade Norte
 };
 
 export const productColors: Record<ThemeName, string> = {
   marca: brand.primary,
   estoque: '#168E9A', // Norte Estoque
   vendas: '#484DB5', // Norte Vendas
-  avalia: '#484DB5', // Norte Avalia
+  avalia: '#9A3B86', // Norte Avalia
+  pisos: '#00497E', // Norte Pisos
 };
 
 export const neutral = {
@@ -30,7 +31,7 @@ export const neutral = {
 export const semantic = {
   success: '#168E9A',
   warning: '#f8a41a',
-  error: '#ea2840',
+  error: '#B23A48',
   info: '#484DB5',
 };
 
@@ -66,6 +67,7 @@ export const themes: Record<ThemeName, Theme> = {
   estoque: {name: 'estoque', label: 'Norte Estoque', color: productColors.estoque},
   vendas: {name: 'vendas', label: 'Norte Vendas', color: productColors.vendas},
   avalia: {name: 'avalia', label: 'Norte Avalia', color: productColors.avalia},
+  pisos: {name: 'pisos', label: 'Norte Pisos', color: productColors.pisos},
 };
 
 export function getTheme(name: ThemeName = 'marca'): Theme {

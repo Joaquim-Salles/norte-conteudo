@@ -1,7 +1,7 @@
 # Família Norte — atualização de identidade
 
 **Data de referência:** 27/09/2026
-**Material de referência:** `Familia-Norte-Apresentacao.pdf`, apresentação do Norte Vendas e novo site institucional.
+**Material de referência:** `Norte-Kit-de-Marca.zip` (fonte principal), `Familia-Norte-Apresentacao.pdf`, apresentações dos produtos e site institucional.
 
 ## Arquitetura da marca
 
@@ -35,6 +35,14 @@ Pontos confirmados para comunicação:
 - fichas técnicas e produção;
 - integração/complemento ao Omie.
 
+### Norte Avalia
+
+Produto da família para avaliação e acompanhamento de desempenho. A cor própria é `#9A3B86` e o símbolo usa o bloco N com uma prancheta de avaliação.
+
+### Norte Pisos
+
+Produto da família para orçamentos e operação de pisos. A cor própria é `#00497E` e o símbolo usa o bloco N com o elemento de piso.
+
 ## Direção visual
 
 | Uso | Cor |
@@ -55,6 +63,8 @@ O símbolo oficial é o N em perspectiva com o traço integrado da trajetória; 
 - **Norte para Negócios** é a marca-mãe e deve aparecer em peças institucionais, de posicionamento, consultoria, processos e visão de operação. Sua expressão é mais sóbria e usa o azul-noite `#14163A`.
 - **Norte Vendas** é a solução para restaurantes, bares e lanchonetes. Entra quando o conteúdo falar de pedidos, mesas, comandas, cozinha, caixa, fechamento ou NFC-e. Sua cor é o Azul Norte `#484DB5`.
 - **Norte Estoque** é a solução para estoque, insumos e produção. Entra quando o conteúdo falar de etiquetas, inventários, transferências, fichas técnicas, produção ou integração com o Omie. Sua cor é o verde-azulado `#168E9A`.
+- **Norte Avalia** é a solução da família para avaliação e acompanhamento de desempenho. Sua cor é `#9A3B86`.
+- **Norte Pisos** é a solução da família para orçamentos e operação de pisos. Sua cor é `#00497E`.
 
 ### Versões do logo
 
@@ -75,11 +85,12 @@ O símbolo oficial é o N em perspectiva com o traço integrado da trajetória; 
 
 ### Tipografia
 
-O PDF oficial registra **Atkinson Hyperlegible** como tipografia da família. O site institucional publicado atualmente carrega **Geist Variable** para textos e títulos, além de **Geist Mono Variable** para rótulos e informações técnicas. Como os posts precisam conversar com o site vigente, os exports atuais seguem Geist: títulos e textos em Geist Variable, rótulos em Geist Mono Variable. Atkinson fica registrado como referência histórica do material de identidade e só deve ser usado se a marca decidir padronizar novamente essa fonte em todos os canais.
+O kit completo define **Atkinson Hyperlegible** como a fonte oficial de peças, logos, posts, carrosséis, reels, animações e papelaria. **Geist Variable**, **Geist Mono Variable** e **Newsreader** ficam reservadas para o site e interfaces web. Esta separação substitui a leitura anterior que tratava Atkinson como referência histórica.
 
 ### Direção de composição
 
-- Priorizar hierarquia editorial, bastante respiro e frases que expressem a visão da marca.
+- Usar linguagem visual moderna, direta e funcional, tomando como referência específica o carrossel animado aprovado em 27/09/2026; evitar que posts pareçam páginas editoriais, relatórios ou propostas.
+- Manter hierarquia clara, títulos curtos e prova visual concreta; o respiro serve à leitura, não deve deixar a tela vazia.
 - Usar o N como assinatura ou textura discreta, nunca como elemento decorativo sem função.
 - Mostrar os sistemas quando a mensagem for sobre produto, usando capturas reais e dados mascarados.
 - Nas capturas, seguir o padrão do site: desfocar apenas nomes, identificadores, valores e outros dados sensíveis, preservando a leitura da interface.
@@ -106,4 +117,9 @@ Atualizar apenas a identidade, os nomes, as cores, a assinatura visual e as cóp
 - Em fundo azul ou escuro, usar o N oficial branco, também sem fundo próprio.
 - O Norte Vendas deve aparecer com sua marca azul oficial nos slides do produto.
 - O Norte Estoque deve aparecer com sua marca verde-azulada oficial nos slides do produto.
-- As versões horizontais coloridas usadas no carrossel foram extraídas da apresentação oficial da Família Norte e ficam em `public/logos/`.
+- As versões oficiais da família ficam em `public/brand-kit/01-logos/`; `public/logos/` mantém apenas compatibilidade com templates antigos.
+- As fontes oficiais das peças ficam em `public/brand-kit/02-fontes/pecas-e-logo/`; as fontes web ficam em `public/brand-kit/02-fontes/site/`.
+
+### Referência de linguagem visual aprovada
+
+O conjunto `conteudo ntb/01-fixados/Carrossel fixado/Referencia animada aprovada/` passa a ser a referência atual de composição, acabamento e movimento para novos posts. Ele não altera as regras de marca acima: cores, logos e tipografia continuam subordinadas ao kit oficial.
