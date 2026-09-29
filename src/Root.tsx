@@ -20,6 +20,7 @@ import {
   ArgumentoComplementa,
   ArgumentoFechamento,
 } from './templates/ArgumentoOmieNtb';
+import {ApresentaCapa, ApresentaDores, ApresentaCliente, ApresentaPreparo, ApresentaPreparoAnim, ApresentaPapeis, ApresentaConta, ApresentaContaAnim, ApresentaCaixa, ApresentaCaixaAnim, ApresentaFechamento} from './templates/NorteVendasApresentacao';
 import {NorteVendasCapa, NorteVendasRoteamento, NorteVendasTelas, NorteVendasNotaFiscal, NorteVendasFechamento, NorteVendasTelasAnim, NorteVendasNotaFiscalAnim} from './templates/NorteVendasPost';
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
@@ -241,6 +242,17 @@ export const RemotionRoot: React.FC = () => {
       <Still id="NorteVendasFechamento" component={NorteVendasFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Composition id="NorteVendasTelasAnim" component={NorteVendasTelasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
       <Composition id="NorteVendasNotaFiscalAnim" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="VendasApresentaCapa" component={ApresentaCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="VendasApresentaDores" component={ApresentaDores} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="VendasApresentaCliente" component={ApresentaCliente} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="VendasApresentaPreparo" component={ApresentaPreparo} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="VendasApresentaPreparoAnim" component={ApresentaPreparoAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="VendasApresentaPapeis" component={ApresentaPapeis} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="VendasApresentaConta" component={ApresentaConta} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="VendasApresentaContaAnim" component={ApresentaContaAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="VendasApresentaCaixa" component={ApresentaCaixa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="VendasApresentaCaixaAnim" component={ApresentaCaixaAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="VendasApresentaFechamento" component={ApresentaFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
     </>
   );
