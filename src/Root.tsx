@@ -1,5 +1,5 @@
 import React from 'react';
-import {Still} from 'remotion';
+import {Composition, Still} from 'remotion';
 import {
   EtapasCapa,
   EtapasEntrada,
@@ -20,6 +20,7 @@ import {
   ArgumentoComplementa,
   ArgumentoFechamento,
 } from './templates/ArgumentoOmieNtb';
+import {NorteVendasCapa, NorteVendasRoteamento, NorteVendasTelas, NorteVendasNotaFiscal, NorteVendasFechamento, NorteVendasTelasAnim, NorteVendasNotaFiscalAnim} from './templates/NorteVendasPost';
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
   AntesDepoisAntes,
@@ -233,6 +234,13 @@ export const RemotionRoot: React.FC = () => {
       <Still id="CarrosselVendas" component={CarrosselVendas} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselEstoque" component={CarrosselEstoque} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselFechamento" component={CarrosselFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasCapa" component={NorteVendasCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasRoteamento" component={NorteVendasRoteamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasTelas" component={NorteVendasTelas} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasNotaFiscal" component={NorteVendasNotaFiscal} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasFechamento" component={NorteVendasFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="NorteVendasTelasAnim" component={NorteVendasTelasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Composition id="NorteVendasNotaFiscalAnim" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
 
     </>
   );

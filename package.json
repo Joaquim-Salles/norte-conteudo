@@ -12,7 +12,8 @@
     "qa:temas": "node scripts/qa-theme-batch.mjs",
     "qa:estilos": "node scripts/qa-visual-styles.mjs",
     "qa:motion": "node scripts/qa-motion-styles.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "post": "node scripts/render-post.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.518",

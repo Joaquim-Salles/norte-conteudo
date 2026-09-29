@@ -1,0 +1,88 @@
+{
+  "marca": {
+    "azul-noite": "#14163A",
+    "preto": "#0B0B0F",
+    "branco": "#FBFBFE",
+    "papel": "#F5F5F9",
+    "lavanda": "#B9BCEB",
+    "lavanda-escura": "#7A7DB8",
+    "texto-secundario": "#4A4A63"
+  },
+  "produtos": {
+    "norte-vendas": {
+      "cor": "#484DB5",
+      "clara": "#8D92F0"
+    },
+    "norte-estoque": {
+      "cor": "#168E9A",
+      "escura": "#117C87",
+      "clara": "#5FD3DC"
+    },
+    "norte-avalia": {
+      "cor": "#9A3B86"
+    },
+    "norte-pisos": {
+      "cor": "#00497E"
+    }
+  },
+  "tipografia": {
+    "pecas-e-logo": {
+      "texto": "Atkinson Hyperlegible",
+      "dados": "Atkinson Hyperlegible Mono"
+    },
+    "site": {
+      "texto": "Geist",
+      "dados": "Geist Mono",
+      "notas-a-mao": "Newsreader (itálico)"
+    },
+    "pesos": {
+      "regular": 400,
+      "bold": 700,
+      "titulo-site": 650
+    }
+  },
+  "post": {
+    "feed": {
+      "largura": 1080,
+      "altura": 1350
+    },
+    "stories": {
+      "largura": 1080,
+      "altura": 1920
+    },
+    "margem": 86,
+    "video-carrossel": {
+      "animacao-segundos": "4-5",
+      "total-segundos": 15,
+      "loudness-lufs": -16
+    }
+  },
+  "componentes": {
+    "cartao": {
+      "raio": "28-30px",
+      "padding": "30-34px",
+      "borda-clara": "2px #E6E6EF"
+    },
+    "chip": {
+      "forma": "pilula",
+      "fundo-sobre-cor": "rgba(251,251,254,.14)",
+      "fonte": "bold caixa alta 22px"
+    },
+    "eyebrow": {
+      "traco": "40x3px",
+      "fonte": "bold caixa alta 21px, espaçamento +3"
+    },
+    "papel-termico": "#FFFDF8",
+    "fundo-claro-quadriculado": {
+      "tamanho": "54px",
+      "cor": "rgba(20,22,58,.05)"
+    },
+    "luz-fundo-escuro": "#2E3380",
+    "notebook-moldura": "#1A1B2E"
+  },
+  "icones": {
+    "biblioteca": "Lucide (lucide.dev)",
+    "traco": "2-2.4",
+    "cor": "uma só"
+  }
+}
