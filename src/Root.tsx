@@ -21,6 +21,7 @@ import {
   ArgumentoFechamento,
 } from './templates/ArgumentoOmieNtb';
 import {ApresentaCapa, ApresentaDores, ApresentaCliente, ApresentaPreparo, ApresentaPreparoAnim, ApresentaPapeis, ApresentaConta, ApresentaContaAnim, ApresentaCaixa, ApresentaCaixaAnim, ApresentaFechamento} from './templates/NorteVendasApresentacao';
+import {EstoqueCapa, EstoqueDores, EstoqueEtiqueta, EstoqueEtiquetaAnim, EstoqueBip, EstoqueBipAnim, EstoqueAtencao, EstoqueOmie, EstoqueOmieAnim, EstoqueFuncoes, EstoqueFechamento} from './templates/NorteEstoquePost';
 import {NorteVendasCapa, NorteVendasRoteamento, NorteVendasTelas, NorteVendasNotaFiscal, NorteVendasFechamento, NorteVendasTelasAnim, NorteVendasNotaFiscalAnim} from './templates/NorteVendasPost';
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
@@ -252,6 +253,17 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="VendasApresentaContaAnim" component={ApresentaContaAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
       <Still id="VendasApresentaCaixa" component={ApresentaCaixa} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Composition id="VendasApresentaCaixaAnim" component={ApresentaCaixaAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="EstoqueApresentaCapa" component={EstoqueCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="EstoqueApresentaDores" component={EstoqueDores} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="EstoqueApresentaEtiqueta" component={EstoqueEtiqueta} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="EstoqueApresentaEtiquetaAnim" component={EstoqueEtiquetaAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="EstoqueApresentaBip" component={EstoqueBip} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="EstoqueApresentaBipAnim" component={EstoqueBipAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="EstoqueApresentaAtencao" component={EstoqueAtencao} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="EstoqueApresentaOmie" component={EstoqueOmie} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="EstoqueApresentaOmieAnim" component={EstoqueOmieAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={450} />
+      <Still id="EstoqueApresentaFuncoes" component={EstoqueFuncoes} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="EstoqueApresentaFechamento" component={EstoqueFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="VendasApresentaFechamento" component={ApresentaFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
     </>
