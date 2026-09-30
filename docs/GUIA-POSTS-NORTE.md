@@ -63,14 +63,20 @@ Logos e telas: `kit('01-logos/...')`, `kit('08-recursos/telas-oficiais/...')`. L
 6. **Fonte errada.** Posts usam Atkinson (`ensurePostLoaded()`), não Geist/Fraunces do resto do repo.
 7. **Sombra cortada.** Ao usar `overflow: hidden` num contêiner com `drop-shadow`, use `clipPath: 'inset(0 0 -80px 0)'` (corta só o topo).
 8. **Dado inventado.** Nunca desenhe UI ou métrica que o produto não tem. Animação só **move ou destaca** as telas oficiais.
-9. **Reescrever bloco existente.** Se o bloco já existe em `NortePost.tsx`, importe. Se faltar um, adicione lá e documente aqui.
+9. **Animar texto.** Regra do dono: nunca anime letras. Os posts `NorteVendasPost`, `NorteVendasApresentacao` e `NorteEstoquePost` foram feitos
+   antes dessa regra e ainda envolvem `Title`/`Eyebrow`/`Support` em `<Fx>`: **não copie esse trecho**, deixe o texto parado.
+10. **Reescrever bloco existente.** Se o bloco já existe em `NortePost.tsx`, importe. Se faltar um, adicione lá e documente aqui.
 
 ## 5. Animação (vídeo de carrossel)
 
+> **Regra: nunca anime letras, apenas elementos.** Título, eyebrow, apoio e chips ficam parados e legíveis desde o quadro 0
+> (nada de fade, subida, blur, máscara, letra ou palavra por vez). Anime só objetos, aparelhos, cartões, fotos, linhas, ícones e carimbos;
+> o texto que está dentro de um elemento se move junto com ele. `<Fx>` é para elementos, nunca para `Title`, `Eyebrow` ou `Support`.
+
 - Componente de cena recebe `f?: number`. Estático: `<Cena />` (quadro final). Animado: `<Cena f={useCurrentFrame()} />`. Um único layout serve aos dois.
 - `A(f, inicio, duracao)` → 0→1 com ease-out suave. `S(f, inicio, {damping, stiffness, mass})` → mola. Ambos retornam `1` quando `f` é indefinido.
-- `<Fx p dy>` faz fade + subida de um bloco absoluto inteiro.
-- **Roteiro de 15 s (450 frames a 30 fps):** frames 0–30 texto entra · 24–60 objetos entram (molas) · 36–112 ação principal
+- `<Fx p dy>` faz fade + subida de um **elemento** absoluto inteiro (cartão, objeto, aparelho). **Nunca em texto solto.**
+- **Roteiro de 15 s (450 frames a 30 fps):** frames 0–30 texto já parado, sem animar · 24–60 objetos entram (molas) · 36–112 ação principal
   (ex.: papel saindo aos trancos, destaque nas comandas) · depois **fica parado**. Uma ação principal por vez, toca uma vez.
 - Papel saindo da impressora: avanço em degraus (`PRINT_STEPS`), cada um rápido e seguido de pausa; impressora treme ±1,6 px.
 - Câmera: zoom lento (até +3%). Sem movimento decorativo sem sentido.
@@ -92,6 +98,7 @@ Logos e telas: `kit('01-logos/...')`, `kit('08-recursos/telas-oficiais/...')`. L
 - [ ] Fundos alternados; slide de produto na cor do produto; só cores de `cores.json`.
 - [ ] Fonte Atkinson; ícones Lucide de linha numa cor só; logos dos arquivos oficiais.
 - [ ] Texto concreto e verdadeiro; dado de exemplo marcado "exemplo"; sem dado real de cliente.
+- [ ] Nenhuma letra animada: título, rótulo, apoio e chips parados desde o quadro 0; só elementos se movem.
 - [ ] Animação toca uma vez, dura ~4–5 s e o quadro final fica parado até 15 s.
 - [ ] `npx tsc --noEmit` sem erro novo. Nomes de arquivo numerados na ordem de uso.
 - [ ] Legenda: 1ª linha com a ideia, 2–4 linhas curtas, fechamento "Fale com a gente: norteparanegocios.com.br", poucas hashtags.

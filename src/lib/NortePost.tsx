@@ -48,6 +48,7 @@ export const A = (f: number | undefined, start: number, dur = 18) =>
   f === undefined ? 1 : interpolate(f, [start, start + dur], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
 export const S = (f: number | undefined, start: number, config: {damping: number; stiffness: number; mass?: number}) =>
   f === undefined ? 1 : spring({frame: f - start, fps: 30, config});
+// REGRA: nunca anime letras, apenas elementos. Use Fx só em cartões, objetos e aparelhos; jamais em Title, Eyebrow ou Support.
 export const Fx: React.FC<{p: number; dy?: number; children: React.ReactNode}> = ({p, dy = 36, children}) => (
   <div style={{position: 'absolute', inset: 0, opacity: p, transform: `translateY(${(1 - p) * dy}px)`, pointerEvents: 'none'}}>{children}</div>
 );
