@@ -21,10 +21,11 @@ ou editar qualquer peça. O guia completo está em `docs/GUIA-POSTS-NORTE.md`.
 - Telas: só as oficiais de `public/brand-kit/08-recursos/telas-oficiais/`. **Nunca inventar UI, número, cliente ou
   depoimento.** Cupom, etiqueta e ticket levam a marca "exemplo".
 - Texto de produto vem do site de referência (seções do produto) e do `MARCA.md` §1. Frases curtas, concretas, chão de loja.
-- **Animação: nunca anime letras, apenas elementos.** Título, rótulo (eyebrow), texto de apoio, chips e botões de texto ficam
-  **parados e legíveis desde o primeiro quadro**: sem fade, subida, blur, máscara, letra por letra ou palavra por palavra. Só se
-  animam elementos: objetos (impressora, cupom, etiqueta), aparelhos, cartões, fotos, linhas, ícones, carimbos e molduras. O texto
-  que vai dentro de um elemento anima junto com ele, como parte do elemento. Não use `<Fx>` em `Title`, `Eyebrow` nem `Support`.
+- **Animação: nunca anime a headline nem a subheadline.** O `Title` (headline) e o `Support` (subheadline) são o que a pessoa precisa
+  ler: ficam **parados e legíveis desde o primeiro quadro**, sem fade, subida, blur, máscara, letra por letra ou palavra por palavra.
+  Anime só elementos: objetos (impressora, cupom, etiqueta), aparelhos, cartões, fotos, linhas, ícones, carimbos e molduras. O texto
+  que está dentro de um elemento (cartão, cupom, etiqueta, chip) anima junto com ele. Não use `<Fx>` em `Title` nem em `Support`;
+  o `Eyebrow` (rótulo pequeno) fica parado por padrão, para não competir com a headline.
 - Nomes: "Norte para Negócios", "Norte Vendas", "Norte Estoque", "Norte Avalia", "Norte Pisos". Nunca "NTB ...".
 
 ## Como entregar
