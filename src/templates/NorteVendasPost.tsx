@@ -156,17 +156,13 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
     <AbsoluteFill>
       <Background tone="dark" id="nv-grid-3" />
       <Top n={3} tone="dark" />
-      <Fx p={A(f, 0)} dy={20}><Eyebrow tone="dark" top={210}>Cardápio no QR · mesas e comandas</Eyebrow></Fx>
-      <Fx p={A(f, 6, 24)} dy={48}>
-        <Title tone="dark" top={262} size={76}>
+      <Eyebrow tone="dark" top={210}>Cardápio no QR · mesas e comandas</Eyebrow>
+      <Title tone="dark" top={262} size={76}>
           O cliente pede pelo celular.
         </Title>
-      </Fx>
-      <Fx p={A(f, 16, 24)}>
-        <Support tone="dark" top={440} width={800} size={28}>
+      <Support tone="dark" top={440} width={800} size={28}>
           O cardápio abre pelo QR code da mesa. No caixa, cada mesa aparece com o valor da comanda, e as livres ficam à mostra.
         </Support>
-      </Fx>
 
       <div style={{position: 'absolute', inset: 0, transform: `scale(${zoom})`, transformOrigin: '50% 75%'}}>
         {/* notebook */}
@@ -249,12 +245,10 @@ export const NotaFiscalScene: React.FC<{f?: number}> = ({f}) => {
     <AbsoluteFill>
       <Background tone="product" id="nv-grid-4" />
       <Top n={4} tone="product" />
-      <Fx p={A(f, 0)} dy={20}><Eyebrow tone="product" top={210}>Nota fiscal</Eyebrow></Fx>
-      <Fx p={A(f, 5, 24)} dy={48}>
-        <Title tone="product" top={262} size={74}>
+      <Eyebrow tone="product" top={210}>Nota fiscal</Eyebrow>
+      <Title tone="product" top={262} size={74}>
           Nota fiscal? Sai do caixa.
         </Title>
-      </Fx>
 
       <div style={{position: 'absolute', left: PAD, top: 440, width: 440, display: 'flex', flexDirection: 'column', gap: 22}}>
         {nfCards.map(({Icon, t, d}, i) => {

@@ -197,17 +197,13 @@ export const PreparoScene: React.FC<{f?: number}> = ({f}) => {
     <AbsoluteFill>
       <Background tone="light" id="nva-4" />
       <Top n={4} total={TOTAL} tone="light" />
-      <Fx p={A(f, 0)} dy={20}><Eyebrow tone="light" top={210}>Cozinha organizada</Eyebrow></Fx>
-      <Fx p={A(f, 5, 24)} dy={48}>
-        <Title tone="light" top={262} size={76}>
+      <Eyebrow tone="light" top={210}>Cozinha organizada</Eyebrow>
+      <Title tone="light" top={262} size={76}>
           Pizza na pizzaria. Chope no bar.
         </Title>
-      </Fx>
-      <Fx p={A(f, 14, 24)}>
-        <Support tone="light" top={462} width={880} size={28}>
+      <Support tone="light" top={462} width={880} size={28}>
           Cada categoria do cardápio tem o seu local de preparo. O pedido sai na impressora ou na tela.
         </Support>
-      </Fx>
 
       {/* linhas do pedido até cada impressora */}
       <svg width={1080} height={1350} style={{position: 'absolute', inset: 0}} fill="none">
@@ -318,17 +314,13 @@ export const ContaScene: React.FC<{f?: number}> = ({f}) => {
     <AbsoluteFill>
       <Background tone="product" id="nva-6" />
       <Top n={6} total={TOTAL} tone="product" />
-      <Fx p={A(f, 0)} dy={20}><Eyebrow tone="product" top={210}>Divisão de conta</Eyebrow></Fx>
-      <Fx p={A(f, 5, 24)} dy={48}>
-        <Title tone="product" top={262} size={84}>
+      <Eyebrow tone="product" top={210}>Divisão de conta</Eyebrow>
+      <Title tone="product" top={262} size={84}>
           A conta se divide.
         </Title>
-      </Fx>
-      <Fx p={A(f, 14, 24)}>
-        <Support tone="product" top={392} width={880} size={28}>
+      <Support tone="product" top={392} width={880} size={28}>
           Cada um paga o que consumiu, com a taxa de serviço separada. Em dinheiro, cartão ou Pix.
         </Support>
-      </Fx>
 
       <div style={{position: 'absolute', left: PAD, top: 590, width: SW, height: SH, borderRadius: 30, overflow: 'hidden', opacity: Math.min(1, pSheet * 1.6), transform: `translateY(${(1 - pSheet) * 260}px)`, filter: 'drop-shadow(0 26px 34px rgba(0,0,0,.35))', background: WHITE}}>
         <Img src={TELA_DIVIDIR} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
@@ -401,17 +393,13 @@ export const CaixaScene: React.FC<{f?: number}> = ({f}) => {
     <AbsoluteFill>
       <Background tone="light" id="nva-7" />
       <Top n={7} total={TOTAL} tone="light" />
-      <Fx p={A(f, 0)} dy={20}><Eyebrow tone="light" top={210}>Fechamento</Eyebrow></Fx>
-      <Fx p={A(f, 5, 24)} dy={48}>
-        <Title tone="light" top={262} size={72}>
+      <Eyebrow tone="light" top={210}>Fechamento</Eyebrow>
+      <Title tone="light" top={262} size={72}>
           O caixa fecha contando nota por nota.
         </Title>
-      </Fx>
-      <Fx p={A(f, 14, 24)}>
-        <Support tone="light" top={442} width={880} size={28}>
+      <Support tone="light" top={442} width={880} size={28}>
           Cada operador fecha o próprio turno. Se a conta não bate, alguém fica sabendo.
         </Support>
-      </Fx>
 
       <div style={{position: 'absolute', left: PAD, top: 580, opacity: Math.min(1, pFolha * 1.6), transform: `translateY(${(1 - pFolha) * 120}px) rotate(-.8deg)`}}>
         <Paper width={FW}>
