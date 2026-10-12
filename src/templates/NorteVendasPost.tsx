@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Receipt, Ban, Archive} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
@@ -43,8 +43,8 @@ const LOGO_VENDAS_BRANCO = kit('01-logos/norte-vendas/horizontal/norte-vendas_ho
 const LOGO_VENDAS_COR = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_vendas_transparente.png');
 const TELA_MESAS = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const TELA_CARDAPIO = kit('08-recursos/telas-oficiais/vendas/m-cliente-cardapio.png');
-const TELA_DASHBOARD_REAL = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
-const TELA_CARDAPIO_GESTAO_REAL = kit('08-recursos/telas-oficiais/vendas/d-cardapio.png');
+const FOTO_OPERACAO_CELULAR = staticFile('operacao-real/foto-aplicativo.png');
+const FOTO_OPERACAO_SALAO = staticFile('operacao-real/foto-atendimento.png');
 const QR_TOTAL = 7;
 
 /* ---------- 1 · capa (cor do produto) ---------- */
@@ -81,7 +81,7 @@ const destinos = [
   {local: 'Pizzaria', item: '1× Pizza meio a meio'},
 ];
 
-export const NorteVendasRoteamento: React.FC = () => {
+const RoteamentoScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
   const TICKET_W = 400;
   const TICKET_H = 150;
@@ -92,6 +92,7 @@ export const NorteVendasRoteamento: React.FC = () => {
   const ys = destinos.map((_, i) => top0 + i * (TICKET_H + GAP) + TICKET_H / 2);
   const pedidoW = 330;
   const fromX = PAD + pedidoW;
+  const routeProgress = (index: number) => f === undefined ? 1 : interpolate(f, [9 + index * 12, 24 + index * 12], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.22, 1, 0.36, 1)});
   return (
     <AbsoluteFill>
       <Background tone="light" id="nv-grid-2" />
@@ -106,11 +107,11 @@ export const NorteVendasRoteamento: React.FC = () => {
 
       <svg width={1080} height={1350} style={{position: 'absolute', inset: 0}} fill="none">
         {ys.map((y, i) => (
-          <path key={i} d={`M${fromX + 8} ${centerY} C ${fromX + 90} ${centerY}, ${ticketX - 90} ${y}, ${ticketX - 8} ${y}`} stroke={VENDAS} strokeWidth={3.5} strokeLinecap="round" />
+          <path key={i} d={`M${fromX + 8} ${centerY} C ${fromX + 90} ${centerY}, ${ticketX - 90} ${y}, ${ticketX - 8} ${y}`} stroke={VENDAS} strokeWidth={3.5} strokeLinecap="round" strokeDasharray={600} strokeDashoffset={600 * (1 - routeProgress(i))} />
         ))}
         <circle cx={fromX + 8} cy={centerY} r={7} fill={VENDAS} />
         {ys.map((y, i) => (
-          <circle key={i} cx={ticketX - 8} cy={y} r={7} fill={VENDAS} />
+          <circle key={i} cx={ticketX - 8} cy={y} r={7} fill={VENDAS} opacity={routeProgress(i)} />
         ))}
       </svg>
 
@@ -128,8 +129,9 @@ export const NorteVendasRoteamento: React.FC = () => {
         </Paper>
       </div>
 
-      {destinos.map((d, i) => (
-        <div key={d.local} style={{position: 'absolute', left: ticketX, top: top0 + i * (TICKET_H + GAP), transform: `rotate(${[-1.4, 1, -0.8][i]}deg)`}}>
+      {destinos.map((d, i) => {
+        const p = routeProgress(i);
+        return <div key={d.local} style={{position: 'absolute', left: ticketX, top: top0 + i * (TICKET_H + GAP), opacity: p, transform: `translateX(${(1-p)*36}px) rotate(${[-1.4, 1, -0.8][i]}deg)`}}>
           <Paper width={TICKET_W}>
             <div style={{height: TICKET_H - 26, padding: '26px 30px 0'}}>
               <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 21, letterSpacing: 3, textTransform: 'uppercase', color: VENDAS}}>{d.local}</div>
@@ -137,12 +139,14 @@ export const NorteVendasRoteamento: React.FC = () => {
               <div style={{marginTop: 14, fontFamily: SANS, fontWeight: 700, fontSize: 28, letterSpacing: -0.3}}>{d.item}</div>
             </div>
           </Paper>
-        </div>
-      ))}
+        </div>;
+      })}
       <Foot tone="light" />
     </AbsoluteFill>
   );
 };
+export const NorteVendasRoteamento: React.FC = () => <RoteamentoScene />;
+export const NorteVendasRoteamentoAnim: React.FC = () => <RoteamentoScene f={useCurrentFrame()} />;
 
 /* ---------- 3 · prova do produto (azul-noite) ---------- */
 export const TelasScene: React.FC<{f?: number}> = ({f}) => {
@@ -202,8 +206,9 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
       </div>
       <svg width={1080} height={1350} viewBox="0 0 1080 1350" style={{position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4}}>
         <path d="M858 986 C 790 858 760 850 710 830" fill="none" stroke={LAV} strokeWidth={4} strokeLinecap="round" opacity={pedidoOpacity * 0.28} />
-        <path d="M858 986 C 790 858 760 850 710 830" fill="none" stroke={WHITE} strokeWidth={4} strokeLinecap="round" strokeDasharray={320} strokeDashoffset={320 * (1 - pedidoProgress)} opacity={pedidoOpacity} />
-        <circle cx={packetX} cy={packetY} r={8} fill={WHITE} opacity={pedidoOpacity} />
+        <path d="M858 986 C 790 858 760 850 710 830" fill="none" stroke={VENDAS} strokeWidth={4} strokeLinecap="round" strokeDasharray={320} strokeDashoffset={320 * (1 - pedidoProgress)} opacity={pedidoOpacity} />
+        <path d="M710 830l16-2-8 14" fill="none" stroke={VENDAS} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" opacity={pedidoOpacity} />
+        <circle cx={packetX} cy={packetY} r={8} fill={VENDAS} opacity={pedidoOpacity} />
       </svg>
       <Foot tone="dark" />
     </AbsoluteFill>
@@ -212,44 +217,44 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteVendasTelas: React.FC = () => <TelasScene />;
 export const NorteVendasTelasAnim: React.FC = () => <TelasScene f={useCurrentFrame()} />;
 
-/* ---------- 4 · sistema em funcionamento: visão geral da loja ---------- */
-export const NorteVendasQRMesas: React.FC = () => {
+/* ---------- 4 · foto real do pedido pelo celular ---------- */
+export const NorteVendasQRCelular: React.FC = () => {
   ensurePostLoaded();
   return (
     <AbsoluteFill>
       <Background tone="light" id="nv-grid-4" />
       <Top n={4} tone="light" total={QR_TOTAL} />
-      <Eyebrow tone="light" top={210}>Sistema em funcionamento</Eyebrow>
+      <Eyebrow tone="light" top={210}>Pedido lançado na mesa</Eyebrow>
       <Title tone="light" top={262} size={72}>
-        A visão da loja, em uma tela.
+        O pedido acontece no salão.
       </Title>
-      <Support tone="light" top={430} width={880} size={28}>
-        O painel reúne o movimento do turno, alertas e informações das vendas para a equipe acompanhar a operação.
+      <Support tone="light" top={420} width={880} size={28}>
+        O cliente escolhe os itens no celular, enquanto a equipe acompanha o pedido na operação da casa.
       </Support>
-      <div style={{position: 'absolute', left: PAD, top: 620, width: 908, height: 568, overflow: 'hidden', borderRadius: 16, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
-        <Img src={TELA_DASHBOARD_REAL} style={{width: '100%', height: '100%', objectFit: 'contain', display: 'block'}} />
+      <div style={{position: 'absolute', left: 270, top: 570, width: 540, height: 700, overflow: 'hidden', borderRadius: 28, background: WHITE, boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+        <Img src={FOTO_OPERACAO_CELULAR} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 52%', display: 'block'}} />
       </div>
       <Foot tone="light" />
     </AbsoluteFill>
   );
 };
 
-/* ---------- 5 · sistema em funcionamento: gestão do cardápio ---------- */
-export const NorteVendasQRCardapio: React.FC = () => {
+/* ---------- 5 · foto real do sistema no restaurante ---------- */
+export const NorteVendasQROperacao: React.FC = () => {
   ensurePostLoaded();
   return (
     <AbsoluteFill>
       <Background tone="product" id="nv-grid-5" />
       <Top n={5} tone="product" total={QR_TOTAL} />
-      <Eyebrow tone="product" top={210}>Gestão do cardápio</Eyebrow>
+      <Eyebrow tone="product" top={210}>Norte Vendas no restaurante</Eyebrow>
       <Title tone="product" top={262} size={72}>
-        Cada pedido segue para o preparo certo.
+        A operação acompanhada de perto.
       </Title>
       <Support tone="product" top={430} width={880} size={28}>
-        No sistema, a equipe define os locais de preparo das categorias e organiza o cardápio da loja.
+        A equipe acompanha mesas, comandas e pedidos com o sistema aberto no próprio salão.
       </Support>
-      <div style={{position: 'absolute', left: PAD, top: 620, width: 908, height: 568, overflow: 'hidden', borderRadius: 16, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(0,0,0,.24)'}}>
-        <Img src={TELA_CARDAPIO_GESTAO_REAL} style={{width: '100%', height: '100%', objectFit: 'contain', display: 'block'}} />
+      <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 610, overflow: 'hidden', borderRadius: 24, boxShadow: '0 24px 55px rgba(0,0,0,.24)'}}>
+        <Img src={FOTO_OPERACAO_SALAO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block'}} />
       </div>
       <Foot tone="product" />
     </AbsoluteFill>

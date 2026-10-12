@@ -24,9 +24,10 @@ import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, Car
 import {
   NorteVendasCapa,
   NorteVendasRoteamento,
+  NorteVendasRoteamentoAnim,
   NorteVendasTelas,
-  NorteVendasQRMesas,
-  NorteVendasQRCardapio,
+  NorteVendasQRCelular,
+  NorteVendasQROperacao,
   NorteVendasNotaFiscal,
   NorteVendasFechamento,
   NorteVendasTelasAnim,
@@ -248,10 +249,12 @@ export const RemotionRoot: React.FC = () => {
       <Still id="NorteVendasQR01" component={NorteVendasCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasQR02" component={NorteVendasRoteamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasQR03" component={NorteVendasTelas} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="NorteVendasQR04" component={NorteVendasQRMesas} width={FEED_WIDTH} height={FEED_HEIGHT} />
-      <Still id="NorteVendasQR05" component={NorteVendasQRCardapio} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR04" component={NorteVendasQRCelular} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR05" component={NorteVendasQROperacao} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasQR06" component={NorteVendasNotaFiscal} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasQR07" component={NorteVendasFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+
+      <Composition id="NorteVendasQRAnimada02" component={NorteVendasRoteamentoAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
       <Composition id="NorteVendasQRAnimada03" component={NorteVendasTelasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasQRAnimada06" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
