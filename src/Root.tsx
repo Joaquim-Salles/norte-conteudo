@@ -1,5 +1,5 @@
 import React from 'react';
-import {Still} from 'remotion';
+import {Composition, Still} from 'remotion';
 import {
   EtapasCapa,
   EtapasEntrada,
@@ -21,6 +21,15 @@ import {
   ArgumentoFechamento,
 } from './templates/ArgumentoOmieNtb';
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
+import {
+  NorteVendasCapa,
+  NorteVendasRoteamento,
+  NorteVendasTelas,
+  NorteVendasNotaFiscal,
+  NorteVendasFechamento,
+  NorteVendasTelasAnim,
+  NorteVendasNotaFiscalAnim,
+} from './templates/NorteVendasPost';
 import {
   AntesDepoisAntes,
   AntesDepoisPonte,
@@ -233,6 +242,15 @@ export const RemotionRoot: React.FC = () => {
       <Still id="CarrosselVendas" component={CarrosselVendas} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselEstoque" component={CarrosselEstoque} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="CarrosselFechamento" component={CarrosselFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      {/* Norte Vendas: carrossel QR do pedido ao caixa. */}
+      <Still id="NorteVendasQR01" component={NorteVendasCapa} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR02" component={NorteVendasRoteamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR03" component={NorteVendasTelas} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR04" component={NorteVendasNotaFiscal} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasQR05" component={NorteVendasFechamento} width={FEED_WIDTH} height={FEED_HEIGHT} />
+
+      <Composition id="NorteVendasQRAnimada03" component={NorteVendasTelasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteVendasQRAnimada04" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
     </>
   );
