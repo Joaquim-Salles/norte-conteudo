@@ -21,7 +21,8 @@ test('the QR carousel uses real restaurant-operation photos and runs through sev
   ]) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
-  assert.match(template, /operacao-real\/foto-equipe\.png/);
+  assert.match(template, /operacao-real\/foto-computador-angulo\.png/);
+  assert.doesNotMatch(template, /FOTO_OPERACAO_COMPUTADOR\s*=\s*staticFile\('operacao-real\/foto-atendimento\.png'\)/);
   assert.match(template, /operacao-real\/foto-atendimento\.png/);
   assert.match(template, /NorteVendasQROperacao/);
   assert.match(template, /NorteVendasQRCelular/);

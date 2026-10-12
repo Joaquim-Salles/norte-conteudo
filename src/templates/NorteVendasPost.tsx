@@ -43,7 +43,7 @@ const LOGO_VENDAS_BRANCO = kit('01-logos/norte-vendas/horizontal/norte-vendas_ho
 const LOGO_VENDAS_COR = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_vendas_transparente.png');
 const TELA_MESAS = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const TELA_CARDAPIO = kit('08-recursos/telas-oficiais/vendas/m-cliente-cardapio.png');
-const FOTO_OPERACAO_COMPUTADOR = staticFile('operacao-real/foto-equipe.png');
+const FOTO_OPERACAO_COMPUTADOR = staticFile('operacao-real/foto-computador-angulo.png');
 const FOTO_OPERACAO_SALAO = staticFile('operacao-real/foto-atendimento.png');
 const QR_TOTAL = 7;
 
