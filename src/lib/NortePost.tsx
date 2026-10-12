@@ -78,11 +78,11 @@ export const Background: React.FC<{tone: Tone; id: string}> = ({tone, id}) => {
 };
 
 // assinatura oficial (62 px de altura) + página em Mono
-export const Top: React.FC<{n: number; tone: Tone}> = ({n, tone}) => (
+export const Top: React.FC<{n: number; tone: Tone; total?: number}> = ({n, tone, total = TOTAL}) => (
   <div style={{position: 'absolute', left: PAD, right: PAD, top: 66, height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
     <Img src={tone === 'light' ? LOGO_NEGOCIOS_AZUL : LOGO_NEGOCIOS_BRANCO} style={{height: 62, width: 'auto'}} />
     <span style={{fontFamily: MONO, fontSize: 22, color: mute(tone)}}>
-      {String(n).padStart(2, '0')}/{String(TOTAL).padStart(2, '0')}
+      {String(n).padStart(2, '0')}/{String(total).padStart(2, '0')}
     </span>
   </div>
 );

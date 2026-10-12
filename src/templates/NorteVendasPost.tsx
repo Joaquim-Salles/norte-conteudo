@@ -34,7 +34,7 @@ import {
 } from '../lib/NortePost';
 
 /**
- * Carrossel "Norte Vendas" (5 slides). Blocos compartilhados vêm de src/lib/NortePost.tsx.
+ * Carrossel "Norte Vendas" (7 slides). Blocos compartilhados vêm de src/lib/NortePost.tsx.
  * Texto só com fatos do site (sections/vendas). Dado de cupom/ticket é sempre "exemplo".
  */
 
@@ -43,6 +43,9 @@ const LOGO_VENDAS_BRANCO = kit('01-logos/norte-vendas/horizontal/norte-vendas_ho
 const LOGO_VENDAS_COR = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_vendas_transparente.png');
 const TELA_MESAS = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const TELA_CARDAPIO = kit('08-recursos/telas-oficiais/vendas/m-cliente-cardapio.png');
+const TELA_DASHBOARD_REAL = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
+const TELA_CARDAPIO_GESTAO_REAL = kit('08-recursos/telas-oficiais/vendas/d-cardapio.png');
+const QR_TOTAL = 7;
 
 /* ---------- 1 · capa (cor do produto) ---------- */
 export const NorteVendasCapa: React.FC = () => {
@@ -53,7 +56,7 @@ export const NorteVendasCapa: React.FC = () => {
       <div style={{position: 'absolute', left: PAD, top: 92}}>
         <Img src={LOGO_VENDAS_BRANCO} style={{height: 150, width: 'auto'}} />
       </div>
-      <div style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/{String(TOTAL).padStart(2, '0')}</div>
+      <div style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/{String(QR_TOTAL).padStart(2, '0')}</div>
       <Eyebrow tone="product" top={470}>Para restaurante, bar e lanchonete</Eyebrow>
       <Title tone="product" top={528} size={92}>
         Do QR code na mesa ao caixa fechado.
@@ -92,7 +95,7 @@ export const NorteVendasRoteamento: React.FC = () => {
   return (
     <AbsoluteFill>
       <Background tone="light" id="nv-grid-2" />
-      <Top n={2} tone="light" />
+      <Top n={2} tone="light" total={QR_TOTAL} />
       <Eyebrow tone="light" top={210}>Cozinha organizada</Eyebrow>
       <Title tone="light" top={262} size={84}>
         Um pedido, três destinos.
@@ -158,7 +161,7 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
   return (
     <AbsoluteFill>
       <Background tone="dark" id="nv-grid-3" />
-      <Top n={3} tone="dark" />
+      <Top n={3} tone="dark" total={QR_TOTAL} />
       <Fx p={A(f, 0)} dy={20}><Eyebrow tone="dark" top={210}>Cardápio no QR · mesas e comandas</Eyebrow></Fx>
       <Fx p={A(f, 6, 24)} dy={48}>
         <Title tone="dark" top={262} size={76}>
@@ -209,7 +212,51 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteVendasTelas: React.FC = () => <TelasScene />;
 export const NorteVendasTelasAnim: React.FC = () => <TelasScene f={useCurrentFrame()} />;
 
-/* ---------- 4 · nota fiscal (cor do produto) ---------- */
+/* ---------- 4 · sistema em funcionamento: visão geral da loja ---------- */
+export const NorteVendasQRMesas: React.FC = () => {
+  ensurePostLoaded();
+  return (
+    <AbsoluteFill>
+      <Background tone="light" id="nv-grid-4" />
+      <Top n={4} tone="light" total={QR_TOTAL} />
+      <Eyebrow tone="light" top={210}>Sistema em funcionamento</Eyebrow>
+      <Title tone="light" top={262} size={72}>
+        A visão da loja, em uma tela.
+      </Title>
+      <Support tone="light" top={430} width={880} size={28}>
+        O painel reúne o movimento do turno, alertas e informações das vendas para a equipe acompanhar a operação.
+      </Support>
+      <div style={{position: 'absolute', left: PAD, top: 620, width: 908, height: 568, overflow: 'hidden', borderRadius: 16, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+        <Img src={TELA_DASHBOARD_REAL} style={{width: '100%', height: '100%', objectFit: 'contain', display: 'block'}} />
+      </div>
+      <Foot tone="light" />
+    </AbsoluteFill>
+  );
+};
+
+/* ---------- 5 · sistema em funcionamento: gestão do cardápio ---------- */
+export const NorteVendasQRCardapio: React.FC = () => {
+  ensurePostLoaded();
+  return (
+    <AbsoluteFill>
+      <Background tone="product" id="nv-grid-5" />
+      <Top n={5} tone="product" total={QR_TOTAL} />
+      <Eyebrow tone="product" top={210}>Gestão do cardápio</Eyebrow>
+      <Title tone="product" top={262} size={72}>
+        Cada pedido segue para o preparo certo.
+      </Title>
+      <Support tone="product" top={430} width={880} size={28}>
+        No sistema, a equipe define os locais de preparo das categorias e organiza o cardápio da loja.
+      </Support>
+      <div style={{position: 'absolute', left: PAD, top: 620, width: 908, height: 568, overflow: 'hidden', borderRadius: 16, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(0,0,0,.24)'}}>
+        <Img src={TELA_CARDAPIO_GESTAO_REAL} style={{width: '100%', height: '100%', objectFit: 'contain', display: 'block'}} />
+      </div>
+      <Foot tone="product" />
+    </AbsoluteFill>
+  );
+};
+
+/* ---------- 6 · nota fiscal (cor do produto) ---------- */
 const N = 25;
 const qr = (() => {
   let seed = 7;
@@ -245,7 +292,7 @@ export const NotaFiscalScene: React.FC<{f?: number}> = ({f}) => {
   return (
     <AbsoluteFill>
       <Background tone="product" id="nv-grid-4" />
-      <Top n={4} tone="product" />
+      <Top n={6} tone="product" total={QR_TOTAL} />
       <Fx p={A(f, 0)} dy={20}><Eyebrow tone="product" top={210}>Nota fiscal</Eyebrow></Fx>
       <Fx p={A(f, 5, 24)} dy={48}>
         <Title tone="product" top={262} size={74}>
@@ -320,13 +367,13 @@ export const NotaFiscalScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteVendasNotaFiscal: React.FC = () => <NotaFiscalScene />;
 export const NorteVendasNotaFiscalAnim: React.FC = () => <NotaFiscalScene f={useCurrentFrame()} />;
 
-/* ---------- 5 · fechamento (azul-noite) ---------- */
+/* ---------- 7 · fechamento (azul-noite) ---------- */
 export const NorteVendasFechamento: React.FC = () => {
   ensurePostLoaded();
   return (
     <AbsoluteFill>
       <Background tone="dark" id="nv-grid-5" />
-      <div style={{position: 'absolute', right: PAD, top: 80, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>05/{String(TOTAL).padStart(2, '0')}</div>
+      <div style={{position: 'absolute', right: PAD, top: 80, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>07/{String(QR_TOTAL).padStart(2, '0')}</div>
       <div style={{position: 'absolute', left: PAD, top: 150}}>
         <Img src={LOGO_NEGOCIOS_BRANCO} style={{height: 150, width: 'auto'}} />
       </div>
