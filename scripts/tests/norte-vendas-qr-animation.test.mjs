@@ -6,7 +6,7 @@ const root = readFileSync(new URL('../../src/Root.tsx', import.meta.url), 'utf8'
 const template = readFileSync(new URL('../../src/templates/NorteVendasPost.tsx', import.meta.url), 'utf8');
 
 test('the QR carousel exports its animated slides at 1080x1350, 30 fps, and three seconds', () => {
-  for (const id of ['NorteVendasQRAnimada02', 'NorteVendasQRAnimada03', 'NorteVendasQRAnimada06']) {
+  for (const id of ['NorteVendasQRAnimada02', 'NorteVendasQRAnimada03', 'NorteVendasQRAnimada04', 'NorteVendasQRAnimada06']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/);
@@ -21,11 +21,14 @@ test('the QR carousel uses real restaurant-operation photos and runs through sev
   ]) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
-  assert.match(template, /operacao-real\/foto-computador-angulo\.png/);
+  assert.match(template, /TELA_MESAS = kit\('08-recursos\/telas-oficiais\/vendas\/d-mesas\.png'\)/);
   assert.doesNotMatch(template, /FOTO_OPERACAO_COMPUTADOR\s*=\s*staticFile\('operacao-real\/foto-atendimento\.png'\)/);
   assert.match(template, /operacao-real\/foto-atendimento\.png/);
   assert.match(template, /NorteVendasQROperacao/);
-  assert.match(template, /NorteVendasQRCelular/);
+  assert.match(template, /NorteVendasQRMesas/);
+  assert.match(template, /NorteVendasQRMesasAnim/);
+  assert.doesNotMatch(template, /FOTO_OPERACAO_COMPUTADOR/);
+  assert.match(root, /NorteVendasQRAnimada04/);
   assert.doesNotMatch(template, /TELA_DASHBOARD_REAL|TELA_CARDAPIO_GESTAO_REAL/);
   assert.match(template, /equipe registra o pedido e acompanha as mesas com o sistema aberto no computador/i);
 });

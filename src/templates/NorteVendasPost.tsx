@@ -43,7 +43,6 @@ const LOGO_VENDAS_BRANCO = kit('01-logos/norte-vendas/horizontal/norte-vendas_ho
 const LOGO_VENDAS_COR = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_vendas_transparente.png');
 const TELA_MESAS = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const TELA_CARDAPIO = kit('08-recursos/telas-oficiais/vendas/m-cliente-cardapio.png');
-const FOTO_OPERACAO_COMPUTADOR = staticFile('operacao-real/foto-computador-angulo.png');
 const FOTO_OPERACAO_SALAO = staticFile('operacao-real/foto-atendimento.png');
 const QR_TOTAL = 7;
 
@@ -217,27 +216,37 @@ export const TelasScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteVendasTelas: React.FC = () => <TelasScene />;
 export const NorteVendasTelasAnim: React.FC = () => <TelasScene f={useCurrentFrame()} />;
 
-/* ---------- 4 · foto real do pedido pelo celular ---------- */
-export const NorteVendasQRCelular: React.FC = () => {
+/* ---------- 4 · interface real de mesas e comandas, em movimento ---------- */
+const MesasScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
+  const screenIn = A(f, 4, 18);
+  const highlight = f === undefined ? 1 : interpolate(f, [34, 42, 65, 76], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.22, 1, 0.36, 1)});
+  const pulse = f === undefined ? 1 : 1 + Math.sin((f - 42) / 7) * 0.012;
   return (
     <AbsoluteFill>
       <Background tone="light" id="nv-grid-4" />
       <Top n={4} tone="light" total={QR_TOTAL} />
-      <Eyebrow tone="light" top={210}>Pedido lançado na mesa</Eyebrow>
+      <Fx p={A(f, 0)} dy={18}><Eyebrow tone="light" top={210}>Pedido lançado na mesa</Eyebrow></Fx>
+      <Fx p={A(f, 4, 20)} dy={34}>
       <Title tone="light" top={262} size={72}>
         O pedido acontece no salão.
       </Title>
+      </Fx>
+      <Fx p={A(f, 10, 20)} dy={20}>
       <Support tone="light" top={420} width={880} size={28}>
         A equipe registra o pedido e acompanha as mesas com o sistema aberto no computador.
       </Support>
-      <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 610, overflow: 'hidden', borderRadius: 24, boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
-        <Img src={FOTO_OPERACAO_COMPUTADOR} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block'}} />
+      </Fx>
+      <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 567, overflow: 'hidden', borderRadius: 20, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)', opacity: screenIn, transform: `translateY(${(1-screenIn)*64}px) scale(${0.97 + screenIn*0.03})`}}>
+        <Img src={TELA_MESAS} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
+        <div style={{position: 'absolute', left: '19.7%', top: '18.5%', width: '12.5%', height: '21.4%', borderRadius: 14, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 7px rgba(72,77,181,.17)', background: 'rgba(72,77,181,.035)', opacity: highlight, transform: `scale(${pulse})`, transformOrigin: 'center'}} />
       </div>
       <Foot tone="light" />
     </AbsoluteFill>
   );
 };
+export const NorteVendasQRMesas: React.FC = () => <MesasScene />;
+export const NorteVendasQRMesasAnim: React.FC = () => <MesasScene f={useCurrentFrame()} />;
 
 /* ---------- 5 · foto real do sistema no restaurante ---------- */
 export const NorteVendasQROperacao: React.FC = () => {
