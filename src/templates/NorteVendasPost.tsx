@@ -43,7 +43,7 @@ const LOGO_VENDAS_BRANCO = kit('01-logos/norte-vendas/horizontal/norte-vendas_ho
 const LOGO_VENDAS_COR = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_vendas_transparente.png');
 const TELA_MESAS = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const TELA_CARDAPIO = kit('08-recursos/telas-oficiais/vendas/m-cliente-cardapio.png');
-const FOTO_OPERACAO_CELULAR = staticFile('operacao-real/foto-aplicativo.png');
+const FOTO_OPERACAO_COMPUTADOR = staticFile('operacao-real/foto-equipe.png');
 const FOTO_OPERACAO_SALAO = staticFile('operacao-real/foto-atendimento.png');
 const QR_TOTAL = 7;
 
@@ -229,10 +229,10 @@ export const NorteVendasQRCelular: React.FC = () => {
         O pedido acontece no salão.
       </Title>
       <Support tone="light" top={420} width={880} size={28}>
-        O cliente escolhe os itens no celular, enquanto a equipe acompanha o pedido na operação da casa.
+        A equipe registra o pedido e acompanha as mesas com o sistema aberto no computador.
       </Support>
-      <div style={{position: 'absolute', left: 270, top: 570, width: 540, height: 700, overflow: 'hidden', borderRadius: 28, background: WHITE, boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
-        <Img src={FOTO_OPERACAO_CELULAR} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 52%', display: 'block'}} />
+      <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 610, overflow: 'hidden', borderRadius: 24, boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+        <Img src={FOTO_OPERACAO_COMPUTADOR} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block'}} />
       </div>
       <Foot tone="light" />
     </AbsoluteFill>

@@ -21,11 +21,12 @@ test('the QR carousel uses real restaurant-operation photos and runs through sev
   ]) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
-  assert.match(template, /operacao-real\/foto-aplicativo\.png/);
+  assert.match(template, /operacao-real\/foto-equipe\.png/);
   assert.match(template, /operacao-real\/foto-atendimento\.png/);
   assert.match(template, /NorteVendasQROperacao/);
   assert.match(template, /NorteVendasQRCelular/);
   assert.doesNotMatch(template, /TELA_DASHBOARD_REAL|TELA_CARDAPIO_GESTAO_REAL/);
+  assert.match(template, /equipe registra o pedido e acompanha as mesas com o sistema aberto no computador/i);
 });
 
 test('the QR slide motion uses continuous receipt movement, not quantized printer steps', () => {

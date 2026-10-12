@@ -7,7 +7,7 @@ Carrossel para restaurante, bar e lanchonete. Formato 4:5, 1080 × 1350.
 1. Capa: do QR code na mesa ao caixa fechado.
 2. Um pedido é encaminhado à cozinha, ao bar e à pizzaria, com animação.
 3. Cardápio pelo celular e visão de mesas/comandas no sistema, com animação.
-4. Foto real do pedido sendo lançado pelo celular no restaurante.
+4. Foto real do sistema aberto no computador, dentro do restaurante.
 5. Foto real do Norte Vendas aberto no salão, com a operação ao redor.
 6. Emissão de NFC-e, cancelamento e envio de XMLs ao contador; a integração com Omie também aparece, com animação.
 7. Fechamento e chamada para conhecer o Norte Vendas.
