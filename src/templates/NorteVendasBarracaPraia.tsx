@@ -22,9 +22,13 @@ import {
   mute,
 } from '../lib/NortePost';
 
-const TOTAL = 5;
+const TOTAL = 7;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
+const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
+const COVER_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-capa.png');
+const MOBILE_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-celular.png');
+const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
 
 const PageTop: React.FC<{n: number; tone: 'light' | 'dark'}> = ({n, tone}) => (
   <div style={{position: 'absolute', left: PAD, right: PAD, top: 66, height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -35,49 +39,61 @@ const PageTop: React.FC<{n: number; tone: 'light' | 'dark'}> = ({n, tone}) => (
 
 const CoverScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const flowProgress = frame === undefined ? 1 : interpolate(frame, [38, 70], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const progress = frame === undefined ? 1 : interpolate(frame, [30, 74], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="product" id="barraca-cover-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
-    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/05</span>
-    <Eyebrow tone="product" top={275}>Norte Vendas para barracas de praia</Eyebrow>
+    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
+    <Eyebrow tone="product" top={230}>Norte Vendas para barracas de praia</Eyebrow>
     <Fx p={A(frame, 4, 18)} dy={32}>
-      <Title tone="product" top={340} size={73}>
+      <Title tone="product" top={292} size={70}>
         Dono de barraca,<br />seus pedidos chegam<br />direto à cozinha?
       </Title>
     </Fx>
-    <Fx p={A(frame, 18, 18)} dy={24}>
-      <Support tone="product" top={620} width={875} size={29}>
+    <Fx p={A(frame, 17, 16)} dy={22}>
+      <Support tone="product" top={552} width={890} size={27}>
         Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
       </Support>
     </Fx>
-    <div style={{position: 'absolute', left: PAD + 12, right: PAD + 12, bottom: 385, height: 2, background: 'rgba(251,251,254,.28)'}} />
-    <div style={{position: 'absolute', left: PAD + 12, right: PAD + 12, bottom: 385, height: 2, width: `${(908 - 24) * flowProgress}px`, background: '#B9BCEB'}} />
-    <div style={{position: 'absolute', left: PAD + 12 + (908 - 24) * flowProgress - 9, bottom: 376, width: 20, height: 20, borderRadius: '50%', background: WHITE, boxShadow: '0 0 0 8px rgba(251,251,254,.16)'}} />
-    <div style={{position: 'absolute', left: PAD, right: PAD, bottom: 335, display: 'flex', justifyContent: 'space-between', color: 'rgba(251,251,254,.9)', fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 1.6, textTransform: 'uppercase'}}>
-      <span>Atendimento</span><span>Pedido online</span><span>Cozinha</span><span>Gerência</span>
+    <div style={{position: 'absolute', left: PAD, top: 715, width: 908, height: 500, borderRadius: 24, overflow: 'hidden', background: '#171933', boxShadow: '0 25px 55px rgba(10,12,50,.30)', border: '1px solid rgba(255,255,255,.30)'}}>
+      <Img src={COVER_PHOTO} style={{width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center 56%', transform: `scale(${1.015 + progress * .035})`}} />
+      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 55%, rgba(13,15,49,.50) 100%)'}} />
+      <div style={{position: 'absolute', left: 24, bottom: 20, color: WHITE, fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Norte Vendas em operação</div>
+      <div style={{position: 'absolute', right: 25, bottom: 24, width: `${Math.max(0, progress) * 120}px`, height: 3, background: '#B9BCEB'}} />
     </div>
   </AbsoluteFill></Produto>;
 };
 
-const RoutineScene: React.FC = () => {
+const MobileRoutineScene: React.FC = () => {
   ensurePostLoaded();
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="light" id="barraca-routine-grid" />
     <PageTop n={2} tone="light" />
-    <Eyebrow tone="light" top={185}>A rotina da barraca</Eyebrow>
-    <Title tone="light" top={245} size={68}>Na barraca, a equipe está em vários pontos.</Title>
-    <Support tone="light" top={410} width={900} size={28}>
-      Enquanto os clientes são atendidos, os pedidos continuam chegando. Quem gerencia precisa acompanhar o que a equipe registra e garantir que a informação chegue à cozinha.
+    <Eyebrow tone="light" top={205}>A rotina da barraca</Eyebrow>
+    <h1 style={{position: 'absolute', left: PAD, top: 265, width: 420, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 48, lineHeight: 1.08, letterSpacing: -1.2, color: NAVY}}>O pedido começa<br />no atendimento.</h1>
+    <Support tone="light" top={415} width={420} size={27}>
+      Com a equipe espalhada pelo espaço, registrar as comandas no sistema ajuda a informação a seguir pelo fluxo online até quem prepara.
     </Support>
-    <div style={{position: 'absolute', left: PAD + 18, right: PAD + 18, top: 810, height: 260}}>
-      <div style={{position: 'absolute', left: 75, right: 75, top: 72, height: 3, background: 'rgba(72,77,181,.28)'}} />
-      <div style={{position: 'absolute', left: '16%', top: 55, width: 38, height: 38, borderRadius: '50%', background: VENDAS, boxShadow: '0 0 0 12px rgba(72,77,181,.10)'}} />
-      <div style={{position: 'absolute', left: '49%', top: 55, width: 38, height: 38, borderRadius: '50%', background: VENDAS, boxShadow: '0 0 0 12px rgba(72,77,181,.10)'}} />
-      <div style={{position: 'absolute', right: '16%', top: 55, width: 38, height: 38, borderRadius: '50%', background: VENDAS, boxShadow: '0 0 0 12px rgba(72,77,181,.10)'}} />
-      <div style={{position: 'absolute', left: '8%', top: 132, width: 200, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 12, color: NAVY, fontFamily: SANS, fontSize: 18, fontWeight: 700, letterSpacing: 1.2, textAlign: 'center', textTransform: 'uppercase'}}><UsersRound size={28} color={VENDAS} />Equipe em atendimento</div>
-      <div style={{position: 'absolute', left: '41%', top: 132, width: 200, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 12, color: NAVY, fontFamily: SANS, fontSize: 18, fontWeight: 700, letterSpacing: 1.2, textAlign: 'center', textTransform: 'uppercase'}}><ChefHat size={28} color={VENDAS} />Cozinha</div>
-      <div style={{position: 'absolute', right: '7%', top: 132, width: 200, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 12, color: NAVY, fontFamily: SANS, fontSize: 18, fontWeight: 700, letterSpacing: 1.2, textAlign: 'center', textTransform: 'uppercase'}}><Eye size={28} color={VENDAS} />Gerência</div>
+    <div style={{position: 'absolute', left: 560, top: 236, width: 430, height: 880, borderRadius: 28, overflow: 'hidden', background: '#E9EAF5', boxShadow: '0 24px 55px rgba(20,22,58,.20)', border: '1px solid rgba(20,22,58,.12)'}}>
+      <Img src={MOBILE_PHOTO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block'}} />
+    </div>
+    <div style={{position: 'absolute', left: PAD, top: 830, display: 'flex', gap: 15, alignItems: 'center', color: VENDAS, fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase'}}><UsersRound size={27} />Atendimento conectado</div>
+    <Foot tone="light" label="Norte Vendas" />
+  </AbsoluteFill></Produto>;
+};
+
+const TablesScene: React.FC<{frame?: number}> = ({frame}) => {
+  ensurePostLoaded();
+  const focus = frame === undefined ? 1 : interpolate(frame, [32, 43, 60, 70], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  return <Produto id="vendas"><AbsoluteFill>
+    <Background tone="light" id="barraca-tables-grid" />
+    <PageTop n={3} tone="light" />
+    <Fx p={A(frame, 0, 15)}><Eyebrow tone="light" top={185}>Norte Vendas na operação</Eyebrow></Fx>
+    <Fx p={A(frame, 5, 18)} dy={30}><Title tone="light" top={245} size={66}>Mesas e comandas em uma só tela.</Title></Fx>
+    <Fx p={A(frame, 12, 18)} dy={22}><Support tone="light" top={385} width={900} size={27}>A equipe registra os pedidos no sistema e acompanha as comandas durante o atendimento. Veja a tela real do Norte Vendas em uso.</Support></Fx>
+    <div style={{position: 'absolute', left: PAD, top: 585, width: 908, height: 565, borderRadius: 22, overflow: 'hidden', background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+      <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
+      <div style={{position: 'absolute', left: '20%', top: '18%', width: '18%', height: '28%', borderRadius: 16, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.15)', opacity: focus, transform: `scale(${1 + focus * .012})`}} />
     </div>
     <Foot tone="light" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
@@ -85,54 +101,63 @@ const RoutineScene: React.FC = () => {
 
 const KitchenFlowScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const progress = frame === undefined ? 1 : interpolate(frame, [12, 52], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const arrived = frame === undefined ? 1 : interpolate(frame, [48, 58, 82], [0, 1, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const orderX = 148 + progress * 610;
+  const progress = frame === undefined ? 1 : interpolate(frame, [10, 52], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const arrived = frame === undefined ? 1 : interpolate(frame, [49, 58, 80], [0, 1, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const orderX = 290 + progress * 328;
+  const cardY = 26 + Math.sin((frame ?? 0) / 6) * 3;
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="dark" id="barraca-kitchen-grid" />
-    <PageTop n={3} tone="dark" />
-    <Fx p={A(frame, 0, 15)}><Eyebrow tone="dark" top={185}>Pedido lançado no sistema</Eyebrow></Fx>
-    <Fx p={A(frame, 4, 18)} dy={30}><Title tone="dark" top={245} size={70}>A cozinha recebe o pedido online.</Title></Fx>
-    <Fx p={A(frame, 10, 18)} dy={22}>
-      <Support tone="dark" top={405} width={880} size={28}>
-        A equipe registra o pedido no Norte Vendas e a informação chega direto a quem prepara. Assim, a cozinha acompanha o que foi solicitado sem depender de um recado levado de um lado para o outro.
-      </Support>
-    </Fx>
-    <div style={{position: 'absolute', left: PAD, right: PAD, top: 760, height: 330}}>
-      <svg width="100%" height="190" viewBox="0 0 908 190" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 0, top: 0, overflow: 'visible'}}>
-        <path d="M140 30H766" stroke="rgba(251,251,254,.22)" strokeWidth="5" strokeLinecap="round" />
-        <path d="M140 30H766" stroke="#B9BCEB" strokeWidth="5" strokeLinecap="round" strokeDasharray="626" strokeDashoffset={626 * (1 - progress)} />
-        <circle cx="140" cy="30" r="18" fill="#484DB5" stroke="#FBFBFE" strokeWidth="4" />
-        <circle cx="766" cy="30" r="18" fill="#484DB5" stroke="#FBFBFE" strokeWidth="4" opacity={arrived} />
-        <circle cx={orderX} cy="30" r="12" fill="#FBFBFE" opacity={frame === undefined ? 0 : progress * (1 - arrived)} />
+    <PageTop n={4} tone="dark" />
+    <Fx p={A(frame, 0, 15)}><Eyebrow tone="dark" top={185}>Do atendimento à cozinha</Eyebrow></Fx>
+    <Fx p={A(frame, 5, 18)} dy={30}><Title tone="dark" top={245} size={68}>O pedido segue online até quem prepara.</Title></Fx>
+    <Fx p={A(frame, 12, 18)} dy={22}><Support tone="dark" top={405} width={890} size={27}>A equipe registra no Norte Vendas. A cozinha recebe a informação pelo sistema, sem depender de um recado levado de um lado para o outro.</Support></Fx>
+    <div style={{position: 'absolute', left: PAD, right: PAD, top: 735, height: 380}}>
+      <svg width="100%" height="140" viewBox="0 0 908 140" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 0, top: 0, overflow: 'visible'}}>
+        <path d="M290 74H618" stroke="rgba(251,251,254,.24)" strokeWidth="5" strokeLinecap="round" />
+        <path d="M290 74H618" stroke="#B9BCEB" strokeWidth="5" strokeLinecap="round" strokeDasharray="328" strokeDashoffset={328 * (1 - progress)} />
+        <circle cx="290" cy="74" r="18" fill="#484DB5" stroke="#FBFBFE" strokeWidth="4" />
+        <circle cx="618" cy="74" r="18" fill="#484DB5" stroke="#FBFBFE" strokeWidth="4" opacity={arrived} />
+        <circle cx={orderX} cy="74" r="15" fill="#FBFBFE" opacity={frame === undefined ? 0 : progress * (1 - arrived)} />
       </svg>
-      <div style={{position: 'absolute', left: 4, top: 92, width: 270, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 15, color: WHITE, fontFamily: SANS, fontSize: 20, fontWeight: 700, letterSpacing: 1.8, textAlign: 'center', textTransform: 'uppercase'}}>
-        <ClipboardList size={35} color="#B9BCEB" />Equipe registra
+      <div style={{position: 'absolute', left: 20, top: 0, width: 245, height: 176, border: '1px solid rgba(251,251,254,.27)', borderRadius: 20, background: 'rgba(251,251,254,.08)', color: WHITE, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, fontFamily: SANS, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', transform: `translateY(${cardY}px)`}}>
+        <ClipboardList size={39} color="#B9BCEB" /><span>Pedido registrado</span><span style={{fontFamily: MONO, color: '#B9BCEB', fontSize: 14}}>ONLINE</span>
       </div>
-      <div style={{position: 'absolute', right: 4, top: 92, width: 270, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 15, color: WHITE, fontFamily: SANS, fontSize: 20, fontWeight: 700, letterSpacing: 1.8, textAlign: 'center', textTransform: 'uppercase', opacity: .45 + arrived * .55}}>
-        <ChefHat size={35} color="#B9BCEB" />Cozinha recebe
+      <div style={{position: 'absolute', right: 20, top: 0, width: 245, height: 176, border: `1px solid rgba(251,251,254,${.24 + arrived * .55})`, borderRadius: 20, background: `rgba(72,77,181,${.10 + arrived * .20})`, color: WHITE, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, fontFamily: SANS, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase'}}>
+        <ChefHat size={39} color="#B9BCEB" /><span>Cozinha informada</span><span style={{fontFamily: MONO, color: '#B9BCEB', fontSize: 14, opacity: arrived}}>PEDIDO RECEBIDO</span>
       </div>
-      <div style={{position: 'absolute', left: '50%', top: 235, transform: 'translateX(-50%)', color: '#B9BCEB', fontFamily: MONO, fontSize: 17, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Fluxo online</div>
     </div>
     <Foot tone="dark" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };
 
+const RealOperationScene: React.FC = () => {
+  ensurePostLoaded();
+  return <Produto id="vendas"><AbsoluteFill>
+    <Background tone="light" id="barraca-operation-grid" />
+    <PageTop n={5} tone="light" />
+    <Eyebrow tone="light" top={185}>Na rotina de verdade</Eyebrow>
+    <Title tone="light" top={245} size={67}>O Norte Vendas está onde a equipe trabalha.</Title>
+    <Support tone="light" top={405} width={900} size={27}>Uma visão real do sistema aberto durante a operação, com mesas e comandas na tela do notebook.</Support>
+    <div style={{position: 'absolute', left: PAD, top: 585, width: 908, height: 590, borderRadius: 22, overflow: 'hidden', background: '#191A21', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+      <Img src={FLOOR_PHOTO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 50%', display: 'block'}} />
+      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 65%, rgba(13,15,49,.46) 100%)'}} />
+      <div style={{position: 'absolute', right: 24, bottom: 18, color: WHITE, fontFamily: MONO, fontSize: 15, letterSpacing: 1.5}}>TELA REAL • OPERAÇÃO REAL</div>
+    </div>
+    <Foot tone="light" label="Norte Vendas" />
+  </AbsoluteFill></Produto>;
+};
+
 const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const working = frame === undefined ? 1 : interpolate(frame, [30, 38, 51, 58], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const history = frame === undefined ? 1 : interpolate(frame, [53, 61, 76, 84], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const working = frame === undefined ? 1 : interpolate(frame, [24, 34, 49, 57], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const history = frame === undefined ? 1 : interpolate(frame, [49, 58, 74, 84], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="light" id="barraca-manager-grid" />
-    <PageTop n={4} tone="light" />
+    <PageTop n={6} tone="light" />
     <Fx p={A(frame, 0, 16)}><Eyebrow tone="light" top={185}>Visibilidade para o gerente</Eyebrow></Fx>
-    <Fx p={A(frame, 5, 18)} dy={30}><Title tone="light" top={245} size={68}>Acompanhe o que a equipe está fazendo.</Title></Fx>
-    <Fx p={A(frame, 12, 18)} dy={22}>
-      <Support tone="light" top={405} width={880} size={28}>
-        No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais segurança para acompanhar os registros da equipe durante a operação.
-      </Support>
-    </Fx>
-    <div style={{position: 'absolute', left: PAD, top: 645, width: 908, height: 567, overflow: 'hidden', borderRadius: 22, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
+    <Fx p={A(frame, 5, 18)} dy={30}><Title tone="light" top={245} size={67}>Acompanhe o que a equipe está fazendo.</Title></Fx>
+    <Fx p={A(frame, 12, 18)} dy={22}><Support tone="light" top={405} width={890} size={27}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support></Fx>
+    <div style={{position: 'absolute', left: PAD, top: 635, width: 908, height: 560, overflow: 'hidden', borderRadius: 22, background: WHITE, border: '1px solid rgba(20,22,58,.12)', boxShadow: '0 24px 55px rgba(20,22,58,.18)'}}>
       <Img src={SCREEN_DASHBOARD} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       <div style={{position: 'absolute', left: '38.5%', top: '13%', width: '23.5%', height: '15.5%', borderRadius: 13, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: working, transform: `scale(${1 + working * .008})`, transformOrigin: 'center'}} />
       <div style={{position: 'absolute', left: '80%', top: '15%', width: '17%', height: '11%', borderRadius: 12, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: history, transform: `scale(${1 + history * .008})`, transformOrigin: 'center'}} />
@@ -146,17 +171,15 @@ const ClosingScene: React.FC = () => {
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="dark" id="barraca-closing-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
-    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>05/05</span>
-    <Eyebrow tone="dark" top={340}>Norte Vendas para barracas de praia</Eyebrow>
-    <Title tone="dark" top={400} size={75}>Equipe, cozinha e gerente conectados.</Title>
-    <Support tone="dark" top={595} width={880} size={29}>
-      Os pedidos chegam online a quem prepara, enquanto o gerente acompanha o que a equipe está fazendo pelo sistema. Um fluxo mais conectado para a rotina da sua barraca.
-    </Support>
-    <div style={{position: 'absolute', left: PAD, top: 900, display: 'flex', alignItems: 'center', gap: 20, padding: '22px 30px', borderRadius: 999, background: WHITE, color: NAVY, fontFamily: SANS, fontSize: 23, fontWeight: 700}}>
-      Conheça o Norte Vendas <ArrowRight size={24} color={VENDAS} />
+    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>07/07</span>
+    <Eyebrow tone="dark" top={325}>Norte Vendas para barracas de praia</Eyebrow>
+    <Title tone="dark" top={390} size={76}>Pedido na equipe.<br />Cozinha informada.<br />Gerente com visibilidade.</Title>
+    <Support tone="dark" top={650} width={880} size={29}>Conheça o Norte Vendas e veja como o sistema pode acompanhar o ritmo da operação da sua barraca.</Support>
+    <div style={{position: 'absolute', left: PAD, top: 915, display: 'flex', alignItems: 'center', gap: 20, padding: '22px 30px', borderRadius: 999, background: WHITE, color: NAVY, fontFamily: SANS, fontSize: 23, fontWeight: 700}}>
+      Acesse o link da bio <ArrowRight size={24} color={VENDAS} />
     </div>
     <div style={{position: 'absolute', left: PAD, right: PAD, bottom: 136, display: 'flex', alignItems: 'center', gap: 14, color: '#D9DBFF', fontFamily: SANS, fontSize: 19, fontWeight: 700, letterSpacing: 1.1, textTransform: 'uppercase'}}>
-      Acesse o link da bio e dê um norte ao seu negócio <span style={{fontSize: 24}}>🚀</span>
+      Dê um norte ao seu negócio <span style={{fontSize: 24}}>🚀</span>
     </div>
     <Foot tone="dark" last label="Norte Vendas" />
   </AbsoluteFill></Produto>;
@@ -164,9 +187,12 @@ const ClosingScene: React.FC = () => {
 
 export const NorteVendasBarraca01: React.FC = () => <CoverScene />;
 export const NorteVendasBarraca01Animada: React.FC = () => <CoverScene frame={useCurrentFrame()} />;
-export const NorteVendasBarraca02: React.FC = RoutineScene;
-export const NorteVendasBarraca03: React.FC = () => <KitchenFlowScene />;
-export const NorteVendasBarraca03Animada: React.FC = () => <KitchenFlowScene frame={useCurrentFrame()} />;
-export const NorteVendasBarraca04: React.FC = () => <ManagerScene />;
-export const NorteVendasBarraca04Animada: React.FC = () => <ManagerScene frame={useCurrentFrame()} />;
-export const NorteVendasBarraca05: React.FC = ClosingScene;
+export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
+export const NorteVendasBarraca03: React.FC = () => <TablesScene />;
+export const NorteVendasBarraca03Animada: React.FC = () => <TablesScene frame={useCurrentFrame()} />;
+export const NorteVendasBarraca04: React.FC = () => <KitchenFlowScene />;
+export const NorteVendasBarraca04Animada: React.FC = () => <KitchenFlowScene frame={useCurrentFrame()} />;
+export const NorteVendasBarraca05: React.FC = RealOperationScene;
+export const NorteVendasBarraca06: React.FC = () => <ManagerScene />;
+export const NorteVendasBarraca06Animada: React.FC = () => <ManagerScene frame={useCurrentFrame()} />;
+export const NorteVendasBarraca07: React.FC = ClosingScene;

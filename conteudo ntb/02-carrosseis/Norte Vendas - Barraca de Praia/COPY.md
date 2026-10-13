@@ -4,30 +4,42 @@
 
 **Dono de barraca, seus pedidos chegam direto à cozinha?**
 
-Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
+No meio do atendimento, o Norte Vendas conecta o registro do pedido à cozinha e dá ao gerente visibilidade da equipe.
 
-## Slide 2 | A rotina da barraca
+## Slide 2 | Atendimento
 
-**Na barraca, a equipe está em vários pontos.**
+**O atendimento acontece por toda a barraca. O pedido não precisa se perder.**
 
-Enquanto os clientes são atendidos, os pedidos continuam chegando. Quem gerencia precisa acompanhar o que a equipe registra e garantir que a informação chegue à cozinha.
+Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
 
-## Slide 3 | Pedido direto à cozinha
+## Slide 3 | Mesas e comandas
 
-**A equipe registra. A cozinha recebe online.**
+**Mesas e comandas acompanhadas na tela.**
 
-O pedido lançado no Norte Vendas chega direto ao sistema da cozinha. Quem prepara acompanha o que foi solicitado sem depender de um recado levado de um lado para o outro.
+Com a visão de Mesas & Comandas, a equipe consulta o que está em atendimento e registra os pedidos no sistema.
 
-## Slide 4 | Visibilidade para o gerente
+## Slide 4 | Pedido na cozinha
 
-**O gerente acompanha o que a equipe está fazendo.**
+**Pedido registrado. Cozinha informada.**
 
-No painel do Norte Vendas, é possível ver quem está trabalhando e consultar o histórico por operador. Isso dá mais segurança para acompanhar os registros da equipe durante a operação.
+O pedido lançado online segue direto para a cozinha. Quem prepara acompanha o que foi solicitado, sem depender de um recado atravessando a operação.
 
-## Slide 5 | Fechamento e CTA
+## Slide 5 | Sistema em uso
 
-**Equipe, cozinha e gerente conectados.**
+**O sistema aberto no lugar onde a operação acontece.**
 
-O Norte Vendas leva os pedidos online até a cozinha e permite que o gerente acompanhe a operação pelo sistema. Uma visão mais conectada para a rotina da sua barraca.
+Uma imagem real do Norte Vendas em uso durante o atendimento, com as mesas e comandas na tela do notebook.
 
-**Conheça o Norte Vendas pelo link da bio e dê um norte ao seu negócio. 🚀**
+## Slide 6 | Visibilidade do gerente
+
+**Gerente, acompanhe quem está na operação.**
+
+No painel de Administração, o gerente vê quem está trabalhando e consulta o histórico por operador. Mais visibilidade sobre os registros da equipe.
+
+## Slide 7 | Fechamento
+
+**Pedido online até a cozinha. Acompanhamento para o gerente.**
+
+Conheça o Norte Vendas e veja como conectar o fluxo de pedidos da sua barraca.
+
+**Acesse o link da bio e dê um norte ao seu negócio. 🚀**

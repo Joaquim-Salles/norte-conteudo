@@ -23,8 +23,12 @@ import {
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
   NorteVendasBarraca01, NorteVendasBarraca01Animada,
-  NorteVendasBarraca02, NorteVendasBarraca03, NorteVendasBarraca03Animada,
-  NorteVendasBarraca04, NorteVendasBarraca04Animada, NorteVendasBarraca05,
+  NorteVendasBarraca02,
+  NorteVendasBarraca03, NorteVendasBarraca03Animada,
+  NorteVendasBarraca04, NorteVendasBarraca04Animada,
+  NorteVendasBarraca05,
+  NorteVendasBarraca06, NorteVendasBarraca06Animada,
+  NorteVendasBarraca07,
 } from './templates/NorteVendasBarracaPraia';
 import {
   NorteVendasCapa,
@@ -272,9 +276,12 @@ export const RemotionRoot: React.FC = () => {
       <Still id="NorteVendasBarraca03" component={NorteVendasBarraca03} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasBarraca04" component={NorteVendasBarraca04} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasBarraca05" component={NorteVendasBarraca05} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca06" component={NorteVendasBarraca06} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca07" component={NorteVendasBarraca07} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Composition id="NorteVendasBarracaAnimada01" component={NorteVendasBarraca01Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasBarracaAnimada03" component={NorteVendasBarraca03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasBarracaAnimada04" component={NorteVendasBarraca04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteVendasBarracaAnimada06" component={NorteVendasBarraca06Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
     </>
   );
 };
