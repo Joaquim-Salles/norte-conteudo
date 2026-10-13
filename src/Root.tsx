@@ -22,6 +22,11 @@ import {
 } from './templates/ArgumentoOmieNtb';
 import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, CarrosselFechamento} from './templates/NorteNtbApresentacao';
 import {
+  NorteVendasBarraca01, NorteVendasBarraca01Animada,
+  NorteVendasBarraca02, NorteVendasBarraca03, NorteVendasBarraca03Animada,
+  NorteVendasBarraca04, NorteVendasBarraca04Animada, NorteVendasBarraca05,
+} from './templates/NorteVendasBarracaPraia';
+import {
   NorteVendasCapa,
   NorteVendasRoteamento,
   NorteVendasRoteamentoAnim,
@@ -261,6 +266,15 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="NorteVendasQRAnimada04" component={NorteVendasQRMesasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasQRAnimada06" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
+      {/* Norte Vendas para barracas de praia */}
+      <Still id="NorteVendasBarraca01" component={NorteVendasBarraca01} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca02" component={NorteVendasBarraca02} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca03" component={NorteVendasBarraca03} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca04" component={NorteVendasBarraca04} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteVendasBarraca05" component={NorteVendasBarraca05} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="NorteVendasBarracaAnimada01" component={NorteVendasBarraca01Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteVendasBarracaAnimada03" component={NorteVendasBarraca03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteVendasBarracaAnimada04" component={NorteVendasBarraca04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
     </>
   );
 };
