@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, ChefHat, ClipboardList, Store} from 'lucide-react';
+import {ArrowRight, ChefHat, ClipboardList} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {textEntrance} from '../lib/postMotion.mjs';
 import {
@@ -69,6 +69,88 @@ const PhoneFrame: React.FC = () => (
   </div>
 );
 
+const BeachStandHero: React.FC = () => (
+  <svg width="100%" height="100%" viewBox="0 0 908 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustração de uma barraca de praia em funcionamento" style={{display: 'block'}}>
+    <ellipse cx="454" cy="246" rx="398" ry="25" fill="rgba(12,15,72,.2)" />
+    <path d="M34 231C152 193 241 227 332 211C424 194 501 206 591 220C682 233 774 204 874 224" stroke="rgba(241,243,255,.34)" strokeWidth="2" />
+    <path d="M68 245C184 218 265 244 355 231C457 216 555 228 651 239C730 249 800 229 850 238" stroke="rgba(241,243,255,.2)" strokeWidth="2" />
+
+    <g transform="translate(150 135)">
+      <path d="M-70 0C-62-43-29-67 0-67C30-67 62-42 70 0H-70Z" fill="#DDE1FF" />
+      <path d="M0-67V0M-36-54L-24 0M36-54L24 0" stroke="#9298E9" strokeWidth="3" />
+      <path d="M0 0V68" stroke="#E8EAFA" strokeWidth="5" strokeLinecap="round" />
+      <path d="M-39 70H39" stroke="#E8EAFA" strokeWidth="4" strokeLinecap="round" />
+      <ellipse cx="0" cy="69" rx="46" ry="12" fill="#777DD3" stroke="#E8EAFA" strokeWidth="3" />
+      <path d="M-56 42L-77 66M56 42L77 66" stroke="#DDE1FF" strokeWidth="5" strokeLinecap="round" />
+    </g>
+
+    <g transform="translate(758 151) scale(.82)">
+      <path d="M-70 0C-62-43-29-67 0-67C30-67 62-42 70 0H-70Z" fill="#AAB0F3" />
+      <path d="M0-67V0M-36-54L-24 0M36-54L24 0" stroke="#7379D1" strokeWidth="3" />
+      <path d="M0 0V66" stroke="#E8EAFA" strokeWidth="5" strokeLinecap="round" />
+      <ellipse cx="0" cy="68" rx="44" ry="12" fill="#777DD3" stroke="#E8EAFA" strokeWidth="3" />
+      <path d="M-53 42L-74 64M53 42L74 64" stroke="#DDE1FF" strokeWidth="5" strokeLinecap="round" />
+    </g>
+
+    <g>
+      <path d="M342 112L372 69H536L566 112" fill="#E9EBFF" stroke="#FBFBFE" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M365 86H543L556 111H351L365 86Z" fill="#AEB4F6" />
+      <path d="M390 87V111M425 87V111M461 87V111M497 87V111M532 87V111" stroke="#7279D1" strokeWidth="3" />
+      <rect x="365" y="111" width="178" height="99" rx="8" fill="#292D7D" stroke="#E7E9FF" strokeWidth="3" />
+      <rect x="385" y="132" width="138" height="55" rx="5" fill="#484DB5" />
+      <path d="M384 152H522M453 132V187" stroke="rgba(237,239,255,.34)" strokeWidth="2" />
+      <rect x="344" y="196" width="220" height="20" rx="7" fill="#E5E7F8" />
+      <path d="M356 216H552L538 232H370L356 216Z" fill="#AEB4F6" />
+      <circle cx="504" cy="157" r="5" fill="#7AD1B8" />
+    </g>
+
+    <g fill="#E9EBFF" opacity=".9">
+      <circle cx="277" cy="198" r="13" /><path d="M260 229C260 210 267 204 277 204C287 204 294 210 294 229H260Z" />
+      <circle cx="633" cy="201" r="12" /><path d="M617 230C617 213 623 207 633 207C643 207 649 213 649 230H617Z" />
+    </g>
+    <path d="M277 234V248M633 234V248" stroke="#E9EBFF" strokeWidth="4" strokeLinecap="round" />
+  </svg>
+);
+
+const BeachAreaMap: React.FC = () => (
+  <svg width="100%" height="100%" viewBox="0 0 908 470" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Vista ilustrada das mesas espalhadas pela barraca até a cozinha" style={{display: 'block'}}>
+    <path d="M48 83C188 31 316 56 430 95C548 135 700 121 860 66V388C710 429 567 412 438 380C302 346 172 363 48 416V83Z" fill="rgba(251,251,254,.055)" stroke="rgba(251,251,254,.18)" strokeWidth="2" />
+    <path d="M76 110C208 68 317 85 427 120C557 161 686 147 831 100" stroke="rgba(218,222,255,.18)" strokeWidth="2" strokeDasharray="8 12" />
+    <path d="M78 382C218 331 319 351 431 382C554 416 694 401 831 354" stroke="rgba(218,222,255,.18)" strokeWidth="2" strokeDasharray="8 12" />
+
+    <path d="M171 178C290 172 386 184 483 211C582 238 668 235 724 222" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
+    <path d="M188 308C304 293 394 283 483 264C581 243 655 234 724 222" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
+    <path d="M369 130C418 165 451 188 493 211" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
+
+    <g fill="#DCE0FF" stroke="#9298E9" strokeWidth="3">
+      <circle cx="163" cy="174" r="42" /><circle cx="288" cy="259" r="39" />
+      <circle cx="370" cy="126" r="37" /><circle cx="414" cy="323" r="39" />
+    </g>
+    <g stroke="#9298E9" strokeWidth="2" opacity=".9">
+      <path d="M163 132V216M121 174H205M288 220V298M249 259H327" />
+      <path d="M370 89V163M333 126H407M414 284V362M375 323H453" />
+    </g>
+    <g fill="#484DB5">
+      <circle cx="163" cy="174" r="9" /><circle cx="288" cy="259" r="9" />
+      <circle cx="370" cy="126" r="8" /><circle cx="414" cy="323" r="9" />
+    </g>
+    <g fill="#B7BDF8">
+      <circle cx="112" cy="248" r="6" /><circle cx="227" cy="122" r="6" /><circle cx="330" cy="354" r="6" />
+      <circle cx="455" cy="164" r="6" /><circle cx="535" cy="328" r="6" />
+    </g>
+
+    <g transform="translate(724 222)">
+      <rect x="-76" y="-58" width="152" height="118" rx="16" fill="#252A73" stroke="#E5E8FF" strokeWidth="3" />
+      <path d="M-91-58L-69-91H69L91-58" fill="#AEB4F6" stroke="#E5E8FF" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M-43-90V-58M0-90V-58M43-90V-58" stroke="#6E74C8" strokeWidth="4" />
+      <rect x="-52" y="-34" width="104" height="55" rx="6" fill="#484DB5" />
+      <path d="M-52-15H52M0-34V21" stroke="rgba(237,239,255,.35)" strokeWidth="2" />
+      <rect x="-87" y="53" width="174" height="13" rx="6" fill="#E7E9FA" />
+      <circle cx="49" cy="-8" r="5" fill="#7AD1B8" />
+    </g>
+  </svg>
+);
+
 const CoverScene: React.FC = () => {
   ensurePostLoaded();
   return <Produto id="vendas"><AbsoluteFill>
@@ -82,18 +164,7 @@ const CoverScene: React.FC = () => {
     <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
     </p>
-    <div style={{position: 'absolute', left: PAD, top: 790, width: 908, height: 236}}>
-      <svg width="100%" height="100%" viewBox="0 0 908 236" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', inset: 0}}>
-        <path d="M152 78H756" stroke="rgba(251,251,254,.24)" strokeWidth="4" strokeLinecap="round" />
-        <path d="M152 78H756" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" />
-        <circle cx="114" cy="78" r="38" fill="rgba(251,251,254,.10)" stroke="rgba(251,251,254,.65)" strokeWidth="2" />
-        <circle cx="794" cy="78" r="38" fill="rgba(251,251,254,.22)" stroke="rgba(251,251,254,.9)" strokeWidth="2" />
-      </svg>
-      <div style={{position: 'absolute', left: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE}}><Store size={33} strokeWidth={1.8} /></div>
-      <div style={{position: 'absolute', right: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE}}><ChefHat size={34} strokeWidth={1.8} /></div>
-      <span style={{position: 'absolute', left: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>BARRACA</span>
-      <span style={{position: 'absolute', right: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>COZINHA</span>
-    </div>
+    <div style={{position: 'absolute', left: PAD, top: 770, width: 908, height: 280}}><BeachStandHero /></div>
     <Foot tone="product" />
   </AbsoluteFill></Produto>;
 };
@@ -103,21 +174,15 @@ const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
   const headlineMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 4);
   const supportMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 8);
   return <Produto id="vendas"><AbsoluteFill>
-    <Background tone="light" id="barraca-routine-grid" />
-    <PageTop n={2} tone="light" />
-    <Eyebrow tone="light" top={190} frame={frame}>A rotina da barraca</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: NAVY, opacity: headlineMotion.opacity, transform: `translateY(${headlineMotion.translateY}px)`}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
-    <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: '#4A4A63', opacity: supportMotion.opacity, transform: `translateY(${supportMotion.translateY}px)`}}>
+    <Background tone="dark" id="barraca-routine-grid" />
+    <PageTop n={2} tone="dark" />
+    <Eyebrow tone="dark" top={190} frame={frame}>A rotina da barraca</Eyebrow>
+    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: WHITE, opacity: headlineMotion.opacity, transform: `translateY(${headlineMotion.translateY}px)`}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
+    <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.82)', opacity: supportMotion.opacity, transform: `translateY(${supportMotion.translateY}px)`}}>
       Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
     </p>
-    <div style={{position: 'absolute', left: PAD, top: 580, width: 908, height: 580, display: 'grid', placeItems: 'center'}}>
-      <DeviceEntrance frame={frame}>
-        <LaptopFrame width={850} screenHeight={516}>
-          <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
-        </LaptopFrame>
-      </DeviceEntrance>
-    </div>
-    <Foot tone="light" label="Norte Vendas" />
+    <div style={{position: 'absolute', left: PAD, top: 570, width: 908, height: 470}}><BeachAreaMap /></div>
+    <Foot tone="dark" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };
 
@@ -194,11 +259,11 @@ const RealOperationScene: React.FC = () => {
 const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
   return <Produto id="vendas"><AbsoluteFill>
-    <Background tone="light" id="barraca-manager-grid" />
-    <PageTop n={6} tone="light" />
-    <Eyebrow tone="light" top={185} frame={frame}>Visibilidade para o gerente</Eyebrow>
-    <Title tone="light" top={245} size={67} frame={frame}>Acompanhe o que a equipe está fazendo.</Title>
-    <Support tone="light" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support>
+    <Background tone="dark" id="barraca-manager-grid" />
+    <PageTop n={6} tone="dark" />
+    <Eyebrow tone="dark" top={185} frame={frame}>Visibilidade para o gerente</Eyebrow>
+    <Title tone="dark" top={245} size={67} frame={frame}>Acompanhe o que a equipe está fazendo.</Title>
+    <Support tone="dark" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support>
     <div style={{position: 'absolute', left: PAD, top: 600, width: 908, height: 560, display: 'grid', placeItems: 'center'}}>
       <DeviceEntrance frame={frame}>
       <LaptopFrame width={850} screenHeight={516}>
@@ -206,7 +271,7 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
       </LaptopFrame>
       </DeviceEntrance>
     </div>
-    <Foot tone="light" label="Norte Vendas" />
+    <Foot tone="dark" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };
 

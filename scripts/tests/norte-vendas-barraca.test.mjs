@@ -32,17 +32,33 @@ test('keeps the approved hook and grounds the beach-stand copy in confirmed Nort
   assert.doesNotMatch(copy, /vende mais|elimina erros|aumenta as vendas/i);
 });
 
-test('uses the official desktop screen in the entering laptop on slide two', () => {
+test('replaces the cover icon connector with a static beach-operation illustration', () => {
+  const cover = template.split('const CoverScene')[1]?.split('const MobileRoutineScene')[0] ?? '';
+  assert.match(cover, /<BeachStandHero\s*\/>/);
+  assert.doesNotMatch(cover, /<Store\b|<ChefHat\b/);
+});
+
+test('uses a static beach-area illustration instead of a laptop or system screen on slide two', () => {
   assert.ok(template, 'template should exist');
+  const slideTwo = template.split('const MobileRoutineScene')[1]?.split('const TablesScene')[0] ?? '';
   const normalizedTemplate = template.replace(/<br\s*\/?>/g, ' ');
   assert.match(normalizedTemplate, /O atendimento acontece por toda\s+a barraca\. O pedido não precisa se perder\./);
-  assert.match(template, /Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara\./);
-  assert.match(template, /NorteVendasBarraca02Animada/);
-  assert.match(template, /<LaptopFrame width=\{850\} screenHeight=\{516\}>/);
-  assert.match(template, /<Img src=\{SCREEN_TABLES\}[^>]*objectFit: 'cover'/);
-  assert.doesNotMatch(template, /Pedido online/);
-  assert.match(template, /<DeviceEntrance frame=\{frame\}>/);
+  assert.match(slideTwo, /Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara\./);
+  assert.match(slideTwo, /<BeachAreaMap\s*\/>/);
+  assert.match(slideTwo, /Background tone="dark"/);
+  assert.match(slideTwo, /PageTop n=\{2\} tone="dark"/);
+  assert.doesNotMatch(slideTwo, /LaptopFrame|SCREEN_TABLES|DeviceEntrance|PhoneFrame/);
+  assert.match(root, /NorteVendasBarraca02Animada/);
   assert.match(root, /<Composition\s+id="NorteVendasBarracaAnimada02"[^>]*durationInFrames=\{90\}/);
+});
+
+test('changes slide six background to brand dark for a less repetitive carousel rhythm', () => {
+  const slideSix = template.split('const ManagerScene')[1]?.split('const ReceiptPrintScene')[0] ?? '';
+  assert.match(slideSix, /Background tone="dark"/);
+  assert.match(slideSix, /PageTop n=\{6\} tone="dark"/);
+  assert.match(slideSix, /Eyebrow tone="dark"/);
+  assert.match(slideSix, /Title tone="dark"/);
+  assert.match(slideSix, /Support tone="dark"/);
 });
 
 test('keeps official Norte Vendas screens static inside illustrated notebook frames', () => {
@@ -71,7 +87,7 @@ test('pairs the official desktop screen with the official mobile screen on slide
 
 test('all laptop and phone devices enter from below without animating their screens', () => {
   assert.doesNotMatch(template, /variant=/);
-  assert.equal([...template.matchAll(/<DeviceEntrance\b/g)].length, 5, 'all five laptop and phone illustrations should animate as devices');
+  assert.equal([...template.matchAll(/<DeviceEntrance\b/g)].length, 4, 'the remaining laptop and phone illustrations should animate as devices');
   assert.match(template, /const y = 90 \* \(1 - progress\)/);
   assert.doesNotMatch(template, /focus|working|history/);
   assert.match(template, /transform: `translate3d\(/);
