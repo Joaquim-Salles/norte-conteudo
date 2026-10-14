@@ -2,6 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, spring, staticFile} from 'remotion';
 import {FONT_POST as SANS, FONT_POST_MONO as MONO} from './fonts';
 import {GridTexture} from './GridTexture';
+import {textEntrance} from './postMotion.mjs';
 
 /**
  * Biblioteca de blocos dos posts Norte (ver AGENTS.md e docs/GUIA-POSTS-NORTE.md).
@@ -94,23 +95,26 @@ export const Foot: React.FC<{tone: Tone; last?: boolean; label?: string}> = ({to
   </div>
 );
 
-export const Eyebrow: React.FC<{tone: Tone; top: number; children: React.ReactNode}> = ({tone, top, children}) => {
+export const Eyebrow: React.FC<{tone: Tone; top: number; children: React.ReactNode; frame?: number; delay?: number}> = ({tone, top, children, frame, delay = 0}) => {
   const c = tone === 'light' ? useProduto().cor : LAV;
+  const motion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, delay);
   return (
-  <div style={{position: 'absolute', left: PAD, top, display: 'flex', alignItems: 'center', gap: 16, fontFamily: SANS, fontWeight: 700, fontSize: 21, letterSpacing: 3, textTransform: 'uppercase', color: c}}>
+  <div style={{position: 'absolute', left: PAD, top, display: 'flex', alignItems: 'center', gap: 16, fontFamily: SANS, fontWeight: 700, fontSize: 21, letterSpacing: 3, textTransform: 'uppercase', color: c, opacity: motion.opacity, transform: `translateY(${motion.translateY}px)`}}>
     <span style={{display: 'block', width: 40, height: 3, background: c, borderRadius: 2}} />
     {children}
   </div>
 );
 };
 
-export const Title: React.FC<{tone: Tone; top: number; size?: number; children: React.ReactNode}> = ({tone, top, size = 80, children}) => (
-  <h1 style={{position: 'absolute', left: PAD, right: PAD, top, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: size, lineHeight: 1.04, letterSpacing: -size * 0.025, color: fg(tone)}}>{children}</h1>
-);
+export const Title: React.FC<{tone: Tone; top: number; size?: number; children: React.ReactNode; frame?: number; delay?: number}> = ({tone, top, size = 80, children, frame, delay = 4}) => {
+  const motion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, delay);
+  return <h1 style={{position: 'absolute', left: PAD, right: PAD, top, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: size, lineHeight: 1.04, letterSpacing: -size * 0.025, color: fg(tone), opacity: motion.opacity, transform: `translateY(${motion.translateY}px)`}}>{children}</h1>;
+};
 
-export const Support: React.FC<{tone: Tone; top: number; width?: number; size?: number; children: React.ReactNode}> = ({tone, top, width = 860, size = 29, children}) => (
-  <p style={{position: 'absolute', left: PAD, top, width, margin: 0, fontFamily: SANS, fontSize: size, lineHeight: 1.42, color: tone === 'light' ? TEXT2 : 'rgba(251,251,254,.86)'}}>{children}</p>
-);
+export const Support: React.FC<{tone: Tone; top: number; width?: number; size?: number; children: React.ReactNode; frame?: number; delay?: number}> = ({tone, top, width = 860, size = 29, children, frame, delay = 8}) => {
+  const motion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, delay);
+  return <p style={{position: 'absolute', left: PAD, top, width, margin: 0, fontFamily: SANS, fontSize: size, lineHeight: 1.42, color: tone === 'light' ? TEXT2 : 'rgba(251,251,254,.86)', opacity: motion.opacity, transform: `translateY(${motion.translateY}px)`}}>{children}</p>;
+};
 
 export const Chip: React.FC<{tone: Tone; children: React.ReactNode}> = ({tone, children}) => {
   const c = useProduto().cor;
