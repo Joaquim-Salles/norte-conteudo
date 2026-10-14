@@ -9,12 +9,13 @@ const copyUrl = new URL('../../conteudo ntb/02-carrosseis/Norte Vendas - Barraca
 const template = existsSync(templateUrl) ? readFileSync(templateUrl, 'utf8') : '';
 const copy = existsSync(copyUrl) ? readFileSync(copyUrl, 'utf8') : '';
 
-test('registers eight slides, keeps the cover static, and animates product slides for three seconds', () => {
+test('registers eight slides and keeps only the approved animated product slides', () => {
   for (const id of ['NorteVendasBarraca01', 'NorteVendasBarraca02', 'NorteVendasBarraca03', 'NorteVendasBarraca04', 'NorteVendasBarraca05', 'NorteVendasBarraca06', 'NorteVendasBarraca07', 'NorteVendasBarraca08']) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
   assert.doesNotMatch(root, /NorteVendasBarracaAnimada01/);
-  for (const id of ['NorteVendasBarracaAnimada02', 'NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06', 'NorteVendasBarracaAnimada07']) {
+  assert.doesNotMatch(root, /NorteVendasBarracaAnimada02/);
+  for (const id of ['NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06', 'NorteVendasBarracaAnimada07']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/, 'video should last three seconds');
@@ -38,9 +39,10 @@ test('replaces the cover icon connector with a static beach-operation illustrati
   assert.doesNotMatch(cover, /<Store\b|<ChefHat\b/);
 });
 
-test('uses a static beach-area illustration instead of a laptop or system screen on slide two', () => {
+test('keeps slide two fully static, including its text and exported media', () => {
   assert.ok(template, 'template should exist');
   const slideTwo = template.split('const MobileRoutineScene')[1]?.split('const TablesScene')[0] ?? '';
+  const slideTwoAnimation = new URL('../../conteudo ntb/02-carrosseis/Norte Vendas - Barraca de Praia/02 - Atendimento e comanda animado.mp4', import.meta.url);
   const normalizedTemplate = template.replace(/<br\s*\/?>/g, ' ');
   assert.match(normalizedTemplate, /O atendimento acontece por toda\s+a barraca\. O pedido não precisa se perder\./);
   assert.match(slideTwo, /Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara\./);
@@ -48,8 +50,24 @@ test('uses a static beach-area illustration instead of a laptop or system screen
   assert.match(slideTwo, /Background tone="dark"/);
   assert.match(slideTwo, /PageTop n=\{2\} tone="dark"/);
   assert.doesNotMatch(slideTwo, /LaptopFrame|SCREEN_TABLES|DeviceEntrance|PhoneFrame/);
-  assert.match(root, /NorteVendasBarraca02Animada/);
-  assert.match(root, /<Composition\s+id="NorteVendasBarracaAnimada02"[^>]*durationInFrames=\{90\}/);
+  assert.doesNotMatch(slideTwo, /textEntrance|frame=\{frame\}|translateY/);
+  assert.doesNotMatch(root, /NorteVendasBarraca02Animada|NorteVendasBarracaAnimada02/);
+  assert.equal(existsSync(slideTwoAnimation), false, 'the preview folder should not contain an animated version of this slide');
+});
+
+test('shows the beach stand itself from above with a prominent roof and service counter', () => {
+  const slideTwo = template.split('const MobileRoutineScene')[1]?.split('const TablesScene')[0] ?? '';
+  const map = template.split('const BeachAreaMap')[1]?.split('const CoverScene')[0] ?? '';
+  assert.match(map, /data-scene-object="overhead-beach-stall"/);
+  assert.match(map, /data-scene-object="service-counter"/);
+  assert.match(map, /data-scene-object="order-window"/);
+  assert.match(slideTwo, /<BeachAreaMap\s*\/>/);
+});
+
+test('keeps the cover stall distinctive and its side chair readable as beach furniture', () => {
+  const cover = template.split('const BeachStandHero')[1]?.split('const BeachAreaMap')[0] ?? '';
+  assert.match(cover, /data-scene-object="beach-stall-front"/);
+  assert.ok((cover.match(/data-scene-object="beach-chair"/g) ?? []).length >= 2);
 });
 
 test('changes slide six background to brand dark for a less repetitive carousel rhythm', () => {

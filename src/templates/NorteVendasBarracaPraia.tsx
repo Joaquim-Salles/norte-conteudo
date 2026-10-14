@@ -2,7 +2,6 @@ import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
 import {ArrowRight, ChefHat, ClipboardList} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
-import {textEntrance} from '../lib/postMotion.mjs';
 import {
   Background,
   Eyebrow,
@@ -92,29 +91,34 @@ const BeachStandHero: React.FC = () => (
       <ellipse cx="0" cy="67" rx="31" ry="9" fill="#C79C5E" stroke="#FFF2CE" strokeWidth="3" />
     </g>
 
-    <g transform="translate(270 210)" data-scene-object="beach-chair">
-      <path d="M-18-28L18 25M18-28L-18 25" stroke="#FBFBFE" strokeWidth="7" strokeLinecap="round" />
-      <path d="M-16-28H16V-4H-16Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="3" />
-      <path d="M-25 29H25" stroke="#484DB5" strokeWidth="6" strokeLinecap="round" />
+    <g transform="translate(270 210) rotate(-8)" data-scene-object="beach-chair">
+      <path d="M-21-32L15-25L10-2L-26-9Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M-26-9L10-2L20 13L-16 6Z" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M-22-29L-17 25M15-23L20 25M-18 8H21" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
+      <path d="M-24-34L-17-31M14-27L20-24" stroke="#FBFBFE" strokeWidth="4" strokeLinecap="round" />
     </g>
-    <g transform="translate(650 210)" data-scene-object="beach-chair">
-      <path d="M-18-28L18 25M18-28L-18 25" stroke="#FBFBFE" strokeWidth="7" strokeLinecap="round" />
-      <path d="M-16-28H16V-4H-16Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="3" />
-      <path d="M-25 29H25" stroke="#484DB5" strokeWidth="6" strokeLinecap="round" />
+    <g transform="translate(650 210) rotate(8)" data-scene-object="beach-chair">
+      <path d="M-21-32L15-25L10-2L-26-9Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M-26-9L10-2L20 13L-16 6Z" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M-22-29L-17 25M15-23L20 25M-18 8H21" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
+      <path d="M-24-34L-17-31M14-27L20-24" stroke="#FBFBFE" strokeWidth="4" strokeLinecap="round" />
     </g>
 
-    <g transform="translate(454 162)" data-scene-object="beach-stall">
-      <path d="M-122-45L-101-88H101L122-45" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-      <path d="M-109-69H109L120-45H-120L-109-69Z" fill="#F5A767" />
-      <path d="M-75-68V-46M-30-68V-46M15-68V-46M60-68V-46" stroke="#484DB5" strokeWidth="4" />
-      <rect x="-105" y="-45" width="210" height="123" rx="10" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
-      <rect x="-74" y="-28" width="148" height="77" rx="6" fill="#FFF2CE" />
-      <path d="M-74-5H74" stroke="#D8B77D" strokeWidth="4" />
-      <rect x="-82" y="-108" width="164" height="29" rx="7" fill="#FBFBFE" />
-      <text x="0" y="-88" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="2" fill="#292D7D">BARRACA</text>
-      <rect x="-132" y="73" width="264" height="18" rx="8" fill="#FBFBFE" />
-      <path d="M-121 91H121L105 105H-105L-121 91Z" fill="#C79C5E" />
-      <circle cx="79" cy="-10" r="6" fill="#62BFC5" />
+    <g transform="translate(454 162)" data-scene-object="beach-stall-front">
+      <path d="M-136-47L-111-108Q0-133 111-108L136-47Z" fill="#D8B77D" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M-119-83Q0-106 119-83M-129-64Q0-85 129-64" stroke="#C79C5E" strokeWidth="7" strokeLinecap="round" />
+      <path d="M-136-47Q-113-34-91-47Q-68-34-45-47Q-22-34 0-47Q23-34 46-47Q69-34 92-47Q114-34 136-47" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+      <rect x="-78" y="-21" width="156" height="82" rx="8" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+      <path d="M-64-13H64V13H-64Z" fill="#484DB5" stroke="#FFF2CE" strokeWidth="3" />
+      <path d="M-69 16H69V27H-69Z" fill="#FFF2CE" />
+      <path d="M-53 11V-1M-18 11V-1M18 11V-1M53 11V-1" stroke="#62BFC5" strokeWidth="5" strokeLinecap="round" />
+      <rect x="-91" y="-20" width="12" height="80" rx="5" fill="#FFF2CE" />
+      <rect x="79" y="-20" width="12" height="80" rx="5" fill="#FFF2CE" />
+      <rect x="-116" y="48" width="232" height="18" rx="6" fill="#FBFBFE" stroke="#D8B77D" strokeWidth="3" />
+      <rect x="-105" y="66" width="210" height="26" rx="5" fill="#484DB5" stroke="#FBFBFE" strokeWidth="3" />
+      <path d="M-70 68V90M-35 68V90M0 68V90M35 68V90M70 68V90" stroke="#AEB4F6" strokeWidth="3" />
+      <rect x="-76" y="-46" width="152" height="23" rx="5" fill="#FBFBFE" />
+      <text x="0" y="-30" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="12" fontWeight="700" letterSpacing="1.5" fill="#292D7D">BARRACA DE PRAIA</text>
     </g>
   </svg>
 );
@@ -131,9 +135,10 @@ const BeachAreaMap: React.FC = () => (
       <path d="M44 115C170 91 280 113 396 101C533 86 663 111 856 94" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
       <path d="M44 410C154 392 245 412 347 400M566 405C686 390 765 411 858 390" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
 
-      <path d="M166 178C287 149 410 170 510 211C591 245 674 248 747 250" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
-      <path d="M181 331C299 305 402 286 510 258C603 234 679 244 747 250" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
-      <path d="M366 133C419 161 465 190 510 211" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M166 178C300 184 487 224 747 312" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M181 331C319 328 511 309 747 312" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M366 133C473 172 602 255 747 312" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M438 329C542 333 648 317 747 312" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
 
       {[
         {x: 166, y: 178, r: 39},
@@ -166,17 +171,19 @@ const BeachAreaMap: React.FC = () => (
         </g>
       ))}
 
-      <g transform="translate(747 250)" data-scene-object="beach-stall">
-        <path d="M-72-63L-56-95H56L72-63" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-        <path d="M-62-80H62L71-63H-71L-62-80Z" fill="#F5A767" />
-        <path d="M-32-79V-64M0-79V-64M32-79V-64" stroke="#484DB5" strokeWidth="4" />
-        <rect x="-61" y="-63" width="122" height="125" rx="9" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
-        <rect x="-43" y="-46" width="86" height="17" rx="4" fill="#FFF2CE" />
-        <text x="0" y="-34" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.2" fill="#292D7D">BARRACA</text>
-        <rect x="-45" y="-18" width="90" height="61" rx="5" fill="#484DB5" />
-        <path d="M-45 1H45" stroke="#AEB4F6" strokeWidth="3" />
-        <rect x="-76" y="56" width="152" height="14" rx="6" fill="#FBFBFE" />
-        <circle cx="33" cy="-4" r="4" fill="#62BFC5" />
+      <g transform="translate(747 237)" data-scene-object="overhead-beach-stall">
+        <rect x="-111" y="-96" width="222" height="179" rx="12" fill="#C79C5E" stroke="#FBFBFE" strokeWidth="5" />
+        <path d="M-96-81H96V-5H-96Z" fill="#D8B77D" />
+        <path d="M-88-72V-15M-66-72V-15M-44-72V-15M-22-72V-15M0-72V-15M22-72V-15M44-72V-15M66-72V-15M88-72V-15" stroke="#B58A50" strokeWidth="3" opacity=".82" />
+        <path d="M-96-5H96V29H-96Z" fill="#292D7D" />
+        <rect x="-65" y="-88" width="130" height="28" rx="6" fill="#FBFBFE" />
+        <text x="0" y="-69" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="14" fontWeight="700" letterSpacing="1.6" fill="#292D7D">BARRACA</text>
+        <rect x="-111" y="29" width="222" height="38" rx="5" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" data-scene-object="service-counter" />
+        <rect x="-76" y="37" width="152" height="23" rx="4" fill="#F5A767" data-scene-object="order-window" />
+        <path d="M-53 43V55M-26 43V55M0 43V55M26 43V55M53 43V55" stroke="#292D7D" strokeWidth="3" />
+        <rect x="-19" y="67" width="38" height="17" rx="3" fill="#484DB5" />
+        <path d="M-9 84V92M9 84V92" stroke="#FBFBFE" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="89" cy="13" r="6" fill="#62BFC5" />
       </g>
     </g>
   </svg>
@@ -200,16 +207,14 @@ const CoverScene: React.FC = () => {
   </AbsoluteFill></Produto>;
 };
 
-const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
+const MobileRoutineScene: React.FC = () => {
   ensurePostLoaded();
-  const headlineMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 4);
-  const supportMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 8);
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="dark" id="barraca-routine-grid" />
     <PageTop n={2} tone="dark" />
-    <Eyebrow tone="dark" top={190} frame={frame}>A rotina da barraca</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: WHITE, opacity: headlineMotion.opacity, transform: `translateY(${headlineMotion.translateY}px)`}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
-    <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.82)', opacity: supportMotion.opacity, transform: `translateY(${supportMotion.translateY}px)`}}>
+    <Eyebrow tone="dark" top={190}>A rotina da barraca</Eyebrow>
+    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: WHITE}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
+    <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.82)'}}>
       Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
     </p>
     <div style={{position: 'absolute', left: PAD, top: 570, width: 908, height: 470}}><BeachAreaMap /></div>
@@ -375,7 +380,6 @@ const ClosingScene: React.FC = () => {
 
 export const NorteVendasBarraca01: React.FC = CoverScene;
 export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
-export const NorteVendasBarraca02Animada: React.FC = () => <MobileRoutineScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca03: React.FC = () => <TablesScene />;
 export const NorteVendasBarraca03Animada: React.FC = () => <TablesScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca04: React.FC = () => <KitchenFlowScene />;

@@ -13,7 +13,7 @@ Carrossel de oito slides para donos de barracas. A narrativa parte do gancho apr
 7. Notebook entrando de baixo com a tela oficial de Mesas & Comandas, acompanhado por uma impressora térmica fixa. A NFC-e desce da impressora, traz NTB e um QR visual ilustrativo, e é identificada como exemplo com dados fictícios.
 8. Fechamento com CTA para o link da bio.
 
-Os slides 2, 3, 4, 6 e 7 têm versões animadas em MP4 de 3 segundos. No slide 2, apenas os textos mantêm a entrada discreta; a ilustração não se move. No slide 3, o notebook e o celular entram de baixo em momentos diferentes. Nos slides 6 e 7, os notebooks também entram de baixo. Em todos os dispositivos, as interfaces permanecem estáticas. No slide 7, a impressora fica parada e somente a NFC-e se desenrola para baixo. O slide 4 mantém a animação do pedido chegando à cozinha. A capa fica estática.
+Os slides 3, 4, 6 e 7 têm versões animadas em MP4 de 3 segundos. No slide 3, o notebook e o celular entram de baixo em momentos diferentes. Nos slides 6 e 7, os notebooks também entram de baixo. Em todos os dispositivos, as interfaces permanecem estáticas. No slide 7, a impressora fica parada e somente a NFC-e se desenrola para baixo. O slide 4 mantém a animação do pedido chegando à cozinha. A capa e o slide 2 ficam estáticos.
 
 As fotografias foram escolhidas entre as imagens editadas da operação e copiadas para `public/brand-kit/08-recursos/fotos-reais/` para renderização. Cada slide usa uma imagem diferente. As telas de produto são capturas oficiais do kit de marca.
 
