@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, ChefHat, ClipboardList, Printer} from 'lucide-react';
+import {ArrowRight, ChefHat, ClipboardList, Printer, Store} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   Background,
@@ -22,7 +22,6 @@ import {
 
 const TOTAL = 8;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
-const COVER_MARK = kit('01-logos/norte-para-negocios/simbolo/norte-para-negocios_simbolo_branco_transparente.svg');
 const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
 const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
@@ -34,8 +33,11 @@ const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, 
   </div>
 );
 
-const CoverScene: React.FC = () => {
+const CoverScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
+  const routeProgress = frame === undefined ? 1 : interpolate(frame, [8, 56], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const arrived = frame === undefined ? 1 : interpolate(frame, [49, 58, 80], [0, 1, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const orderX = 114 + routeProgress * 634;
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="product" id="barraca-cover-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
@@ -47,8 +49,21 @@ const CoverScene: React.FC = () => {
     <Support tone="product" top={552} width={890} size={27}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
     </Support>
-    <Img src={COVER_MARK} style={{position: 'absolute', width: 650, height: 650, objectFit: 'contain', left: '50%', bottom: 112, transform: 'translateX(-50%)', opacity: 0.13}} />
-    <div style={{position: 'absolute', left: PAD, bottom: 184, color: '#D9DBFF', fontFamily: SANS, fontSize: 16, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Norte Vendas para barracas de praia</div>
+    <div style={{position: 'absolute', left: PAD, top: 790, width: 908, height: 236}}>
+      <svg width="100%" height="100%" viewBox="0 0 908 236" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', inset: 0}}>
+        <path d="M152 78H756" stroke="rgba(251,251,254,.24)" strokeWidth="4" strokeLinecap="round" />
+        <path d="M152 78H756" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" strokeDasharray="604" strokeDashoffset={604 * (1 - routeProgress)} />
+        <circle cx="114" cy="78" r="38" fill="rgba(251,251,254,.10)" stroke="rgba(251,251,254,.65)" strokeWidth="2" />
+        <circle cx="794" cy="78" r="38" fill={`rgba(251,251,254,${.10 + arrived * .12})`} stroke={`rgba(251,251,254,${.45 + arrived * .45})`} strokeWidth="2" />
+        <circle cx={orderX} cy="78" r="10" fill={WHITE} opacity={frame === undefined ? 0 : routeProgress * (1 - arrived)} />
+      </svg>
+      <div style={{position: 'absolute', left: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE}}><Store size={33} strokeWidth={1.8} /></div>
+      <div style={{position: 'absolute', right: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE, opacity: .55 + arrived * .45, transform: `scale(${.96 + arrived * .04})`}}><ChefHat size={34} strokeWidth={1.8} /></div>
+      <div style={{position: 'absolute', left: orderX, top: 54, width: 48, height: 48, display: 'grid', placeItems: 'center', borderRadius: 15, color: VENDAS, background: WHITE, boxShadow: '0 8px 22px rgba(15,17,57,.22)', transform: 'translateX(-50%)', opacity: frame === undefined ? 0 : 1 - arrived}}><ClipboardList size={25} strokeWidth={1.9} /></div>
+      <span style={{position: 'absolute', left: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>BARRACA</span>
+      <span style={{position: 'absolute', right: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>COZINHA</span>
+    </div>
+    <Foot tone="product" />
   </AbsoluteFill></Produto>;
 };
 
@@ -255,6 +270,7 @@ const ClosingScene: React.FC = () => {
 };
 
 export const NorteVendasBarraca01: React.FC = CoverScene;
+export const NorteVendasBarraca01Animada: React.FC = () => <CoverScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
 export const NorteVendasBarraca02Animada: React.FC = () => <MobileRoutineScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca03: React.FC = () => <TablesScene />;

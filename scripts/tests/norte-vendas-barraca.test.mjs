@@ -8,12 +8,11 @@ const copyUrl = new URL('../../conteudo ntb/02-carrosseis/Norte Vendas - Barraca
 const template = existsSync(templateUrl) ? readFileSync(templateUrl, 'utf8') : '';
 const copy = existsSync(copyUrl) ? readFileSync(copyUrl, 'utf8') : '';
 
-test('registers eight slides, keeps the cover static, and animates the receipt slide', () => {
+test('registers eight slides and 3-second animations for the cover and receipt', () => {
   for (const id of ['NorteVendasBarraca01', 'NorteVendasBarraca02', 'NorteVendasBarraca03', 'NorteVendasBarraca04', 'NorteVendasBarraca05', 'NorteVendasBarraca06', 'NorteVendasBarraca07', 'NorteVendasBarraca08']) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
-  assert.doesNotMatch(root, /NorteVendasBarracaAnimada01/, 'the cover should not have an animation export');
-  for (const id of ['NorteVendasBarracaAnimada02', 'NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06', 'NorteVendasBarracaAnimada07']) {
+  for (const id of ['NorteVendasBarracaAnimada01', 'NorteVendasBarracaAnimada02', 'NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06', 'NorteVendasBarracaAnimada07']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/, 'video should last three seconds');
@@ -74,9 +73,13 @@ test('shows a computer beside a printer and feeds the NTB receipt downward', () 
   assert.match(template, /DANFE NFC-e • EXEMPLO/);
 });
 
-test('uses the official rocket mark as a subtle cover watermark instead of the beach-stand illustration', () => {
-  assert.match(template, /norte-para-negocios\/simbolo\/norte-para-negocios_simbolo_branco_transparente\.svg/);
-  assert.match(template, /COVER_MARK/);
-  assert.match(template, /opacity:\s*0\.1[0-9]/);
-  assert.doesNotMatch(template, /BeachStandIllustration/);
+test('keeps cover text still while the order graphic travels from the stand to the kitchen', () => {
+  assert.match(template, /CoverScene: React\.FC<\{frame\?: number\}>/);
+  assert.match(template, /const routeProgress = frame === undefined \? 1 : interpolate\(frame, \[8, 56\], \[0, 1\]/);
+  assert.match(template, /const orderX = 114 \+ routeProgress \* 634/);
+  assert.match(template, /left: orderX[^}]*transform: 'translateX\(-50%\)'/);
+  assert.match(template, />COZINHA<\/span>/);
+  assert.match(template, /NorteVendasBarraca01Animada/);
+  assert.doesNotMatch(template, /COVER_MARK|BeachStandIllustration/);
+  assert.doesNotMatch(template, /<Fx[^>]*>\s*<(?:Eyebrow|Title|Support)/);
 });
