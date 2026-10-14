@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, ChefHat, ClipboardList, Eye, UsersRound} from 'lucide-react';
+import {ArrowRight, ChefHat, ClipboardList, Printer, UsersRound} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   A,
@@ -22,45 +22,37 @@ import {
   mute,
 } from '../lib/NortePost';
 
-const TOTAL = 7;
+const TOTAL = 8;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
 const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
-const COVER_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-capa.png');
 const MOBILE_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-celular.png');
 const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
 
-const PageTop: React.FC<{n: number; tone: 'light' | 'dark'}> = ({n, tone}) => (
+const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, tone}) => (
   <div style={{position: 'absolute', left: PAD, right: PAD, top: 66, height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
     <Img src={tone === 'light' ? LOGO_NEGOCIOS_AZUL : LOGO_NEGOCIOS_BRANCO} style={{height: 62, width: 'auto'}} />
     <span style={{fontFamily: MONO, fontSize: 22, color: mute(tone)}}>{String(n).padStart(2, '0')}/{String(TOTAL).padStart(2, '0')}</span>
   </div>
 );
 
-const CoverScene: React.FC<{frame?: number}> = ({frame}) => {
+const CoverScene: React.FC = () => {
   ensurePostLoaded();
-  const progress = frame === undefined ? 1 : interpolate(frame, [30, 74], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="product" id="barraca-cover-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
-    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
+    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/08</span>
     <Eyebrow tone="product" top={230}>Norte Vendas para barracas de praia</Eyebrow>
-    <Fx p={A(frame, 4, 18)} dy={32}>
-      <Title tone="product" top={292} size={70}>
-        Dono de barraca,<br />seus pedidos chegam<br />direto à cozinha?
-      </Title>
-    </Fx>
-    <Fx p={A(frame, 17, 16)} dy={22}>
-      <Support tone="product" top={552} width={890} size={27}>
-        Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
-      </Support>
-    </Fx>
-    <div style={{position: 'absolute', left: PAD, top: 715, width: 908, height: 500, borderRadius: 24, overflow: 'hidden', background: '#171933', boxShadow: '0 25px 55px rgba(10,12,50,.30)', border: '1px solid rgba(255,255,255,.30)'}}>
-      <Img src={COVER_PHOTO} style={{width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: 'center 56%', transform: `scale(${1.015 + progress * .035})`}} />
-      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 55%, rgba(13,15,49,.50) 100%)'}} />
-      <div style={{position: 'absolute', left: 24, bottom: 20, color: WHITE, fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Norte Vendas em operação</div>
-      <div style={{position: 'absolute', right: 25, bottom: 24, width: `${Math.max(0, progress) * 120}px`, height: 3, background: '#B9BCEB'}} />
+    <Title tone="product" top={292} size={70}>
+      Dono de barraca,<br />seus pedidos chegam<br />direto à cozinha?
+    </Title>
+    <Support tone="product" top={552} width={890} size={27}>
+      Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
+    </Support>
+    <div style={{position: 'absolute', left: PAD, right: PAD, top: 790, borderTop: '1px solid rgba(251,251,254,.28)', borderBottom: '1px solid rgba(251,251,254,.28)', padding: '30px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#F2F2FF', fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>
+      <span>Atendimento</span><ArrowRight size={22} color="#B9BCEB" /><span>Pedido online</span><ArrowRight size={22} color="#B9BCEB" /><span>Cozinha</span>
     </div>
+    <div style={{position: 'absolute', left: PAD, bottom: 184, color: '#D9DBFF', fontFamily: SANS, fontSize: 16, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Norte Vendas para barracas de praia</div>
   </AbsoluteFill></Produto>;
 };
 
@@ -166,12 +158,44 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
   </AbsoluteFill></Produto>;
 };
 
+const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
+  ensurePostLoaded();
+  const progress = frame === undefined ? 1 : interpolate(frame, [10, 68], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const ticketY = (1 - progress) * 490;
+  return <Produto id="vendas"><AbsoluteFill>
+    <Background tone="product" id="barraca-receipt-grid" />
+    <PageTop n={7} tone="product" />
+    <Fx p={A(frame, 0, 15)}><Eyebrow tone="product" top={185}>Fechamento da venda</Eyebrow></Fx>
+    <Fx p={A(frame, 5, 18)} dy={30}><Title tone="product" top={240} size={62}>A nota fiscal sai no fechamento.</Title></Fx>
+    <Fx p={A(frame, 12, 18)} dy={22}><Support tone="product" top={370} width={890} size={25}>Demonstração visual de uma NFC-e emitida pelo Norte Vendas.</Support></Fx>
+
+    <div style={{position: 'absolute', left: 285, top: 460, width: 510, height: 455, overflow: 'hidden', zIndex: 1}}>
+      <div style={{position: 'absolute', left: 35, top: ticketY, width: 440, minHeight: 555, padding: '26px 30px', boxSizing: 'border-box', background: '#FBFBFE', color: NAVY, fontFamily: MONO, boxShadow: '0 18px 34px rgba(10,12,50,.26)', clipPath: 'polygon(0 0,100% 0,100% 98%,96% 100%,92% 98%,88% 100%,84% 98%,80% 100%,76% 98%,72% 100%,68% 98%,64% 100%,60% 98%,56% 100%,52% 98%,48% 100%,44% 100%,40% 98%,36% 100%,32% 98%,28% 100%,24% 98%,20% 100%,16% 98%,12% 100%,8% 98%,4% 100%,0 98%)'}}>
+        <div style={{textAlign: 'center', fontSize: 13, letterSpacing: 2, color: VENDAS, fontWeight: 700}}>EXEMPLO • DADOS FICTÍCIOS</div>
+        <div style={{textAlign: 'center', marginTop: 10, fontSize: 22, fontWeight: 700}}>BARRACA EXEMPLO</div>
+        <div style={{textAlign: 'center', marginTop: 6, fontSize: 14, color: '#72758B'}}>DANFE NFC-e</div>
+        <div style={{marginTop: 20, borderTop: '2px dashed #A8AAC0', paddingTop: 12, fontSize: 14, display: 'flex', justifyContent: 'space-between'}}><span>ITEM</span><span>QTD.  VALOR</span></div>
+        <div style={{marginTop: 9, fontSize: 16, display: 'flex', justifyContent: 'space-between'}}><span>Porção exemplo</span><span>1  00,00</span></div>
+        <div style={{marginTop: 8, fontSize: 16, display: 'flex', justifyContent: 'space-between'}}><span>Bebida exemplo</span><span>2  00,00</span></div>
+        <div style={{marginTop: 16, borderTop: '2px dashed #A8AAC0', paddingTop: 12, fontSize: 17, fontWeight: 700, display: 'flex', justifyContent: 'space-between'}}><span>TOTAL</span><span>R$ 00,00</span></div>
+        <div style={{marginTop: 18, textAlign: 'center', fontSize: 13, lineHeight: 1.5, color: '#72758B'}}>Representação ilustrativa<br />Documento fiscal de exemplo</div>
+        <div style={{margin: '18px auto 0', width: 104, height: 104, border: '1px solid #C6C8D5', display: 'grid', placeItems: 'center', color: '#72758B', fontFamily: SANS, fontSize: 12, textAlign: 'center'}}>QR CODE<br />ILUSTRATIVO</div>
+      </div>
+    </div>
+    <div style={{position: 'absolute', left: 255, top: 900, width: 570, height: 210, borderRadius: '24px 24px 34px 34px', zIndex: 2, background: 'linear-gradient(145deg,#202342 0%,#111329 100%)', border: '1px solid rgba(251,251,254,.24)', boxShadow: '0 28px 50px rgba(10,12,50,.34)'}}>
+      <div style={{position: 'absolute', left: 96, right: 96, top: 0, height: 14, borderRadius: '0 0 8px 8px', background: '#090A15', boxShadow: 'inset 0 3px 6px rgba(0,0,0,.6)'}} />
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, color: '#D9DBFF', fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}><Printer size={24} color="#B9BCEB" />Impressão ilustrativa</div>
+    </div>
+    <Foot tone="product" label="Norte Vendas" />
+  </AbsoluteFill></Produto>;
+};
+
 const ClosingScene: React.FC = () => {
   ensurePostLoaded();
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="dark" id="barraca-closing-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
-    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>07/07</span>
+    <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>08/08</span>
     <Eyebrow tone="dark" top={325}>Norte Vendas para barracas de praia</Eyebrow>
     <Title tone="dark" top={390} size={76}>Pedido na equipe.<br />Cozinha informada.<br />Gerente com visibilidade.</Title>
     <Support tone="dark" top={650} width={880} size={29}>Conheça o Norte Vendas e veja como o sistema pode acompanhar o ritmo da operação da sua barraca.</Support>
@@ -185,8 +209,7 @@ const ClosingScene: React.FC = () => {
   </AbsoluteFill></Produto>;
 };
 
-export const NorteVendasBarraca01: React.FC = () => <CoverScene />;
-export const NorteVendasBarraca01Animada: React.FC = () => <CoverScene frame={useCurrentFrame()} />;
+export const NorteVendasBarraca01: React.FC = CoverScene;
 export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
 export const NorteVendasBarraca03: React.FC = () => <TablesScene />;
 export const NorteVendasBarraca03Animada: React.FC = () => <TablesScene frame={useCurrentFrame()} />;
@@ -195,4 +218,6 @@ export const NorteVendasBarraca04Animada: React.FC = () => <KitchenFlowScene fra
 export const NorteVendasBarraca05: React.FC = RealOperationScene;
 export const NorteVendasBarraca06: React.FC = () => <ManagerScene />;
 export const NorteVendasBarraca06Animada: React.FC = () => <ManagerScene frame={useCurrentFrame()} />;
-export const NorteVendasBarraca07: React.FC = ClosingScene;
+export const NorteVendasBarraca07: React.FC = () => <ReceiptPrintScene />;
+export const NorteVendasBarraca07Animada: React.FC = () => <ReceiptPrintScene frame={useCurrentFrame()} />;
+export const NorteVendasBarraca08: React.FC = ClosingScene;

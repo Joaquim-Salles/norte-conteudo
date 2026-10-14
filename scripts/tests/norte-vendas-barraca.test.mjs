@@ -8,11 +8,12 @@ const copyUrl = new URL('../../conteudo ntb/02-carrosseis/Norte Vendas - Barraca
 const template = existsSync(templateUrl) ? readFileSync(templateUrl, 'utf8') : '';
 const copy = existsSync(copyUrl) ? readFileSync(copyUrl, 'utf8') : '';
 
-test('registers seven slides and four short animations for the beach-stand carousel', () => {
-  for (const id of ['NorteVendasBarraca01', 'NorteVendasBarraca02', 'NorteVendasBarraca03', 'NorteVendasBarraca04', 'NorteVendasBarraca05', 'NorteVendasBarraca06', 'NorteVendasBarraca07']) {
+test('registers eight slides, keeps the cover static, and animates the receipt slide', () => {
+  for (const id of ['NorteVendasBarraca01', 'NorteVendasBarraca02', 'NorteVendasBarraca03', 'NorteVendasBarraca04', 'NorteVendasBarraca05', 'NorteVendasBarraca06', 'NorteVendasBarraca07', 'NorteVendasBarraca08']) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
-  for (const id of ['NorteVendasBarracaAnimada01', 'NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06']) {
+  assert.doesNotMatch(root, /NorteVendasBarracaAnimada01/, 'the cover should not have an animation export');
+  for (const id of ['NorteVendasBarracaAnimada03', 'NorteVendasBarracaAnimada04', 'NorteVendasBarracaAnimada06', 'NorteVendasBarracaAnimada07']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/, 'video should last three seconds');
@@ -25,6 +26,8 @@ test('keeps the approved hook and grounds the beach-stand copy in confirmed Nort
   assert.match(copy, /(cozinha.*online|online.*cozinha)/i);
   assert.match(copy, /histórico por operador/i);
   assert.match(copy, /Norte Vendas/);
+  assert.match(copy, /nota fiscal|NFC-e/i);
+  assert.match(copy, /Slide 8\s*\|\s*Fechamento/i);
   assert.doesNotMatch(copy, /vende mais|elimina erros|aumenta as vendas/i);
 });
 
@@ -32,9 +35,11 @@ test('uses official Norte Vendas screens for the kitchen flow and manager visibi
   assert.ok(template, 'template should exist');
   assert.match(template, /08-recursos\/telas-oficiais\/vendas\/d-mesas\.png/);
   assert.match(template, /08-recursos\/telas-oficiais\/vendas\/d-dashboard\.png/);
-  assert.match(template, /norte-vendas-barraca-capa\.png/);
   assert.match(template, /norte-vendas-barraca-celular\.png/);
   assert.match(template, /norte-vendas-barraca-operacao\.png/);
+  assert.match(template, /ReceiptPrintScene/);
+  assert.match(template, /NFC-e/);
+  assert.doesNotMatch(template, /COVER_PHOTO/);
   for (const name of ['norte-vendas-barraca-capa.png', 'norte-vendas-barraca-celular.png', 'norte-vendas-barraca-operacao.png']) {
     assert.ok(existsSync(new URL(`../../public/brand-kit/08-recursos/fotos-reais/${name}`, import.meta.url)), `${name} should be available to Remotion`);
   }

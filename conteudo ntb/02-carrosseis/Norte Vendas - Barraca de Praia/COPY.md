@@ -36,7 +36,13 @@ Uma imagem real do Norte Vendas em uso durante o atendimento, com as mesas e com
 
 No painel de Administração, o gerente vê quem está trabalhando e consulta o histórico por operador. Mais visibilidade sobre os registros da equipe.
 
-## Slide 7 | Fechamento
+## Slide 7 | Nota fiscal
+
+**A nota fiscal também faz parte do fechamento.**
+
+Uma demonstração visual da NFC-e no fluxo do Norte Vendas. O cupom mostrado é ilustrativo e usa dados fictícios.
+
+## Slide 8 | Fechamento
 
 **Pedido online até a cozinha. Acompanhamento para o gerente.**
 
