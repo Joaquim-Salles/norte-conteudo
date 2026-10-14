@@ -24,6 +24,7 @@ import {CarrosselCapa, CarrosselSolucoes, CarrosselVendas, CarrosselEstoque, Car
 import {
   NorteVendasBarraca01,
   NorteVendasBarraca02,
+  NorteVendasBarraca02Animada,
   NorteVendasBarraca03,
   NorteVendasBarraca03Animada,
   NorteVendasBarraca04,
@@ -284,6 +285,7 @@ export const RemotionRoot: React.FC = () => {
       <Still id="NorteVendasBarraca06" component={NorteVendasBarraca06} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasBarraca07" component={NorteVendasBarraca07} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteVendasBarraca08" component={NorteVendasBarraca08} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="NorteVendasBarracaAnimada02" component={NorteVendasBarraca02Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasBarracaAnimada03" component={NorteVendasBarraca03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasBarracaAnimada04" component={NorteVendasBarraca04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasBarracaAnimada06" component={NorteVendasBarraca06Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />

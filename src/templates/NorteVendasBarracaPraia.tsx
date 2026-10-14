@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, ChefHat, ClipboardList, Printer, UsersRound} from 'lucide-react';
+import {ArrowRight, ChefHat, ClipboardList, Printer} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   A,
@@ -26,7 +26,6 @@ const TOTAL = 8;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
 const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
-const MOBILE_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-celular.png');
 const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
 
 const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, tone}) => (
@@ -56,20 +55,55 @@ const CoverScene: React.FC = () => {
   </AbsoluteFill></Produto>;
 };
 
-const MobileRoutineScene: React.FC = () => {
+const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
+  const gather = frame === undefined ? 0 : interpolate(frame, [7, 47], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const commandIn = frame === undefined ? 1 : interpolate(frame, [36, 52], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const tables = [
+    {label: 'MESA 04', x: 10, y: 45, endX: 235, endY: 145},
+    {label: 'MESA 08', x: 665, y: 45, endX: 475, endY: 145},
+    {label: 'MESA 12', x: 10, y: 255, endX: 235, endY: 208},
+    {label: 'MESA 16', x: 665, y: 255, endX: 475, endY: 208},
+  ];
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="light" id="barraca-routine-grid" />
     <PageTop n={2} tone="light" />
-    <Eyebrow tone="light" top={205}>A rotina da barraca</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, top: 265, width: 420, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 48, lineHeight: 1.08, letterSpacing: -1.2, color: NAVY}}>O pedido começa<br />no atendimento.</h1>
-    <Support tone="light" top={415} width={420} size={27}>
-      Com a equipe espalhada pelo espaço, registrar as comandas no sistema ajuda a informação a seguir pelo fluxo online até quem prepara.
+    <Eyebrow tone="light" top={190}>A rotina da barraca</Eyebrow>
+    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: NAVY}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
+    <Support tone="light" top={365} width={900} size={27}>
+      Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
     </Support>
-    <div style={{position: 'absolute', left: 560, top: 236, width: 430, height: 880, borderRadius: 28, overflow: 'hidden', background: '#E9EAF5', boxShadow: '0 24px 55px rgba(20,22,58,.20)', border: '1px solid rgba(20,22,58,.12)'}}>
-      <Img src={MOBILE_PHOTO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block'}} />
+    <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 440}}>
+      <svg width="100%" height="100%" viewBox="0 0 908 440" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', inset: 0}}>
+        {tables.map((table) => {
+          const startX = table.x + 108;
+          const startY = table.y + 50;
+          const endX = table.endX + 108;
+          const endY = table.endY + 50;
+          const x = startX + (endX - startX) * gather;
+          const y = startY + (endY - startY) * gather;
+          return <g key={table.label}>
+            <path d={`M${startX} ${startY} Q${(startX + endX) / 2} ${Math.min(startY, endY) - 26} ${endX} ${endY}`} stroke="rgba(72,77,181,.22)" strokeWidth="3" strokeDasharray="7 9" />
+            <circle cx={x} cy={y} r={6} fill={VENDAS} opacity={1 - commandIn * 0.9} />
+          </g>;
+        })}
+      </svg>
+      {tables.map((table) => {
+        const x = table.x + (table.endX - table.x) * gather;
+        const y = table.y + (table.endY - table.y) * gather;
+        const scale = frame === undefined ? 1 : 1 - commandIn * 0.76;
+        const opacity = frame === undefined ? 1 : 1 - commandIn * 0.94;
+        return <div key={table.label} style={{position: 'absolute', left: x, top: y, width: 216, height: 100, boxSizing: 'border-box', padding: '18px 20px', borderRadius: 18, background: WHITE, border: '1px solid rgba(20,22,58,.13)', boxShadow: '0 12px 25px rgba(20,22,58,.10)', color: NAVY, fontFamily: SANS, opacity, transform: `scale(${scale})`, transformOrigin: 'center', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          <span style={{fontSize: 15, fontWeight: 700, letterSpacing: 1.2}}>{table.label}</span>
+          <span style={{width: 11, height: 11, borderRadius: 99, background: '#39A795'}} />
+          <span style={{fontSize: 14, color: '#74778C'}}>Pedido registrado</span>
+        </div>;
+      })}
+      <div style={{position: 'absolute', left: 238, top: 157, width: 432, height: 112, boxSizing: 'border-box', padding: '20px 26px', borderRadius: 20, background: WHITE, border: `2px solid ${VENDAS}`, boxShadow: '0 18px 38px rgba(20,22,58,.16)', color: NAVY, fontFamily: SANS, opacity: commandIn, transform: `translateY(${(1 - commandIn) * 14}px) scale(${.94 + commandIn * .06})`, display: 'flex', alignItems: 'center', gap: 20}}>
+        <div style={{width: 58, height: 58, borderRadius: 16, background: 'rgba(72,77,181,.10)', display: 'grid', placeItems: 'center', flexShrink: 0}}><ClipboardList size={30} color={VENDAS} /></div>
+        <div><div style={{fontSize: 14, fontWeight: 700, color: VENDAS, letterSpacing: 1.6, textTransform: 'uppercase'}}>Comanda organizada</div><div style={{marginTop: 8, fontSize: 21, fontWeight: 700}}>Pedidos reunidos no sistema</div></div>
+      </div>
     </div>
-    <div style={{position: 'absolute', left: PAD, top: 830, display: 'flex', gap: 15, alignItems: 'center', color: VENDAS, fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase'}}><UsersRound size={27} />Atendimento conectado</div>
     <Foot tone="light" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };
@@ -211,6 +245,7 @@ const ClosingScene: React.FC = () => {
 
 export const NorteVendasBarraca01: React.FC = CoverScene;
 export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
+export const NorteVendasBarraca02Animada: React.FC = () => <MobileRoutineScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca03: React.FC = () => <TablesScene />;
 export const NorteVendasBarraca03Animada: React.FC = () => <TablesScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca04: React.FC = () => <KitchenFlowScene />;
