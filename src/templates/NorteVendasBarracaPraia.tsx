@@ -22,27 +22,10 @@ import {
 
 const TOTAL = 8;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
+const COVER_MARK = kit('01-logos/norte-para-negocios/simbolo/norte-para-negocios_simbolo_branco_transparente.svg');
 const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
 const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
-
-const BeachStandIllustration: React.FC = () => (
-  <svg width="908" height="300" viewBox="0 0 908 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustração de barraca de praia com mesas">
-    <path d="M92 260H816" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    <path d="M310 88H598L640 166H268L310 88Z" fill="rgba(251,251,254,.12)" stroke="#D9DBFF" strokeWidth="3" />
-    <path d="M268 166H640V225H268V166Z" fill="rgba(251,251,254,.08)" stroke="#D9DBFF" strokeWidth="3" />
-    <path d="M268 166H640" stroke="#FFBE55" strokeWidth="7" strokeDasharray="28 14" />
-    <path d="M292 225V259M616 225V259" stroke="#D9DBFF" strokeWidth="5" strokeLinecap="round" />
-    <path d="M332 188H576" stroke="rgba(251,251,254,.35)" strokeWidth="2" />
-    <path d="M454 188V225" stroke="rgba(251,251,254,.35)" strokeWidth="2" />
-    <ellipse cx="165" cy="214" rx="70" ry="18" fill="rgba(251,251,254,.10)" stroke="#D9DBFF" strokeWidth="3" />
-    <path d="M165 214V258M130 258H200" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" />
-    <ellipse cx="744" cy="214" rx="70" ry="18" fill="rgba(251,251,254,.10)" stroke="#D9DBFF" strokeWidth="3" />
-    <path d="M744 214V258M709 258H779" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" />
-    <circle cx="165" cy="202" r="6" fill="#FFBE55" />
-    <circle cx="744" cy="202" r="6" fill="#FFBE55" />
-  </svg>
-);
 
 const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, tone}) => (
   <div style={{position: 'absolute', left: PAD, right: PAD, top: 66, height: 62, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -64,7 +47,7 @@ const CoverScene: React.FC = () => {
     <Support tone="product" top={552} width={890} size={27}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
     </Support>
-    <div style={{position: 'absolute', left: PAD, top: 780}}><BeachStandIllustration /></div>
+    <Img src={COVER_MARK} style={{position: 'absolute', width: 650, height: 650, objectFit: 'contain', left: '50%', bottom: 112, transform: 'translateX(-50%)', opacity: 0.13}} />
     <div style={{position: 'absolute', left: PAD, bottom: 184, color: '#D9DBFF', fontFamily: SANS, fontSize: 16, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase'}}>Norte Vendas para barracas de praia</div>
   </AbsoluteFill></Produto>;
 };

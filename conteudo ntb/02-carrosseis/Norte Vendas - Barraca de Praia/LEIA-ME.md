@@ -4,7 +4,7 @@ Carrossel de oito slides para donos de barracas. A narrativa parte do gancho apr
 
 ## Ordem dos slides
 
-1. Capa estática, no padrão gráfico da marca, com ilustração vetorial da barraca e das mesas.
+1. Capa estática, no padrão gráfico da marca, com o símbolo oficial N com foguete como marca d’água discreta no fundo.
 2. Atendimento por toda a barraca, com animação de pedidos das mesas reunidos em uma comanda.
 3. Tela oficial de Mesas & Comandas, com foco animado.
 4. Animação do pedido registrado seguindo online até a cozinha.

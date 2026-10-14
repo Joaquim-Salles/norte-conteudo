@@ -74,7 +74,9 @@ test('shows a computer beside a printer and feeds the NTB receipt downward', () 
   assert.match(template, /DANFE NFC-e • EXEMPLO/);
 });
 
-test('replaces the cover arrow strip with a static beach-stand illustration', () => {
-  assert.match(template, /BeachStandIllustration/);
-  assert.doesNotMatch(template, /<span>Atendimento<\/span><ArrowRight/);
+test('uses the official rocket mark as a subtle cover watermark instead of the beach-stand illustration', () => {
+  assert.match(template, /norte-para-negocios\/simbolo\/norte-para-negocios_simbolo_branco_transparente\.svg/);
+  assert.match(template, /COVER_MARK/);
+  assert.match(template, /opacity:\s*0\.1[0-9]/);
+  assert.doesNotMatch(template, /BeachStandIllustration/);
 });
