@@ -55,3 +55,26 @@ test('uses official Norte Vendas screens for the kitchen flow and manager visibi
   assert.match(template, /useCurrentFrame/);
   assert.match(template, /NorteVendasBarraca/);
 });
+
+test('keeps all slide text static and reserves animation for the visual elements', () => {
+  assert.doesNotMatch(template, /<Fx[^>]*>\s*<(?:Eyebrow|Title|Support)/, 'titles and supporting copy should not be wrapped in text animation');
+});
+
+test('centers the kitchen route line on the card midpoint', () => {
+  assert.match(template, /const routeY = 88/);
+  assert.match(template, /M290 \$\{routeY\}H618/);
+  assert.match(template, /cx="290" cy=\{routeY\}/);
+  assert.match(template, /cx="618" cy=\{routeY\}/);
+});
+
+test('shows a computer beside a printer and feeds the NTB receipt downward', () => {
+  assert.match(template, /<span>Norte Vendas<\/span>/);
+  assert.match(template, /NTB/);
+  assert.match(template, /ticketHeight\s*=\s*progress\s*\*\s*230/);
+  assert.match(template, /DANFE NFC-e • EXEMPLO/);
+});
+
+test('replaces the cover arrow strip with a static beach-stand illustration', () => {
+  assert.match(template, /BeachStandIllustration/);
+  assert.doesNotMatch(template, /<span>Atendimento<\/span><ArrowRight/);
+});
