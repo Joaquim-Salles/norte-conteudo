@@ -71,82 +71,113 @@ const PhoneFrame: React.FC = () => (
 
 const BeachStandHero: React.FC = () => (
   <svg width="100%" height="100%" viewBox="0 0 908 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustração de uma barraca de praia em funcionamento" style={{display: 'block'}}>
-    <ellipse cx="454" cy="246" rx="398" ry="25" fill="rgba(12,15,72,.2)" />
-    <path d="M34 231C152 193 241 227 332 211C424 194 501 206 591 220C682 233 774 204 874 224" stroke="rgba(241,243,255,.34)" strokeWidth="2" />
-    <path d="M68 245C184 218 265 244 355 231C457 216 555 228 651 239C730 249 800 229 850 238" stroke="rgba(241,243,255,.2)" strokeWidth="2" />
+    <path d="M0 112C135 93 216 116 321 105C431 94 538 116 654 105C754 95 832 101 908 91V280H0V112Z" fill="#D8B77D" opacity=".97" />
+    <path d="M0 102C104 84 207 108 309 96C415 83 521 105 622 95C729 83 825 93 908 78V126C805 137 723 125 617 137C504 150 415 127 310 141C198 156 101 131 0 151V102Z" fill="#62BFC5" opacity=".92" />
+    <path d="M0 122C99 106 207 130 307 116M604 116C709 104 809 122 908 102" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" opacity=".8" />
+    <path d="M36 197C164 173 243 204 337 186M570 193C674 172 775 199 872 176M66 255C184 232 247 260 335 242M570 252C681 230 772 256 842 238" stroke="#F3D99E" strokeWidth="4" strokeLinecap="round" opacity=".7" />
 
-    <g transform="translate(150 135)">
-      <path d="M-70 0C-62-43-29-67 0-67C30-67 62-42 70 0H-70Z" fill="#DDE1FF" />
-      <path d="M0-67V0M-36-54L-24 0M36-54L24 0" stroke="#9298E9" strokeWidth="3" />
-      <path d="M0 0V68" stroke="#E8EAFA" strokeWidth="5" strokeLinecap="round" />
-      <path d="M-39 70H39" stroke="#E8EAFA" strokeWidth="4" strokeLinecap="round" />
-      <ellipse cx="0" cy="69" rx="46" ry="12" fill="#777DD3" stroke="#E8EAFA" strokeWidth="3" />
-      <path d="M-56 42L-77 66M56 42L77 66" stroke="#DDE1FF" strokeWidth="5" strokeLinecap="round" />
+    <g transform="translate(150 148)" data-scene-object="beach-umbrella">
+      <path d="M-66 0C-60-42-31-66 0-66C31-66 60-42 66 0H-66Z" fill="#FFF2CE" />
+      <path d="M-66 0C-60-42-31-66 0-66V0H-66Z" fill="#F5A767" />
+      <path d="M0-66V0M-35-55L-23 0M35-55L23 0" stroke="#484DB5" strokeWidth="3" opacity=".75" />
+      <path d="M0 0V64M-22 66H22" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
+      <ellipse cx="0" cy="67" rx="31" ry="9" fill="#C79C5E" stroke="#FFF2CE" strokeWidth="3" />
     </g>
 
-    <g transform="translate(758 151) scale(.82)">
-      <path d="M-70 0C-62-43-29-67 0-67C30-67 62-42 70 0H-70Z" fill="#AAB0F3" />
-      <path d="M0-67V0M-36-54L-24 0M36-54L24 0" stroke="#7379D1" strokeWidth="3" />
-      <path d="M0 0V66" stroke="#E8EAFA" strokeWidth="5" strokeLinecap="round" />
-      <ellipse cx="0" cy="68" rx="44" ry="12" fill="#777DD3" stroke="#E8EAFA" strokeWidth="3" />
-      <path d="M-53 42L-74 64M53 42L74 64" stroke="#DDE1FF" strokeWidth="5" strokeLinecap="round" />
+    <g transform="translate(758 148) scale(.88)" data-scene-object="beach-umbrella">
+      <path d="M-66 0C-60-42-31-66 0-66C31-66 60-42 66 0H-66Z" fill="#FFF2CE" />
+      <path d="M0-66C31-66 60-42 66 0H0V-66Z" fill="#F5A767" />
+      <path d="M0-66V0M-35-55L-23 0M35-55L23 0" stroke="#484DB5" strokeWidth="3" opacity=".75" />
+      <path d="M0 0V64M-22 66H22" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
+      <ellipse cx="0" cy="67" rx="31" ry="9" fill="#C79C5E" stroke="#FFF2CE" strokeWidth="3" />
     </g>
 
-    <g>
-      <path d="M342 112L372 69H536L566 112" fill="#E9EBFF" stroke="#FBFBFE" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M365 86H543L556 111H351L365 86Z" fill="#AEB4F6" />
-      <path d="M390 87V111M425 87V111M461 87V111M497 87V111M532 87V111" stroke="#7279D1" strokeWidth="3" />
-      <rect x="365" y="111" width="178" height="99" rx="8" fill="#292D7D" stroke="#E7E9FF" strokeWidth="3" />
-      <rect x="385" y="132" width="138" height="55" rx="5" fill="#484DB5" />
-      <path d="M384 152H522M453 132V187" stroke="rgba(237,239,255,.34)" strokeWidth="2" />
-      <rect x="344" y="196" width="220" height="20" rx="7" fill="#E5E7F8" />
-      <path d="M356 216H552L538 232H370L356 216Z" fill="#AEB4F6" />
-      <circle cx="504" cy="157" r="5" fill="#7AD1B8" />
+    <g transform="translate(270 210)" data-scene-object="beach-chair">
+      <path d="M-18-28L18 25M18-28L-18 25" stroke="#FBFBFE" strokeWidth="7" strokeLinecap="round" />
+      <path d="M-16-28H16V-4H-16Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="3" />
+      <path d="M-25 29H25" stroke="#484DB5" strokeWidth="6" strokeLinecap="round" />
+    </g>
+    <g transform="translate(650 210)" data-scene-object="beach-chair">
+      <path d="M-18-28L18 25M18-28L-18 25" stroke="#FBFBFE" strokeWidth="7" strokeLinecap="round" />
+      <path d="M-16-28H16V-4H-16Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="3" />
+      <path d="M-25 29H25" stroke="#484DB5" strokeWidth="6" strokeLinecap="round" />
     </g>
 
-    <g fill="#E9EBFF" opacity=".9">
-      <circle cx="277" cy="198" r="13" /><path d="M260 229C260 210 267 204 277 204C287 204 294 210 294 229H260Z" />
-      <circle cx="633" cy="201" r="12" /><path d="M617 230C617 213 623 207 633 207C643 207 649 213 649 230H617Z" />
+    <g transform="translate(454 162)" data-scene-object="beach-stall">
+      <path d="M-122-45L-101-88H101L122-45" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M-109-69H109L120-45H-120L-109-69Z" fill="#F5A767" />
+      <path d="M-75-68V-46M-30-68V-46M15-68V-46M60-68V-46" stroke="#484DB5" strokeWidth="4" />
+      <rect x="-105" y="-45" width="210" height="123" rx="10" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+      <rect x="-74" y="-28" width="148" height="77" rx="6" fill="#FFF2CE" />
+      <path d="M-74-5H74" stroke="#D8B77D" strokeWidth="4" />
+      <rect x="-82" y="-108" width="164" height="29" rx="7" fill="#FBFBFE" />
+      <text x="0" y="-88" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="2" fill="#292D7D">BARRACA</text>
+      <rect x="-132" y="73" width="264" height="18" rx="8" fill="#FBFBFE" />
+      <path d="M-121 91H121L105 105H-105L-121 91Z" fill="#C79C5E" />
+      <circle cx="79" cy="-10" r="6" fill="#62BFC5" />
     </g>
-    <path d="M277 234V248M633 234V248" stroke="#E9EBFF" strokeWidth="4" strokeLinecap="round" />
   </svg>
 );
 
 const BeachAreaMap: React.FC = () => (
   <svg width="100%" height="100%" viewBox="0 0 908 470" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Vista ilustrada das mesas espalhadas pela barraca até a cozinha" style={{display: 'block'}}>
-    <path d="M48 83C188 31 316 56 430 95C548 135 700 121 860 66V388C710 429 567 412 438 380C302 346 172 363 48 416V83Z" fill="rgba(251,251,254,.055)" stroke="rgba(251,251,254,.18)" strokeWidth="2" />
-    <path d="M76 110C208 68 317 85 427 120C557 161 686 147 831 100" stroke="rgba(218,222,255,.18)" strokeWidth="2" strokeDasharray="8 12" />
-    <path d="M78 382C218 331 319 351 431 382C554 416 694 401 831 354" stroke="rgba(218,222,255,.18)" strokeWidth="2" strokeDasharray="8 12" />
+    <defs>
+      <clipPath id="beach-area-boundary"><rect x="24" y="22" width="860" height="426" rx="22" /></clipPath>
+    </defs>
+    <g clipPath="url(#beach-area-boundary)">
+      <rect x="24" y="22" width="860" height="426" fill="#D8B77D" />
+      <path d="M24 22H884V98C806 82 742 101 667 89C579 74 508 100 421 84C331 68 264 98 174 82C118 72 70 83 24 92V22Z" fill="#62BFC5" />
+      <path d="M28 84C112 69 161 91 244 77M373 79C447 65 519 92 591 77M710 79C769 70 824 84 880 71" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" />
+      <path d="M44 115C170 91 280 113 396 101C533 86 663 111 856 94" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
+      <path d="M44 410C154 392 245 412 347 400M566 405C686 390 765 411 858 390" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
 
-    <path d="M171 178C290 172 386 184 483 211C582 238 668 235 724 222" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
-    <path d="M188 308C304 293 394 283 483 264C581 243 655 234 724 222" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
-    <path d="M369 130C418 165 451 188 493 211" stroke="#C5CAFF" strokeWidth="3" strokeDasharray="7 12" opacity=".72" />
+      <path d="M166 178C287 149 410 170 510 211C591 245 674 248 747 250" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M181 331C299 305 402 286 510 258C603 234 679 244 747 250" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
+      <path d="M366 133C419 161 465 190 510 211" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
 
-    <g fill="#DCE0FF" stroke="#9298E9" strokeWidth="3">
-      <circle cx="163" cy="174" r="42" /><circle cx="288" cy="259" r="39" />
-      <circle cx="370" cy="126" r="37" /><circle cx="414" cy="323" r="39" />
-    </g>
-    <g stroke="#9298E9" strokeWidth="2" opacity=".9">
-      <path d="M163 132V216M121 174H205M288 220V298M249 259H327" />
-      <path d="M370 89V163M333 126H407M414 284V362M375 323H453" />
-    </g>
-    <g fill="#484DB5">
-      <circle cx="163" cy="174" r="9" /><circle cx="288" cy="259" r="9" />
-      <circle cx="370" cy="126" r="8" /><circle cx="414" cy="323" r="9" />
-    </g>
-    <g fill="#B7BDF8">
-      <circle cx="112" cy="248" r="6" /><circle cx="227" cy="122" r="6" /><circle cx="330" cy="354" r="6" />
-      <circle cx="455" cy="164" r="6" /><circle cx="535" cy="328" r="6" />
-    </g>
+      {[
+        {x: 166, y: 178, r: 39},
+        {x: 288, y: 319, r: 37},
+        {x: 366, y: 133, r: 34},
+        {x: 438, y: 329, r: 36},
+      ].map(({x, y, r}, index) => (
+        <g key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
+          <g data-scene-object="beach-umbrella">
+            <circle r={r} fill="#FFF2CE" stroke="#484DB5" strokeWidth="3" />
+            <path d={`M0 0L0 ${-r}A${r} ${r} 0 0 1 ${r} 0Z`} fill="#F5A767" />
+            <path d={`M0 0L0 ${r}A${r} ${r} 0 0 1 ${-r} 0Z`} fill="#F5A767" />
+            <path d={`M0 ${-r}V${r}M${-r} 0H${r}M${-r * .72} ${-r * .72}L${r * .72} ${r * .72}M${r * .72} ${-r * .72}L${-r * .72} ${r * .72}`} stroke="#484DB5" strokeWidth="2" opacity=".7" />
+          </g>
+          <g data-scene-object="beach-table">
+            <circle r="17" fill="#FBFBFE" stroke="#484DB5" strokeWidth="3" />
+            <circle cx="-5" cy="-3" r="2.5" fill="#62BFC5" />
+            <circle cx="5" cy="3" r="2.5" fill="#F5A767" />
+          </g>
+          <g data-scene-object="beach-chair">
+            {[0, 90, 180, 270].map((rotation) => (
+              <g key={rotation} transform={`rotate(${rotation}) translate(0 ${-(r + 19)})`}>
+                <path d="M-8-10L-10 14M8-10L10 14" stroke="#484DB5" strokeWidth="3" strokeLinecap="round" />
+                <rect x="-10" y="-11" width="20" height="22" rx="5" fill="#F5A767" stroke="#484DB5" strokeWidth="2.5" />
+                <rect x="-12" y="-19" width="24" height="9" rx="4" fill="#FBFBFE" stroke="#484DB5" strokeWidth="2.5" />
+                <path d="M-6-5H6M-6 1H6" stroke="#FFF2CE" strokeWidth="2" strokeLinecap="round" />
+              </g>
+            ))}
+          </g>
+        </g>
+      ))}
 
-    <g transform="translate(724 222)">
-      <rect x="-76" y="-58" width="152" height="118" rx="16" fill="#252A73" stroke="#E5E8FF" strokeWidth="3" />
-      <path d="M-91-58L-69-91H69L91-58" fill="#AEB4F6" stroke="#E5E8FF" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M-43-90V-58M0-90V-58M43-90V-58" stroke="#6E74C8" strokeWidth="4" />
-      <rect x="-52" y="-34" width="104" height="55" rx="6" fill="#484DB5" />
-      <path d="M-52-15H52M0-34V21" stroke="rgba(237,239,255,.35)" strokeWidth="2" />
-      <rect x="-87" y="53" width="174" height="13" rx="6" fill="#E7E9FA" />
-      <circle cx="49" cy="-8" r="5" fill="#7AD1B8" />
+      <g transform="translate(747 250)" data-scene-object="beach-stall">
+        <path d="M-72-63L-56-95H56L72-63" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
+        <path d="M-62-80H62L71-63H-71L-62-80Z" fill="#F5A767" />
+        <path d="M-32-79V-64M0-79V-64M32-79V-64" stroke="#484DB5" strokeWidth="4" />
+        <rect x="-61" y="-63" width="122" height="125" rx="9" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+        <rect x="-43" y="-46" width="86" height="17" rx="4" fill="#FFF2CE" />
+        <text x="0" y="-34" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.2" fill="#292D7D">BARRACA</text>
+        <rect x="-45" y="-18" width="90" height="61" rx="5" fill="#484DB5" />
+        <path d="M-45 1H45" stroke="#AEB4F6" strokeWidth="3" />
+        <rect x="-76" y="56" width="152" height="14" rx="6" fill="#FBFBFE" />
+        <circle cx="33" cy="-4" r="4" fill="#62BFC5" />
+      </g>
     </g>
   </svg>
 );
