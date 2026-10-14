@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
 import {ArrowRight, ChefHat, ClipboardList, Store} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
-import {screenProgress, textEntrance} from '../lib/postMotion.mjs';
+import {textEntrance} from '../lib/postMotion.mjs';
 import {
   Background,
   Eyebrow,
@@ -35,11 +35,11 @@ const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, 
   </div>
 );
 
-const LaptopFrame: React.FC<{width: number; screenHeight: number; progress: number; children: React.ReactNode}> = ({width, screenHeight, progress, children}) => (
+const LaptopFrame: React.FC<{width: number; screenHeight: number; children: React.ReactNode}> = ({width, screenHeight, children}) => (
   <div style={{width, height: screenHeight + 40, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', filter: 'drop-shadow(0 20px 25px rgba(20,22,58,.20))'}}>
     <div style={{width: '100%', padding: 12, boxSizing: 'border-box', borderRadius: 20, background: '#17182D', border: '2px solid rgba(20,22,58,.72)'}}>
       <div style={{position: 'relative', width: '100%', height: screenHeight, borderRadius: 8, overflow: 'hidden', background: '#F7F8FC'}}>
-        <div style={{position: 'absolute', inset: 0, clipPath: `inset(0 ${(1 - progress) * 100}% 0 0)`, transform: `scale(${.985 + progress * .015})`, transformOrigin: 'center'}}>{children}</div>
+        {children}
       </div>
       <div style={{position: 'absolute', left: '50%', top: 6, width: 5, height: 5, borderRadius: 99, background: '#555775', transform: 'translateX(-50%)'}} />
     </div>
@@ -49,30 +49,21 @@ const LaptopFrame: React.FC<{width: number; screenHeight: number; progress: numb
 
 type DeviceEntranceProps = {
   frame?: number;
-  variant: 'rise' | 'left' | 'right' | 'scale';
   children: React.ReactNode;
   style?: React.CSSProperties;
 };
 
-const DeviceEntrance: React.FC<DeviceEntranceProps> = ({frame, variant, children, style}) => {
-  const progress = frame === undefined ? 1 : screenProgress(frame, 3, 20);
-  const offsets = {
-    rise: {x: 0, y: 90, rotation: 0, scale: .94},
-    left: {x: -130, y: 10, rotation: -3, scale: .96},
-    right: {x: 130, y: 8, rotation: 3, scale: .96},
-    scale: {x: 0, y: 28, rotation: 0, scale: .82},
-  }[variant];
-  const x = offsets.x * (1 - progress);
-  const y = offsets.y * (1 - progress);
-  const rotation = offsets.rotation * (1 - progress);
-  const scale = offsets.scale + (1 - offsets.scale) * progress;
-  return <div style={{opacity: progress, transform: `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`, transformOrigin: 'center bottom', ...style}}>{children}</div>;
+const DeviceEntrance: React.FC<DeviceEntranceProps> = ({frame, children, style}) => {
+  const progress = frame === undefined ? 1 : interpolate(frame, [0, 18], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const y = 90 * (1 - progress);
+  const scale = .96 + .04 * progress;
+  return <div style={{opacity: progress, transform: `translate3d(0, ${y}px, 0) scale(${scale})`, transformOrigin: 'center bottom', ...style}}>{children}</div>;
 };
 
-const PhoneFrame: React.FC<{progress: number}> = ({progress}) => (
+const PhoneFrame: React.FC = () => (
   <div style={{width: 202, height: 422, padding: 8, boxSizing: 'border-box', borderRadius: 28, background: '#17182D', border: '2px solid rgba(20,22,58,.72)', boxShadow: '0 18px 28px rgba(20,22,58,.20)'}}>
     <div style={{position: 'relative', width: '100%', height: '100%', overflow: 'hidden', borderRadius: 21, background: '#F7F8FC'}}>
-      <Img src={SCREEN_MOBILE_TABLES} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', clipPath: `inset(0 ${(1 - progress) * 100}% 0 0)`}} />
+      <Img src={SCREEN_MOBILE_TABLES} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       <div style={{position: 'absolute', top: 5, left: '50%', width: 44, height: 7, transform: 'translateX(-50%)', borderRadius: 8, background: '#17182D'}} />
     </div>
   </div>
@@ -109,7 +100,6 @@ const CoverScene: React.FC = () => {
 
 const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const reveal = frame === undefined ? 1 : screenProgress(frame, 5, 34);
   const headlineMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 4);
   const supportMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 8);
   return <Produto id="vendas"><AbsoluteFill>
@@ -121,8 +111,8 @@ const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
       Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
     </p>
     <div style={{position: 'absolute', left: PAD, top: 580, width: 908, height: 580, display: 'grid', placeItems: 'center'}}>
-      <DeviceEntrance frame={frame} variant="rise">
-        <LaptopFrame width={850} screenHeight={516} progress={reveal}>
+      <DeviceEntrance frame={frame}>
+        <LaptopFrame width={850} screenHeight={516}>
           <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
         </LaptopFrame>
       </DeviceEntrance>
@@ -133,8 +123,6 @@ const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
 
 const TablesScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const reveal = frame === undefined ? 1 : screenProgress(frame, 7, 43);
-  const focus = frame === undefined ? 1 : interpolate(frame, [43, 52, 68, 78], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="light" id="barraca-tables-grid" />
     <PageTop n={3} tone="light" />
@@ -142,16 +130,13 @@ const TablesScene: React.FC<{frame?: number}> = ({frame}) => {
     <Title tone="light" top={245} size={66} frame={frame}>Mesas e comandas em uma só tela.</Title>
     <Support tone="light" top={385} width={900} size={27} frame={frame}>A equipe registra os pedidos no sistema e acompanha as comandas durante o atendimento. Veja a tela real do Norte Vendas em uso.</Support>
     <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 500, display: 'flex', gap: 20, alignItems: 'center', justifyContent: 'center'}}>
-      <DeviceEntrance frame={frame} variant="left" style={{display: 'flex', alignItems: 'center'}}>
-        <LaptopFrame width={640} screenHeight={385} progress={reveal}>
-          <div style={{position: 'relative', width: '100%', height: '100%'}}>
-            <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
-            <div style={{position: 'absolute', left: '20%', top: '18%', width: '18%', height: '28%', borderRadius: 13, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.15)', opacity: focus, transform: `scale(${1 + focus * .012})`}} />
-          </div>
+      <DeviceEntrance frame={frame} style={{display: 'flex', alignItems: 'center'}}>
+        <LaptopFrame width={640} screenHeight={385}>
+          <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
         </LaptopFrame>
       </DeviceEntrance>
-      <DeviceEntrance frame={frame === undefined ? undefined : Math.max(0, frame - 10)} variant="right" style={{alignSelf: 'center'}}>
-        <PhoneFrame progress={frame === undefined ? 1 : screenProgress(frame, 17, 34)} />
+      <DeviceEntrance frame={frame === undefined ? undefined : Math.max(0, frame - 10)} style={{alignSelf: 'center'}}>
+        <PhoneFrame />
       </DeviceEntrance>
     </div>
     <Foot tone="light" label="Norte Vendas" />
@@ -208,9 +193,6 @@ const RealOperationScene: React.FC = () => {
 
 const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
-  const reveal = frame === undefined ? 1 : screenProgress(frame, 7, 43);
-  const working = frame === undefined ? 1 : interpolate(frame, [24, 34, 49, 57], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const history = frame === undefined ? 1 : interpolate(frame, [49, 58, 74, 84], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="light" id="barraca-manager-grid" />
     <PageTop n={6} tone="light" />
@@ -218,13 +200,9 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
     <Title tone="light" top={245} size={67} frame={frame}>Acompanhe o que a equipe está fazendo.</Title>
     <Support tone="light" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support>
     <div style={{position: 'absolute', left: PAD, top: 600, width: 908, height: 560, display: 'grid', placeItems: 'center'}}>
-      <DeviceEntrance frame={frame} variant="right">
-      <LaptopFrame width={850} screenHeight={516} progress={reveal}>
-        <div style={{position: 'relative', width: '100%', height: '100%'}}>
-          <Img src={SCREEN_DASHBOARD} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
-          <div style={{position: 'absolute', left: '38.5%', top: '13%', width: '23.5%', height: '15.5%', borderRadius: 11, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: working, transform: `scale(${1 + working * .008})`, transformOrigin: 'center'}} />
-          <div style={{position: 'absolute', left: '80%', top: '15%', width: '17%', height: '11%', borderRadius: 10, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: history, transform: `scale(${1 + history * .008})`, transformOrigin: 'center'}} />
-        </div>
+      <DeviceEntrance frame={frame}>
+      <LaptopFrame width={850} screenHeight={516}>
+        <Img src={SCREEN_DASHBOARD} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       </LaptopFrame>
       </DeviceEntrance>
     </div>
@@ -235,7 +213,6 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
 const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
   const progress = frame === undefined ? 1 : interpolate(frame, [10, 68], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const reveal = frame === undefined ? 1 : screenProgress(frame, 8, 45);
   const ticketHeight = progress * 348;
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="product" id="barraca-receipt-grid" />
@@ -245,14 +222,14 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
     <Support tone="product" top={370} width={890} size={25} frame={frame}>Demonstração visual de uma NFC-e emitida pelo Norte Vendas.</Support>
 
     <div style={{position: 'absolute', left: 78, top: 625, width: 624, height: 430, display: 'grid', placeItems: 'center'}}>
-      <DeviceEntrance frame={frame} variant="scale">
-      <LaptopFrame width={590} screenHeight={354} progress={reveal}>
+      <DeviceEntrance frame={frame}>
+      <LaptopFrame width={590} screenHeight={354}>
         <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       </LaptopFrame>
       </DeviceEntrance>
     </div>
 
-    <DeviceEntrance frame={frame === undefined ? undefined : Math.max(0, frame - 8)} variant="right" style={{position: 'absolute', left: 744, top: 704, width: 232, height: 426, zIndex: 3}}>
+    <div style={{position: 'absolute', left: 744, top: 704, width: 232, height: 426, zIndex: 3}}>
     <div style={{position: 'absolute', inset: '0 auto auto 0', width: 232, height: 84, borderRadius: '14px 14px 8px 8px', background: '#17182D', boxShadow: '0 15px 28px rgba(10,12,50,.25)', border: '1px solid rgba(251,251,254,.3)'}}>
       <div style={{position: 'absolute', left: 20, right: 20, top: 15, height: 10, borderRadius: 8, background: '#30324C'}} />
       <div style={{position: 'absolute', left: 28, right: 28, bottom: 14, height: 9, borderRadius: 99, background: '#090A15'}} />
@@ -276,7 +253,7 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
         <div style={{textAlign: 'center', marginTop: 5, fontSize: 8, color: '#72758B'}}>REPRESENTAÇÃO ILUSTRATIVA</div>
       </div>
     </div>
-    </DeviceEntrance>
+    </div>
     <Foot tone="product" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };

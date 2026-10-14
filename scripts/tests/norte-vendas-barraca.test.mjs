@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync, readFileSync} from 'node:fs';
-import {screenProgress, textEntrance} from '../../src/lib/postMotion.mjs';
+import {textEntrance} from '../../src/lib/postMotion.mjs';
 
 const root = readFileSync(new URL('../../src/Root.tsx', import.meta.url), 'utf8');
 const templateUrl = new URL('../../src/templates/NorteVendasBarracaPraia.tsx', import.meta.url);
@@ -38,21 +38,22 @@ test('uses the official desktop screen in the entering laptop on slide two', () 
   assert.match(normalizedTemplate, /O atendimento acontece por toda\s+a barraca\. O pedido não precisa se perder\./);
   assert.match(template, /Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara\./);
   assert.match(template, /NorteVendasBarraca02Animada/);
-  assert.match(template, /<LaptopFrame width=\{850\} screenHeight=\{516\} progress=\{reveal\}>/);
+  assert.match(template, /<LaptopFrame width=\{850\} screenHeight=\{516\}>/);
   assert.match(template, /<Img src=\{SCREEN_TABLES\}[^>]*objectFit: 'cover'/);
   assert.doesNotMatch(template, /Pedido online/);
-  assert.match(template, /DeviceEntrance[^\n]*variant="rise"/);
+  assert.match(template, /<DeviceEntrance frame=\{frame\}>/);
   assert.match(root, /<Composition\s+id="NorteVendasBarracaAnimada02"[^>]*durationInFrames=\{90\}/);
 });
 
-test('reveals official Norte Vendas screens inside illustrated notebook frames', () => {
+test('keeps official Norte Vendas screens static inside illustrated notebook frames', () => {
   assert.ok(template, 'template should exist');
   assert.match(template, /08-recursos\/telas-oficiais\/vendas\/d-mesas\.png/);
   assert.match(template, /08-recursos\/telas-oficiais\/vendas\/d-dashboard\.png/);
   assert.match(template, /norte-vendas-barraca-operacao\.png/);
   assert.match(template, /ReceiptPrintScene/);
   assert.match(template, /NFC-e/);
-  assert.match(template, /<LaptopFrame width=\{850\} screenHeight=\{516\} progress=\{reveal\}>/);
+  assert.match(template, /<LaptopFrame width=\{850\} screenHeight=\{516\}>/);
+  assert.doesNotMatch(template, /clipPath: `inset\(0 \$\{\(1 - progress\)/);
   assert.doesNotMatch(template, /COVER_PHOTO/);
   for (const name of ['norte-vendas-barraca-capa.png', 'norte-vendas-barraca-operacao.png']) {
     assert.ok(existsSync(new URL(`../../public/brand-kit/08-recursos/fotos-reais/${name}`, import.meta.url)), `${name} should be available to Remotion`);
@@ -64,15 +65,22 @@ test('reveals official Norte Vendas screens inside illustrated notebook frames',
 test('pairs the official desktop screen with the official mobile screen on slide three', () => {
   assert.match(template, /08-recursos\/telas-oficiais\/vendas\/m-g-mesas\.png/);
   assert.match(template, /PhoneFrame/);
-  assert.match(template, /DeviceEntrance[^\n]*variant="left"/);
-  assert.match(template, /DeviceEntrance[^\n]*variant="right"/);
+  assert.match(template, /<PhoneFrame\s*\/>/);
+  assert.doesNotMatch(template, /<PhoneFrame progress=/);
 });
 
-test('animates the full notebook device with distinct entrances rather than only revealing its screen', () => {
-  for (const variant of ['rise', 'left', 'right', 'scale']) {
-    assert.match(template, new RegExp(`variant="${variant}"`));
-  }
+test('all laptop and phone devices enter from below without animating their screens', () => {
+  assert.doesNotMatch(template, /variant=/);
+  assert.equal([...template.matchAll(/<DeviceEntrance\b/g)].length, 5, 'all five laptop and phone illustrations should animate as devices');
+  assert.match(template, /const y = 90 \* \(1 - progress\)/);
+  assert.doesNotMatch(template, /focus|working|history/);
   assert.match(template, /transform: `translate3d\(/);
+});
+
+test('keeps the receipt printer fixed while the NTB receipt prints downward', () => {
+  assert.match(template, /ticketHeight\s*=\s*progress\s*\*\s*348/);
+  assert.match(template, /position: 'absolute', left: 744, top: 704, width: 232, height: 426/);
+  assert.doesNotMatch(template, /DeviceEntrance[^\n]*style=\{\{position: 'absolute', left: 744/);
 });
 
 test('animates text with a short, subtle entrance that settles before the 3-second post ends', () => {
@@ -80,13 +88,6 @@ test('animates text with a short, subtle entrance that settles before the 3-seco
   assert.deepEqual(textEntrance(6, 0, 12), {opacity: 0.5, translateY: 9});
   assert.deepEqual(textEntrance(12, 0, 12), {opacity: 1, translateY: 0});
   assert.deepEqual(textEntrance(89, 0, 12), {opacity: 1, translateY: 0});
-});
-
-test('reveals the screen UI progressively without changing its final size', () => {
-  assert.equal(screenProgress(0, 8, 48), 0);
-  assert.equal(screenProgress(28, 8, 48), 0.5);
-  assert.equal(screenProgress(48, 8, 48), 1);
-  assert.equal(screenProgress(89, 8, 48), 1);
 });
 
 test('centers the kitchen route line on the card midpoint', () => {
@@ -97,7 +98,7 @@ test('centers the kitchen route line on the card midpoint', () => {
 });
 
 test('pairs an actual Norte Vendas screen with a downward NTB example receipt', () => {
-  assert.match(template, /<LaptopFrame width=\{590\} screenHeight=\{354\} progress=\{reveal\}>/);
+  assert.match(template, /<LaptopFrame width=\{590\} screenHeight=\{354\}>/);
   assert.match(template, /<Img src=\{SCREEN_TABLES\}/);
   assert.match(template, /NTB/);
   assert.match(template, /ticketHeight\s*=\s*progress\s*\*\s*348/);
