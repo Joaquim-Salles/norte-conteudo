@@ -25,6 +25,7 @@ const TOTAL = 8;
 const SALES_LOGO = kit('01-logos/norte-vendas/horizontal/norte-vendas_horizontal_branco_transparente.png');
 const SCREEN_TABLES = kit('08-recursos/telas-oficiais/vendas/d-mesas.png');
 const SCREEN_DASHBOARD = kit('08-recursos/telas-oficiais/vendas/d-dashboard.png');
+const SCREEN_MOBILE_TABLES = kit('08-recursos/telas-oficiais/vendas/m-g-mesas.png');
 const FLOOR_PHOTO = kit('08-recursos/fotos-reais/norte-vendas-barraca-operacao.png');
 
 const PageTop: React.FC<{n: number; tone: 'light' | 'dark' | 'product'}> = ({n, tone}) => (
@@ -46,35 +47,59 @@ const LaptopFrame: React.FC<{width: number; screenHeight: number; progress: numb
   </div>
 );
 
-const CoverScene: React.FC<{frame?: number}> = ({frame}) => {
+type DeviceEntranceProps = {
+  frame?: number;
+  variant: 'rise' | 'left' | 'right' | 'scale';
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+};
+
+const DeviceEntrance: React.FC<DeviceEntranceProps> = ({frame, variant, children, style}) => {
+  const progress = frame === undefined ? 1 : screenProgress(frame, 3, 20);
+  const offsets = {
+    rise: {x: 0, y: 90, rotation: 0, scale: .94},
+    left: {x: -130, y: 10, rotation: -3, scale: .96},
+    right: {x: 130, y: 8, rotation: 3, scale: .96},
+    scale: {x: 0, y: 28, rotation: 0, scale: .82},
+  }[variant];
+  const x = offsets.x * (1 - progress);
+  const y = offsets.y * (1 - progress);
+  const rotation = offsets.rotation * (1 - progress);
+  const scale = offsets.scale + (1 - offsets.scale) * progress;
+  return <div style={{opacity: progress, transform: `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`, transformOrigin: 'center bottom', ...style}}>{children}</div>;
+};
+
+const PhoneFrame: React.FC<{progress: number}> = ({progress}) => (
+  <div style={{width: 202, height: 422, padding: 8, boxSizing: 'border-box', borderRadius: 28, background: '#17182D', border: '2px solid rgba(20,22,58,.72)', boxShadow: '0 18px 28px rgba(20,22,58,.20)'}}>
+    <div style={{position: 'relative', width: '100%', height: '100%', overflow: 'hidden', borderRadius: 21, background: '#F7F8FC'}}>
+      <Img src={SCREEN_MOBILE_TABLES} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', clipPath: `inset(0 ${(1 - progress) * 100}% 0 0)`}} />
+      <div style={{position: 'absolute', top: 5, left: '50%', width: 44, height: 7, transform: 'translateX(-50%)', borderRadius: 8, background: '#17182D'}} />
+    </div>
+  </div>
+);
+
+const CoverScene: React.FC = () => {
   ensurePostLoaded();
-  const routeProgress = frame === undefined ? 1 : interpolate(frame, [8, 56], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const arrived = frame === undefined ? 1 : interpolate(frame, [49, 58, 80], [0, 1, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
-  const titleMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 4);
-  const supportMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 8);
-  const orderX = 114 + routeProgress * 634;
   return <Produto id="vendas"><AbsoluteFill>
     <Background tone="product" id="barraca-cover-grid" />
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
     <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/08</span>
-    <Eyebrow tone="product" top={230} frame={frame} delay={0}>Norte Vendas para barracas de praia</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, right: PAD, top: 292, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 70, lineHeight: 1.04, letterSpacing: -1.75, color: WHITE, opacity: titleMotion.opacity, transform: `translateY(${titleMotion.translateY}px)`}}>
+    <Eyebrow tone="product" top={230}>Norte Vendas para barracas de praia</Eyebrow>
+    <h1 style={{position: 'absolute', left: PAD, right: PAD, top: 292, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 70, lineHeight: 1.04, letterSpacing: -1.75, color: WHITE}}>
       Dono de barraca,<br />seus pedidos chegam<br />direto à cozinha?
     </h1>
-    <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)', opacity: supportMotion.opacity, transform: `translateY(${supportMotion.translateY}px)`}}>
+    <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
     </p>
     <div style={{position: 'absolute', left: PAD, top: 790, width: 908, height: 236}}>
       <svg width="100%" height="100%" viewBox="0 0 908 236" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', inset: 0}}>
         <path d="M152 78H756" stroke="rgba(251,251,254,.24)" strokeWidth="4" strokeLinecap="round" />
-        <path d="M152 78H756" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" strokeDasharray="604" strokeDashoffset={604 * (1 - routeProgress)} />
+        <path d="M152 78H756" stroke="#D9DBFF" strokeWidth="4" strokeLinecap="round" />
         <circle cx="114" cy="78" r="38" fill="rgba(251,251,254,.10)" stroke="rgba(251,251,254,.65)" strokeWidth="2" />
-        <circle cx="794" cy="78" r="38" fill={`rgba(251,251,254,${.10 + arrived * .12})`} stroke={`rgba(251,251,254,${.45 + arrived * .45})`} strokeWidth="2" />
-        <circle cx={orderX} cy="78" r="10" fill={WHITE} opacity={frame === undefined ? 0 : routeProgress * (1 - arrived)} />
+        <circle cx="794" cy="78" r="38" fill="rgba(251,251,254,.22)" stroke="rgba(251,251,254,.9)" strokeWidth="2" />
       </svg>
       <div style={{position: 'absolute', left: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE}}><Store size={33} strokeWidth={1.8} /></div>
-      <div style={{position: 'absolute', right: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE, opacity: .55 + arrived * .45, transform: `scale(${.96 + arrived * .04})`}}><ChefHat size={34} strokeWidth={1.8} /></div>
-      <div style={{position: 'absolute', left: orderX, top: 54, width: 48, height: 48, display: 'grid', placeItems: 'center', borderRadius: 15, color: VENDAS, background: WHITE, boxShadow: '0 8px 22px rgba(15,17,57,.22)', transform: 'translateX(-50%)', opacity: frame === undefined ? 0 : 1 - arrived}}><ClipboardList size={25} strokeWidth={1.9} /></div>
+      <div style={{position: 'absolute', right: 76, top: 40, width: 76, height: 76, display: 'grid', placeItems: 'center', color: WHITE}}><ChefHat size={34} strokeWidth={1.8} /></div>
       <span style={{position: 'absolute', left: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>BARRACA</span>
       <span style={{position: 'absolute', right: 45, top: 145, width: 138, textAlign: 'center', color: '#D9DBFF', fontFamily: SANS, fontSize: 15, fontWeight: 700, letterSpacing: 1.8}}>COZINHA</span>
     </div>
@@ -85,12 +110,6 @@ const CoverScene: React.FC<{frame?: number}> = ({frame}) => {
 const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
   ensurePostLoaded();
   const reveal = frame === undefined ? 1 : screenProgress(frame, 5, 34);
-  const commandIn = frame === undefined ? 1 : screenProgress(frame, 38, 56);
-  const tableCards = [
-    {name: 'Mesa 04', item: '2 itens • porção e bebida'},
-    {name: 'Mesa 08', item: '3 itens • pedido online'},
-    {name: 'Mesa 12', item: '1 item • em preparo'},
-  ];
   const headlineMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 4);
   const supportMotion = frame === undefined ? {opacity: 1, translateY: 0} : textEntrance(frame, 8);
   return <Produto id="vendas"><AbsoluteFill>
@@ -101,34 +120,12 @@ const MobileRoutineScene: React.FC<{frame?: number}> = ({frame}) => {
     <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: '#4A4A63', opacity: supportMotion.opacity, transform: `translateY(${supportMotion.translateY}px)`}}>
       Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
     </p>
-    <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 500, display: 'grid', placeItems: 'center'}}>
-      <LaptopFrame width={850} screenHeight={470} progress={reveal}>
-        <div style={{height: '100%', display: 'flex', background: '#F7F8FC', fontFamily: SANS, color: NAVY}}>
-          <div style={{width: 146, padding: '24px 15px', boxSizing: 'border-box', background: '#454AB1', color: WHITE, display: 'flex', flexDirection: 'column', gap: 17, fontSize: 13, fontWeight: 600}}>
-            <div style={{fontSize: 16, fontWeight: 700, marginBottom: 9}}>Norte Vendas</div><span>▦　Gestão de mesas</span><span>▣　Balcão</span><span>♧　Cardápio</span><span>▤　Administração</span>
-          </div>
-          <div style={{flex: 1, padding: '24px 22px', boxSizing: 'border-box'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 17}}><div><div style={{fontSize: 21, fontWeight: 700}}>Mesas &amp; Comandas</div><div style={{fontSize: 12, color: '#77798B', marginTop: 3}}>Acompanhe os pedidos da operação</div></div><span style={{fontSize: 12, color: '#29926F'}}>● Online</span></div>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.08fr', gap: 12, height: 340}}>
-              {tableCards.map((card, index) => {
-                const visible = frame === undefined ? 1 : screenProgress(frame, 13 + index * 6, 25 + index * 6);
-                return <div key={card.name} style={{padding: 14, borderRadius: 12, background: WHITE, border: `1px solid ${index === 1 ? '#777CE0' : '#DFE1EA'}`, boxShadow: '0 5px 15px rgba(20,22,58,.07)', opacity: visible, transform: `translateY(${(1 - visible) * 12}px)`}}>
-                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 700}}><span>{card.name}</span><span style={{color: '#29926F'}}>●</span></div>
-                  <div style={{marginTop: 18, fontSize: 11, color: '#77798B'}}>Comanda aberta</div>
-                  <div style={{height: 1, background: '#E5E6ED', margin: '12px 0'}} />
-                  <div style={{fontSize: 11, color: '#525469', lineHeight: 1.5}}>{card.item}</div>
-                  <div style={{marginTop: 18, fontSize: 11, color: VENDAS, fontWeight: 700}}>Ver pedido　→</div>
-                </div>;
-              })}
-              <div style={{padding: 15, borderRadius: 12, background: '#F0F1FB', border: '1px solid rgba(72,77,181,.22)', opacity: commandIn, transform: `translateY(${(1 - commandIn) * 10}px)`}}>
-                <div style={{fontSize: 13, fontWeight: 700}}>Pedido online</div><div style={{fontSize: 11, color: '#77798B', marginTop: 5}}>Mesa 08 • 3 itens</div>
-                <div style={{height: 1, background: '#D8DAEC', margin: '15px 0'}} />
-                <div style={{padding: '10px 9px', borderRadius: 8, background: VENDAS, color: WHITE, fontSize: 11, fontWeight: 700, textAlign: 'center'}}>Enviado à cozinha</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </LaptopFrame>
+    <div style={{position: 'absolute', left: PAD, top: 580, width: 908, height: 580, display: 'grid', placeItems: 'center'}}>
+      <DeviceEntrance frame={frame} variant="rise">
+        <LaptopFrame width={850} screenHeight={516} progress={reveal}>
+          <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
+        </LaptopFrame>
+      </DeviceEntrance>
     </div>
     <Foot tone="light" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
@@ -144,13 +141,18 @@ const TablesScene: React.FC<{frame?: number}> = ({frame}) => {
     <Eyebrow tone="light" top={185} frame={frame}>Norte Vendas na operação</Eyebrow>
     <Title tone="light" top={245} size={66} frame={frame}>Mesas e comandas em uma só tela.</Title>
     <Support tone="light" top={385} width={900} size={27} frame={frame}>A equipe registra os pedidos no sistema e acompanha as comandas durante o atendimento. Veja a tela real do Norte Vendas em uso.</Support>
-    <div style={{position: 'absolute', left: PAD, top: 585, width: 908, height: 565, display: 'grid', placeItems: 'center'}}>
-      <LaptopFrame width={850} screenHeight={480} progress={reveal}>
-        <div style={{position: 'relative', width: '100%', height: '100%'}}>
-          <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
-          <div style={{position: 'absolute', left: '20%', top: '18%', width: '18%', height: '28%', borderRadius: 13, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.15)', opacity: focus, transform: `scale(${1 + focus * .012})`}} />
-        </div>
-      </LaptopFrame>
+    <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 500, display: 'flex', gap: 20, alignItems: 'center', justifyContent: 'center'}}>
+      <DeviceEntrance frame={frame} variant="left" style={{display: 'flex', alignItems: 'center'}}>
+        <LaptopFrame width={640} screenHeight={385} progress={reveal}>
+          <div style={{position: 'relative', width: '100%', height: '100%'}}>
+            <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
+            <div style={{position: 'absolute', left: '20%', top: '18%', width: '18%', height: '28%', borderRadius: 13, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.15)', opacity: focus, transform: `scale(${1 + focus * .012})`}} />
+          </div>
+        </LaptopFrame>
+      </DeviceEntrance>
+      <DeviceEntrance frame={frame === undefined ? undefined : Math.max(0, frame - 10)} variant="right" style={{alignSelf: 'center'}}>
+        <PhoneFrame progress={frame === undefined ? 1 : screenProgress(frame, 17, 34)} />
+      </DeviceEntrance>
     </div>
     <Foot tone="light" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
@@ -215,14 +217,16 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
     <Eyebrow tone="light" top={185} frame={frame}>Visibilidade para o gerente</Eyebrow>
     <Title tone="light" top={245} size={67} frame={frame}>Acompanhe o que a equipe está fazendo.</Title>
     <Support tone="light" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support>
-    <div style={{position: 'absolute', left: PAD, top: 635, width: 908, height: 560, display: 'grid', placeItems: 'center'}}>
-      <LaptopFrame width={850} screenHeight={480} progress={reveal}>
+    <div style={{position: 'absolute', left: PAD, top: 600, width: 908, height: 560, display: 'grid', placeItems: 'center'}}>
+      <DeviceEntrance frame={frame} variant="right">
+      <LaptopFrame width={850} screenHeight={516} progress={reveal}>
         <div style={{position: 'relative', width: '100%', height: '100%'}}>
           <Img src={SCREEN_DASHBOARD} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
           <div style={{position: 'absolute', left: '38.5%', top: '13%', width: '23.5%', height: '15.5%', borderRadius: 11, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: working, transform: `scale(${1 + working * .008})`, transformOrigin: 'center'}} />
           <div style={{position: 'absolute', left: '80%', top: '15%', width: '17%', height: '11%', borderRadius: 10, border: `3px solid ${VENDAS}`, boxShadow: '0 0 0 6px rgba(72,77,181,.14)', background: 'rgba(72,77,181,.035)', opacity: history, transform: `scale(${1 + history * .008})`, transformOrigin: 'center'}} />
         </div>
       </LaptopFrame>
+      </DeviceEntrance>
     </div>
     <Foot tone="light" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
@@ -241,17 +245,20 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
     <Support tone="product" top={370} width={890} size={25} frame={frame}>Demonstração visual de uma NFC-e emitida pelo Norte Vendas.</Support>
 
     <div style={{position: 'absolute', left: 78, top: 625, width: 624, height: 430, display: 'grid', placeItems: 'center'}}>
-      <LaptopFrame width={590} screenHeight={348} progress={reveal}>
+      <DeviceEntrance frame={frame} variant="scale">
+      <LaptopFrame width={590} screenHeight={354} progress={reveal}>
         <Img src={SCREEN_TABLES} style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}} />
       </LaptopFrame>
+      </DeviceEntrance>
     </div>
 
-    <div style={{position: 'absolute', left: 744, top: 704, width: 232, height: 84, zIndex: 2, borderRadius: '14px 14px 8px 8px', background: '#17182D', boxShadow: '0 15px 28px rgba(10,12,50,.25)', border: '1px solid rgba(251,251,254,.3)'}}>
+    <DeviceEntrance frame={frame === undefined ? undefined : Math.max(0, frame - 8)} variant="right" style={{position: 'absolute', left: 744, top: 704, width: 232, height: 426, zIndex: 3}}>
+    <div style={{position: 'absolute', inset: '0 auto auto 0', width: 232, height: 84, borderRadius: '14px 14px 8px 8px', background: '#17182D', boxShadow: '0 15px 28px rgba(10,12,50,.25)', border: '1px solid rgba(251,251,254,.3)'}}>
       <div style={{position: 'absolute', left: 20, right: 20, top: 15, height: 10, borderRadius: 8, background: '#30324C'}} />
       <div style={{position: 'absolute', left: 28, right: 28, bottom: 14, height: 9, borderRadius: 99, background: '#090A15'}} />
       <div style={{position: 'absolute', right: 12, top: 12, width: 7, height: 7, borderRadius: 99, background: '#69C5A8'}} />
     </div>
-    <div style={{position: 'absolute', left: 770, top: 780, width: 182, height: ticketHeight, overflow: 'hidden', zIndex: 3, boxShadow: '0 14px 30px rgba(10,12,50,.23)'}}>
+    <div style={{position: 'absolute', left: 26, top: 76, width: 182, height: ticketHeight, overflow: 'hidden', zIndex: 3, boxShadow: '0 14px 30px rgba(10,12,50,.23)'}}>
       <div style={{width: '100%', minHeight: 348, padding: '18px 15px 22px', boxSizing: 'border-box', background: '#FBFBFE', color: NAVY, fontFamily: MONO, borderLeft: '1px dashed #C7C9D7', borderRight: '1px dashed #C7C9D7'}}>
         <div style={{textAlign: 'center', fontSize: 20, letterSpacing: 3, color: VENDAS, fontWeight: 700}}>NTB</div>
         <div style={{textAlign: 'center', marginTop: 5, fontSize: 10, color: '#72758B'}}>DANFE NFC-e • EXEMPLO</div>
@@ -269,6 +276,7 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
         <div style={{textAlign: 'center', marginTop: 5, fontSize: 8, color: '#72758B'}}>REPRESENTAÇÃO ILUSTRATIVA</div>
       </div>
     </div>
+    </DeviceEntrance>
     <Foot tone="product" label="Norte Vendas" />
   </AbsoluteFill></Produto>;
 };
@@ -293,7 +301,6 @@ const ClosingScene: React.FC = () => {
 };
 
 export const NorteVendasBarraca01: React.FC = CoverScene;
-export const NorteVendasBarraca01Animada: React.FC = () => <CoverScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca02: React.FC = MobileRoutineScene;
 export const NorteVendasBarraca02Animada: React.FC = () => <MobileRoutineScene frame={useCurrentFrame()} />;
 export const NorteVendasBarraca03: React.FC = () => <TablesScene />;
