@@ -60,6 +60,9 @@ test('shows the beach seating and order route without a second ambiguous stall',
   const map = template.split('const BeachAreaMap')[1]?.split('const CoverScene')[0] ?? '';
   assert.doesNotMatch(map, /overhead-beach-stall|service-counter|order-window/);
   assert.match(map, /data-scene-object="kitchen-route-endpoint"/);
+  assert.match(map, /data-scene-object="kitchen-prep-counter"/);
+  assert.match(map, /data-scene-object="kitchen-cooktop"/);
+  assert.match(map, /data-scene-object="kitchen-order-pass"/);
   assert.match(map, /data-scene-object="beach-umbrella" data-zone="middle-sand"/);
   const tables = map.match(/\{x:\s*\d+,\s*y:\s*\d+,\s*r:\s*\d+\}/g) ?? [];
   assert.equal(tables.length, 4);
@@ -67,10 +70,11 @@ test('shows the beach seating and order route without a second ambiguous stall',
   assert.match(slideTwo, /<BeachAreaMap\s*\/>/);
 });
 
-test('uses a simple striped awning and recognizable beach loungers on the cover', () => {
+test('keeps the cover stand graphic and recognizable beach loungers without extra roof detail', () => {
   const cover = template.split('const BeachStandHero')[1]?.split('const BeachAreaMap')[0] ?? '';
   assert.match(cover, /data-scene-object="beach-stall-front"/);
-  assert.match(cover, /data-roof="striped-awning"/);
+  assert.match(cover, /data-roof="plain-awning"/);
+  assert.doesNotMatch(cover, /data-roof="striped-awning"|data-roof-detail=/);
   assert.equal((cover.match(/data-furniture="sun-lounger"/g) ?? []).length, 2);
   assert.doesNotMatch(cover, /data-scene-object="beach-chair"/);
 });

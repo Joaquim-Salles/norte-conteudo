@@ -107,14 +107,12 @@ const BeachStandHero: React.FC = () => (
     </g>
 
     <g transform="translate(454 162)" data-scene-object="beach-stall-front">
-      <path d="M-140-54L-112-122H112L140-54Z" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" data-roof="striped-awning" />
-      <path d="M-112-122H-67L-48-54H-137ZM-48-122H-4L3-54H-29ZM21-122H65L49-54H5ZM67-122H112L137-54H95Z" fill="#F5A767" />
-      <path d="M-140-54H140V-30H-140Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" />
-      <path d="M-105-54V-31M-70-54V-31M-35-54V-31M0-54V-31M35-54V-31M70-54V-31M105-54V-31" stroke="#FFF2CE" strokeWidth="4" />
-      <text x="0" y="-36" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="14" fontWeight="700" letterSpacing="1.4" fill="#292D7D">BARRACA</text>
-      <rect x="-86" y="-30" width="172" height="105" rx="8" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
-      <rect x="-68" y="-12" width="136" height="55" rx="4" fill="#484DB5" stroke="#FFF2CE" strokeWidth="4" />
-      <path d="M-36 0H36M-36 16H36" stroke="#62BFC5" strokeWidth="5" strokeLinecap="round" />
+      <path d="M-140-54L-112-120H112L140-54Z" fill="#D8B77D" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" data-roof="plain-awning" />
+      <path d="M-140-54H140V-31H-140Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" />
+      <text x="0" y="-36" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="17" fontWeight="700" letterSpacing="1.2" fill="#292D7D">BARRACA</text>
+      <rect x="-86" y="-31" width="172" height="106" rx="8" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+      <rect x="-67" y="-12" width="134" height="57" rx="5" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" />
+      <rect x="-67" y="31" width="134" height="14" fill="#F5A767" />
       <rect x="-105" y="70" width="210" height="22" rx="6" fill="#FBFBFE" stroke="#D8B77D" strokeWidth="3" />
       <rect x="-92" y="92" width="184" height="23" rx="5" fill="#484DB5" stroke="#FBFBFE" strokeWidth="3" />
       <path d="M-55 94V113M-18 94V113M18 94V113M55 94V113" stroke="#AEB4F6" strokeWidth="3" />
@@ -168,11 +166,17 @@ const BeachAreaMap: React.FC = () => (
       ))}
 
       <g transform="translate(766 248)" data-scene-object="kitchen-route-endpoint">
-        <rect x="-58" y="-34" width="116" height="68" rx="12" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" />
-        <rect x="-40" y="-16" width="19" height="31" rx="3" fill="#F5A767" />
-        <path d="M-34-8H-27M-34-1H-27M-34 6H-27" stroke="#FBFBFE" strokeWidth="2" strokeLinecap="round" />
-        <text x="6" y="3" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="13" fontWeight="700" letterSpacing="1" fill="#292D7D">COZINHA</text>
-        <circle cx="43" cy="-20" r="4" fill="#62BFC5" />
+        <rect x="-76" y="-58" width="152" height="116" rx="12" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" />
+        <rect x="-63" y="-46" width="126" height="24" rx="5" fill="#484DB5" />
+        <text x="0" y="-29" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="13" fontWeight="700" letterSpacing="1.4" fill="#FBFBFE">COZINHA</text>
+        <rect x="-63" y="-14" width="56" height="43" rx="5" fill="#292D7D" data-scene-object="kitchen-cooktop" />
+        <circle cx="-47" cy="-1" r="8" fill="#F5A767" stroke="#FFF2CE" strokeWidth="2" />
+        <circle cx="-24" cy="15" r="8" fill="#62BFC5" stroke="#FFF2CE" strokeWidth="2" />
+        <rect x="2" y="-14" width="61" height="43" rx="5" fill="#D8B77D" stroke="#C79C5E" strokeWidth="2" data-scene-object="kitchen-prep-counter" />
+        <path d="M13 18L42-5M18 21L47-2" stroke="#FBFBFE" strokeWidth="3" strokeLinecap="round" />
+        <rect x="-63" y="36" width="126" height="13" rx="3" fill="#484DB5" data-scene-object="kitchen-order-pass" />
+        <path d="M-39 39V46M-33 39V46M-27 39V46" stroke="#FFF2CE" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="52" cy="42" r="4" fill="#62BFC5" />
       </g>
     </g>
   </svg>
