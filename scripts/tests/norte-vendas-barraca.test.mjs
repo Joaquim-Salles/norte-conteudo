@@ -55,19 +55,24 @@ test('keeps slide two fully static, including its text and exported media', () =
   assert.equal(existsSync(slideTwoAnimation), false, 'the preview folder should not contain an animated version of this slide');
 });
 
-test('shows the beach stand itself from above with a prominent roof and service counter', () => {
+test('shows the beach seating and order route without a second ambiguous stall', () => {
   const slideTwo = template.split('const MobileRoutineScene')[1]?.split('const TablesScene')[0] ?? '';
   const map = template.split('const BeachAreaMap')[1]?.split('const CoverScene')[0] ?? '';
-  assert.match(map, /data-scene-object="overhead-beach-stall"/);
-  assert.match(map, /data-scene-object="service-counter"/);
-  assert.match(map, /data-scene-object="order-window"/);
+  assert.doesNotMatch(map, /overhead-beach-stall|service-counter|order-window/);
+  assert.match(map, /data-scene-object="kitchen-route-endpoint"/);
+  assert.match(map, /data-scene-object="beach-umbrella" data-zone="middle-sand"/);
+  const tables = map.match(/\{x:\s*\d+,\s*y:\s*\d+,\s*r:\s*\d+\}/g) ?? [];
+  assert.equal(tables.length, 4);
+  assert.ok(tables.every((table) => Number(table.match(/y:\s*(\d+)/)?.[1]) >= 160));
   assert.match(slideTwo, /<BeachAreaMap\s*\/>/);
 });
 
-test('keeps the cover stall distinctive and its side chair readable as beach furniture', () => {
+test('uses a simple striped awning and recognizable beach loungers on the cover', () => {
   const cover = template.split('const BeachStandHero')[1]?.split('const BeachAreaMap')[0] ?? '';
   assert.match(cover, /data-scene-object="beach-stall-front"/);
-  assert.ok((cover.match(/data-scene-object="beach-chair"/g) ?? []).length >= 2);
+  assert.match(cover, /data-roof="striped-awning"/);
+  assert.equal((cover.match(/data-furniture="sun-lounger"/g) ?? []).length, 2);
+  assert.doesNotMatch(cover, /data-scene-object="beach-chair"/);
 });
 
 test('changes slide six background to brand dark for a less repetitive carousel rhythm', () => {
