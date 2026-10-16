@@ -69,53 +69,41 @@ const PhoneFrame: React.FC = () => (
 );
 
 const BeachStandHero: React.FC = () => (
-  <svg width="100%" height="100%" viewBox="0 0 908 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustração de uma barraca de praia em funcionamento" style={{display: 'block'}}>
-    <path d="M0 112C135 93 216 116 321 105C431 94 538 116 654 105C754 95 832 101 908 91V280H0V112Z" fill="#D8B77D" opacity=".97" />
-    <path d="M0 102C104 84 207 108 309 96C415 83 521 105 622 95C729 83 825 93 908 78V126C805 137 723 125 617 137C504 150 415 127 310 141C198 156 101 131 0 151V102Z" fill="#62BFC5" opacity=".92" />
-    <path d="M0 122C99 106 207 130 307 116M604 116C709 104 809 122 908 102" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" opacity=".8" />
-    <path d="M36 197C164 173 243 204 337 186M570 193C674 172 775 199 872 176M66 255C184 232 247 260 335 242M570 252C681 230 772 256 842 238" stroke="#F3D99E" strokeWidth="4" strokeLinecap="round" opacity=".7" />
+  <svg width="100%" height="100%" viewBox="0 0 908 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Barraca de praia com toldo listrado" style={{display: 'block'}}>
+    <defs>
+      <clipPath id="beach-stand-awning"><path d="M218 48H690L746 157H162L218 48Z" /></clipPath>
+    </defs>
+    <path d="M0 238C113 222 203 245 310 233C416 221 510 244 615 231C721 218 815 236 908 219V420H0V238Z" fill="#D8B77D" />
+    <path d="M0 224C124 209 204 230 313 218C419 206 507 229 614 216C728 202 818 219 908 204V273C802 284 721 271 614 284C508 297 412 276 308 289C199 302 102 281 0 298V224Z" fill="#62BFC5" />
+    <path d="M0 246C112 231 199 251 306 239M614 238C717 226 813 244 908 228" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" opacity=".85" />
+    <path d="M36 336C152 319 236 341 334 326M574 335C681 316 775 338 872 319M63 397C170 380 256 401 352 386M590 394C699 375 785 395 851 379" stroke="#F3D99E" strokeWidth="4" strokeLinecap="round" opacity=".78" />
 
-    <g transform="translate(150 148)" data-scene-object="beach-umbrella">
-      <path d="M-66 0C-60-42-31-66 0-66C31-66 60-42 66 0H-66Z" fill="#FFF2CE" />
-      <path d="M-66 0C-60-42-31-66 0-66V0H-66Z" fill="#F5A767" />
-      <path d="M0-66V0M-35-55L-23 0M35-55L23 0" stroke="#484DB5" strokeWidth="3" opacity=".75" />
-      <path d="M0 0V64M-22 66H22" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
-      <ellipse cx="0" cy="67" rx="31" ry="9" fill="#C79C5E" stroke="#FFF2CE" strokeWidth="3" />
-    </g>
+    <g data-scene-object="beach-stall-front">
+      {/* Open kiosk body and simple serving window */}
+      <path d="M267 162H641V293H267Z" fill="#292D7D" stroke="#FBFBFE" strokeWidth="5" strokeLinejoin="round" />
+      <path d="M286 177H622V257H286Z" fill="#23266F" stroke="#484DB5" strokeWidth="4" />
+      <path d="M300 242H608V259H300Z" fill="#FFF2CE" />
+      <path d="M278 164V284M630 164V284" stroke="#FFF2CE" strokeWidth="9" />
 
-    <g transform="translate(758 148) scale(.88)" data-scene-object="beach-umbrella">
-      <path d="M-66 0C-60-42-31-66 0-66C31-66 60-42 66 0H-66Z" fill="#FFF2CE" />
-      <path d="M0-66C31-66 60-42 66 0H0V-66Z" fill="#F5A767" />
-      <path d="M0-66V0M-35-55L-23 0M35-55L23 0" stroke="#484DB5" strokeWidth="3" opacity=".75" />
-      <path d="M0 0V64M-22 66H22" stroke="#484DB5" strokeWidth="5" strokeLinecap="round" />
-      <ellipse cx="0" cy="67" rx="31" ry="9" fill="#C79C5E" stroke="#FFF2CE" strokeWidth="3" />
-    </g>
+      {/* Two slim supports make the striped canopy read as a real beach kiosk */}
+      <path d="M218 144V290M690 144V290" stroke="#292D7D" strokeWidth="18" strokeLinecap="round" />
+      <path d="M218 144V290M690 144V290" stroke="#FFF2CE" strokeWidth="8" strokeLinecap="round" />
 
-    <g transform="translate(270 208)" data-furniture="sun-lounger">
-      <path d="M-39-4L-23-35L-9-28L-24 1Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-      <path d="M-24 1H41V13H-24Z" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-      <path d="M-34-13L-25-9M-29-22L-20-18M-24-31L-16-27M-11 2V11M7 2V11M25 2V11" stroke="#484DB5" strokeWidth="3" strokeLinecap="round" />
-      <path d="M-28 13L-40 33M34 13L43 33M-40 33H43M-8 13L4 33" stroke="#292D7D" strokeWidth="5" strokeLinecap="round" />
-      <rect x="-35" y="-40" width="16" height="8" rx="4" fill="#FBFBFE" stroke="#484DB5" strokeWidth="2" />
-    </g>
-    <g transform="translate(650 208) scale(-1 1)" data-furniture="sun-lounger">
-      <path d="M-39-4L-23-35L-9-28L-24 1Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-      <path d="M-24 1H41V13H-24Z" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" />
-      <path d="M-34-13L-25-9M-29-22L-20-18M-24-31L-16-27M-11 2V11M7 2V11M25 2V11" stroke="#484DB5" strokeWidth="3" strokeLinecap="round" />
-      <path d="M-28 13L-40 33M34 13L43 33M-40 33H43M-8 13L4 33" stroke="#292D7D" strokeWidth="5" strokeLinecap="round" />
-      <rect x="-35" y="-40" width="16" height="8" rx="4" fill="#FBFBFE" stroke="#484DB5" strokeWidth="2" />
-    </g>
+      {/* Broad, restrained striped fabric awning */}
+      <path d="M218 48H690L746 157H162L218 48Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="5" strokeLinejoin="round" />
+      <g clipPath="url(#beach-stand-awning)">
+        <path d="M200 40H236L185 166H149L200 40ZM271 40H307L256 166H220L271 40ZM342 40H378L327 166H291L342 40ZM413 40H449L398 166H362L413 40ZM484 40H520L469 166H433L484 40ZM555 40H591L540 166H504L555 40ZM626 40H662L611 166H575L626 40ZM697 40H733L682 166H646L697 40Z" fill="#F5A767" />
+      </g>
+      <path d="M162 157H746V176C746 184 735 189 724 181C713 190 701 189 691 180C680 190 668 190 657 180C646 190 634 190 623 180C612 190 600 190 589 180C578 190 566 190 555 180C544 190 532 190 521 180C510 190 498 190 487 180C476 190 464 190 453 180C442 190 430 190 419 180C408 190 396 190 385 180C374 190 362 190 351 180C340 190 328 190 317 180C306 190 294 190 283 180C272 190 260 190 249 180C238 190 226 190 215 180C204 190 192 190 181 181C170 189 162 184 162 176V157Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="5" strokeLinejoin="round" />
+      <path d="M162 157H204V179C193 189 182 190 171 181C165 185 162 181 162 176V157ZM246 157H288V180C277 190 265 190 254 180C251 180 248 179 246 178V157ZM330 157H372V180C361 190 349 190 338 180C335 180 332 179 330 178V157ZM414 157H456V180C445 190 433 190 422 180C419 180 416 179 414 178V157ZM498 157H540V180C529 190 517 190 506 180C503 180 500 179 498 178V157ZM582 157H624V180C613 190 601 190 590 180C587 180 584 179 582 178V157ZM666 157H708V180C697 190 685 190 674 180C671 180 668 179 666 178V157ZM708 157H746V176C746 184 735 189 724 181C718 186 712 186 708 183V157Z" fill="#F5A767" />
+      <path d="M162 157H746" stroke="#292D7D" strokeWidth="5" />
 
-    <g transform="translate(454 162)" data-scene-object="beach-stall-front">
-      <path d="M-140-54L-112-120H112L140-54Z" fill="#D8B77D" stroke="#FBFBFE" strokeWidth="4" strokeLinejoin="round" data-roof="plain-awning" />
-      <path d="M-140-54H140V-31H-140Z" fill="#F5A767" stroke="#FBFBFE" strokeWidth="4" />
-      <text x="0" y="-36" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="17" fontWeight="700" letterSpacing="1.2" fill="#292D7D">BARRACA</text>
-      <rect x="-86" y="-31" width="172" height="106" rx="8" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
-      <rect x="-67" y="-12" width="134" height="57" rx="5" fill="#FFF2CE" stroke="#FBFBFE" strokeWidth="4" />
-      <rect x="-67" y="31" width="134" height="14" fill="#F5A767" />
-      <rect x="-105" y="70" width="210" height="22" rx="6" fill="#FBFBFE" stroke="#D8B77D" strokeWidth="3" />
-      <rect x="-92" y="92" width="184" height="23" rx="5" fill="#484DB5" stroke="#FBFBFE" strokeWidth="3" />
-      <path d="M-55 94V113M-18 94V113M18 94V113M55 94V113" stroke="#AEB4F6" strokeWidth="3" />
+      {/* Counter: clear front face, restrained panel rhythm */}
+      <path d="M191 278H717V300H191Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="5" strokeLinejoin="round" />
+      <path d="M202 300H706V372H202Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="5" strokeLinejoin="round" />
+      <path d="M202 302H245V370H202ZM288 302H331V370H288ZM374 302H417V370H374ZM460 302H503V370H460ZM546 302H589V370H546ZM632 302H675V370H632Z" fill="#F5A767" />
+      <path d="M245 302V370M288 302V370M331 302V370M374 302V370M417 302V370M460 302V370M503 302V370M546 302V370M589 302V370M632 302V370M675 302V370" stroke="#292D7D" strokeWidth="4" />
+      <path d="M196 372H712V386H196Z" fill="#FBFBFE" stroke="#292D7D" strokeWidth="5" strokeLinejoin="round" />
     </g>
   </svg>
 );
@@ -192,7 +180,7 @@ const CoverScene: React.FC = () => {
     <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
     </p>
-    <div style={{position: 'absolute', left: PAD, top: 770, width: 908, height: 280}}><BeachStandHero /></div>
+    <div style={{position: 'absolute', left: PAD, top: 730, width: 908, height: 420}}><BeachStandHero /></div>
     <Foot tone="product" />
   </AbsoluteFill></Produto>;
 };
