@@ -172,13 +172,22 @@ const BeachAreaMap: React.FC = () => (
       ))}
 
       <g transform="translate(766 248)" data-scene-object="kitchen-route-endpoint">
-        <rect x="-60" y="-48" width="120" height="96" rx="10" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" data-scene-object="kitchen-range" />
-        {[-24, 24].flatMap((x) => [-18, 18].map((y) => (
-          <g key={`${x}-${y}`} data-scene-object="kitchen-burner">
-            <circle cx={x} cy={y} r="13" fill="#FFF2CE" stroke="#292D7D" strokeWidth="3" />
-            <circle cx={x} cy={y} r="5" fill="#F5A767" />
-          </g>
-        )))}
+        <rect x="-70" y="-50" width="140" height="102" rx="12" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" />
+        {/* Chef hat + a steaming pot and prep board read as a kitchen work station. */}
+        <path d="M-16-34C-16-42-10-47-4-46C0-56 15-54 17-44C24-43 28-37 27-31H-16V-34Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M-16-31H27" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
+        <rect x="-56" y="-19" width="112" height="59" rx="7" fill="#E5E7F8" stroke="#484DB5" strokeWidth="3" />
+        <g data-scene-object="kitchen-pot">
+          <path d="M-43-7H-7L-10 19H-40L-43-7Z" fill="#F5A767" stroke="#292D7D" strokeWidth="3" strokeLinejoin="round" />
+          <path d="M-46-10H-4M-38-15C-38-20-34-20-34-25M-25-15C-25-21-21-21-21-26" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
+          <path d="M-47-4H-52M-4-4H1" stroke="#292D7D" strokeWidth="4" strokeLinecap="round" />
+          <path d="M-36 4H-14" stroke="#FFF2CE" strokeWidth="3" strokeLinecap="round" />
+        </g>
+        <g data-scene-object="kitchen-prep-board">
+          <rect x="8" y="-8" width="39" height="36" rx="5" fill="#F5A767" stroke="#292D7D" strokeWidth="3" />
+          <path d="M18 19L37-1L41 3L22 23L16 25L18 19Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M14 31H41" stroke="#484DB5" strokeWidth="2.5" strokeLinecap="round" />
+        </g>
         <text x="0" y="72" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="1.6" fill="#292D7D">COZINHA</text>
       </g>
     </g>
