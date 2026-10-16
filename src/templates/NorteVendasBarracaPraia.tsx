@@ -304,7 +304,7 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={7} tone="product" />
     <Eyebrow tone="product" top={185} frame={frame}>Fechamento da venda</Eyebrow>
     <Title tone="product" top={240} size={62} frame={frame}>A nota fiscal sai no fechamento.</Title>
-    <Support tone="product" top={370} width={890} size={25} frame={frame}>Ao concluir a venda, o sistema pode emitir a NFC-e e imprimir o comprovante para o cliente, como nesta representação com dados fictícios.</Support>
+    <Support tone="product" top={370} width={890} size={25} frame={frame}>Com a venda fechada no Norte Vendas, a equipe pode emitir a NFC-e e imprimir o comprovante para o cliente.</Support>
 
     <div style={{position: 'absolute', left: 78, top: 625, width: 624, height: 430, display: 'grid', placeItems: 'center'}}>
       <DeviceEntrance frame={frame}>

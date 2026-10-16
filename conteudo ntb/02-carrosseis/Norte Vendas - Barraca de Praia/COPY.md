@@ -40,7 +40,7 @@ No painel de Administração, o gerente vê quem está trabalhando e consulta o 
 
 **A nota fiscal também faz parte do fechamento.**
 
-Ao concluir a venda, o sistema pode emitir a NFC-e e imprimir o comprovante para o cliente, como nesta representação com dados fictícios.
+Com a venda fechada no Norte Vendas, a equipe pode emitir a NFC-e e imprimir o comprovante para o cliente.
 
 ## Slide 8 | Fechamento
 
