@@ -78,7 +78,25 @@ const BeachStandHero: React.FC = () => (
     <path d="M0 246C112 231 199 251 306 239M614 238C717 226 813 244 908 228" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" opacity=".85" />
     <path d="M36 336C152 319 236 341 334 326M574 335C681 316 775 338 872 319M63 397C170 380 256 401 352 386M590 394C699 375 785 395 851 379" stroke="#F3D99E" strokeWidth="4" strokeLinecap="round" opacity=".78" />
 
-    <g data-scene-object="beach-stall-front">
+    {[{x: 112, y: 318}, {x: 796, y: 318}].map(({x, y}) => (
+      <g key={x} transform={`translate(${x} ${y})`} data-scene-object="beach-table-set">
+        <ellipse cx="0" cy="0" rx="39" ry="14" fill="#FFF2CE" stroke="#292D7D" strokeWidth="4" />
+        <ellipse cx="0" cy="-2" rx="31" ry="8" fill="#F5A767" opacity=".82" />
+        <path d="M0 10V37M-17 38H17" stroke="#292D7D" strokeWidth="5" strokeLinecap="round" />
+        <g transform="translate(-51 7)">
+          <path d="M-9-18H9V-4H-9Z" fill="#FFF2CE" stroke="#484DB5" strokeWidth="3" />
+          <path d="M-11-6H11V5H-11Z" fill="#F5A767" stroke="#292D7D" strokeWidth="3" />
+          <path d="M-8 5L-11 20M8 5L11 20" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
+        </g>
+        <g transform="translate(51 7)">
+          <path d="M-9-18H9V-4H-9Z" fill="#FFF2CE" stroke="#484DB5" strokeWidth="3" />
+          <path d="M-11-6H11V5H-11Z" fill="#F5A767" stroke="#292D7D" strokeWidth="3" />
+          <path d="M-8 5L-11 20M8 5L11 20" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
+        </g>
+      </g>
+    ))}
+
+    <g transform="translate(109 50) scale(.76)" data-scene-object="beach-stall-front">
       {/* Open kiosk body and simple serving window */}
       <path d="M267 162H641V293H267Z" fill="#292D7D" stroke="#FBFBFE" strokeWidth="5" strokeLinejoin="round" />
       <path d="M286 177H622V257H286Z" fill="#23266F" stroke="#484DB5" strokeWidth="4" />
