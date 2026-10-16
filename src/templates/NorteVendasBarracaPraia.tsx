@@ -184,7 +184,7 @@ const CoverScene: React.FC = () => {
       Na sua barraca,<br />a cozinha ainda depende<br />de alguém levar o pedido?
     </h1>
     <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
-      Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
+      Com o Norte Vendas, o pedido feito online chega direto à cozinha, sem alguém precisar levá-lo.
     </p>
     <div style={{position: 'absolute', left: PAD, top: 730, width: 908, height: 420}}><BeachStandHero /></div>
     <Foot tone="product" />
@@ -197,9 +197,9 @@ const MobileRoutineScene: React.FC = () => {
     <Background tone="dark" id="barraca-routine-grid" />
     <PageTop n={2} tone="dark" />
     <Eyebrow tone="dark" top={190}>A rotina da barraca</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 43, lineHeight: 1.1, letterSpacing: -1.1, color: WHITE}}>O atendimento acontece por toda<br />a barraca. O pedido não precisa se perder.</h1>
+    <h1 style={{position: 'absolute', left: PAD, top: 250, width: 908, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 40, lineHeight: 1.1, letterSpacing: -1.1, color: WHITE}}>O atendimento acontece por toda<br />a barraca, e o pedido segue online até a cozinha.</h1>
     <p style={{position: 'absolute', left: PAD, top: 365, width: 900, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.82)'}}>
-      Enquanto a equipe circula entre clientes e mesas, os pedidos registrados no Norte Vendas seguem pelo fluxo online até quem prepara.
+      Mesmo com a equipe circulando entre clientes e mesas, o pedido registrado chega a quem prepara.
     </p>
     <div style={{position: 'absolute', left: PAD, top: 570, width: 908, height: 470}}><BeachAreaMap /></div>
     <Foot tone="dark" label="Norte Vendas" />
@@ -213,7 +213,7 @@ const TablesScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={3} tone="light" />
     <Eyebrow tone="light" top={185} frame={frame}>Norte Vendas na operação</Eyebrow>
     <Title tone="light" top={245} size={66} frame={frame}>Mesas e comandas em uma só tela.</Title>
-    <Support tone="light" top={385} width={900} size={27} frame={frame}>A equipe registra os pedidos no sistema e acompanha as comandas durante o atendimento. Veja a tela real do Norte Vendas em uso.</Support>
+    <Support tone="light" top={385} width={900} size={27} frame={frame}>A equipe registra os pedidos e acompanha as comandas durante o atendimento, como mostra a tela real do Norte Vendas.</Support>
     <div style={{position: 'absolute', left: PAD, top: 610, width: 908, height: 500, display: 'flex', gap: 20, alignItems: 'center', justifyContent: 'center'}}>
       <DeviceEntrance frame={frame} style={{display: 'flex', alignItems: 'center'}}>
         <LaptopFrame width={640} screenHeight={385}>
@@ -239,7 +239,7 @@ const KitchenFlowScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={4} tone="dark" />
     <Eyebrow tone="dark" top={185} frame={frame}>Do atendimento à cozinha</Eyebrow>
     <Title tone="dark" top={245} size={68} frame={frame}>O pedido segue online até quem prepara.</Title>
-    <Support tone="dark" top={405} width={890} size={27} frame={frame}>A equipe registra no Norte Vendas. A cozinha recebe a informação pelo sistema, sem depender de um recado levado de um lado para o outro.</Support>
+    <Support tone="dark" top={405} width={890} size={27} frame={frame}>Ao registrar o pedido no Norte Vendas, a equipe envia a informação à cozinha pelo sistema, sem depender de alguém para levá-la.</Support>
     <div style={{position: 'absolute', left: PAD, right: PAD, top: 735, height: 380}}>
       <svg width="100%" height="140" viewBox="0 0 908 140" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 0, top: 0, overflow: 'visible'}}>
         <path d={`M290 ${routeY}H618`} stroke="rgba(251,251,254,.24)" strokeWidth="5" strokeLinecap="round" />
@@ -283,7 +283,7 @@ const ManagerScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={6} tone="dark" />
     <Eyebrow tone="dark" top={185} frame={frame}>Visibilidade para o gerente</Eyebrow>
     <Title tone="dark" top={245} size={67} frame={frame}>Acompanhe o que a equipe está fazendo.</Title>
-    <Support tone="dark" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente pode ver quem está trabalhando e consultar o histórico por operador. Mais visibilidade para acompanhar os registros durante a operação.</Support>
+    <Support tone="dark" top={405} width={890} size={27} frame={frame}>No painel do Norte Vendas, o gerente vê quem está trabalhando e consulta o histórico por operador, acompanhando os registros durante a operação.</Support>
     <div style={{position: 'absolute', left: PAD, top: 600, width: 908, height: 560, display: 'grid', placeItems: 'center'}}>
       <DeviceEntrance frame={frame}>
       <LaptopFrame width={850} screenHeight={516}>
@@ -304,7 +304,7 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={7} tone="product" />
     <Eyebrow tone="product" top={185} frame={frame}>Fechamento da venda</Eyebrow>
     <Title tone="product" top={240} size={62} frame={frame}>A nota fiscal sai no fechamento.</Title>
-    <Support tone="product" top={370} width={890} size={25} frame={frame}>Demonstração visual de uma NFC-e emitida pelo Norte Vendas.</Support>
+    <Support tone="product" top={370} width={890} size={25} frame={frame}>Representação ilustrativa da emissão de uma NFC-e, com dados fictícios.</Support>
 
     <div style={{position: 'absolute', left: 78, top: 625, width: 624, height: 430, display: 'grid', placeItems: 'center'}}>
       <DeviceEntrance frame={frame}>
@@ -350,7 +350,7 @@ const ClosingScene: React.FC = () => {
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
     <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>08/08</span>
     <Eyebrow tone="dark" top={325}>Norte Vendas para barracas de praia</Eyebrow>
-    <Title tone="dark" top={390} size={76}>Pedido na equipe.<br />Cozinha informada.<br />Gerente com visibilidade.</Title>
+    <Title tone="dark" top={390} size={76}>Pedidos chegam à cozinha,<br />e o gerente acompanha<br />a operação.</Title>
     <Support tone="dark" top={650} width={880} size={29}>Conheça o Norte Vendas e veja como o sistema pode acompanhar o ritmo da operação da sua barraca.</Support>
     <div style={{position: 'absolute', left: PAD, top: 915, display: 'flex', alignItems: 'center', gap: 20, padding: '22px 30px', borderRadius: 999, background: WHITE, color: NAVY, fontFamily: SANS, fontSize: 23, fontWeight: 700}}>
       Acesse o link da bio <ArrowRight size={24} color={VENDAS} />
