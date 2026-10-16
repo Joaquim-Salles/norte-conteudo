@@ -304,7 +304,7 @@ const ReceiptPrintScene: React.FC<{frame?: number}> = ({frame}) => {
     <PageTop n={7} tone="product" />
     <Eyebrow tone="product" top={185} frame={frame}>Fechamento da venda</Eyebrow>
     <Title tone="product" top={240} size={62} frame={frame}>A nota fiscal sai no fechamento.</Title>
-    <Support tone="product" top={370} width={890} size={25} frame={frame}>Representação ilustrativa da emissão de uma NFC-e, com dados fictícios.</Support>
+    <Support tone="product" top={370} width={890} size={25} frame={frame}>Ao concluir a venda, o sistema pode emitir a NFC-e e imprimir o comprovante para o cliente, como nesta representação com dados fictícios.</Support>
 
     <div style={{position: 'absolute', left: 78, top: 625, width: 624, height: 430, display: 'grid', placeItems: 'center'}}>
       <DeviceEntrance frame={frame}>
@@ -350,7 +350,7 @@ const ClosingScene: React.FC = () => {
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
     <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>08/08</span>
     <Eyebrow tone="dark" top={325}>Norte Vendas para barracas de praia</Eyebrow>
-    <Title tone="dark" top={390} size={76}>Pedidos chegam à cozinha,<br />e o gerente acompanha<br />a operação.</Title>
+    <Title tone="dark" top={390} size={62}>Pedidos chegam à cozinha,<br />e o gerente acompanha<br />a operação da barraca.</Title>
     <Support tone="dark" top={650} width={880} size={29}>Conheça o Norte Vendas e veja como o sistema pode acompanhar o ritmo da operação da sua barraca.</Support>
     <div style={{position: 'absolute', left: PAD, top: 915, display: 'flex', alignItems: 'center', gap: 20, padding: '22px 30px', borderRadius: 999, background: WHITE, color: NAVY, fontFamily: SANS, fontSize: 23, fontWeight: 700}}>
       Acesse o link da bio <ArrowRight size={24} color={VENDAS} />

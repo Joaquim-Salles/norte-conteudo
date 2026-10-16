@@ -40,11 +40,11 @@ No painel de Administração, o gerente vê quem está trabalhando e consulta o 
 
 **A nota fiscal também faz parte do fechamento.**
 
-Uma representação ilustrativa da emissão de uma NFC-e no fluxo do Norte Vendas, com dados fictícios.
+Ao concluir a venda, o sistema pode emitir a NFC-e e imprimir o comprovante para o cliente, como nesta representação com dados fictícios.
 
 ## Slide 8 | Fechamento
 
-**Pedidos chegam à cozinha, e o gerente acompanha a operação.**
+**Pedidos chegam à cozinha, e o gerente acompanha a operação da barraca.**
 
 Conheça o Norte Vendas e veja como conectar o fluxo de pedidos da sua barraca.
 
