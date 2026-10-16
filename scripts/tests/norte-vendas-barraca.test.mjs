@@ -60,9 +60,11 @@ test('shows the beach seating and order route without a second ambiguous stall',
   const map = template.split('const BeachAreaMap')[1]?.split('const CoverScene')[0] ?? '';
   assert.doesNotMatch(map, /overhead-beach-stall|service-counter|order-window/);
   assert.match(map, /data-scene-object="kitchen-route-endpoint"/);
-  assert.match(map, /data-scene-object="kitchen-prep-counter"/);
-  assert.match(map, /data-scene-object="kitchen-cooktop"/);
-  assert.match(map, /data-scene-object="kitchen-order-pass"/);
+  assert.match(map, /data-scene-object="kitchen-range"/);
+  assert.match(map, /\[-24, 24\]\.flatMap\(\(x\) => \[-18, 18\]/);
+  assert.match(map, /data-scene-object="kitchen-burner"/);
+  assert.match(map, />COZINHA<\/text>/);
+  assert.doesNotMatch(map, /kitchen-prep-counter|kitchen-order-pass/);
   assert.match(map, /data-scene-object="beach-umbrella" data-zone="middle-sand"/);
   const tables = map.match(/\{x:\s*\d+,\s*y:\s*\d+,\s*r:\s*\d+\}/g) ?? [];
   assert.equal(tables.length, 4);

@@ -166,17 +166,14 @@ const BeachAreaMap: React.FC = () => (
       ))}
 
       <g transform="translate(766 248)" data-scene-object="kitchen-route-endpoint">
-        <rect x="-76" y="-58" width="152" height="116" rx="12" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" />
-        <rect x="-63" y="-46" width="126" height="24" rx="5" fill="#484DB5" />
-        <text x="0" y="-29" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="13" fontWeight="700" letterSpacing="1.4" fill="#FBFBFE">COZINHA</text>
-        <rect x="-63" y="-14" width="56" height="43" rx="5" fill="#292D7D" data-scene-object="kitchen-cooktop" />
-        <circle cx="-47" cy="-1" r="8" fill="#F5A767" stroke="#FFF2CE" strokeWidth="2" />
-        <circle cx="-24" cy="15" r="8" fill="#62BFC5" stroke="#FFF2CE" strokeWidth="2" />
-        <rect x="2" y="-14" width="61" height="43" rx="5" fill="#D8B77D" stroke="#C79C5E" strokeWidth="2" data-scene-object="kitchen-prep-counter" />
-        <path d="M13 18L42-5M18 21L47-2" stroke="#FBFBFE" strokeWidth="3" strokeLinecap="round" />
-        <rect x="-63" y="36" width="126" height="13" rx="3" fill="#484DB5" data-scene-object="kitchen-order-pass" />
-        <path d="M-39 39V46M-33 39V46M-27 39V46" stroke="#FFF2CE" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="52" cy="42" r="4" fill="#62BFC5" />
+        <rect x="-60" y="-48" width="120" height="96" rx="10" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" data-scene-object="kitchen-range" />
+        {[-24, 24].flatMap((x) => [-18, 18].map((y) => (
+          <g key={`${x}-${y}`} data-scene-object="kitchen-burner">
+            <circle cx={x} cy={y} r="13" fill="#FFF2CE" stroke="#292D7D" strokeWidth="3" />
+            <circle cx={x} cy={y} r="5" fill="#F5A767" />
+          </g>
+        )))}
+        <text x="0" y="72" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="1.6" fill="#292D7D">COZINHA</text>
       </g>
     </g>
   </svg>
