@@ -5,7 +5,7 @@ Carrossel de oito slides para donos de barracas. A narrativa parte do gancho apr
 ## Ordem dos slides
 
 1. Capa estática, no fundo azul quadriculado, com barraca vetorial menor, balcão aberto, toldo listrado em creme e laranja e mesas com cadeiras ao redor. A copy permanece em revisão separada.
-2. Atendimento por toda a barraca, em fundo escuro, com uma ilustração estática vista de cima que mostra as mesas distribuídas e a cozinha. Sem notebook nem captura de sistema.
+2. Atendimento por toda a barraca, em fundo escuro, com um fluxo estático em três etapas: atendimento nas mesas, pedido online e preparo na cozinha. Sem notebook nem captura de sistema.
 3. Capturas oficiais de Mesas & Comandas no notebook e na tela mobile, lado a lado e com entradas em momentos diferentes.
 4. Animação do pedido registrado seguindo online até a cozinha.
 5. Outra foto real, com o Norte Vendas aberto no notebook durante a operação.

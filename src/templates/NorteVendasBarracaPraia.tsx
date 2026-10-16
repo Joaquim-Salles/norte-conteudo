@@ -127,69 +127,48 @@ const BeachStandHero: React.FC = () => (
 );
 
 const BeachAreaMap: React.FC = () => (
-  <svg width="100%" height="100%" viewBox="0 0 908 470" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Vista ilustrada das mesas e guarda-sóis com pedidos seguindo para a cozinha" style={{display: 'block'}}>
-    <defs>
-      <clipPath id="beach-area-boundary"><rect x="24" y="22" width="860" height="426" rx="22" /></clipPath>
-    </defs>
-    <g clipPath="url(#beach-area-boundary)">
-      <rect x="24" y="22" width="860" height="426" fill="#D8B77D" />
-      <path d="M24 22H884V98C806 82 742 101 667 89C579 74 508 100 421 84C331 68 264 98 174 82C118 72 70 83 24 92V22Z" fill="#62BFC5" />
-      <path d="M28 84C112 69 161 91 244 77M373 79C447 65 519 92 591 77M710 79C769 70 824 84 880 71" stroke="#D8F1E9" strokeWidth="5" strokeLinecap="round" />
-      <path d="M44 115C170 91 280 113 396 101C533 86 663 111 856 94" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
-      <path d="M44 410C154 392 245 412 347 400M566 405C686 390 765 411 858 390" stroke="#F2D59A" strokeWidth="3" strokeDasharray="7 13" opacity=".9" />
-
-      <path d="M250 184C369 184 536 207 766 248M300 292C418 287 585 270 766 248M436 169C536 187 652 220 766 248M558 334C636 307 714 269 766 248" stroke="#484DB5" strokeWidth="5" strokeDasharray="8 12" opacity=".8" />
-
-      {[
-        {x: 250, y: 184, r: 39},
-        {x: 300, y: 292, r: 37},
-        {x: 436, y: 169, r: 34},
-        {x: 558, y: 334, r: 36},
-      ].map(({x, y, r}, index) => (
-        <g key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
-          <g data-scene-object="beach-umbrella" data-zone="middle-sand">
-            <circle r={r} fill="#FFF2CE" stroke="#484DB5" strokeWidth="3" />
-            <path d={`M0 0L0 ${-r}A${r} ${r} 0 0 1 ${r} 0Z`} fill="#F5A767" />
-            <path d={`M0 0L0 ${r}A${r} ${r} 0 0 1 ${-r} 0Z`} fill="#F5A767" />
-            <path d={`M0 ${-r}V${r}M${-r} 0H${r}M${-r * .72} ${-r * .72}L${r * .72} ${r * .72}M${r * .72} ${-r * .72}L${-r * .72} ${r * .72}`} stroke="#484DB5" strokeWidth="2" opacity=".7" />
-          </g>
-          <g data-scene-object="beach-table">
-            <circle r="17" fill="#FBFBFE" stroke="#484DB5" strokeWidth="3" />
-            <circle cx="-5" cy="-3" r="2.5" fill="#62BFC5" />
-            <circle cx="5" cy="3" r="2.5" fill="#F5A767" />
-          </g>
-          <g data-scene-object="beach-chair">
-            {[0, 90, 180, 270].map((rotation) => (
-              <g key={rotation} transform={`rotate(${rotation}) translate(0 ${-(r + 19)})`}>
-                <path d="M-8-10L-10 14M8-10L10 14" stroke="#484DB5" strokeWidth="3" strokeLinecap="round" />
-                <rect x="-10" y="-11" width="20" height="22" rx="5" fill="#F5A767" stroke="#484DB5" strokeWidth="2.5" />
-                <rect x="-12" y="-19" width="24" height="9" rx="4" fill="#FBFBFE" stroke="#484DB5" strokeWidth="2.5" />
-                <path d="M-6-5H6M-6 1H6" stroke="#FFF2CE" strokeWidth="2" strokeLinecap="round" />
-              </g>
-            ))}
-          </g>
+  <svg width="100%" height="100%" viewBox="0 0 908 470" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fluxo do atendimento ao pedido online e ao preparo na cozinha" style={{display: 'block'}}>
+    <g data-stage="atendimento">
+      <rect x="12" y="28" width="260" height="320" rx="18" fill="rgba(251,251,254,.045)" stroke="rgba(251,251,254,.24)" strokeWidth="2" />
+      <g transform="translate(142 162)" strokeLinecap="round" strokeLinejoin="round">
+        <ellipse cy="0" rx="39" ry="14" fill="#2E3380" stroke="#FBFBFE" strokeWidth="4" />
+        <ellipse cy="-2" rx="29" ry="8" fill="#8D92F0" opacity=".8" />
+        <path d="M0 11V40M-18 41H18" stroke="#B9BCEB" strokeWidth="5" />
+        <g fill="#484DB5" stroke="#FBFBFE" strokeWidth="3">
+          <path d="M-58-22H-40V-5H-58ZM-61-4H-37V9H-61ZM-57 9L-61 26M-41 9L-37 26" />
+          <path d="M40-22H58V-5H40ZM37-4H61V9H37ZM41 9L37 26M57 9L61 26" />
         </g>
-      ))}
-
-      <g transform="translate(766 248)" data-scene-object="kitchen-route-endpoint">
-        <rect x="-70" y="-50" width="140" height="102" rx="12" fill="#FBFBFE" stroke="#484DB5" strokeWidth="4" />
-        {/* Chef hat + a steaming pot and prep board read as a kitchen work station. */}
-        <path d="M-16-34C-16-42-10-47-4-46C0-56 15-54 17-44C24-43 28-37 27-31H-16V-34Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="3" strokeLinejoin="round" />
-        <path d="M-16-31H27" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
-        <rect x="-56" y="-19" width="112" height="59" rx="7" fill="#E5E7F8" stroke="#484DB5" strokeWidth="3" />
-        <g data-scene-object="kitchen-pot">
-          <path d="M-43-7H-7L-10 19H-40L-43-7Z" fill="#F5A767" stroke="#292D7D" strokeWidth="3" strokeLinejoin="round" />
-          <path d="M-46-10H-4M-38-15C-38-20-34-20-34-25M-25-15C-25-21-21-21-21-26" stroke="#292D7D" strokeWidth="3" strokeLinecap="round" />
-          <path d="M-47-4H-52M-4-4H1" stroke="#292D7D" strokeWidth="4" strokeLinecap="round" />
-          <path d="M-36 4H-14" stroke="#FFF2CE" strokeWidth="3" strokeLinecap="round" />
-        </g>
-        <g data-scene-object="kitchen-prep-board">
-          <rect x="8" y="-8" width="39" height="36" rx="5" fill="#F5A767" stroke="#292D7D" strokeWidth="3" />
-          <path d="M18 19L37-1L41 3L22 23L16 25L18 19Z" fill="#FFF2CE" stroke="#292D7D" strokeWidth="2.5" strokeLinejoin="round" />
-          <path d="M14 31H41" stroke="#484DB5" strokeWidth="2.5" strokeLinecap="round" />
-        </g>
-        <text x="0" y="72" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="1.6" fill="#292D7D">COZINHA</text>
       </g>
+      <text x="142" y="300" textAnchor="middle" fontFamily={SANS} fontSize="18" fontWeight="700" letterSpacing="2" fill={WHITE}>ATENDIMENTO</text>
+    </g>
+
+    <path d="M274 188H322M309 176L322 188L309 200" stroke="#B9BCEB" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+
+    <g data-stage="pedido-online">
+      <rect x="324" y="28" width="260" height="320" rx="18" fill="rgba(251,251,254,.045)" stroke="rgba(251,251,254,.24)" strokeWidth="2" />
+      <g transform="translate(454 160)" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M-42-59H42V59L30 49L18 59L6 49L-6 59L-18 49L-30 59L-42 49V-59Z" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+        <circle cy="-39" r="4" fill="#FBFBFE" />
+        <path d="M-22-19H22M-22 0H22M-22 19H13" stroke="#B9BCEB" strokeWidth="4" />
+      </g>
+      <text x="454" y="300" textAnchor="middle" fontFamily={SANS} fontSize="18" fontWeight="700" letterSpacing="2" fill={WHITE}>PEDIDO ONLINE</text>
+    </g>
+
+    <path d="M586 188H634M621 176L634 188L621 200" stroke="#B9BCEB" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+
+    <g data-stage="preparo">
+      <rect x="636" y="28" width="260" height="320" rx="18" fill="rgba(251,251,254,.045)" stroke="rgba(251,251,254,.24)" strokeWidth="2" />
+      <g transform="translate(766 160)" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="-78" y="-58" width="156" height="118" rx="13" fill="#292D7D" stroke="#FBFBFE" strokeWidth="4" />
+        <path d="M-18-37C-18-47-10-52-2-50C3-62 20-58 22-47C31-46 36-39 34-31H-18V-37Z" fill="#B9BCEB" stroke="#FBFBFE" strokeWidth="3" />
+        <path d="M-18-31H34" stroke="#FBFBFE" strokeWidth="3" />
+        <rect x="-62" y="-17" width="124" height="61" rx="7" fill="#353A76" stroke="#B9BCEB" strokeWidth="3" />
+        <path d="M-50-7H-14L-17 21H-47L-50-7ZM-53-10H-11M-44-15C-44-22-39-22-39-28M-29-15C-29-22-24-22-24-28" fill="#8D92F0" stroke="#FBFBFE" strokeWidth="3" />
+        <path d="M-54-4H-59M-10-4H-5" stroke="#FBFBFE" strokeWidth="4" />
+        <rect x="3" y="-7" width="48" height="39" rx="5" fill="#484DB5" stroke="#B9BCEB" strokeWidth="3" />
+        <path d="M11 21L33 0L40 7L18 29L9 31L11 21Z" fill="#D7D8F3" stroke="#FBFBFE" strokeWidth="2.5" />
+      </g>
+      <text x="766" y="300" textAnchor="middle" fontFamily={SANS} fontSize="18" fontWeight="700" letterSpacing="2" fill={WHITE}>PREPARO</text>
     </g>
   </svg>
 );
