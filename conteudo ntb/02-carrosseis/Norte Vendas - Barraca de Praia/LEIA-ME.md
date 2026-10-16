@@ -4,7 +4,7 @@ Carrossel de oito slides para donos de barracas. A narrativa parte do gancho apr
 
 ## Ordem dos slides
 
-1. Capa estática, no fundo azul quadriculado, com barraca vetorial menor, balcão aberto, toldo listrado em creme e laranja e mesas com cadeiras ao redor. O gancho pergunta se a cozinha ainda depende de alguém levar o pedido; a subheadline responde que o pedido online chega direto à cozinha.
+1. Capa estática, no fundo azul quadriculado, com barraca vetorial menor, balcão aberto, toldo listrado em creme e laranja e mesas com cadeiras ao redor. O gancho aborda o cliente que precisa chamar alguém da equipe para conseguir fazer o pedido; a subheadline mostra que o pedido online chega direto à cozinha.
 2. Atendimento por toda a barraca, em fundo escuro, com um fluxo estático em três etapas: atendimento nas mesas, pedido online e preparo na cozinha. O texto acompanha esse fluxo sem prometer que pedidos nunca se perdem. Sem notebook nem captura de sistema.
 3. Capturas oficiais de Mesas & Comandas no notebook e na tela mobile, lado a lado e com entradas em momentos diferentes.
 4. Animação do pedido registrado seguindo online até a cozinha.

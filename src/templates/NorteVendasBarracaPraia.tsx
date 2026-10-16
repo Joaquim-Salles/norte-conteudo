@@ -180,8 +180,8 @@ const CoverScene: React.FC = () => {
     <Img src={SALES_LOGO} style={{position: 'absolute', left: PAD, top: 74, height: 76, width: 'auto'}} />
     <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/08</span>
     <Eyebrow tone="product" top={230}>Norte Vendas para barracas de praia</Eyebrow>
-    <h1 style={{position: 'absolute', left: PAD, right: PAD, top: 292, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 70, lineHeight: 1.04, letterSpacing: -1.75, color: WHITE}}>
-      Na sua barraca,<br />a cozinha ainda depende<br />de alguém levar o pedido?
+    <h1 style={{position: 'absolute', left: PAD, right: PAD, top: 292, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 64, lineHeight: 1.04, letterSpacing: -1.6, color: WHITE}}>
+      Na sua barraca, o cliente<br />ainda precisa ficar chamando<br />alguém até conseguir pedir?
     </h1>
     <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
       Com o Norte Vendas, o pedido feito online chega direto à cozinha, sem alguém precisar levá-lo.

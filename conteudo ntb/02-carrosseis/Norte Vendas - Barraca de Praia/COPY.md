@@ -2,7 +2,7 @@
 
 ## Slide 1 | Capa
 
-**Na sua barraca, a cozinha ainda depende de alguém levar o pedido?**
+**Na sua barraca, o cliente ainda precisa ficar chamando alguém até conseguir pedir?**
 
 Com o Norte Vendas, o pedido feito online chega direto à cozinha, sem alguém precisar levá-lo.
 
