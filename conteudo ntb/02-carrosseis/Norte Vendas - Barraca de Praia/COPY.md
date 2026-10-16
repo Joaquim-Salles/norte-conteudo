@@ -2,7 +2,7 @@
 
 ## Slide 1 | Capa
 
-**Dono de barraca, seus pedidos chegam direto à cozinha?**
+**Na sua barraca, a cozinha ainda depende de alguém levar o pedido?**
 
 No meio do atendimento, o Norte Vendas conecta o registro do pedido à cozinha e dá ao gerente visibilidade da equipe.
 

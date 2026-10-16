@@ -181,7 +181,7 @@ const CoverScene: React.FC = () => {
     <span style={{position: 'absolute', right: PAD, top: 92, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/08</span>
     <Eyebrow tone="product" top={230}>Norte Vendas para barracas de praia</Eyebrow>
     <h1 style={{position: 'absolute', left: PAD, right: PAD, top: 292, margin: 0, fontFamily: SANS, fontWeight: 700, fontSize: 70, lineHeight: 1.04, letterSpacing: -1.75, color: WHITE}}>
-      Dono de barraca,<br />seus pedidos chegam<br />direto à cozinha?
+      Na sua barraca,<br />a cozinha ainda depende<br />de alguém levar o pedido?
     </h1>
     <p style={{position: 'absolute', left: PAD, top: 552, width: 890, margin: 0, fontFamily: SANS, fontSize: 27, lineHeight: 1.42, color: 'rgba(251,251,254,.86)'}}>
       Pedidos online chegam direto a quem prepara. E o gerente acompanha o que a equipe está fazendo.
