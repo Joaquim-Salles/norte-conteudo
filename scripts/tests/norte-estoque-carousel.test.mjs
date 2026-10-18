@@ -34,6 +34,14 @@ test('the QR scan animation shows a food item being scanned by a phone', () => {
   assert.match(template, /scanLine/);
 });
 
+test('the food package depicts a recognizable tomato with its calyx and stem', () => {
+  const template = readFileSync(templatePath, 'utf8');
+  assert.match(template, /data-food="tomato"/);
+  assert.match(template, /data-part="tomato-body"/);
+  assert.match(template, /data-part="tomato-calyx"/);
+  assert.match(template, /data-part="tomato-stem"/);
+});
+
 test('the selected carousel exports seven slides and animates slides 2 through 6', () => {
   assert.ok(existsSync(carouselPath));
   const slides = groupMediaFiles(readdirSync(carouselPath));
