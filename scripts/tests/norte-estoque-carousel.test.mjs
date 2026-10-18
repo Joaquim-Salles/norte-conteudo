@@ -8,12 +8,12 @@ const root = readFileSync(new URL('../../src/Root.tsx', import.meta.url), 'utf8'
 const templatePath = new URL('../../src/templates/NorteEstoqueCarousel.tsx', import.meta.url);
 const carouselPath = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Inventario e movimentacao');
 
-test('the selected Norte Estoque carousel registers five slides and three 3-second videos', () => {
-  for (const id of ['NorteEstoqueQR01', 'NorteEstoqueQR02', 'NorteEstoqueQR03', 'NorteEstoqueQR04', 'NorteEstoqueQR05']) {
+test('the selected Norte Estoque carousel registers seven slides and five 3-second videos', () => {
+  for (const id of ['NorteEstoqueQR01', 'NorteEstoqueQR02', 'NorteEstoqueQR03', 'NorteEstoqueQR04', 'NorteEstoqueQR05', 'NorteEstoqueQR06', 'NorteEstoqueQR07']) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
 
-  for (const id of ['NorteEstoqueQRAnimada02', 'NorteEstoqueQRAnimada03', 'NorteEstoqueQRAnimada04']) {
+  for (const id of ['NorteEstoqueQRAnimada02', 'NorteEstoqueQRAnimada03', 'NorteEstoqueQRAnimada04', 'NorteEstoqueQRAnimada05', 'NorteEstoqueQRAnimada06']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/, `${id} should last 3 seconds`);
@@ -21,23 +21,25 @@ test('the selected Norte Estoque carousel registers five slides and three 3-seco
   }
 });
 
-test('the label slide keeps its layout and adds a short downward entrance animation', () => {
+test('the QR scan animation shows a food item being scanned by a phone', () => {
   const template = readFileSync(templatePath, 'utf8');
   const composition = root.match(/<Composition id="NorteEstoqueQRAnimada03"[^>]*>/);
-  assert.ok(composition, 'the label animation should be registered');
+  assert.ok(composition, 'the QR scan animation should be registered');
   assert.match(composition[0], /durationInFrames=\{90\}/);
   assert.match(composition[0], /fps=\{30\}/);
   assert.match(template, /export const NorteEstoqueQR03Animada/);
-  assert.match(template, /const pLabel = S\(f,/);
-  assert.match(template, /translateY\(\$\{\(1 - pLabel\) \* 140\}px\)/);
+  assert.match(template, /const ScanScene: React\.FC/);
+  assert.match(template, /LEITURA CONCLUÍDA/);
+  assert.match(template, /QR do alimento/i);
+  assert.match(template, /scanLine/);
 });
 
-test('the selected carousel exports five slides and animates slides 2, 3, and 4', () => {
+test('the selected carousel exports seven slides and animates slides 2 through 6', () => {
   assert.ok(existsSync(carouselPath));
   const slides = groupMediaFiles(readdirSync(carouselPath));
-  assert.equal(slides.length, 5);
-  assert.deepEqual(slides.map(({number}) => number), [1, 2, 3, 4, 5]);
-  assert.deepEqual(slides.filter(({animation}) => animation).map(({number}) => number), [2, 3, 4]);
+  assert.equal(slides.length, 7);
+  assert.deepEqual(slides.map(({number}) => number), [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(slides.filter(({animation}) => animation).map(({number}) => number), [2, 3, 4, 5, 6]);
 });
 
 test('the rejected Estoque sob controle carousel is removed while the selected carousel remains', () => {
@@ -59,9 +61,10 @@ test('the carousel uses the official Estoque color, real kit screens, and approv
   assert.match(template, /<Produto id="estoque">/, 'each slide should use the product brand color');
   assert.match(template, /norte-estoque_horizontal_branco_transparente\.png/, 'the official product logo should be used');
   assert.match(template, /08-recursos\/telas-oficiais\/estoque\//, 'screens should come from the official brand kit');
-  for (const phrase of ['inventário com QR Code', 'etiquetas com lote e validade', 'transferências em massa online', 'complementa o Omie']) {
+  for (const phrase of ['inventário com QR Code', 'etiquetas com lote e validade', 'transferências em massa online', 'QR do alimento']) {
     assert.ok(template.toLowerCase().includes(phrase.toLowerCase()), `the post should include the confirmed claim: ${phrase}`);
   }
+  assert.doesNotMatch(template, /\bomie\b/i, 'the Norte Estoque post must not mention Omie');
   assert.doesNotMatch(template, /\b(?:76|62|82)%\b/, 'unvalidated performance percentages should not be published');
 });
 
@@ -71,6 +74,7 @@ test('every internal slide identifies Norte Estoque and support copy clears the 
     assert.ok(template.includes(`<Foot tone="${tone}" label="Norte Estoque"`), `${tone} slides should carry the correct product footer`);
   }
   assert.match(template, /<Foot tone="dark" last label="Norte Estoque"/);
+  assert.match(template, /01\/07/);
   assert.match(template, /<Support tone="product" top=\{650\}/, 'cover support should clear its two-line hook');
   assert.match(template, /<Support tone="dark" top=\{430\}/, 'the label slide support should clear its headline');
   assert.match(template, /<Support tone="product" top=\{430\}/, 'the transfer slide support should clear its headline');

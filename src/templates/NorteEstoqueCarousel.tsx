@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {QrCode, Tag} from 'lucide-react';
+import {Check, QrCode, Tag} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   A,
@@ -58,7 +58,7 @@ export const NorteEstoqueQR01: React.FC = () => {
       <AbsoluteFill>
         <Background tone="product" id="ne-qr-grid-1" />
         <Img src={LOGO_ESTOQUE_BRANCO} style={{position: 'absolute', left: PAD, top: 78, height: 100, width: 'auto'}} />
-        <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/05</span>
+        <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
         <Eyebrow tone="product" top={410}>Inventário · etiquetas · transferências</Eyebrow>
         <Title tone="product" top={468} size={84}>O inventário ainda é planilha?</Title>
         <Support tone="product" top={650} width={860} size={30}>
@@ -86,7 +86,7 @@ const InventarioScene: React.FC<{f?: number}> = ({f}) => {
     <Produto id="estoque">
       <AbsoluteFill>
         <Background tone="light" id="ne-qr-grid-2" />
-        <Top n={2} tone="light" />
+        <Top n={2} total={7} tone="light" />
         <Eyebrow tone="light" top={195}>Inventário com QR Code</Eyebrow>
         <Fx p={A(f, 0, 16)}>
           <Title tone="light" top={245} size={78}>Inventário online.</Title>
@@ -112,15 +112,94 @@ const InventarioScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteEstoqueQR02: React.FC = () => <InventarioScene />;
 export const NorteEstoqueQR02Animada: React.FC = () => <InventarioScene f={useCurrentFrame()} />;
 
-/* 03 · Etiquetas com lote e validade */
+/* 03 · Leitura prática do QR Code no alimento */
+const ScanScene: React.FC<{f?: number}> = ({f}) => {
+  ensurePostLoaded();
+  const pPhone = S(f, 8, {damping: 16, stiffness: 135, mass: 0.8});
+  const scanLine = f === undefined ? 0.64 : interpolate(f, [22, 53], [0.12, 0.92], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const read = f === undefined ? 1 : interpolate(f, [52, 62], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <Produto id="estoque">
+      <AbsoluteFill>
+        <Background tone="dark" id="ne-qr-grid-3" />
+        <Top n={3} total={7} tone="dark" />
+        <Eyebrow tone="dark" top={195}>Inventário com QR Code</Eyebrow>
+        <Title tone="dark" top={245} size={78}>Leia o código no alimento.</Title>
+        <Support tone="dark" top={430} width={850} size={29}>
+          Aponte o celular para o QR Code do produto e faça a leitura durante a conferência.
+        </Support>
+        <div style={{position: 'absolute', left: 100, top: 595, width: 535, height: 465, borderRadius: 34, background: '#E8D9B6', border: '3px solid rgba(251,251,254,.65)', boxShadow: '0 26px 42px rgba(0,0,0,.24)', transform: 'rotate(-3deg)'}}>
+          <div style={{position: 'absolute', inset: 18, borderRadius: 24, border: '2px solid rgba(20,22,58,.17)', background: 'linear-gradient(145deg,#F4E8CB,#D5C397)'}} />
+          <div style={{position: 'absolute', left: 56, top: 62, width: 290, height: 265, borderRadius: '48% 48% 34% 34%', background: '#729E61', boxShadow: 'inset 0 -16px 0 rgba(20,22,58,.10)'}}>
+            <div style={{position: 'absolute', left: 30, top: 36, width: 108, height: 94, borderRadius: '55% 45% 50% 40%', background: '#88B970', transform: 'rotate(-22deg)'}} />
+            <div style={{position: 'absolute', right: 30, top: 50, width: 110, height: 92, borderRadius: '45% 55% 42% 58%', background: '#679554', transform: 'rotate(21deg)'}} />
+            <div style={{position: 'absolute', left: 82, bottom: 30, width: 145, height: 115, borderRadius: '50%', background: '#E56E4D', border: '6px solid #F4A17A'}} />
+            <div style={{position: 'absolute', left: 131, bottom: 65, width: 44, height: 44, borderRadius: '50%', background: '#F4A17A'}} />
+          </div>
+          <div style={{position: 'absolute', right: 28, bottom: 30, width: 148, height: 160, borderRadius: 14, background: '#FFFDF8', boxShadow: '0 8px 16px rgba(20,22,58,.12)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            <QrCode size={112} color={NAVY} strokeWidth={2.4} />
+            <span style={{fontFamily: MONO, fontWeight: 700, fontSize: 13, letterSpacing: 1.5, color: NAVY}}>QR DO ALIMENTO</span>
+          </div>
+          <div style={{position: 'absolute', left: 42, bottom: 24, fontFamily: SANS, fontWeight: 700, fontSize: 19, letterSpacing: 2, color: NAVY}}>TOMATE · ITEM DE ESTOQUE</div>
+        </div>
+        <div style={{position: 'absolute', right: 82, top: 565, width: 320, height: 555, padding: 13, borderRadius: 42, background: FRAME, border: '3px solid rgba(251,251,254,.45)', boxShadow: '0 28px 50px rgba(0,0,0,.35)', opacity: Math.min(1, pPhone * 1.4), transform: `translateY(${(1 - pPhone) * 170}px) rotate(2deg)`}}>
+          <div style={{height: '100%', borderRadius: 30, background: '#0D1025', position: 'relative', overflow: 'hidden'}}>
+            <div style={{position: 'absolute', left: 20, top: 22, fontFamily: MONO, fontSize: 15, letterSpacing: 1.5, color: WHITE}}>LEITURA DE PRODUTO</div>
+            <div style={{position: 'absolute', left: 44, top: 104, width: 205, height: 205, border: `3px solid ${WHITE}`, borderRadius: 22, boxShadow: '0 0 0 999px rgba(13,16,37,.28)'}}>
+              <QrCode size={174} color={WHITE} strokeWidth={2.2} style={{position: 'absolute', left: 13, top: 13}} />
+              <div style={{position: 'absolute', left: 0, right: 0, top: `${scanLine * 100}%`, height: 4, background: '#5FD3DC', boxShadow: '0 0 18px #5FD3DC', opacity: 1 - read * 0.3}} />
+              <div style={{position: 'absolute', right: -11, bottom: -11, width: 48, height: 48, borderRadius: 50, background: '#168E9A', color: WHITE, display: 'grid', placeItems: 'center', opacity: read, transform: `scale(${0.75 + read * 0.25})`}}><Check size={29} strokeWidth={3} /></div>
+            </div>
+            <div style={{position: 'absolute', left: 22, right: 22, bottom: 42, padding: '18px 12px', borderRadius: 18, background: read ? '#168E9A' : 'rgba(251,251,254,.12)', color: WHITE, textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.4}}>{read > 0.8 ? 'LEITURA CONCLUÍDA' : 'APONTE PARA O CÓDIGO'}</div>
+          </div>
+        </div>
+        <Foot tone="dark" label="Norte Estoque" />
+      </AbsoluteFill>
+    </Produto>
+  );
+};
+
+export const NorteEstoqueQR03: React.FC = () => <ScanScene />;
+export const NorteEstoqueQR03Animada: React.FC = () => <ScanScene f={useCurrentFrame()} />;
+
+/* 04 · A leitura chega ao inventário */
+const RegistroScene: React.FC<{f?: number}> = ({f}) => {
+  ensurePostLoaded();
+  const pScreen = S(f, 10, {damping: 16, stiffness: 125, mass: 0.85});
+  const highlight = f === undefined ? 0.82 : interpolate(f, [38, 50, 70, 82], [0, 1, 1, 0.82], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <Produto id="estoque">
+      <AbsoluteFill>
+        <Background tone="light" id="ne-qr-grid-4" />
+        <Top n={4} total={7} tone="light" />
+        <Eyebrow tone="light" top={195}>Conferência online</Eyebrow>
+        <Title tone="light" top={245} size={78}>Da leitura ao inventário.</Title>
+        <Support tone="light" top={355} width={850} size={29}>
+          Acompanhe os produtos registrados e confira as informações na tela do inventário.
+        </Support>
+        <div style={{position: 'absolute', left: PAD - 16, top: 565, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 155}px)`}}>
+          <Screen src={TELA_INVENTARIO} width={910} />
+          <div style={{position: 'absolute', left: 142, top: 170, right: 26, height: 62, border: '3px solid #168E9A', borderRadius: 12, boxShadow: '0 0 0 7px rgba(22,142,154,.14)', opacity: highlight}} />
+        </div>
+        <div style={{position: 'absolute', right: 98, top: 475, width: 110, height: 110, borderRadius: 100, background: '#168E9A', color: WHITE, display: 'grid', placeItems: 'center', boxShadow: '0 12px 24px rgba(20,22,58,.18)', opacity: highlight, transform: `scale(${0.8 + highlight * 0.2})`}}><Check size={58} strokeWidth={3} /></div>
+        <Foot tone="light" label="Norte Estoque" />
+      </AbsoluteFill>
+    </Produto>
+  );
+};
+
+export const NorteEstoqueQR04: React.FC = () => <RegistroScene />;
+export const NorteEstoqueQR04Animada: React.FC = () => <RegistroScene f={useCurrentFrame()} />;
+
+/* 05 · Etiquetas com lote e validade */
 const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
   const pLabel = S(f, 18, {damping: 15, stiffness: 140, mass: 0.8});
   return (
     <Produto id="estoque">
       <AbsoluteFill>
-        <Background tone="dark" id="ne-qr-grid-3" />
-        <Top n={3} tone="dark" />
+        <Background tone="dark" id="ne-qr-grid-5" />
+        <Top n={5} total={7} tone="dark" />
         <Eyebrow tone="dark" top={195}>Identificação e rastreabilidade</Eyebrow>
         <Title tone="dark" top={245} size={78}>Lote e validade na etiqueta.</Title>
         <Support tone="dark" top={430} width={850} size={29}>
@@ -150,8 +229,8 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
   );
 };
 
-export const NorteEstoqueQR03: React.FC = () => <EtiquetaScene />;
-export const NorteEstoqueQR03Animada: React.FC = () => <EtiquetaScene f={useCurrentFrame()} />;
+export const NorteEstoqueQR05: React.FC = () => <EtiquetaScene />;
+export const NorteEstoqueQR05Animada: React.FC = () => <EtiquetaScene f={useCurrentFrame()} />;
 
 /* 04 · Transferências em massa online */
 const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
@@ -162,8 +241,8 @@ const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
   return (
     <Produto id="estoque">
       <AbsoluteFill>
-        <Background tone="product" id="ne-qr-grid-4" />
-        <Top n={4} tone="product" />
+        <Background tone="product" id="ne-qr-grid-6" />
+        <Top n={6} total={7} tone="product" />
         <Eyebrow tone="product" top={195}>Movimentação do estoque</Eyebrow>
         <Fx p={A(f, 0, 16)}>
           <Title tone="product" top={245} size={78}>Transfira vários itens de uma vez.</Title>
@@ -183,22 +262,22 @@ const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
   );
 };
 
-export const NorteEstoqueQR04: React.FC = () => <TransferenciasScene />;
-export const NorteEstoqueQR04Animada: React.FC = () => <TransferenciasScene f={useCurrentFrame()} />;
+export const NorteEstoqueQR06: React.FC = () => <TransferenciasScene />;
+export const NorteEstoqueQR06Animada: React.FC = () => <TransferenciasScene f={useCurrentFrame()} />;
 
-/* 05 · Fechamento e posicionamento */
-export const NorteEstoqueQR05: React.FC = () => {
+/* 07 · Fechamento */
+export const NorteEstoqueQR07: React.FC = () => {
   ensurePostLoaded();
   return (
     <Produto id="estoque">
       <AbsoluteFill>
-        <Background tone="dark" id="ne-qr-grid-5" />
+        <Background tone="dark" id="ne-qr-grid-7" />
         <Img src={LOGO_ESTOQUE_BRANCO} style={{position: 'absolute', left: PAD, top: 92, height: 105, width: 'auto'}} />
-        <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>05/05</span>
+        <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>07/07</span>
         <Eyebrow tone="dark" top={440}>Norte Estoque</Eyebrow>
-        <Title tone="dark" top={495} size={80}>Controle físico integrado ao Omie.</Title>
+        <Title tone="dark" top={495} size={80}>Estoque conferido. Operação no ritmo.</Title>
         <Support tone="dark" top={685} width={850} size={30}>
-          O Norte Estoque complementa o Omie na rotina de inventários, etiquetas, transferências e produção.
+          Inventário, identificação e movimentação em um fluxo organizado para o dia a dia da operação.
         </Support>
         <div style={{position: 'absolute', left: PAD, right: PAD, top: 890, height: 1, background: 'rgba(251,251,254,.2)'}} />
         <div style={{position: 'absolute', left: PAD, right: PAD, top: 930, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>

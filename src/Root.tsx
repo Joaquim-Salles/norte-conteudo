@@ -57,6 +57,10 @@ import {
   NorteEstoqueQR04,
   NorteEstoqueQR04Animada,
   NorteEstoqueQR05,
+  NorteEstoqueQR05Animada,
+  NorteEstoqueQR06,
+  NorteEstoqueQR06Animada,
+  NorteEstoqueQR07,
 } from './templates/NorteEstoqueCarousel';
 import {
   AntesDepoisAntes,
@@ -291,10 +295,14 @@ export const RemotionRoot: React.FC = () => {
       <Still id="NorteEstoqueQR03" component={NorteEstoqueQR03} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteEstoqueQR04" component={NorteEstoqueQR04} width={FEED_WIDTH} height={FEED_HEIGHT} />
       <Still id="NorteEstoqueQR05" component={NorteEstoqueQR05} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR06" component={NorteEstoqueQR06} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR07" component={NorteEstoqueQR07} width={FEED_WIDTH} height={FEED_HEIGHT} />
 
       <Composition id="NorteEstoqueQRAnimada02" component={NorteEstoqueQR02Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada03" component={NorteEstoqueQR03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada04" component={NorteEstoqueQR04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueQRAnimada05" component={NorteEstoqueQR05Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueQRAnimada06" component={NorteEstoqueQR06Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
       {/* Norte Vendas para barracas de praia */}
       <Still id="NorteVendasBarraca01" component={NorteVendasBarraca01} width={FEED_WIDTH} height={FEED_HEIGHT} />
