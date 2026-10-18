@@ -42,6 +42,18 @@ test('the food package depicts a recognizable tomato with its calyx and stem', (
   assert.match(template, /data-part="tomato-stem"/);
 });
 
+test('inventory callouts frame one real row and the tomato label has no generic stock wording', () => {
+  const template = readFileSync(templatePath, 'utf8');
+  for (const sceneName of ['InventarioScene', 'RegistroScene', 'TransferenciasScene']) {
+    const scene = template.match(new RegExp(`const ${sceneName}:[\\s\\S]*?(?=export const)`));
+    assert.ok(scene, `${sceneName} should exist`);
+    assert.match(scene[0], /data-focus-target="inventory-row"/, `${sceneName} should identify the row being highlighted`);
+    assert.match(scene[0], /height: 30/, `${sceneName} focus outline should fit one inventory row`);
+  }
+  assert.match(template, />TOMATE<\/div>/, 'the food label should name only the tomato');
+  assert.doesNotMatch(template, /TOMATE · ITEM DE ESTOQUE/);
+});
+
 test('the selected carousel exports seven slides and animates slides 2 through 6', () => {
   assert.ok(existsSync(carouselPath));
   const slides = groupMediaFiles(readdirSync(carouselPath));

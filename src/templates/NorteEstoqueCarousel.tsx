@@ -98,7 +98,7 @@ const InventarioScene: React.FC<{f?: number}> = ({f}) => {
         </Fx>
         <div style={{position: 'absolute', left: PAD - 12, top: 550, opacity: Math.min(1, pDesktop * 1.4), transform: `translateY(${(1 - pDesktop) * 145}px)`}}>
           <Screen src={TELA_INVENTARIO} width={835} />
-          <div style={{position: 'absolute', left: 552, top: 102, width: 205, height: 54, border: '3px solid #168E9A', borderRadius: 16, boxShadow: '0 0 0 7px rgba(22,142,154,.16)', opacity: focus}} />
+          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 182, top: 140, width: 500, height: 30, border: '3px solid #168E9A', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: focus}} />
         </div>
         <div style={{position: 'absolute', right: 78, top: 625, opacity: Math.min(1, pMobile * 1.5), transform: `translateY(${(1 - pMobile) * 205}px) rotate(2deg)`}}>
           <Phone src={TELA_INVENTARIO_MOBILE} width={228} height={460} />
@@ -140,7 +140,7 @@ const ScanScene: React.FC<{f?: number}> = ({f}) => {
             <QrCode size={112} color={NAVY} strokeWidth={2.4} />
             <span style={{fontFamily: MONO, fontWeight: 700, fontSize: 13, letterSpacing: 1.5, color: NAVY}}>QR DO ALIMENTO</span>
           </div>
-          <div style={{position: 'absolute', left: 42, bottom: 24, fontFamily: SANS, fontWeight: 700, fontSize: 19, letterSpacing: 2, color: NAVY}}>TOMATE · ITEM DE ESTOQUE</div>
+          <div style={{position: 'absolute', left: 42, bottom: 24, fontFamily: SANS, fontWeight: 700, fontSize: 19, letterSpacing: 2, color: NAVY}}>TOMATE</div>
         </div>
         <div style={{position: 'absolute', right: 82, top: 565, width: 320, height: 555, padding: 13, borderRadius: 42, background: FRAME, border: '3px solid rgba(251,251,254,.45)', boxShadow: '0 28px 50px rgba(0,0,0,.35)', opacity: Math.min(1, pPhone * 1.4), transform: `translateY(${(1 - pPhone) * 170}px) rotate(2deg)`}}>
           <div style={{height: '100%', borderRadius: 30, background: '#0D1025', position: 'relative', overflow: 'hidden'}}>
@@ -179,7 +179,7 @@ const RegistroScene: React.FC<{f?: number}> = ({f}) => {
         </Support>
         <div style={{position: 'absolute', left: PAD - 16, top: 565, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 155}px)`}}>
           <Screen src={TELA_INVENTARIO} width={910} />
-          <div style={{position: 'absolute', left: 142, top: 170, right: 26, height: 62, border: '3px solid #168E9A', borderRadius: 12, boxShadow: '0 0 0 7px rgba(22,142,154,.14)', opacity: highlight}} />
+          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 198, top: 155, right: 26, height: 30, border: '3px solid #168E9A', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: highlight}} />
         </div>
         <div style={{position: 'absolute', right: 98, top: 475, width: 110, height: 110, borderRadius: 100, background: '#168E9A', color: WHITE, display: 'grid', placeItems: 'center', boxShadow: '0 12px 24px rgba(20,22,58,.18)', opacity: highlight, transform: `scale(${0.8 + highlight * 0.2})`}}><Check size={58} strokeWidth={3} /></div>
         <Foot tone="light" label="Norte Estoque" />
@@ -254,7 +254,7 @@ const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
         </Fx>
         <div style={{position: 'absolute', left: PAD - 6, top: 560, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 150}px) scale(${zoom})`, transformOrigin: '50% 60%'}}>
           <Screen src={TELA_TRANSFERENCIAS} width={910} />
-          <div style={{position: 'absolute', left: 138, right: 18, top: 162, height: 80, border: '3px solid rgba(22,142,154,.9)', borderRadius: 14, boxShadow: '0 0 0 6px rgba(22,142,154,.18)', opacity: highlight}} />
+          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 202, right: 18, top: 180, height: 30, border: '3px solid rgba(22,142,154,.9)', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: highlight}} />
         </div>
         <Foot tone="product" label="Norte Estoque" />
       </AbsoluteFill>
