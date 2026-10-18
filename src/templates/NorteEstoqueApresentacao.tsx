@@ -22,6 +22,11 @@ const QR_SCAN_START = 16;
 const QR_SCAN_END = 40;
 const LABEL_PRINT_START = 22;
 const LABEL_PRINT_END = 50;
+const CONFERENCE_START = 12;
+const CONFERENCE_STAGGER = 7;
+const CONFERENCE_ROW_DURATION = 7;
+const PRODUCTION_START = 12;
+const PRODUCTION_STAGE_DURATION = 10;
 const LOGO_ESTOQUE_BRANCO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
 const INVENTARIO_DESKTOP = kit('08-recursos/telas-oficiais/estoque/d-inventario.png');
 const INVENTARIO_MOBILE = kit('08-recursos/telas-oficiais/estoque/m-inventario.png');
@@ -174,10 +179,11 @@ const InventarioQrScene: React.FC<{f?: number}> = ({f}) => {
         <Background tone="light" id="ne-ap-grid-2" />
         <Copy n={2} tone="light" eyebrow="Inventário por QR Code" title={<>Conte pelo celular.<br />Registre no inventário.</>} support="A leitura do código leva a equipe direto ao inventário online para registrar a contagem dos produtos." />
         <div style={{position: 'absolute', left: 108, top: 650, width: 420, height: 380, display: 'grid', placeItems: 'center', transform: `translateY(${boxY}px)`}}>
-          <div style={{position: 'absolute', width: 380, height: 320, borderRadius: 34, background: '#D7C69F', border: `5px solid ${NAVY}`, boxShadow: '0 24px 45px rgba(20,22,58,.18)'}} />
-          <div style={{position: 'absolute', top: 70, left: 72, width: 274, height: 13, background: '#B29A6D', borderRadius: 10, opacity: .65}} />
-          <div style={{position: 'absolute', top: 291, left: 72, width: 274, height: 13, background: '#B29A6D', borderRadius: 10, opacity: .65}} />
+          <div style={{position: 'absolute', width: 380, height: 320, borderRadius: 34, background: '#FCFCFF', border: `5px solid ${NAVY}`, boxShadow: '0 24px 45px rgba(20,22,58,.18)'}} />
+          <div style={{position: 'absolute', top: 36, left: 58, width: 264, textAlign: 'center', fontFamily: SANS, color: NAVY, fontSize: 16, fontWeight: 800, letterSpacing: 1.2}}>ETIQUETA DE INVENTÁRIO</div>
+          <div style={{position: 'absolute', top: 65, left: 58, width: 264, height: 2, background: 'rgba(20,22,58,.14)'}} />
           <QrMark size={178} beam={f === undefined ? undefined : scan} beamOpacity={beamOpacity} />
+          <div style={{position: 'absolute', bottom: 32, width: '100%', textAlign: 'center', fontFamily: MONO, color: '#168E9A', fontSize: 14, fontWeight: 700, letterSpacing: 1.6}}>LEIA PARA CONTAR</div>
           {pulse > 0 && <div style={{position: 'absolute', width: 202, height: 202, borderRadius: 28, border: `5px solid rgba(22,142,154,${.8 * pulse})`, transform: `scale(${1 + .08 * pulse})`, opacity: pulse, boxShadow: '0 0 0 12px rgba(22,142,154,.12)'}} />}
         </div>
         <PhonePanel src={INVENTARIO_MOBILE} width={250} height={452} style={{position: 'absolute', right: 104, top: 630, transform: `rotate(3deg) translateY(${f === undefined ? 0 : interpolate(f, [8, 25], [180, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.16, 1, .3, 1)})}px)`}} />
@@ -193,8 +199,14 @@ export const NorteEstoqueApresentacaoAnimada02: React.FC = () => <InventarioQrSc
 /* 03 · Acompanhamento: etapas da conferência atualizam em sequência. */
 const ConferenciaScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const count = f === undefined ? 5 : Math.floor(progress(f, 18, 72) * 5);
   const rows = ['Produto conferido', 'Quantidade registrada', 'Inventário atualizado', 'Divergência identificada', 'Revisão acompanhada'];
+  const rowProgress = rows.map((_, index) => f === undefined ? 1 : interpolate(
+    f,
+    [CONFERENCE_START + index * CONFERENCE_STAGGER, CONFERENCE_START + index * CONFERENCE_STAGGER + CONFERENCE_ROW_DURATION],
+    [0, 1],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.22, 1, 0.36, 1)},
+  ));
+  const completion = rowProgress.reduce((sum, value) => sum + value, 0) / rows.length;
   return (
     <Produto id="estoque">
       <AbsoluteFill>
@@ -205,12 +217,13 @@ const ConferenciaScene: React.FC<{f?: number}> = ({f}) => {
             <div style={{fontFamily: SANS, color: WHITE, fontSize: 28, fontWeight: 700}}>Andamento do inventário</div>
             <div style={{fontFamily: MONO, fontSize: 20, color: '#80E4DE', letterSpacing: 1.4}}>ACOMPANHADO</div>
           </div>
-          <div style={{height: 12, marginTop: 22, borderRadius: 99, background: 'rgba(251,251,254,.16)', overflow: 'hidden'}}><div style={{width: `${count * 20}%`, height: '100%', background: '#5FD3DC', borderRadius: 99}} /></div>
+          <div style={{height: 12, marginTop: 22, borderRadius: 99, background: 'rgba(251,251,254,.16)', overflow: 'hidden'}}><div style={{width: `${completion * 100}%`, height: '100%', background: '#5FD3DC', borderRadius: 99}} /></div>
           <div style={{display: 'grid', gap: 15, marginTop: 30}}>
             {rows.map((row, index) => {
-              const checked = count > index;
-              return <div key={row} style={{height: 54, display: 'flex', alignItems: 'center', gap: 16, borderBottom: '1px solid rgba(251,251,254,.12)', opacity: checked ? 1 : .4}}>
-                <div style={{width: 32, height: 32, borderRadius: 50, display: 'grid', placeItems: 'center', background: checked ? '#168E9A' : 'rgba(251,251,254,.12)', transform: checked && f !== undefined ? `scale(${index === count - 1 ? 1.12 : 1})` : 'scale(1)'}}>{checked && <Check size={19} color={WHITE} strokeWidth={3} />}</div>
+              const itemProgress = rowProgress[index];
+              const checked = itemProgress >= 1;
+              return <div key={row} style={{height: 54, display: 'flex', alignItems: 'center', gap: 16, borderBottom: '1px solid rgba(251,251,254,.12)', opacity: .4 + itemProgress * .6}}>
+                <div style={{width: 32, height: 32, borderRadius: 50, display: 'grid', placeItems: 'center', background: checked ? '#168E9A' : 'rgba(251,251,254,.12)', transform: `scale(${.88 + itemProgress * .12})`}}>{itemProgress > .72 && <Check size={19} color={WHITE} strokeWidth={3} />}</div>
                 <span style={{fontFamily: SANS, color: WHITE, fontSize: 24, fontWeight: 600}}>{row}</span>
                 <span style={{marginLeft: 'auto', fontFamily: MONO, color: checked ? '#80E4DE' : 'rgba(251,251,254,.45)', fontSize: 16}}>{checked ? 'REGISTRADO' : 'AGUARDANDO'}</span>
               </div>;
@@ -228,7 +241,7 @@ export const NorteEstoqueApresentacaoAnimada03: React.FC = () => <ConferenciaSce
 /* 04 · Etiquetas: a impressora permanece fixa e a etiqueta avança para baixo. */
 const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const paperRevealHeight = f === undefined ? 282 : interpolate(f, [LABEL_PRINT_START, LABEL_PRINT_END], [0, 282], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const printProgress = f === undefined ? 1 : interpolate(f, [LABEL_PRINT_START, LABEL_PRINT_END], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(0.22, 1, 0.36, 1)});
   const laptopY = f === undefined ? 0 : interpolate(f, [0, 20], [175, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.16, 1, .3, 1)});
   return (
     <Produto id="estoque">
@@ -236,13 +249,13 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
         <Background tone="product" id="ne-ap-grid-4" />
         <Copy n={4} tone="product" eyebrow="Lote e validade" title={<>Cada produto com<br />sua identificação.</>} support="Gere etiquetas com lote e validade para identificar os produtos e acompanhar sua rastreabilidade." />
         <LaptopPanel src={INVENTARIO_DESKTOP} width={570} height={310} style={{position: 'absolute', left: 62, top: 690, transform: `translateY(${laptopY}px)`}} />
-        <div style={{position: 'absolute', right: 76, top: 690, width: 352, height: 424}}>
+        <div style={{position: 'absolute', right: 76, top: 690, width: 352, height: 424, overflow: 'hidden'}}>
           <div style={{position: 'absolute', left: 0, top: 0, width: 352, height: 126, borderRadius: 25, background: '#17192E', border: '4px solid rgba(251,251,254,.75)', boxShadow: '0 26px 42px rgba(12,20,47,.3)', zIndex: 2}}>
             <div style={{position: 'absolute', left: 42, right: 42, top: 31, height: 14, borderRadius: 10, background: '#30344E'}} />
             <div style={{position: 'absolute', left: 48, right: 48, bottom: 10, height: 22, borderRadius: '0 0 8px 8px', background: '#0C0E1C', border: '2px solid rgba(251,251,254,.16)'}} />
             <div style={{position: 'absolute', right: 28, top: 30, width: 12, height: 12, borderRadius: 50, background: '#5FD3DC', boxShadow: '0 0 13px #5FD3DC'}} />
           </div>
-          <div style={{position: 'absolute', top: 117, left: 48, width: 256, height: paperRevealHeight, overflow: 'hidden', boxShadow: '0 20px 30px rgba(10,18,49,.2)', zIndex: 1}}>
+          <div style={{position: 'absolute', top: 117, left: 48, width: 256, height: 282, transform: `translateY(${-282 * (1 - printProgress)}px)`, boxShadow: '0 20px 30px rgba(10,18,49,.2)', zIndex: 1}}>
             <div style={{width: 256, height: 282, background: '#FFFDF8', color: NAVY, padding: '22px 20px', clipPath: 'polygon(0 0,100% 0,100% 94%,93% 100%,86% 94%,79% 100%,72% 94%,65% 100%,58% 94%,51% 100%,44% 94%,37% 100%,30% 94%,23% 100%,16% 94%,9% 100%,0 94%)'}}>
             <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 18, letterSpacing: 2, textAlign: 'center', color: '#168E9A'}}>NORTE ESTOQUE</div>
             <div style={{height: 1, background: '#D5D4D0', margin: '17px 0'}} />
@@ -297,7 +310,7 @@ export const NorteEstoqueApresentacaoAnimada05: React.FC = () => <TransferenciaS
 /* 06 · Produção: ordens de produção ligadas à rotina de estoque. */
 const ProducaoScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const active = f === undefined ? 2 : Math.min(2, Math.floor(progress(f, 12, 72) * 3));
+  const active = f === undefined ? 2 : Math.min(2, Math.max(0, Math.floor((f - PRODUCTION_START) / PRODUCTION_STAGE_DURATION)));
   const steps = [
     {label: 'Ordem de produção', icon: <ClipboardCheck size={34} />},
     {label: 'Acompanhamento', icon: <Factory size={34} />},
