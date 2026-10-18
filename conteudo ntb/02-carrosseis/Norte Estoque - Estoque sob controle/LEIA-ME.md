@@ -8,7 +8,7 @@ Carrossel de apresentação do Norte Estoque com sete slides, no formato 4:5 par
 - Versões MP4 de 3 segundos nos slides 2 a 6, com movimentos distintos: leitura de QR Code, avanço da conferência, impressão da etiqueta, transferência de volumes e acompanhamento de uma ordem de produção.
 - `COPY.md` contém a copy aplicada em cada arte.
 
-As interfaces mostradas vêm das telas oficiais do kit de marca. Os movimentos destacam ações e elementos visuais, sem animar o conteúdo dentro das telas capturadas. O post tem uma entrada Remotion isolada em `src/NorteEstoqueApresentacaoEntry.tsx`.
+As interfaces mostradas vêm das telas oficiais do kit de marca. A capa compara uma prateleira de estoque físico com uma lista do sistema. No slide 2, a linha vermelha percorre o QR Code na horizontal em 24 quadros e conclui com uma confirmação visual. No slide 4, a etiqueta aparece logo abaixo da abertura da impressora e é revelada de cima para baixo. O notebook entra de baixo; o conteúdo das telas permanece estático. O post tem uma entrada Remotion isolada em `src/NorteEstoqueApresentacaoEntry.tsx`.
 
 ## Recursos e alegações
 

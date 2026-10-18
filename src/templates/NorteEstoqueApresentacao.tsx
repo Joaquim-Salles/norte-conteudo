@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, Box, Check, ClipboardCheck, Factory, Package, Printer, ScanLine, Warehouse} from 'lucide-react';
+import {ArrowRight, Box, Check, ClipboardCheck, Factory, Package, ScanLine, Warehouse} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   Background,
@@ -18,6 +18,10 @@ import {
 } from '../lib/NortePost';
 
 const TOTAL = 7;
+const QR_SCAN_START = 16;
+const QR_SCAN_END = 40;
+const LABEL_PRINT_START = 22;
+const LABEL_PRINT_END = 50;
 const LOGO_ESTOQUE_BRANCO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
 const INVENTARIO_DESKTOP = kit('08-recursos/telas-oficiais/estoque/d-inventario.png');
 const INVENTARIO_MOBILE = kit('08-recursos/telas-oficiais/estoque/m-inventario.png');
@@ -53,7 +57,7 @@ const Barcode: React.FC<{color?: string}> = ({color = NAVY}) => (
   </div>
 );
 
-const QrMark: React.FC<{size: number; beam?: number}> = ({size, beam}) => {
+const QrMark: React.FC<{size: number; beam?: number; beamOpacity?: number}> = ({size, beam, beamOpacity = 1}) => {
   const modules = 21;
   const finder = (x: number, y: number, left: number, top: number) => {
     const dx = x - left;
@@ -73,7 +77,7 @@ const QrMark: React.FC<{size: number; beam?: number}> = ({size, beam}) => {
   return (
     <div style={{position: 'relative', width: size, height: size, background: WHITE, padding: size * .07, borderRadius: 12, boxShadow: '0 12px 24px rgba(20,22,58,.18)', overflow: 'hidden'}}>
       <svg width="100%" height="100%" viewBox="0 0 21 21" shapeRendering="crispEdges">{cells}</svg>
-      {beam !== undefined && <div style={{position: 'absolute', top: 0, bottom: 0, left: `${beam * 100}%`, width: 7, transform: 'translateX(-50%)', background: '#69E0E3', boxShadow: '0 0 20px 8px rgba(53,214,220,.78)', opacity: .9}} />}
+      {beam !== undefined && <div style={{position: 'absolute', left: 16, right: 16, top: `${7 + beam * 86}%`, height: 4, background: '#FF5B65', boxShadow: '0 0 12px 4px rgba(255,91,101,.72)', opacity: beamOpacity}} />}
     </div>
   );
 };
@@ -92,6 +96,33 @@ const StockBox: React.FC<{size?: number; tone?: 'teal' | 'cream'; style?: React.
     </div>
   );
 };
+
+const PhysicalShelf: React.FC = () => (
+  <div style={{width: 330, height: 230, padding: '16px 18px', borderRadius: 18, background: 'rgba(251,251,254,.11)', border: '1px solid rgba(251,251,254,.34)'}}>
+    <div style={{fontFamily: MONO, color: WHITE, fontSize: 17, letterSpacing: 1.4}}>ESTOQUE FÍSICO</div>
+    <div style={{position: 'relative', height: 160, marginTop: 13, padding: '8px 20px 0'}}>
+      <div style={{position: 'absolute', left: 17, right: 17, top: 0, bottom: 0, borderLeft: '7px solid #E3F7F6', borderRight: '7px solid #E3F7F6', opacity: .95}} />
+      {[70, 144].map((top) => <div key={top} style={{position: 'absolute', left: 11, right: 11, top, height: 9, borderRadius: 5, background: '#E3F7F6', boxShadow: '0 3px 0 rgba(10,18,49,.18)'}} />)}
+      <div style={{position: 'relative', display: 'flex', gap: 9, height: 59, alignItems: 'end', padding: '0 11px'}}>
+        {[0, 1, 2].map((item) => <div key={item} style={{width: 74, height: item === 1 ? 52 : 44, borderRadius: '8px 8px 4px 4px', background: item === 1 ? '#8CE3E2' : '#53C7D0', border: '2px solid rgba(20,22,58,.65)', position: 'relative', boxShadow: 'inset 0 8px 0 rgba(255,255,255,.2)'}}><span style={{position: 'absolute', left: 9, right: 9, top: 20, height: 4, borderRadius: 4, background: 'rgba(20,22,58,.28)'}} /></div>)}
+      </div>
+      <div style={{position: 'absolute', left: 29, right: 29, top: 81, display: 'flex', gap: 16, alignItems: 'end', height: 57}}>
+        {[0, 1].map((item) => <div key={item} style={{width: 106, height: item ? 48 : 56, borderRadius: '8px 8px 4px 4px', background: item ? '#A6E8E6' : '#65D0D6', border: '2px solid rgba(20,22,58,.65)', position: 'relative', boxShadow: 'inset 0 8px 0 rgba(255,255,255,.2)'}}><span style={{position: 'absolute', left: 12, right: 12, top: 22, height: 4, borderRadius: 4, background: 'rgba(20,22,58,.28)'}} /></div>)}
+      </div>
+    </div>
+  </div>
+);
+
+const LaptopPanel: React.FC<{src: string; width: number; height: number; style?: React.CSSProperties}> = ({src, width, height, style}) => (
+  <div style={{width, ...style}}>
+    <div style={{padding: 10, background: '#141629', border: '2px solid rgba(251,251,254,.58)', borderRadius: '18px 18px 12px 12px', boxShadow: '0 22px 42px rgba(12,20,47,.28)'}}>
+      <Img src={src} style={{display: 'block', width: '100%', height, objectFit: 'cover', objectPosition: 'top left', borderRadius: 6}} />
+    </div>
+    <div style={{position: 'relative', width: '108%', height: 17, marginLeft: '-4%', borderRadius: '0 0 20px 20px', background: 'linear-gradient(180deg,#E6E7EE 0%,#A9ADBD 55%,#72768A 100%)', boxShadow: '0 9px 14px rgba(12,20,47,.22)', clipPath: 'polygon(3% 0,97% 0,100% 82%,95% 100%,5% 100%,0 82%)'}}>
+      <div style={{width: 100, height: 3, margin: '2px auto 0', borderRadius: 4, background: 'rgba(20,22,58,.25)'}} />
+    </div>
+  </div>
+);
 
 const Copy: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: string; title: React.ReactNode; support: React.ReactNode}> = ({n, tone, eyebrow, title, support}) => (
   <>
@@ -114,17 +145,14 @@ export const NorteEstoqueApresentacao01: React.FC = () => {
         <Eyebrow tone="product" top={350}>Norte Estoque</Eyebrow>
         <Title tone="product" top={415} size={82}>O estoque do sistema bate com o real?</Title>
         <Support tone="product" top={615} width={850} size={30}>Organize o controle físico e acompanhe o que acontece na operação.</Support>
-        <div style={{position: 'absolute', left: 145, right: 145, top: 815, display: 'flex', alignItems: 'end', justifyContent: 'center', gap: 32}}>
-          <div style={{width: 300, height: 204, background: 'rgba(251,251,254,.12)', border: '2px solid rgba(251,251,254,.55)', borderRadius: 18, padding: 18, transform: 'rotate(-3deg)'}}>
-            <div style={{fontFamily: MONO, color: WHITE, fontSize: 17, letterSpacing: 1.5}}>ESTOQUE FÍSICO</div>
-            <div style={{display: 'flex', gap: 10, marginTop: 22}}><StockBox size={100} tone="teal" /><StockBox size={100} tone="teal" /></div>
-          </div>
-          <ArrowRight size={68} color="#C6F3F3" strokeWidth={1.8} style={{marginBottom: 76}} />
-          <div style={{width: 300, height: 204, background: WHITE, borderRadius: 18, padding: 18, transform: 'rotate(3deg)', boxShadow: '0 20px 36px rgba(10,18,49,.22)'}}>
-            <div style={{fontFamily: MONO, color: NAVY, fontSize: 17, letterSpacing: 1.5}}>SISTEMA</div>
-            <div style={{display: 'grid', gap: 13, marginTop: 20}}>
-              {[0, 1, 2].map((row) => <div key={row} style={{height: 22, borderRadius: 6, background: row === 1 ? '#D9F0F0' : '#ECECF1', display: 'flex', alignItems: 'center', paddingLeft: 10, gap: 8}}><span style={{width: 30, height: 5, background: '#168E9A', borderRadius: 5}} /><span style={{width: 98, height: 5, background: '#B6B8C6', borderRadius: 5}} /></div>)}
-            </div>
+        <div style={{position: 'absolute', left: 94, right: 94, top: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20}}>
+          <PhysicalShelf />
+          <ArrowRight size={54} color="#C6F3F3" strokeWidth={1.8} />
+          <div style={{width: 330, height: 230, background: WHITE, borderRadius: 18, padding: 18, boxShadow: '0 20px 36px rgba(10,18,49,.22)'}}>
+            <div style={{fontFamily: MONO, color: NAVY, fontSize: 17, letterSpacing: 1.3}}>ESTOQUE NO SISTEMA</div>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 17, color: '#72758B', fontFamily: SANS, fontSize: 15, fontWeight: 700}}><span>PRODUTO</span><span>QTD.</span></div>
+            <div style={{height: 1, background: '#D9DAE2', margin: '8px 0'}} />
+            {['Item 01', 'Item 02', 'Item 03'].map((item, row) => <div key={item} style={{height: 42, display: 'flex', alignItems: 'center', borderBottom: '1px solid #E7E8ED', fontFamily: SANS, color: NAVY, fontSize: 18}}><span style={{width: 12, height: 12, marginRight: 10, borderRadius: 3, background: row === 1 ? '#5FD3DC' : '#168E9A'}} />{item}<span style={{marginLeft: 'auto', fontFamily: MONO, fontSize: 17}}>{['12', '08', '24'][row]}</span></div>)}
           </div>
         </div>
         <Foot tone="product" label="Norte Estoque" />
@@ -136,8 +164,9 @@ export const NorteEstoqueApresentacao01: React.FC = () => {
 /* 02 · QR: a varredura é a ação principal, com a interface oficial sem movimento interno. */
 const InventarioQrScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const scan = progress(f, 18, 52);
-  const pulse = f === undefined ? 1 : interpolate(f, [48, 56, 70, 78], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const scan = f === undefined ? 1 : interpolate(f, [QR_SCAN_START, QR_SCAN_END], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const beamOpacity = f === undefined ? 0 : interpolate(f, [QR_SCAN_START, QR_SCAN_START + 2, QR_SCAN_END, QR_SCAN_END + 5], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const pulse = f === undefined ? 1 : interpolate(f, [QR_SCAN_END, QR_SCAN_END + 7, QR_SCAN_END + 21, QR_SCAN_END + 27], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const boxY = f === undefined ? 0 : interpolate(f, [0, 18], [180, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.16, 1, .3, 1)});
   return (
     <Produto id="estoque">
@@ -148,7 +177,7 @@ const InventarioQrScene: React.FC<{f?: number}> = ({f}) => {
           <div style={{position: 'absolute', width: 380, height: 320, borderRadius: 34, background: '#D7C69F', border: `5px solid ${NAVY}`, boxShadow: '0 24px 45px rgba(20,22,58,.18)'}} />
           <div style={{position: 'absolute', top: 70, left: 72, width: 274, height: 13, background: '#B29A6D', borderRadius: 10, opacity: .65}} />
           <div style={{position: 'absolute', top: 291, left: 72, width: 274, height: 13, background: '#B29A6D', borderRadius: 10, opacity: .65}} />
-          <QrMark size={178} beam={f === undefined ? undefined : scan} />
+          <QrMark size={178} beam={f === undefined ? undefined : scan} beamOpacity={beamOpacity} />
           {pulse > 0 && <div style={{position: 'absolute', width: 202, height: 202, borderRadius: 28, border: `5px solid rgba(22,142,154,${.8 * pulse})`, transform: `scale(${1 + .08 * pulse})`, opacity: pulse, boxShadow: '0 0 0 12px rgba(22,142,154,.12)'}} />}
         </div>
         <PhonePanel src={INVENTARIO_MOBILE} width={250} height={452} style={{position: 'absolute', right: 104, top: 630, transform: `rotate(3deg) translateY(${f === undefined ? 0 : interpolate(f, [8, 25], [180, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.16, 1, .3, 1)})}px)`}} />
@@ -199,21 +228,22 @@ export const NorteEstoqueApresentacaoAnimada03: React.FC = () => <ConferenciaSce
 /* 04 · Etiquetas: a impressora permanece fixa e a etiqueta avança para baixo. */
 const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const labelY = f === undefined ? 194 : interpolate(f, [20, 68], [-150, 194], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.18, .75, .28, 1)});
-  const labelOpacity = f === undefined ? 1 : interpolate(f, [17, 25], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const printerShake = f === undefined ? 0 : Math.sin(f * .75) * (f > 22 && f < 64 ? 1.5 : 0);
+  const paperRevealHeight = f === undefined ? 282 : interpolate(f, [LABEL_PRINT_START, LABEL_PRINT_END], [0, 282], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const laptopY = f === undefined ? 0 : interpolate(f, [0, 20], [175, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.bezier(.16, 1, .3, 1)});
   return (
     <Produto id="estoque">
       <AbsoluteFill>
         <Background tone="product" id="ne-ap-grid-4" />
         <Copy n={4} tone="product" eyebrow="Lote e validade" title={<>Cada produto com<br />sua identificação.</>} support="Gere etiquetas com lote e validade para identificar os produtos e acompanhar sua rastreabilidade." />
-        <div style={{position: 'absolute', left: 230, top: 670, width: 620, height: 270}}>
-          <div style={{position: 'absolute', inset: '0 0 34px', borderRadius: 34, background: '#17192E', border: '4px solid rgba(251,251,254,.72)', boxShadow: '0 28px 48px rgba(12,20,47,.32)', transform: `translateX(${printerShake}px)`}}>
-            <div style={{position: 'absolute', left: 78, right: 78, top: 48, height: 16, borderRadius: 10, background: '#30344E'}} />
-            <div style={{position: 'absolute', left: 116, right: 116, bottom: 33, height: 24, borderRadius: '0 0 8px 8px', background: '#0C0E1C', border: '2px solid rgba(251,251,254,.16)'}} />
-            <div style={{position: 'absolute', right: 42, top: 44, width: 13, height: 13, borderRadius: 50, background: '#5FD3DC', boxShadow: '0 0 13px #5FD3DC'}} />
+        <LaptopPanel src={INVENTARIO_DESKTOP} width={570} height={310} style={{position: 'absolute', left: 62, top: 690, transform: `translateY(${laptopY}px)`}} />
+        <div style={{position: 'absolute', right: 76, top: 690, width: 352, height: 424}}>
+          <div style={{position: 'absolute', left: 0, top: 0, width: 352, height: 126, borderRadius: 25, background: '#17192E', border: '4px solid rgba(251,251,254,.75)', boxShadow: '0 26px 42px rgba(12,20,47,.3)', zIndex: 2}}>
+            <div style={{position: 'absolute', left: 42, right: 42, top: 31, height: 14, borderRadius: 10, background: '#30344E'}} />
+            <div style={{position: 'absolute', left: 48, right: 48, bottom: 10, height: 22, borderRadius: '0 0 8px 8px', background: '#0C0E1C', border: '2px solid rgba(251,251,254,.16)'}} />
+            <div style={{position: 'absolute', right: 28, top: 30, width: 12, height: 12, borderRadius: 50, background: '#5FD3DC', boxShadow: '0 0 13px #5FD3DC'}} />
           </div>
-          <div style={{position: 'absolute', left: 246, top: labelY, width: 230, height: 300, background: '#FFFDF8', color: NAVY, padding: '22px 20px', boxShadow: '0 20px 30px rgba(10,18,49,.2)', opacity: labelOpacity, clipPath: 'polygon(0 0,100% 0,100% 94%,93% 100%,86% 94%,79% 100%,72% 94%,65% 100%,58% 94%,51% 100%,44% 94%,37% 100%,30% 94%,23% 100%,16% 94%,9% 100%,0 94%)'}}>
+          <div style={{position: 'absolute', top: 117, left: 48, width: 256, height: paperRevealHeight, overflow: 'hidden', boxShadow: '0 20px 30px rgba(10,18,49,.2)', zIndex: 1}}>
+            <div style={{width: 256, height: 282, background: '#FFFDF8', color: NAVY, padding: '22px 20px', clipPath: 'polygon(0 0,100% 0,100% 94%,93% 100%,86% 94%,79% 100%,72% 94%,65% 100%,58% 94%,51% 100%,44% 94%,37% 100%,30% 94%,23% 100%,16% 94%,9% 100%,0 94%)'}}>
             <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 18, letterSpacing: 2, textAlign: 'center', color: '#168E9A'}}>NORTE ESTOQUE</div>
             <div style={{height: 1, background: '#D5D4D0', margin: '17px 0'}} />
             <div style={{fontFamily: SANS, fontSize: 14, fontWeight: 700, color: '#42445C'}}>IDENTIFICAÇÃO DO PRODUTO</div>
@@ -222,7 +252,7 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
             <div style={{fontFamily: MONO, fontSize: 12, letterSpacing: 2, marginTop: 10, textAlign: 'center'}}>RASTREABILIDADE</div>
           </div>
         </div>
-        <div style={{position: 'absolute', right: 136, top: 915, width: 146, height: 132, borderRadius: 18, background: '#FBFBFE', border: '2px solid rgba(20,22,58,.12)', display: 'grid', placeItems: 'center', boxShadow: '0 18px 30px rgba(12,20,47,.18)'}}><Printer size={70} color={NAVY} strokeWidth={1.6} /></div>
+        </div>
         <Foot tone="product" label="Norte Estoque" />
       </AbsoluteFill>
     </Produto>
