@@ -130,7 +130,7 @@ const ScanScene: React.FC<{f?: number}> = ({f}) => {
         </Support>
         <div style={{position: 'absolute', left: 100, top: 595, width: 535, height: 465, borderRadius: 34, background: '#E8D9B6', border: '3px solid rgba(251,251,254,.65)', boxShadow: '0 26px 42px rgba(0,0,0,.24)', transform: 'rotate(-3deg)'}}>
           <div style={{position: 'absolute', inset: 18, borderRadius: 24, border: '2px solid rgba(20,22,58,.17)', background: 'linear-gradient(145deg,#F4E8CB,#D5C397)'}} />
-          <svg data-food="tomato" viewBox="0 0 290 265" aria-label="Tomate inteiro com cálice e haste" style={{position: 'absolute', left: 56, top: 48, width: 290, height: 265, overflow: 'visible'}}>
+          <svg data-food="tomato" viewBox="0 0 290 265" aria-label="Tomate inteiro com cálice e haste" style={{position: 'absolute', left: 56, top: 55, width: 325, height: 297, overflow: 'visible'}}>
             <path data-part="tomato-body" d="M145 62 C160 48 174 54 183 67 C212 58 239 79 244 111 C253 148 235 187 207 204 C190 218 170 222 145 214 C120 222 100 218 83 204 C55 187 37 148 46 111 C51 79 78 58 107 67 C116 54 130 48 145 62Z" fill="#E6533F" stroke="#B93632" strokeWidth="4" />
             <path data-part="tomato-calyx" d="M145 76 C137 66 122 57 111 58 C117 70 123 78 133 83 C119 79 103 82 95 91 C108 98 123 99 136 93 C126 103 121 118 126 128 C139 119 146 106 146 94 C151 109 163 120 176 122 C178 108 171 97 159 89 C175 92 190 86 197 75 C183 69 168 71 156 80 C159 67 154 54 145 46 C136 55 132 67 136 80Z" fill="#397C50" stroke="#286742" strokeWidth="3" strokeLinejoin="round" />
             <path data-part="tomato-stem" d="M145 57 C145 47 149 39 156 33" fill="none" stroke="#286742" strokeWidth="8" strokeLinecap="round" />
