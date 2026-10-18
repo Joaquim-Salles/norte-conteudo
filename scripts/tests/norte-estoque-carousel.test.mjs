@@ -1,0 +1,77 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {existsSync, readFileSync, readdirSync} from 'node:fs';
+import path from 'node:path';
+import {groupMediaFiles} from '../lib/carousel-preview.mjs';
+
+const root = readFileSync(new URL('../../src/Root.tsx', import.meta.url), 'utf8');
+const templatePath = new URL('../../src/templates/NorteEstoqueCarousel.tsx', import.meta.url);
+const carouselPath = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Inventario e movimentacao');
+
+test('the selected Norte Estoque carousel registers five slides and three 3-second videos', () => {
+  for (const id of ['NorteEstoqueQR01', 'NorteEstoqueQR02', 'NorteEstoqueQR03', 'NorteEstoqueQR04', 'NorteEstoqueQR05']) {
+    assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
+  }
+
+  for (const id of ['NorteEstoqueQRAnimada02', 'NorteEstoqueQRAnimada03', 'NorteEstoqueQRAnimada04']) {
+    const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
+    assert.ok(composition, `${id} should be registered`);
+    assert.match(composition[0], /durationInFrames=\{90\}/, `${id} should last 3 seconds`);
+    assert.match(composition[0], /fps=\{30\}/, `${id} should be 30 fps`);
+  }
+});
+
+test('the label slide keeps its layout and adds a short downward entrance animation', () => {
+  const template = readFileSync(templatePath, 'utf8');
+  const composition = root.match(/<Composition id="NorteEstoqueQRAnimada03"[^>]*>/);
+  assert.ok(composition, 'the label animation should be registered');
+  assert.match(composition[0], /durationInFrames=\{90\}/);
+  assert.match(composition[0], /fps=\{30\}/);
+  assert.match(template, /export const NorteEstoqueQR03Animada/);
+  assert.match(template, /const pLabel = S\(f,/);
+  assert.match(template, /translateY\(\$\{\(1 - pLabel\) \* 140\}px\)/);
+});
+
+test('the selected carousel exports five slides and animates slides 2, 3, and 4', () => {
+  assert.ok(existsSync(carouselPath));
+  const slides = groupMediaFiles(readdirSync(carouselPath));
+  assert.equal(slides.length, 5);
+  assert.deepEqual(slides.map(({number}) => number), [1, 2, 3, 4, 5]);
+  assert.deepEqual(slides.filter(({animation}) => animation).map(({number}) => number), [2, 3, 4]);
+});
+
+test('the rejected Estoque sob controle carousel is removed while the selected carousel remains', () => {
+  const legacyPaths = [
+    path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Estoque sob controle'),
+    path.resolve('src/templates/NorteEstoqueApresentacao.tsx'),
+    path.resolve('src/NorteEstoqueApresentacaoEntry.tsx'),
+    path.resolve('scripts/render-norte-estoque-apresentacao.mjs'),
+    path.resolve('scripts/tests/norte-estoque-apresentacao.test.mjs'),
+  ];
+  assert.ok(legacyPaths.every((legacyPath) => !existsSync(legacyPath)), 'the rejected carousel and its generator should be removed');
+  assert.ok(existsSync(carouselPath), 'the selected carousel must remain intact');
+});
+
+test('the carousel uses the official Estoque color, real kit screens, and approved feature claims', () => {
+  assert.ok(existsSync(templatePath), 'the Norte Estoque carousel template should exist');
+  const template = readFileSync(templatePath, 'utf8');
+
+  assert.match(template, /<Produto id="estoque">/, 'each slide should use the product brand color');
+  assert.match(template, /norte-estoque_horizontal_branco_transparente\.png/, 'the official product logo should be used');
+  assert.match(template, /08-recursos\/telas-oficiais\/estoque\//, 'screens should come from the official brand kit');
+  for (const phrase of ['inventário com QR Code', 'etiquetas com lote e validade', 'transferências em massa online', 'complementa o Omie']) {
+    assert.ok(template.toLowerCase().includes(phrase.toLowerCase()), `the post should include the confirmed claim: ${phrase}`);
+  }
+  assert.doesNotMatch(template, /\b(?:76|62|82)%\b/, 'unvalidated performance percentages should not be published');
+});
+
+test('every internal slide identifies Norte Estoque and support copy clears the two-line headlines', () => {
+  const template = readFileSync(templatePath, 'utf8');
+  for (const tone of ['light', 'dark', 'product']) {
+    assert.ok(template.includes(`<Foot tone="${tone}" label="Norte Estoque"`), `${tone} slides should carry the correct product footer`);
+  }
+  assert.match(template, /<Foot tone="dark" last label="Norte Estoque"/);
+  assert.match(template, /<Support tone="product" top=\{650\}/, 'cover support should clear its two-line hook');
+  assert.match(template, /<Support tone="dark" top=\{430\}/, 'the label slide support should clear its headline');
+  assert.match(template, /<Support tone="product" top=\{430\}/, 'the transfer slide support should clear its headline');
+});

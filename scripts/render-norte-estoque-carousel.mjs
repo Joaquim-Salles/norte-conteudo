@@ -2,19 +2,17 @@ import path from 'node:path';
 import {bundle} from '@remotion/bundler';
 import {renderMedia, renderStill, selectComposition} from '@remotion/renderer';
 
-const output = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Estoque sob controle');
+const output = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Inventario e movimentacao');
 const slides = [
-  {number: 1, title: 'Capa', still: 'NorteEstoqueApresentacao01'},
-  {number: 2, title: 'Inventário por QR Code', still: 'NorteEstoqueApresentacao02', video: 'NorteEstoqueApresentacaoAnimada02'},
-  {number: 3, title: 'Conferência acompanhada', still: 'NorteEstoqueApresentacao03', video: 'NorteEstoqueApresentacaoAnimada03'},
-  {number: 4, title: 'Etiquetas de lote e validade', still: 'NorteEstoqueApresentacao04', video: 'NorteEstoqueApresentacaoAnimada04'},
-  {number: 5, title: 'Transferências em massa', still: 'NorteEstoqueApresentacao05', video: 'NorteEstoqueApresentacaoAnimada05'},
-  {number: 6, title: 'Acompanhamento da produção', still: 'NorteEstoqueApresentacao06', video: 'NorteEstoqueApresentacaoAnimada06'},
-  {number: 7, title: 'Fechamento', still: 'NorteEstoqueApresentacao07'},
+  {number: 1, title: 'Capa', still: 'NorteEstoqueQR01'},
+  {number: 2, title: 'Inventario com QR Code', still: 'NorteEstoqueQR02', video: 'NorteEstoqueQRAnimada02'},
+  {number: 3, title: 'Etiquetas com lote e validade', still: 'NorteEstoqueQR03', video: 'NorteEstoqueQRAnimada03'},
+  {number: 4, title: 'Transferencias em massa', still: 'NorteEstoqueQR04', video: 'NorteEstoqueQRAnimada04'},
+  {number: 5, title: 'Fechamento', still: 'NorteEstoqueQR05'},
 ];
 
 const serveUrl = await bundle({
-  entryPoint: path.resolve('src/NorteEstoqueApresentacaoEntry.tsx'),
+  entryPoint: path.resolve('src/index.ts'),
   onProgress: (value) => process.stdout.write(`Bundling ${Math.round(value)}%\r`),
 });
 process.stdout.write('\n');

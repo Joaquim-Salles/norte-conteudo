@@ -49,6 +49,16 @@ import {
   NorteVendasNotaFiscalAnim,
 } from './templates/NorteVendasPost';
 import {
+  NorteEstoqueQR01,
+  NorteEstoqueQR02,
+  NorteEstoqueQR02Animada,
+  NorteEstoqueQR03,
+  NorteEstoqueQR03Animada,
+  NorteEstoqueQR04,
+  NorteEstoqueQR04Animada,
+  NorteEstoqueQR05,
+} from './templates/NorteEstoqueCarousel';
+import {
   AntesDepoisAntes,
   AntesDepoisPonte,
   AntesDepoisDepois,
@@ -274,6 +284,17 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="NorteVendasQRAnimada03" component={NorteVendasTelasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasQRAnimada04" component={NorteVendasQRMesasAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteVendasQRAnimada06" component={NorteVendasNotaFiscalAnim} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+
+      {/* Norte Estoque — inventário, etiquetas e transferências no fluxo físico. */}
+      <Still id="NorteEstoqueQR01" component={NorteEstoqueQR01} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR02" component={NorteEstoqueQR02} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR03" component={NorteEstoqueQR03} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR04" component={NorteEstoqueQR04} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueQR05" component={NorteEstoqueQR05} width={FEED_WIDTH} height={FEED_HEIGHT} />
+
+      <Composition id="NorteEstoqueQRAnimada02" component={NorteEstoqueQR02Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueQRAnimada03" component={NorteEstoqueQR03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueQRAnimada04" component={NorteEstoqueQR04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
       {/* Norte Vendas para barracas de praia */}
       <Still id="NorteVendasBarraca01" component={NorteVendasBarraca01} width={FEED_WIDTH} height={FEED_HEIGHT} />
