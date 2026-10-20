@@ -21,6 +21,15 @@ test('the selected Norte Estoque carousel registers seven slides and five 3-seco
   }
 });
 
+test('the cover uses the approved stock-count pain hook and slide four presents inventory in a laptop', () => {
+  const template = readFileSync(templatePath, 'utf8');
+  assert.match(template, /Quanto tempo sua equipe perde tentando conferir o estoque\?/);
+  const registro = template.match(/const RegistroScene:[\s\S]*?(?=export const NorteEstoqueQR04)/);
+  assert.ok(registro, 'the inventory registration slide should exist');
+  assert.match(registro[0], /<LaptopFrame width=\{910\} screenHeight=\{554\}>[\s\S]*?src=\{TELA_INVENTARIO\}/, 'slide four should show its official inventory capture in a laptop frame');
+  assert.match(template, /data-device="laptop"/, 'the device frame should be semantically identified as a laptop');
+});
+
 test('the QR scan animation shows a food item being scanned by a phone', () => {
   const template = readFileSync(templatePath, 'utf8');
   const composition = root.match(/<Composition id="NorteEstoqueQRAnimada03"[^>]*>/);

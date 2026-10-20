@@ -42,6 +42,18 @@ const Screen: React.FC<{src: string; width: number; style?: React.CSSProperties}
   );
 };
 
+const LaptopFrame: React.FC<{width: number; screenHeight: number; children: React.ReactNode}> = ({width, screenHeight, children}) => (
+  <div data-device="laptop" style={{width, height: screenHeight + 40, display: 'flex', flexDirection: 'column', alignItems: 'center', filter: 'drop-shadow(0 20px 25px rgba(20,22,58,.20))'}}>
+    <div style={{position: 'relative', width: '100%', padding: 12, boxSizing: 'border-box', borderRadius: 20, background: '#17182D', border: '2px solid rgba(20,22,58,.72)'}}>
+      <div style={{position: 'relative', width: '100%', height: screenHeight, borderRadius: 8, overflow: 'hidden', background: '#F7F8FC'}}>
+        {children}
+      </div>
+      <div style={{position: 'absolute', left: '50%', top: 6, width: 5, height: 5, borderRadius: 99, background: '#555775', transform: 'translateX(-50%)'}} />
+    </div>
+    <div style={{width: '106%', height: 25, marginTop: -1, clipPath: 'polygon(2% 0, 98% 0, 100% 72%, 96% 100%, 4% 100%, 0 72%)', borderRadius: '0 0 15px 15px', background: 'linear-gradient(180deg,#D7D8E4 0%,#AEB0C3 78%,#777A91 100%)', borderTop: '1px solid rgba(255,255,255,.76)'}} />
+  </div>
+);
+
 const Phone: React.FC<{src: string; width: number; height: number; style?: React.CSSProperties}> = ({src, width, height, style}) => (
   <div style={{width, padding: 10, background: FRAME, borderRadius: 40, border: '2px solid rgba(251,251,254,.18)', boxShadow: '0 22px 36px rgba(20,22,58,.3)', ...style}}>
     <div style={{height, overflow: 'hidden', borderRadius: 30, background: WHITE}}>
@@ -60,7 +72,7 @@ export const NorteEstoqueQR01: React.FC = () => {
         <Img src={LOGO_ESTOQUE_BRANCO} style={{position: 'absolute', left: PAD, top: 78, height: 100, width: 'auto'}} />
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
         <Eyebrow tone="product" top={410}>Inventário · etiquetas · transferências</Eyebrow>
-        <Title tone="product" top={468} size={84}>O inventário ainda é planilha?</Title>
+        <Title tone="product" top={468} size={60}>Quanto tempo sua equipe perde tentando conferir o estoque?</Title>
         <Support tone="product" top={650} width={860} size={30}>
           O Norte Estoque organiza a conferência online, com leitura por QR Code, etiquetas e transferências em massa.
         </Support>
@@ -178,7 +190,9 @@ const RegistroScene: React.FC<{f?: number}> = ({f}) => {
           Acompanhe os produtos registrados e confira as informações na tela do inventário.
         </Support>
         <div style={{position: 'absolute', left: PAD - 16, top: 565, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 155}px)`}}>
-          <Screen src={TELA_INVENTARIO} width={910} />
+          <LaptopFrame width={910} screenHeight={554}>
+            <Img src={TELA_INVENTARIO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top', display: 'block'}} />
+          </LaptopFrame>
           <div data-focus-target="inventory-row" style={{position: 'absolute', left: 198, top: 155, right: 26, height: 30, border: '3px solid #168E9A', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: highlight}} />
         </div>
         <div style={{position: 'absolute', right: 98, top: 475, width: 110, height: 110, borderRadius: 100, background: '#168E9A', color: WHITE, display: 'grid', placeItems: 'center', boxShadow: '0 12px 24px rgba(20,22,58,.18)', opacity: highlight, transform: `scale(${0.8 + highlight * 0.2})`}}><Check size={58} strokeWidth={3} /></div>
