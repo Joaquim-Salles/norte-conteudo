@@ -8,19 +8,19 @@ const root = readFileSync(new URL('../../src/Root.tsx', import.meta.url), 'utf8'
 const templatePath = new URL('../../src/templates/NorteEstoqueCarousel.tsx', import.meta.url);
 const carouselPath = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Inventario e movimentacao');
 
-test('the selected Norte Estoque carousel registers seven slides and only the QR scan and transfer videos', () => {
+test('the selected Norte Estoque carousel registers seven slides with motion on inventory, QR scan, registration, and transfer', () => {
   for (const id of ['NorteEstoqueQR01', 'NorteEstoqueQR02', 'NorteEstoqueQR03', 'NorteEstoqueQR04', 'NorteEstoqueQR05', 'NorteEstoqueQR06', 'NorteEstoqueQR07']) {
     assert.match(root, new RegExp(`<Still\\s+id="${id}"`), `${id} should be registered`);
   }
 
-  for (const id of ['NorteEstoqueQRAnimada03', 'NorteEstoqueQRAnimada06']) {
+  for (const id of ['NorteEstoqueQRAnimada02', 'NorteEstoqueQRAnimada03', 'NorteEstoqueQRAnimada05', 'NorteEstoqueQRAnimada06']) {
     const composition = root.match(new RegExp(`<Composition\\s+id="${id}"[^>]*>`));
     assert.ok(composition, `${id} should be registered`);
     assert.match(composition[0], /durationInFrames=\{90\}/, `${id} should last 3 seconds`);
     assert.match(composition[0], /fps=\{30\}/, `${id} should be 30 fps`);
   }
   const registeredStockAnimations = [...root.matchAll(/<Composition\s+id="NorteEstoqueQRAnimada(\d+)"/g)].map((match) => Number(match[1]));
-  assert.deepEqual(registeredStockAnimations, [3, 6], 'only the QR scan and illustrated transfer should be animated');
+  assert.deepEqual(registeredStockAnimations, [2, 3, 5, 6], 'the inventory screen, QR scan, registration screen, and transfer should be animated');
 });
 
 test('the cover uses the approved stock-count pain hook', () => {
@@ -28,20 +28,27 @@ test('the cover uses the approved stock-count pain hook', () => {
   assert.match(template, /Quanto tempo sua equipe perde tentando conferir o estoque\?/);
 });
 
-test('slide four explains product-to-inventory registration with an illustration, not a system screen', () => {
+test('slide four shows an easy-to-read lot and expiry label on a warm stock package', () => {
   const template = readFileSync(templatePath, 'utf8');
-  const registro = template.match(/const RegistroScene:[\s\S]*?(?=export const NorteEstoqueQR04)/);
-  assert.ok(registro, 'the inventory registration slide should exist');
-  assert.match(registro[0], /data-illustration="product-to-inventory"/, 'the drawing should show a product moving into an inventory record');
-  assert.doesNotMatch(registro[0], /LaptopFrame|<Screen|TELA_INVENTARIO/, 'slide four should not repeat a system screen');
+  const etiqueta = template.match(/const EtiquetaScene:[\s\S]*?(?=export const NorteEstoqueQR04)/);
+  assert.ok(etiqueta, 'the label slide should exist');
+  assert.match(etiqueta[0], /data-illustration="lot-expiry-label"/, 'the label should be the clear focus');
+  assert.match(etiqueta[0], /data-label-row="lot"/);
+  assert.match(etiqueta[0], /data-label-row="expiry"/);
+  assert.match(etiqueta[0], /<table/);
+  assert.doesNotMatch(etiqueta[0], /#CBD5D8|#D8DFE0|#B9C8CB/, 'the label should not sit on an ambiguous gray tub');
 });
 
-test('slide five shows a printed identification label on a storage container without a monitor', () => {
+test('slide five animates the inventory record into view on a notebook', () => {
   const template = readFileSync(templatePath, 'utf8');
-  const etiqueta = template.match(/const EtiquetaScene:[\s\S]*?(?=export const NorteEstoqueQR05)/);
-  assert.ok(etiqueta, 'the product label slide should exist');
-  assert.match(etiqueta[0], /data-illustration="label-on-container"/, 'the label should visibly belong to a stock container');
-  assert.doesNotMatch(etiqueta[0], /<Screen|TELA_IMPRESSOES/, 'slide five should use a physical product visual, not another screen');
+  const registro = template.match(/const RegistroScene:[\s\S]*?(?=export const NorteEstoqueQR05)/);
+  assert.ok(registro, 'the inventory registration slide should exist');
+  assert.match(registro[0], /data-illustration="inventory-notebook"/);
+  assert.match(registro[0], /<LaptopFrame/);
+  assert.match(registro[0], /TELA_INVENTARIO/);
+  assert.match(registro[0], /data-focus-target="inventory-row"/);
+  assert.match(template, /NorteEstoqueQR05Animada/);
+  assert.match(registro[0], /Depois da leitura, o produto aparece no inventário/);
 });
 
 test('slide six animates a stock transfer between two labeled locations without a system screen', () => {
@@ -83,12 +90,12 @@ test('the inventory screen highlights one real row and the tomato label has no g
   assert.doesNotMatch(template, /TOMATE · ITEM DE ESTOQUE/);
 });
 
-test('the selected carousel exports seven slides and animates only slides 3 and 6', () => {
+test('the selected carousel exports seven slides and animates only slides 2, 3, 5, and 6', () => {
   assert.ok(existsSync(carouselPath));
   const slides = groupMediaFiles(readdirSync(carouselPath));
   assert.equal(slides.length, 7);
   assert.deepEqual(slides.map(({number}) => number), [1, 2, 3, 4, 5, 6, 7]);
-  assert.deepEqual(slides.filter(({animation}) => animation).map(({number}) => number), [3, 6]);
+  assert.deepEqual(slides.filter(({animation}) => animation).map(({number}) => number), [2, 3, 5, 6]);
 });
 
 test('the rejected Estoque sob controle carousel is removed while the selected carousel remains', () => {

@@ -5,10 +5,10 @@ import {renderMedia, renderStill, selectComposition} from '@remotion/renderer';
 const output = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Inventario e movimentacao');
 const slides = [
   {number: 1, title: 'Capa', still: 'NorteEstoqueQR01'},
-  {number: 2, title: 'Inventario com QR Code', still: 'NorteEstoqueQR02'},
+  {number: 2, title: 'Inventario com QR Code', still: 'NorteEstoqueQR02', video: 'NorteEstoqueQRAnimada02'},
   {number: 3, title: 'Leitura do QR Code no alimento', still: 'NorteEstoqueQR03', video: 'NorteEstoqueQRAnimada03'},
-  {number: 4, title: 'Registro no inventario', still: 'NorteEstoqueQR04'},
-  {number: 5, title: 'Etiquetas com lote e validade', still: 'NorteEstoqueQR05'},
+  {number: 4, title: 'Etiquetas com lote e validade', still: 'NorteEstoqueQR04'},
+  {number: 5, title: 'Registro no inventario', still: 'NorteEstoqueQR05', video: 'NorteEstoqueQRAnimada05'},
   {number: 6, title: 'Transferencias em massa', still: 'NorteEstoqueQR06', video: 'NorteEstoqueQRAnimada06'},
   {number: 7, title: 'Fechamento', still: 'NorteEstoqueQR07'},
 ];

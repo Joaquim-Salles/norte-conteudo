@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, ArrowRightLeft, Check, Package, QrCode, Tag} from 'lucide-react';
+import {ArrowRightLeft, Check, Package, QrCode, Tag} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   A,
@@ -27,6 +27,16 @@ import {
 const LOGO_ESTOQUE_BRANCO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
 const TELA_INVENTARIO = kit('08-recursos/telas-oficiais/estoque/d-inventario.png');
 const TELA_INVENTARIO_MOBILE = kit('08-recursos/telas-oficiais/estoque/m-inventario.png');
+
+const LaptopFrame: React.FC<{width: number; screenHeight: number; children: React.ReactNode}> = ({width, screenHeight, children}) => (
+  <div data-device="laptop" style={{width, height: screenHeight + 40, display: 'flex', flexDirection: 'column', alignItems: 'center', filter: 'drop-shadow(0 22px 28px rgba(20,22,58,.24))'}}>
+    <div style={{position: 'relative', width: '100%', padding: 12, boxSizing: 'border-box', borderRadius: 20, background: '#17182D', border: '2px solid rgba(251,251,254,.72)'}}>
+      <div style={{position: 'relative', width: '100%', height: screenHeight, borderRadius: 8, overflow: 'hidden', background: '#F7F8FC'}}>{children}</div>
+      <div style={{position: 'absolute', left: '50%', top: 6, width: 5, height: 5, borderRadius: 99, background: '#555775', transform: 'translateX(-50%)'}} />
+    </div>
+    <div style={{width: '106%', height: 25, marginTop: -1, clipPath: 'polygon(3% 0,97% 0,100% 70%,96% 100%,4% 100%,0 70%)', borderRadius: '0 0 15px 15px', background: 'linear-gradient(180deg,#E8EAF2,#AEB4C7)', borderTop: '1px solid rgba(255,255,255,.76)'}} />
+  </div>
+);
 
 const Screen: React.FC<{src: string; width: number; style?: React.CSSProperties}> = ({src, width, style}) => {
   const height = Math.round((width - 24) * (1800 / 2880));
@@ -107,6 +117,7 @@ const InventarioScene: React.FC<{f?: number}> = ({f}) => {
 };
 
 export const NorteEstoqueQR02: React.FC = () => <InventarioScene />;
+export const NorteEstoqueQR02Animada: React.FC = () => <InventarioScene f={useCurrentFrame()} />;
 
 /* 03 · Leitura prática do QR Code no alimento */
 const ScanScene: React.FC<{f?: number}> = ({f}) => {
@@ -158,44 +169,26 @@ const ScanScene: React.FC<{f?: number}> = ({f}) => {
 export const NorteEstoqueQR03: React.FC = () => <ScanScene />;
 export const NorteEstoqueQR03Animada: React.FC = () => <ScanScene f={useCurrentFrame()} />;
 
-/* 04 · A leitura chega ao inventário */
-const RegistroScene: React.FC = () => {
+/* 05 · A leitura chega ao inventário */
+const RegistroScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
+  const pScreen = S(f, 10, {damping: 16, stiffness: 120, mass: 0.85});
+  const highlight = f === undefined ? 0.82 : interpolate(f, [38, 50, 70, 82], [0, 1, 1, 0.82], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Produto id="estoque">
       <AbsoluteFill>
-        <Background tone="light" id="ne-qr-grid-4" />
-        <Top n={4} total={7} tone="light" />
+        <Background tone="light" id="ne-qr-grid-5" />
+        <Top n={5} total={7} tone="light" />
         <Eyebrow tone="light" top={195}>Conferência online</Eyebrow>
         <Title tone="light" top={245} size={78}>Da leitura ao inventário.</Title>
         <Support tone="light" top={355} width={850} size={29}>
-          A leitura identifica o produto e atualiza o inventário conferido.
+          Depois da leitura, o produto aparece no inventário para a equipe registrar a quantidade conferida e acompanhar o que já foi registrado.
         </Support>
-        <div data-illustration="product-to-inventory" style={{position: 'absolute', left: 88, top: 565, width: 904, height: 500, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-          <div style={{position: 'relative', width: 292, height: 340, borderRadius: '20px 20px 28px 28px', background: 'linear-gradient(145deg,#EBD9B7,#D8C39B)', border: '4px solid rgba(20,22,58,.78)', boxShadow: '0 22px 35px rgba(20,22,58,.13)'}}>
-            <div style={{position: 'absolute', left: -13, right: -13, top: -17, height: 36, borderRadius: 12, background: '#F8E9C9', border: '4px solid rgba(20,22,58,.78)'}} />
-            <div style={{position: 'absolute', left: 22, right: 22, bottom: 22, height: 30, borderTop: '3px solid rgba(20,22,58,.2)', borderBottom: '3px solid rgba(20,22,58,.2)'}} />
-            <div style={{position: 'absolute', left: 79, top: 89, width: 134, height: 143, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7, background: WHITE, border: '3px solid rgba(20,22,58,.18)', borderRadius: 14, boxShadow: '0 10px 18px rgba(20,22,58,.12)'}}>
-              <QrCode size={86} color={NAVY} strokeWidth={2.1} />
-              <span style={{fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: 1.4, color: NAVY}}>PRODUTO</span>
-            </div>
-            <div style={{position: 'absolute', left: 0, right: 0, bottom: 59, textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 2, color: NAVY}}>COM QR CODE</div>
-          </div>
-          <div style={{width: 78, display: 'grid', justifyItems: 'center', gap: 12, color: '#168E9A'}}>
-            <ArrowRight size={60} strokeWidth={2.3} />
-            <span style={{fontFamily: SANS, fontSize: 14, fontWeight: 700, letterSpacing: 1.7, color: '#168E9A'}}>LEITURA</span>
-          </div>
-          <div style={{position: 'relative', width: 360, height: 360, padding: '38px 30px', boxSizing: 'border-box', borderRadius: 22, background: WHITE, border: '4px solid rgba(20,22,58,.82)', boxShadow: '0 22px 35px rgba(20,22,58,.13)'}}>
-            <div style={{position: 'absolute', left: '50%', top: -17, width: 112, height: 35, transform: 'translateX(-50%)', borderRadius: 10, background: '#B9DDE0', border: '3px solid rgba(20,22,58,.7)'}} />
-            <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 19, letterSpacing: 2.2, color: NAVY}}>INVENTÁRIO</div>
-            <div style={{height: 2, background: 'rgba(20,22,58,.14)', margin: '18px 0 10px'}} />
-            {['Produto identificado', 'Quantidade conferida', 'Registro atualizado'].map((label) => (
-              <div key={label} style={{height: 67, display: 'flex', alignItems: 'center', gap: 13, borderBottom: '1px solid rgba(20,22,58,.12)'}}>
-                <span style={{width: 29, height: 29, flex: '0 0 auto', borderRadius: 99, display: 'grid', placeItems: 'center', background: '#168E9A', color: WHITE}}><Check size={19} strokeWidth={3} /></span>
-                <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 17, color: NAVY}}>{label}</span>
-              </div>
-            ))}
-          </div>
+        <div data-illustration="inventory-notebook" style={{position: 'absolute', left: PAD - 16, top: 565, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 155}px)`}}>
+          <LaptopFrame width={910} screenHeight={554}>
+            <Img src={TELA_INVENTARIO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top', display: 'block'}} />
+          </LaptopFrame>
+          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 198, top: 155, right: 26, height: 30, border: '3px solid #168E9A', borderRadius: 9, boxShadow: '0 0 0 4px rgba(22,142,154,.13)', opacity: highlight}} />
         </div>
         <Foot tone="light" label="Norte Estoque" />
       </AbsoluteFill>
@@ -203,33 +196,41 @@ const RegistroScene: React.FC = () => {
   );
 };
 
-export const NorteEstoqueQR04: React.FC = () => <RegistroScene />;
+export const NorteEstoqueQR05: React.FC = () => <RegistroScene />;
+export const NorteEstoqueQR05Animada: React.FC = () => <RegistroScene f={useCurrentFrame()} />;
 
-/* 05 · Etiquetas com lote e validade */
+/* 04 · Etiquetas com lote e validade */
 const EtiquetaScene: React.FC = () => {
   ensurePostLoaded();
   return (
     <Produto id="estoque">
       <AbsoluteFill>
-        <Background tone="dark" id="ne-qr-grid-5" />
-        <Top n={5} total={7} tone="dark" />
+        <Background tone="dark" id="ne-qr-grid-4" />
+        <Top n={4} total={7} tone="dark" />
         <Eyebrow tone="dark" top={195}>Identificação e rastreabilidade</Eyebrow>
         <Title tone="dark" top={245} size={78}>Lote e validade na etiqueta.</Title>
         <Support tone="dark" top={430} width={850} size={29}>
           Emita etiquetas com lote e validade para identificar produtos e acompanhar a operação.
         </Support>
-        <div data-illustration="label-on-container" style={{position: 'absolute', left: 196, top: 565, width: 688, height: 505, filter: 'drop-shadow(0 25px 36px rgba(0,0,0,.28))'}}>
-          <div style={{position: 'absolute', left: 0, right: 0, top: 42, height: 405, borderRadius: '28px 28px 42px 42px', background: 'linear-gradient(110deg,#CBD5D8 0%,#F5F5F0 16%,#D8DFE0 50%,#B9C8CB 100%)', border: '4px solid rgba(251,251,254,.62)', boxShadow: 'inset 0 -22px 0 rgba(20,22,58,.08)'}}>
-            <div style={{position: 'absolute', left: 24, right: 24, top: 20, height: 22, borderRadius: 8, background: 'rgba(20,22,58,.12)'}} />
-            <div style={{position: 'absolute', left: 30, right: 30, bottom: 25, height: 24, borderRadius: 8, borderTop: '3px solid rgba(20,22,58,.16)', borderBottom: '3px solid rgba(20,22,58,.16)'}} />
-            <div style={{position: 'absolute', left: '50%', top: 68, width: 286, height: 296, padding: '23px 24px', boxSizing: 'border-box', transform: 'translateX(-50%) rotate(-2deg)', borderRadius: 10, background: '#FFFDF8', border: '2px solid rgba(20,22,58,.17)', boxShadow: '0 14px 22px rgba(20,22,58,.19)'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.5, color: '#168E9A'}}><Tag size={25} /> IDENTIFICAÇÃO</div>
-              <div style={{height: 2, margin: '16px 0', background: 'rgba(20,22,58,.16)'}} />
-              <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 15, lineHeight: 1.9, letterSpacing: .8, color: NAVY}}>PRODUTO<br />LOTE: __________<br />VALIDADE: __/__/____</div>
-              <QrCode size={88} color={NAVY} strokeWidth={2.2} style={{display: 'block', margin: '12px auto 0'}} />
+        <div data-illustration="lot-expiry-label" style={{position: 'absolute', left: 145, top: 565, width: 780, height: 505, filter: 'drop-shadow(0 25px 36px rgba(0,0,0,.28))'}}>
+          <div data-package="kraft-stock-box" style={{position: 'absolute', left: 15, right: 15, top: 112, height: 315, borderRadius: '20px 20px 28px 28px', background: 'linear-gradient(105deg,#A96F3D 0%,#D5A267 12%,#C18A50 48%,#A66D3C 100%)', border: '4px solid rgba(251,251,254,.72)', boxShadow: 'inset 0 -20px 0 rgba(92,51,25,.13)'}}>
+            <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 22, background: 'rgba(91,53,28,.16)', borderBottom: '2px solid rgba(91,53,28,.22)'}} />
+            <div style={{position: 'absolute', left: '50%', top: 28, width: 385, height: 354, padding: '24px 26px', boxSizing: 'border-box', transform: 'translateX(-50%) rotate(-1deg)', borderRadius: 12, background: '#FFFDF7', border: '2px solid rgba(20,22,58,.22)', boxShadow: '0 14px 22px rgba(20,22,58,.2)'}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.4, color: '#168E9A'}}><span>ETIQUETA DE ESTOQUE</span><Tag size={22} /></div>
+              <table style={{width: '100%', marginTop: 18, borderCollapse: 'collapse', fontFamily: MONO, color: NAVY, textAlign: 'left'}}>
+                <thead><tr style={{fontSize: 12, letterSpacing: 1.2, color: '#62677F'}}><th style={{padding: '7px 4px', borderBottom: '2px solid rgba(20,22,58,.2)'}}>IDENTIFICAÇÃO</th><th style={{padding: '7px 4px', borderBottom: '2px solid rgba(20,22,58,.2)'}}>DADO</th></tr></thead>
+                <tbody>
+                  <tr><th style={{padding: '12px 4px', fontSize: 15, borderBottom: '1px solid rgba(20,22,58,.15)'}}>PRODUTO</th><td style={{padding: '12px 4px', borderBottom: '1px solid rgba(20,22,58,.15)'}}>____________</td></tr>
+                  <tr data-label-row="lot"><th style={{padding: '12px 4px', fontSize: 15, borderBottom: '1px solid rgba(20,22,58,.15)'}}>LOTE</th><td style={{padding: '12px 4px', borderBottom: '1px solid rgba(20,22,58,.15)'}}>____________</td></tr>
+                  <tr data-label-row="expiry"><th style={{padding: '12px 4px', fontSize: 15}}>VALIDADE</th><td style={{padding: '12px 4px'}}>__/__/____</td></tr>
+                </tbody>
+              </table>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 17, paddingTop: 12, borderTop: '2px dashed rgba(20,22,58,.2)'}}>
+                <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 14, letterSpacing: 1.2, color: '#168E9A'}}>RASTREABILIDADE</span>
+                <QrCode size={80} color={NAVY} strokeWidth={2.2} />
+              </div>
             </div>
           </div>
-          <div style={{position: 'absolute', left: -8, right: -8, top: 20, height: 46, borderRadius: 14, background: 'linear-gradient(180deg,#EDF1F1,#C5D0D2)', border: '3px solid rgba(251,251,254,.65)'}} />
         </div>
         <Foot tone="dark" label="Norte Estoque" />
       </AbsoluteFill>
@@ -237,7 +238,7 @@ const EtiquetaScene: React.FC = () => {
   );
 };
 
-export const NorteEstoqueQR05: React.FC = () => <EtiquetaScene />;
+export const NorteEstoqueQR04: React.FC = () => <EtiquetaScene />;
 
 /* 06 · Transferências em massa online */
 const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
