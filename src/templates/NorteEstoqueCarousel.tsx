@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {Check, QrCode, Tag} from 'lucide-react';
+import {ArrowRight, ArrowRightLeft, Check, Package, QrCode, Tag} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {
   A,
@@ -13,14 +13,13 @@ import {
   NAVY,
   PAD,
   PAPER,
-  Paper,
   Produto,
   S,
   Support,
-  TEXT2,
   Title,
   Top,
   WHITE,
+  ease,
   kit,
   mute,
 } from '../lib/NortePost';
@@ -28,8 +27,6 @@ import {
 const LOGO_ESTOQUE_BRANCO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
 const TELA_INVENTARIO = kit('08-recursos/telas-oficiais/estoque/d-inventario.png');
 const TELA_INVENTARIO_MOBILE = kit('08-recursos/telas-oficiais/estoque/m-inventario.png');
-const TELA_IMPRESSOES = kit('08-recursos/telas-oficiais/estoque/d-impressoes.png');
-const TELA_TRANSFERENCIAS = kit('08-recursos/telas-oficiais/estoque/d-transferencia.png');
 
 const Screen: React.FC<{src: string; width: number; style?: React.CSSProperties}> = ({src, width, style}) => {
   const height = Math.round((width - 24) * (1800 / 2880));
@@ -41,18 +38,6 @@ const Screen: React.FC<{src: string; width: number; style?: React.CSSProperties}
     </div>
   );
 };
-
-const LaptopFrame: React.FC<{width: number; screenHeight: number; children: React.ReactNode}> = ({width, screenHeight, children}) => (
-  <div data-device="laptop" style={{width, height: screenHeight + 40, display: 'flex', flexDirection: 'column', alignItems: 'center', filter: 'drop-shadow(0 20px 25px rgba(20,22,58,.20))'}}>
-    <div style={{position: 'relative', width: '100%', padding: 12, boxSizing: 'border-box', borderRadius: 20, background: '#17182D', border: '2px solid rgba(20,22,58,.72)'}}>
-      <div style={{position: 'relative', width: '100%', height: screenHeight, borderRadius: 8, overflow: 'hidden', background: '#F7F8FC'}}>
-        {children}
-      </div>
-      <div style={{position: 'absolute', left: '50%', top: 6, width: 5, height: 5, borderRadius: 99, background: '#555775', transform: 'translateX(-50%)'}} />
-    </div>
-    <div style={{width: '106%', height: 25, marginTop: -1, clipPath: 'polygon(2% 0, 98% 0, 100% 72%, 96% 100%, 4% 100%, 0 72%)', borderRadius: '0 0 15px 15px', background: 'linear-gradient(180deg,#D7D8E4 0%,#AEB0C3 78%,#777A91 100%)', borderTop: '1px solid rgba(255,255,255,.76)'}} />
-  </div>
-);
 
 const Phone: React.FC<{src: string; width: number; height: number; style?: React.CSSProperties}> = ({src, width, height, style}) => (
   <div style={{width, padding: 10, background: FRAME, borderRadius: 40, border: '2px solid rgba(251,251,254,.18)', boxShadow: '0 22px 36px rgba(20,22,58,.3)', ...style}}>
@@ -122,7 +107,6 @@ const InventarioScene: React.FC<{f?: number}> = ({f}) => {
 };
 
 export const NorteEstoqueQR02: React.FC = () => <InventarioScene />;
-export const NorteEstoqueQR02Animada: React.FC = () => <InventarioScene f={useCurrentFrame()} />;
 
 /* 03 · Leitura prática do QR Code no alimento */
 const ScanScene: React.FC<{f?: number}> = ({f}) => {
@@ -175,10 +159,8 @@ export const NorteEstoqueQR03: React.FC = () => <ScanScene />;
 export const NorteEstoqueQR03Animada: React.FC = () => <ScanScene f={useCurrentFrame()} />;
 
 /* 04 · A leitura chega ao inventário */
-const RegistroScene: React.FC<{f?: number}> = ({f}) => {
+const RegistroScene: React.FC = () => {
   ensurePostLoaded();
-  const pScreen = S(f, 10, {damping: 16, stiffness: 125, mass: 0.85});
-  const highlight = f === undefined ? 0.82 : interpolate(f, [38, 50, 70, 82], [0, 1, 1, 0.82], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <Produto id="estoque">
       <AbsoluteFill>
@@ -187,15 +169,34 @@ const RegistroScene: React.FC<{f?: number}> = ({f}) => {
         <Eyebrow tone="light" top={195}>Conferência online</Eyebrow>
         <Title tone="light" top={245} size={78}>Da leitura ao inventário.</Title>
         <Support tone="light" top={355} width={850} size={29}>
-          Acompanhe os produtos registrados e confira as informações na tela do inventário.
+          A leitura identifica o produto e atualiza o inventário conferido.
         </Support>
-        <div style={{position: 'absolute', left: PAD - 16, top: 565, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 155}px)`}}>
-          <LaptopFrame width={910} screenHeight={554}>
-            <Img src={TELA_INVENTARIO} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top', display: 'block'}} />
-          </LaptopFrame>
-          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 198, top: 155, right: 26, height: 30, border: '3px solid #168E9A', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: highlight}} />
+        <div data-illustration="product-to-inventory" style={{position: 'absolute', left: 88, top: 565, width: 904, height: 500, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          <div style={{position: 'relative', width: 292, height: 340, borderRadius: '20px 20px 28px 28px', background: 'linear-gradient(145deg,#EBD9B7,#D8C39B)', border: '4px solid rgba(20,22,58,.78)', boxShadow: '0 22px 35px rgba(20,22,58,.13)'}}>
+            <div style={{position: 'absolute', left: -13, right: -13, top: -17, height: 36, borderRadius: 12, background: '#F8E9C9', border: '4px solid rgba(20,22,58,.78)'}} />
+            <div style={{position: 'absolute', left: 22, right: 22, bottom: 22, height: 30, borderTop: '3px solid rgba(20,22,58,.2)', borderBottom: '3px solid rgba(20,22,58,.2)'}} />
+            <div style={{position: 'absolute', left: 79, top: 89, width: 134, height: 143, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7, background: WHITE, border: '3px solid rgba(20,22,58,.18)', borderRadius: 14, boxShadow: '0 10px 18px rgba(20,22,58,.12)'}}>
+              <QrCode size={86} color={NAVY} strokeWidth={2.1} />
+              <span style={{fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: 1.4, color: NAVY}}>PRODUTO</span>
+            </div>
+            <div style={{position: 'absolute', left: 0, right: 0, bottom: 59, textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 2, color: NAVY}}>COM QR CODE</div>
+          </div>
+          <div style={{width: 78, display: 'grid', justifyItems: 'center', gap: 12, color: '#168E9A'}}>
+            <ArrowRight size={60} strokeWidth={2.3} />
+            <span style={{fontFamily: SANS, fontSize: 14, fontWeight: 700, letterSpacing: 1.7, color: '#168E9A'}}>LEITURA</span>
+          </div>
+          <div style={{position: 'relative', width: 360, height: 360, padding: '38px 30px', boxSizing: 'border-box', borderRadius: 22, background: WHITE, border: '4px solid rgba(20,22,58,.82)', boxShadow: '0 22px 35px rgba(20,22,58,.13)'}}>
+            <div style={{position: 'absolute', left: '50%', top: -17, width: 112, height: 35, transform: 'translateX(-50%)', borderRadius: 10, background: '#B9DDE0', border: '3px solid rgba(20,22,58,.7)'}} />
+            <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 19, letterSpacing: 2.2, color: NAVY}}>INVENTÁRIO</div>
+            <div style={{height: 2, background: 'rgba(20,22,58,.14)', margin: '18px 0 10px'}} />
+            {['Produto identificado', 'Quantidade conferida', 'Registro atualizado'].map((label) => (
+              <div key={label} style={{height: 67, display: 'flex', alignItems: 'center', gap: 13, borderBottom: '1px solid rgba(20,22,58,.12)'}}>
+                <span style={{width: 29, height: 29, flex: '0 0 auto', borderRadius: 99, display: 'grid', placeItems: 'center', background: '#168E9A', color: WHITE}}><Check size={19} strokeWidth={3} /></span>
+                <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 17, color: NAVY}}>{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{position: 'absolute', right: 98, top: 475, width: 110, height: 110, borderRadius: 100, background: '#168E9A', color: WHITE, display: 'grid', placeItems: 'center', boxShadow: '0 12px 24px rgba(20,22,58,.18)', opacity: highlight, transform: `scale(${0.8 + highlight * 0.2})`}}><Check size={58} strokeWidth={3} /></div>
         <Foot tone="light" label="Norte Estoque" />
       </AbsoluteFill>
     </Produto>
@@ -203,12 +204,10 @@ const RegistroScene: React.FC<{f?: number}> = ({f}) => {
 };
 
 export const NorteEstoqueQR04: React.FC = () => <RegistroScene />;
-export const NorteEstoqueQR04Animada: React.FC = () => <RegistroScene f={useCurrentFrame()} />;
 
 /* 05 · Etiquetas com lote e validade */
-const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
+const EtiquetaScene: React.FC = () => {
   ensurePostLoaded();
-  const pLabel = S(f, 18, {damping: 15, stiffness: 140, mass: 0.8});
   return (
     <Produto id="estoque">
       <AbsoluteFill>
@@ -219,23 +218,18 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
         <Support tone="dark" top={430} width={850} size={29}>
           Emita etiquetas com lote e validade para identificar produtos e acompanhar a operação.
         </Support>
-        <div style={{position: 'absolute', left: PAD, top: 560}}>
-          <Screen src={TELA_IMPRESSOES} width={690} />
-        </div>
-        <div style={{position: 'absolute', right: 100, top: 640, opacity: Math.min(1, pLabel * 1.25), transform: `translateY(${(1 - pLabel) * 140}px) rotate(2deg)`}}>
-          <Paper width={300} style={{filter: 'drop-shadow(0 20px 30px rgba(0,0,0,.3))'}}>
-            <div style={{padding: '26px 24px 32px'}}>
-              <div style={{textAlign: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 16, letterSpacing: 2, color: '#168E9A'}}>EXEMPLO</div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 12, marginTop: 22}}>
-                <Tag size={32} color="#168E9A" />
-                <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 21, color: NAVY}}>Produto de exemplo</div>
-              </div>
-              <div style={{marginTop: 18, borderTop: '1px dashed rgba(20,22,58,.25)', paddingTop: 14, fontFamily: MONO, fontSize: 18, lineHeight: 1.65, color: TEXT2}}>
-                LOTE&nbsp;&nbsp; EX-001<br />VALIDADE&nbsp; 31/12/2026
-              </div>
-              <QrCode size={90} color={NAVY} style={{display: 'block', margin: '16px auto 0'}} />
+        <div data-illustration="label-on-container" style={{position: 'absolute', left: 196, top: 565, width: 688, height: 505, filter: 'drop-shadow(0 25px 36px rgba(0,0,0,.28))'}}>
+          <div style={{position: 'absolute', left: 0, right: 0, top: 42, height: 405, borderRadius: '28px 28px 42px 42px', background: 'linear-gradient(110deg,#CBD5D8 0%,#F5F5F0 16%,#D8DFE0 50%,#B9C8CB 100%)', border: '4px solid rgba(251,251,254,.62)', boxShadow: 'inset 0 -22px 0 rgba(20,22,58,.08)'}}>
+            <div style={{position: 'absolute', left: 24, right: 24, top: 20, height: 22, borderRadius: 8, background: 'rgba(20,22,58,.12)'}} />
+            <div style={{position: 'absolute', left: 30, right: 30, bottom: 25, height: 24, borderRadius: 8, borderTop: '3px solid rgba(20,22,58,.16)', borderBottom: '3px solid rgba(20,22,58,.16)'}} />
+            <div style={{position: 'absolute', left: '50%', top: 68, width: 286, height: 296, padding: '23px 24px', boxSizing: 'border-box', transform: 'translateX(-50%) rotate(-2deg)', borderRadius: 10, background: '#FFFDF8', border: '2px solid rgba(20,22,58,.17)', boxShadow: '0 14px 22px rgba(20,22,58,.19)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 10, fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.5, color: '#168E9A'}}><Tag size={25} /> IDENTIFICAÇÃO</div>
+              <div style={{height: 2, margin: '16px 0', background: 'rgba(20,22,58,.16)'}} />
+              <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 15, lineHeight: 1.9, letterSpacing: .8, color: NAVY}}>PRODUTO<br />LOTE: __________<br />VALIDADE: __/__/____</div>
+              <QrCode size={88} color={NAVY} strokeWidth={2.2} style={{display: 'block', margin: '12px auto 0'}} />
             </div>
-          </Paper>
+          </div>
+          <div style={{position: 'absolute', left: -8, right: -8, top: 20, height: 46, borderRadius: 14, background: 'linear-gradient(180deg,#EDF1F1,#C5D0D2)', border: '3px solid rgba(251,251,254,.65)'}} />
         </div>
         <Foot tone="dark" label="Norte Estoque" />
       </AbsoluteFill>
@@ -244,14 +238,14 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
 };
 
 export const NorteEstoqueQR05: React.FC = () => <EtiquetaScene />;
-export const NorteEstoqueQR05Animada: React.FC = () => <EtiquetaScene f={useCurrentFrame()} />;
 
-/* 04 · Transferências em massa online */
+/* 06 · Transferências em massa online */
 const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
   ensurePostLoaded();
-  const pScreen = S(f, 14, {damping: 17, stiffness: 110, mass: 0.9});
-  const highlight = f === undefined ? 0 : interpolate(f, [42, 52, 68, 78], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const zoom = f === undefined ? 1 : 1 + 0.018 * Math.min(1, f / 76);
+  const progress = f === undefined ? 1 : interpolate(f, [12, 70], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+  const check = f === undefined ? 1 : interpolate(f, [68, 78], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const packageX = 292 + progress * 374;
+  const packageY = 230 - Math.sin(progress * Math.PI) * 27;
   return (
     <Produto id="estoque">
       <AbsoluteFill>
@@ -263,12 +257,34 @@ const TransferenciasScene: React.FC<{f?: number}> = ({f}) => {
         </Fx>
         <Fx p={A(f, 8, 18)}>
           <Support tone="product" top={430} width={850} size={29}>
-            Faça transferências em massa online entre locais de estoque, com a movimentação registrada no sistema.
+            Faça transferências em massa entre locais de estoque e acompanhe cada movimentação na operação.
           </Support>
         </Fx>
-        <div style={{position: 'absolute', left: PAD - 6, top: 560, opacity: Math.min(1, pScreen * 1.3), transform: `translateY(${(1 - pScreen) * 150}px) scale(${zoom})`, transformOrigin: '50% 60%'}}>
-          <Screen src={TELA_TRANSFERENCIAS} width={910} />
-          <div data-focus-target="inventory-row" style={{position: 'absolute', left: 202, right: 18, top: 180, height: 30, border: '3px solid rgba(22,142,154,.9)', borderRadius: 10, boxShadow: '0 0 0 5px rgba(22,142,154,.14)', opacity: highlight}} />
+        <div data-illustration="stock-transfer" style={{position: 'absolute', left: 90, top: 565, width: 900, height: 490}}>
+          <svg aria-hidden="true" style={{position: 'absolute', inset: 0, width: '100%', height: '100%'}} viewBox="0 0 900 490">
+            <path d="M270 235H630" stroke="rgba(251,251,254,.55)" strokeWidth="8" strokeDasharray="13 14" strokeLinecap="round" />
+            <path d="M585 211L620 235L585 259" stroke="rgba(251,251,254,.88)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {[{x: 0, title: 'LOCAL DE ORIGEM', badge: 'SAÍDA'}, {x: 580, title: 'LOCAL DE DESTINO', badge: 'ENTRADA'}].map(({x, title, badge}, index) => (
+            <div key={title} style={{position: 'absolute', left: x, top: 45, width: 320, height: 350, boxSizing: 'border-box', padding: '28px 24px', borderRadius: 24, background: 'rgba(20,22,58,.24)', border: '2px solid rgba(251,251,254,.4)'}}>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: WHITE}}>
+                <span style={{fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 1.4}}>{title}</span>
+                <span style={{padding: '6px 9px', borderRadius: 999, background: 'rgba(251,251,254,.13)', fontFamily: MONO, fontSize: 12, letterSpacing: 1}}>{badge}</span>
+              </div>
+              <div style={{position: 'absolute', left: 24, right: 24, top: 108, height: 7, borderRadius: 4, background: 'rgba(251,251,254,.74)'}} />
+              <div style={{position: 'absolute', left: 35, top: 118, width: 8, height: 147, borderRadius: 5, background: 'rgba(251,251,254,.55)'}} />
+              <div style={{position: 'absolute', right: 35, top: 118, width: 8, height: 147, borderRadius: 5, background: 'rgba(251,251,254,.55)'}} />
+              <div style={{position: 'absolute', left: 24, right: 24, top: 260, height: 8, borderRadius: 4, background: 'rgba(251,251,254,.74)'}} />
+              <div style={{position: 'absolute', left: 52, top: 153, width: 68, height: 64, borderRadius: 11, display: 'grid', placeItems: 'center', background: '#F2D9A8', color: NAVY, border: '2px solid rgba(20,22,58,.45)', opacity: index === 0 ? 1 - progress * .55 : 0}}><Package size={39} strokeWidth={1.9} /></div>
+              <div style={{position: 'absolute', right: 50, top: 153, width: 68, height: 64, borderRadius: 11, display: 'grid', placeItems: 'center', background: '#F2D9A8', color: NAVY, border: '2px solid rgba(20,22,58,.45)', opacity: index === 0 ? 1 - progress : .35}}><Package size={39} strokeWidth={1.9} /></div>
+            </div>
+          ))}
+          <div style={{position: 'absolute', left: 383, top: 102, width: 130, textAlign: 'center', color: WHITE, opacity: .9}}>
+            <ArrowRightLeft size={54} strokeWidth={2.2} />
+            <div style={{marginTop: 5, fontFamily: SANS, fontWeight: 700, fontSize: 14, letterSpacing: 1.4}}>TRANSFERÊNCIA</div>
+          </div>
+          <div style={{position: 'absolute', left: packageX, top: packageY, width: 78, height: 72, display: 'grid', placeItems: 'center', borderRadius: 16, background: '#F6DCA8', color: NAVY, border: '3px solid #FBFBFE', boxShadow: '0 12px 22px rgba(0,0,0,.22)', transform: 'translate(-50%,-50%)'}}><Package size={46} strokeWidth={1.9} /></div>
+          <div style={{position: 'absolute', left: 795, top: 19, width: 58, height: 58, display: 'grid', placeItems: 'center', borderRadius: 99, background: '#168E9A', color: WHITE, opacity: check, transform: `scale(${.78 + check * .22})`, boxShadow: '0 10px 22px rgba(0,0,0,.2)'}}><Check size={34} strokeWidth={3} /></div>
         </div>
         <Foot tone="product" label="Norte Estoque" />
       </AbsoluteFill>
