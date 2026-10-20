@@ -212,10 +212,8 @@ const EtiquetaScene: React.FC = () => {
         <Support tone="dark" top={430} width={850} size={29}>
           Emita etiquetas com lote e validade para identificar produtos e acompanhar a operação.
         </Support>
-        <div data-illustration="lot-expiry-label" style={{position: 'absolute', left: 145, top: 565, width: 780, height: 505, filter: 'drop-shadow(0 25px 36px rgba(0,0,0,.28))'}}>
-          <div data-package="kraft-stock-box" style={{position: 'absolute', left: 15, right: 15, top: 112, height: 315, borderRadius: '20px 20px 28px 28px', background: 'linear-gradient(105deg,#A96F3D 0%,#D5A267 12%,#C18A50 48%,#A66D3C 100%)', border: '4px solid rgba(251,251,254,.72)', boxShadow: 'inset 0 -20px 0 rgba(92,51,25,.13)'}}>
-            <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 22, background: 'rgba(91,53,28,.16)', borderBottom: '2px solid rgba(91,53,28,.22)'}} />
-            <div style={{position: 'absolute', left: '50%', top: 28, width: 385, height: 354, padding: '24px 26px', boxSizing: 'border-box', transform: 'translateX(-50%) rotate(-1deg)', borderRadius: 12, background: '#FFFDF7', border: '2px solid rgba(20,22,58,.22)', boxShadow: '0 14px 22px rgba(20,22,58,.2)'}}>
+        <div data-illustration="lot-expiry-label" style={{position: 'absolute', left: 145, top: 565, width: 780, height: 505}}>
+            <div style={{position: 'absolute', left: '50%', top: 140, width: 385, height: 354, padding: '24px 26px', boxSizing: 'border-box', transform: 'translateX(-50%) rotate(-1deg)', borderRadius: 12, background: '#FFFDF7', border: '1px solid rgba(20,22,58,.14)', boxShadow: '0 16px 28px rgba(0,0,0,.16)'}}>
               <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.4, color: '#168E9A'}}><span>ETIQUETA DE ESTOQUE</span><Tag size={22} /></div>
               <table style={{width: '100%', marginTop: 18, borderCollapse: 'collapse', fontFamily: MONO, color: NAVY, textAlign: 'left'}}>
                 <thead><tr style={{fontSize: 12, letterSpacing: 1.2, color: '#62677F'}}><th style={{padding: '7px 4px', borderBottom: '2px solid rgba(20,22,58,.2)'}}>IDENTIFICAÇÃO</th><th style={{padding: '7px 4px', borderBottom: '2px solid rgba(20,22,58,.2)'}}>DADO</th></tr></thead>
@@ -230,7 +228,6 @@ const EtiquetaScene: React.FC = () => {
                 <QrCode size={80} color={NAVY} strokeWidth={2.2} />
               </div>
             </div>
-          </div>
         </div>
         <Foot tone="dark" label="Norte Estoque" />
       </AbsoluteFill>

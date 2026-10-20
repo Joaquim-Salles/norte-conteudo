@@ -28,7 +28,7 @@ test('the cover uses the approved stock-count pain hook', () => {
   assert.match(template, /Quanto tempo sua equipe perde tentando conferir o estoque\?/);
 });
 
-test('slide four shows an easy-to-read lot and expiry label on a warm stock package', () => {
+test('slide four keeps the readable lot and expiry label without a cartoon package backing', () => {
   const template = readFileSync(templatePath, 'utf8');
   const etiqueta = template.match(/const EtiquetaScene:[\s\S]*?(?=export const NorteEstoqueQR04)/);
   assert.ok(etiqueta, 'the label slide should exist');
@@ -36,6 +36,8 @@ test('slide four shows an easy-to-read lot and expiry label on a warm stock pack
   assert.match(etiqueta[0], /data-label-row="lot"/);
   assert.match(etiqueta[0], /data-label-row="expiry"/);
   assert.match(etiqueta[0], /<table/);
+  assert.doesNotMatch(etiqueta[0], /data-package=|linear-gradient\(105deg,#A96F3D/);
+  assert.match(etiqueta[0], /boxShadow: '0 16px 28px rgba\(0,0,0,\.16\)'/, 'the label keeps only its subtle depth');
   assert.doesNotMatch(etiqueta[0], /#CBD5D8|#D8DFE0|#B9C8CB/, 'the label should not sit on an ambiguous gray tub');
 });
 
