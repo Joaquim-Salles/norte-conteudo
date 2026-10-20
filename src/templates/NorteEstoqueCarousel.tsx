@@ -248,7 +248,7 @@ const EtiquetaScene: React.FC<{f?: number}> = ({f}) => {
               </div>
             </div>
           </div>
-          <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 68, borderRadius: 34, background: '#101225', border: '2px solid rgba(251,251,254,.72)', boxShadow: '0 16px 26px rgba(8,12,52,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2}}>
+          <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 68, borderRadius: 34, background: '#101225', boxShadow: '0 16px 26px rgba(8,12,52,.32)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2}}>
             <div style={{position: 'absolute', left: 46, right: 46, top: 23, height: 10, borderRadius: 8, background: '#2E3457'}} />
             <div style={{position: 'absolute', right: 35, top: 21, width: 13, height: 13, borderRadius: '50%', background: '#5FD3DC', boxShadow: '0 0 14px #5FD3DC'}} />
             <Printer size={23} color="rgba(251,251,254,.8)" style={{position: 'absolute', right: 17, bottom: -28}} />

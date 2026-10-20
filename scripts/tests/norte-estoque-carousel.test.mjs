@@ -38,6 +38,7 @@ test('slide four animates a thermal printer producing a readable lot and expiry 
   assert.match(etiqueta[0], /data-label-row="lot"/);
   assert.match(etiqueta[0], /data-label-row="expiry"/);
   assert.match(etiqueta[0], /<table/);
+  assert.doesNotMatch(etiqueta[0], /border: '2px solid rgba\(251,251,254,\.72\)'/, 'the printer housing should not have a white outline');
   assert.match(template, /export const NorteEstoqueQR04Animada/);
 });
 
