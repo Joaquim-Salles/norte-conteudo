@@ -55,8 +55,8 @@ import {
   NorteEstoqueQR03,
   NorteEstoqueQR03Animada,
   NorteEstoqueQR04,
+  NorteEstoqueQR04Animada,
   NorteEstoqueQR05,
-  NorteEstoqueQR05Animada,
   NorteEstoqueQR06,
   NorteEstoqueQR06Animada,
   NorteEstoqueQR07,
@@ -299,7 +299,7 @@ export const RemotionRoot: React.FC = () => {
 
       <Composition id="NorteEstoqueQRAnimada02" component={NorteEstoqueQR02Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada03" component={NorteEstoqueQR03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
-      <Composition id="NorteEstoqueQRAnimada05" component={NorteEstoqueQR05Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueQRAnimada04" component={NorteEstoqueQR04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada06" component={NorteEstoqueQR06Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
       {/* Norte Vendas para barracas de praia */}
