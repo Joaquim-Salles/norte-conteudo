@@ -27,106 +27,112 @@ const RefFrame: React.FC<{name: string; children: React.ReactNode}> = ({name, ch
   );
 };
 
-const Caderno: React.FC = () => (
-  <RefFrame name="Caderno com rasuras">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Caderno de estoque com quantidades rasuradas e divergentes">
-      <g transform="rotate(-3 454 194)">
-        <rect x="196" y="48" width="516" height="278" rx="18" fill="#FBFBFE" />
-        <path d="M454 49V326" stroke="#D5D8E2" strokeWidth="4" />
-        <path d="M232 106H417M232 145H417M232 184H417M232 223H417M232 262H417M491 106H676M491 145H676M491 184H676M491 223H676M491 262H676" stroke="#D5D8E2" strokeWidth="3" />
-        <path d="M242 79H350M501 79H610" stroke="#168E9A" strokeWidth="7" strokeLinecap="round" />
-        <text x="253" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">farinha</text>
-        <text x="366" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">12</text>
-        <path d="M360 119L401 140M360 141L401 119" stroke="#E57655" strokeWidth="5" strokeLinecap="round" />
-        <text x="253" y="176" fill="#14163A" fontFamily="monospace" fontSize="27">óleo</text>
-        <text x="367" y="176" fill="#168E9A" fontFamily="monospace" fontSize="27">8?</text>
-        <text x="505" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">leite</text>
-        <text x="617" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">6</text>
-        <path d="M605 122L646 145" stroke="#E57655" strokeWidth="5" strokeLinecap="round" />
-        <text x="505" y="176" fill="#168E9A" fontFamily="monospace" fontSize="27">?</text>
-        <path d="M520 210C550 193 584 204 614 194" stroke="#E57655" strokeWidth="5" strokeLinecap="round" strokeDasharray="4 11" />
-        <path d="M620 272L655 236" stroke="#C49B55" strokeWidth="13" strokeLinecap="round" />
-        <path d="M613 279L626 266" stroke="#14163A" strokeWidth="13" strokeLinecap="round" />
-      </g>
-      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    </svg>
-  </RefFrame>
-);
-
-const Mapa: React.FC = () => (
-  <RefFrame name="Mapa rabiscado">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa de estoque desenhado à mão com localização incerta">
-      <path d="M153 86L338 61L370 181L172 191Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M370 181L338 61L553 79L544 194Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M544 194L553 79L748 92L733 208Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M172 191L370 181L386 304L183 289Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M370 181L544 194L552 315L386 304Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M544 194L733 208L719 307L552 315Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M205 115L279 103M205 133L258 126M412 110L487 117M589 115L686 124M216 231L312 237M418 236L507 246M578 249L680 258" stroke="rgba(251,251,254,.4)" strokeWidth="8" strokeLinecap="round" />
-      <path d="M251 121C325 149 290 205 445 220C592 235 673 185 650 142C627 99 536 148 583 208C608 241 683 257 708 270" stroke={TEAL} strokeWidth="8" strokeLinecap="round" strokeDasharray="2 18" />
-      <path d="M636 122L678 164M678 122L636 164" stroke={CREAM} strokeWidth="8" strokeLinecap="round" />
-      <circle cx="251" cy="121" r="16" fill={CREAM} stroke={WHITE} strokeWidth="5" />
-      <circle cx="708" cy="270" r="16" fill={TEAL} stroke={WHITE} strokeWidth="5" />
-      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    </svg>
-  </RefFrame>
-);
-
-const Etiqueta: React.FC = () => (
-  <RefFrame name="Anotação que não bate">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Produto com etiqueta manual marcada com quantidade divergente">
-      <path d="M196 310H714" stroke="rgba(251,251,254,.32)" strokeWidth="3" />
-      <g transform="translate(303 69)">
-        <path d="M123 20H229V80C229 106 269 120 282 158V260H70V158C84 120 123 106 123 80Z" fill={CREAM} stroke="#8D6D3D" strokeWidth="6" />
-        <path d="M111 3H240V33H111Z" fill={TEAL} stroke="#8D6D3D" strokeWidth="5" />
-        <path d="M100 174H252V235H100Z" fill="#FBFBFE" />
-        <path d="M120 193H230M120 215H207" stroke="#168E9A" strokeWidth="6" strokeLinecap="round" />
-      </g>
-      <g transform="rotate(-24 310 166)">
-        <rect x="258" y="120" width="112" height="92" rx="7" fill="#FBFBFE" stroke={STROKE} strokeWidth="5" />
-        <circle cx="276" cy="140" r="7" fill="#168E9A" />
-        <text x="293" y="161" fill="#14163A" fontFamily="monospace" fontSize="25">24</text>
-        <path d="M289 148L337 148" stroke="#E57655" strokeWidth="6" strokeLinecap="round" />
-        <text x="293" y="190" fill="#168E9A" fontFamily="monospace" fontSize="24">9</text>
-      </g>
-      <path d="M575 149H720M604 171H710" stroke={TEAL} strokeWidth="7" strokeLinecap="round" strokeDasharray="3 16" />
-      <circle cx="742" cy="160" r="29" fill="#E57655" />
-      <path d="M742 144V163M742 176V177" stroke={WHITE} strokeWidth="6" strokeLinecap="round" />
-      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    </svg>
-  </RefFrame>
-);
-
 const TresSinais: React.FC = () => (
-  <RefFrame name="Três sinais no dia a dia">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Três sinais de improviso: ruptura, divergência e validade esquecida">
-      <path d="M168 299H740" stroke={STROKE} strokeWidth="7" strokeLinecap="round" />
-      <path d="M310 114V299M598 114V299" stroke="rgba(251,251,254,.36)" strokeWidth="3" strokeDasharray="3 12" />
-      <g transform="translate(184 102)">
-        <path d="M10 158H104M31 143V85C31 63 48 46 70 46C92 46 109 63 109 85V143" stroke={WHITE} strokeWidth="8" strokeLinecap="round" />
-        <path d="M49 46V27H90V46" stroke={WHITE} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M49 99H91" stroke={TEAL} strokeWidth="10" strokeLinecap="round" />
-        <path d="M41 120L56 135M56 120L41 135" stroke={CREAM} strokeWidth="7" strokeLinecap="round" />
+  <RefFrame name="Três sinais claros">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Falta inesperada, quantidade divergente e validade esquecida">
+      <path d="M302 65V325M606 65V325" stroke="rgba(251,251,254,.34)" strokeWidth="3" strokeDasharray="3 12" />
+      <g transform="translate(76 77)">
+        <path d="M34 32V189M180 32V189M34 104H78M136 104H180M34 189H180" stroke={STROKE} strokeWidth="9" strokeLinecap="round" />
+        <path d="M82 78H132V129H82Z" stroke={TEAL} strokeWidth="5" strokeDasharray="8 8" />
+        <path d="M88 87L126 120M126 87L88 120" stroke={CREAM} strokeWidth="7" strokeLinecap="round" />
       </g>
-      <g transform="translate(365 118)">
-        <path d="M0 0H138V152H0Z" fill="#FBFBFE" />
-        <path d="M22 35H112M22 70H112M22 105H80" stroke="#D5D8E2" strokeWidth="5" strokeLinecap="round" />
-        <path d="M22 35H83" stroke="#168E9A" strokeWidth="7" strokeLinecap="round" />
-        <path d="M95 56L120 82M120 56L95 82" stroke="#E57655" strokeWidth="8" strokeLinecap="round" />
-        <path d="M24 128L47 105" stroke="#C49B55" strokeWidth="10" strokeLinecap="round" />
+      <text x="150" y="307" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="22" fontWeight="700" letterSpacing="1">FALTA INESPERADA</text>
+      <g transform="translate(367 83)">
+        <path d="M0 0H174V174H0Z" fill="#FBFBFE" />
+        <path d="M20 35H154M20 76H154M20 117H154" stroke="#D5D8E2" strokeWidth="5" strokeLinecap="round" />
+        <text x="26" y="68" fill="#14163A" fontFamily="monospace" fontSize="30">8 un.</text>
+        <path d="M24 47L105 71" stroke="#E57655" strokeWidth="6" strokeLinecap="round" />
+        <text x="26" y="109" fill="#168E9A" fontFamily="monospace" fontSize="30">3 un.</text>
       </g>
-      <g transform="translate(624 106)">
-        <circle cx="56" cy="93" r="67" stroke={WHITE} strokeWidth="8" />
-        <path d="M56 48V94L88 112" stroke={CREAM} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M43 14H69" stroke={TEAL} strokeWidth="9" strokeLinecap="round" />
-        <path d="M119 34L137 16" stroke={TEAL} strokeWidth="8" strokeLinecap="round" />
+      <text x="454" y="307" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="22" fontWeight="700" letterSpacing="1">QUANTIDADE NÃO BATE</text>
+      <g transform="translate(671 72)">
+        <rect x="18" y="18" width="138" height="150" rx="8" stroke={STROKE} strokeWidth="8" />
+        <path d="M18 58H156M50 0V37M124 0V37" stroke={STROKE} strokeWidth="9" strokeLinecap="round" />
+        <path d="M52 89H74M100 89H122M52 124H74" stroke={TEAL} strokeWidth="9" strokeLinecap="round" />
+        <path d="M101 116L127 142M127 116L101 142" stroke={CREAM} strokeWidth="8" strokeLinecap="round" />
+      </g>
+      <text x="757" y="307" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="22" fontWeight="700" letterSpacing="1">VALIDADE ESQUECIDA</text>
+      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
+    </svg>
+  </RefFrame>
+);
+
+const Caderno: React.FC = () => (
+  <RefFrame name="Três alertas no caderno">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Caderno registra três problemas concretos do estoque">
+      <g transform="rotate(-2 454 196)">
+        <rect x="190" y="37" width="528" height="286" rx="15" fill="#FBFBFE" />
+        <path d="M222 131H682M222 205H682M222 279H682" stroke="#D5D8E2" strokeWidth="3" />
+        <path d="M248 68H660" stroke="#168E9A" strokeWidth="7" strokeLinecap="round" />
+        <circle cx="256" cy="103" r="16" stroke="#E57655" strokeWidth="6" /><path d="M249 96L263 110M263 96L249 110" stroke="#E57655" strokeWidth="4" strokeLinecap="round" />
+        <text x="289" y="111" fill="#14163A" fontFamily={SANS} fontSize="24" fontWeight="700">FALTA INESPERADA</text>
+        <circle cx="256" cy="177" r="16" stroke="#E57655" strokeWidth="6" /><path d="M247 179L254 186L267 168" stroke="#E57655" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="289" y="185" fill="#14163A" fontFamily={SANS} fontSize="24" fontWeight="700">8 REGISTRADOS / 3 CONTADOS</text>
+        <circle cx="256" cy="251" r="16" stroke="#E57655" strokeWidth="6" /><path d="M256 241V253L265 259" stroke="#E57655" strokeWidth="4" strokeLinecap="round" />
+        <text x="289" y="259" fill="#14163A" fontFamily={SANS} fontSize="24" fontWeight="700">VALIDADE PASSOU</text>
+        <path d="M614 294L655 250" stroke="#C49B55" strokeWidth="13" strokeLinecap="round" /><path d="M607 301L620 288" stroke="#14163A" strokeWidth="13" strokeLinecap="round" />
       </g>
       <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
     </svg>
   </RefFrame>
 );
-export const NorteEstoqueCapaBalanca = Caderno;
-export const NorteEstoqueCapaMapa = Mapa;
-export const NorteEstoqueCapaEtiqueta = Etiqueta;
-export const NorteEstoqueCapaMedidor = TresSinais;
+
+const Prateleira: React.FC = () => (
+  <RefFrame name="Evidências no estoque">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Prateleira com um espaço vazio, quantidade divergente e validade vencida">
+      <path d="M132 268H776M170 103V272M738 103V272M170 186H738" stroke={STROKE} strokeWidth="8" strokeLinecap="round" />
+      <g transform="translate(231 113)">
+        <path d="M22 0H70V24C70 40 92 50 99 71V122H0V71C7 50 22 40 22 24Z" fill={CREAM} stroke="#8D6D3D" strokeWidth="5" />
+        <path d="M17 0H75V18H17Z" fill={TEAL} stroke="#8D6D3D" strokeWidth="4" />
+      </g>
+      <path d="M388 125H515V251H388Z" stroke={TEAL} strokeWidth="6" strokeDasharray="11 10" />
+      <path d="M407 145L496 231M496 145L407 231" stroke={CREAM} strokeWidth="9" strokeLinecap="round" />
+      <g transform="translate(548 119)">
+        <rect width="128" height="98" rx="8" fill="#FBFBFE" />
+        <text x="16" y="38" fill="#14163A" fontFamily="monospace" fontSize="26">8 un.</text>
+        <path d="M14 25L90 45" stroke="#E57655" strokeWidth="5" strokeLinecap="round" />
+        <text x="16" y="77" fill="#168E9A" fontFamily="monospace" fontSize="26">3 un.</text>
+      </g>
+      <g transform="translate(683 93)">
+        <circle cx="31" cy="31" r="28" fill="#E57655" />
+        <path d="M31 16V34M31 45V46" stroke={WHITE} strokeWidth="6" strokeLinecap="round" />
+      </g>
+      <text x="272" y="319" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="19" fontWeight="700" letterSpacing=".7">FALTA</text>
+      <text x="452" y="319" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="19" fontWeight="700" letterSpacing=".7">SALDO DIVERGENTE</text>
+      <text x="631" y="319" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="19" fontWeight="700" letterSpacing=".7">VALIDADE</text>
+      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
+    </svg>
+  </RefFrame>
+);
+
+const Ficha: React.FC = () => (
+  <RefFrame name="Conferência sem controle">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ficha de conferência com três sinais marcados de descontrole">
+      <path d="M276 116L406 167M632 116L501 167M453 237V254" stroke="rgba(251,251,254,.55)" strokeWidth="5" />
+      <circle cx="453" cy="185" r="52" fill="rgba(251,251,254,.16)" stroke={STROKE} strokeWidth="5" />
+      <text x="453" y="192" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="19" fontWeight="700">ESTOQUE</text>
+      <g transform="translate(127 50)">
+        <circle cx="107" cy="52" r="42" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" />
+        <path d="M83 52L98 67L130 35" stroke={CREAM} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="107" y="124" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="20" fontWeight="700">FALTA</text>
+      </g>
+      <g transform="translate(567 50)">
+        <circle cx="107" cy="52" r="42" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" />
+        <text x="107" y="61" textAnchor="middle" fill={CREAM} fontFamily="monospace" fontSize="26" fontWeight="700">8 ≠ 3</text>
+        <text x="107" y="124" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="20" fontWeight="700">CONTAGEM</text>
+      </g>
+      <g transform="translate(346 240)">
+        <circle cx="107" cy="52" r="42" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" />
+        <path d="M107 24V52L126 64" stroke={CREAM} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M92 11H122" stroke={TEAL} strokeWidth="7" strokeLinecap="round" />
+        <text x="107" y="117" textAnchor="middle" fill={WHITE} fontFamily={SANS} fontSize="20" fontWeight="700">VALIDADE</text>
+      </g>
+    </svg>
+  </RefFrame>
+);
+export const NorteEstoqueCapaBalanca = TresSinais;
+export const NorteEstoqueCapaMapa = Caderno;
+export const NorteEstoqueCapaEtiqueta = Prateleira;
+export const NorteEstoqueCapaMedidor = Ficha;
+
 
