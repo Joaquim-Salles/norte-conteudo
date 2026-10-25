@@ -23,29 +23,15 @@ const Slide: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: s
 
 const PaperLine: React.FC<{width: number; color?: string}> = ({width, color = 'rgba(20,22,58,.18)'}) => <div style={{height: 8, width, borderRadius: 5, background: color}} />;
 
-const StockItem: React.FC<{x: number; y: number; scale?: number; type: 'bottle' | 'can' | 'jar'; accent?: string}> = ({x, y, scale = 1, type, accent = '#168E9A'}) => (
-  <g data-item={type} transform={`translate(${x} ${y}) scale(${scale})`} strokeLinejoin="round" strokeLinecap="round">
-    {type === 'bottle' && <>
-      <path d="M42 15H58V30C58 38 70 42 74 51V96H26V51C30 42 42 38 42 30Z" fill="#F3D99E" stroke="rgba(20,22,58,.58)" strokeWidth="3" />
-      <path d="M41 7H59V16H41Z" fill={accent} stroke="rgba(20,22,58,.58)" strokeWidth="2.5" />
-      <path d="M30 61H70V81H30Z" fill={accent} />
-      <path d="M35 66H65M35 72H58" stroke="#FBFBFE" strokeWidth="2.5" opacity=".85" />
-      <path d="M34 51V57M66 51V57" stroke="#FBFBFE" strokeWidth="2" opacity=".65" />
-    </>}
-    {type === 'can' && <>
-      <path d="M25 18C25 13 75 13 75 18V89C75 96 25 96 25 89Z" fill="#F3D99E" stroke="rgba(20,22,58,.58)" strokeWidth="3" />
-      <ellipse cx="50" cy="18" rx="25" ry="7" fill="#F8E8C1" stroke="rgba(20,22,58,.58)" strokeWidth="3" />
-      <path d="M27 40H73V70H27Z" fill={accent} />
-      <path d="M35 48H65M35 55H58M35 62H63" stroke="#FBFBFE" strokeWidth="2.5" opacity=".88" />
-      <path d="M28 87C38 92 62 92 72 87" stroke="#FBFBFE" strokeWidth="2" opacity=".75" />
-    </>}
-    {type === 'jar' && <>
-      <path d="M31 24H69L74 34V87C74 95 26 95 26 87V34Z" fill="#F3D99E" stroke="rgba(20,22,58,.58)" strokeWidth="3" />
-      <path d="M28 14H72V25H28Z" fill={accent} stroke="rgba(20,22,58,.58)" strokeWidth="3" />
-      <path d="M29 48H71V73H29Z" fill="#FBFBFE" stroke="rgba(20,22,58,.2)" strokeWidth="1.5" />
-      <path d="M36 56H64M36 63H58" stroke={accent} strokeWidth="2.5" />
-      <path d="M33 37V43M67 37V43" stroke="#FBFBFE" strokeWidth="2" opacity=".8" />
-    </>}
+const Carton: React.FC<{x: number; y: number; scale?: number; accent?: string}> = ({x, y, scale = 1, accent = '#168E9A'}) => (
+  <g data-carton="shipping-box" transform={`translate(${x} ${y}) scale(${scale})`} strokeLinejoin="round" strokeLinecap="round">
+    <path d="M2 22L42 2L112 18L68 43Z" fill="#F8E8C1" stroke="#8D6D3D" strokeWidth="2.5" />
+    <path d="M2 22L68 43V103L2 79Z" fill="#E8C983" stroke="#8D6D3D" strokeWidth="2.5" />
+    <path d="M68 43L112 18V79L68 103Z" fill="#C9A762" stroke="#8D6D3D" strokeWidth="2.5" />
+    <path d="M46 4L65 8L65 100L58 98L53 96L53 39L36 34Z" fill={accent} opacity=".88" />
+    <path d="M12 47L54 60V85L12 70Z" fill="#FBFBFE" stroke="rgba(20,22,58,.32)" strokeWidth="1.7" />
+    <path d="M20 53L46 61M20 59L47 67M20 65L37 70" stroke={NAVY} strokeWidth="2.5" opacity=".78" />
+    <path d="M74 52L101 37M74 62L101 47M74 72L101 57" stroke="rgba(251,251,254,.36)" strokeWidth="2" />
   </g>
 );
 
@@ -65,18 +51,13 @@ const Cover: React.FC = () => {
             <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
             <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
             <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
-            <StockItem x={196} y={112} scale={0.64} type="bottle" />
-            <StockItem x={278} y={111} scale={0.64} type="can" accent="#E5A75E" />
-            <StockItem x={360} y={112} scale={0.64} type="jar" />
-            <StockItem x={442} y={111} scale={0.64} type="bottle" accent="#E5A75E" />
-            <StockItem x={524} y={112} scale={0.64} type="can" />
-            <StockItem x={606} y={111} scale={0.64} type="jar" accent="#E5A75E" />
-            <StockItem x={196} y={185} scale={0.64} type="jar" accent="#E5A75E" />
-            <StockItem x={278} y={184} scale={0.64} type="bottle" />
-            <StockItem x={360} y={185} scale={0.64} type="can" accent="#E5A75E" />
-            <StockItem x={442} y={184} scale={0.64} type="jar" />
-            <StockItem x={524} y={185} scale={0.64} type="bottle" accent="#E5A75E" />
-            <StockItem x={606} y={184} scale={0.64} type="can" />
+            <Carton x={202} y={82} scale={0.78} />
+            <Carton x={372} y={88} scale={0.78} accent="#E5A75E" />
+            <Carton x={540} y={82} scale={0.78} />
+            <Carton x={188} y={158} scale={0.72} accent="#E5A75E" />
+            <Carton x={308} y={162} scale={0.72} />
+            <Carton x={428} y={158} scale={0.72} accent="#E5A75E" />
+            <Carton x={548} y={162} scale={0.72} />
           </svg>
         </div>
         <Foot tone="product" label="Norte Estoque" />

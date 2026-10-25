@@ -32,12 +32,12 @@ test('the cover and replenishment slide use distinct visual compositions instead
   assert.doesNotMatch(template, /DÚVIDAS NA ROTINA/);
 });
 
-test('the cover uses varied stock products instead of cartons or unexplained number markers', () => {
+test('the cover uses clear, dimensional cartons without unexplained number markers', () => {
   const template = readFileSync(path.resolve('src/templates/NorteEstoqueSinais.tsx'), 'utf8');
-  assert.match(template, /const StockItem/);
-  assert.match(template, /data-item=\{type\}/);
-  assert.match(template, /type: 'bottle' \| 'can' \| 'jar'/);
-  assert.doesNotMatch(template, /const Carton|data-carton=/);
+  assert.match(template, /const Carton/);
+  assert.match(template, /data-carton="shipping-box"/);
+  assert.match(template, /<Carton x=/);
+  assert.doesNotMatch(template, /const StockItem|data-item=/);
   assert.doesNotMatch(template, /<text\b/);
 });
 
