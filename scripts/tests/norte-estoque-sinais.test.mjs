@@ -32,6 +32,13 @@ test('the cover and replenishment slide use distinct visual compositions instead
   assert.doesNotMatch(template, /DÚVIDAS NA ROTINA/);
 });
 
+test('the cover cartons have dimensional detail and no unexplained number markers', () => {
+  const template = readFileSync(path.resolve('src/templates/NorteEstoqueSinais.tsx'), 'utf8');
+  assert.match(template, /const Carton/);
+  assert.match(template, /ESTOQUE/);
+  assert.doesNotMatch(template, /<text\b/);
+});
+
 test('the carousel description adds context instead of repeating the three slide headlines', () => {
   const caption = readFileSync(path.join(carouselPath, 'LEGENDA.md'), 'utf8');
   assert.match(caption, /Dê um norte ao seu negócio/i);

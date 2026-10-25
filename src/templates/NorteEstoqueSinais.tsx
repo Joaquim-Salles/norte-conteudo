@@ -23,6 +23,17 @@ const Slide: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: s
 
 const PaperLine: React.FC<{width: number; color?: string}> = ({width, color = 'rgba(20,22,58,.18)'}) => <div style={{height: 8, width, borderRadius: 5, background: color}} />;
 
+const Carton: React.FC<{x: number; y: number; scale?: number; accent?: string}> = ({x, y, scale = 1, accent = '#168E9A'}) => (
+  <g data-carton="dimensional" transform={`translate(${x} ${y}) scale(${scale})`} strokeLinejoin="round">
+    <path d="M0 15L34 0L100 12L53 30Z" fill="#F8E8C1" stroke="rgba(20,22,58,.42)" strokeWidth="2" />
+    <path d="M0 15L53 30V78L0 61Z" fill="#F3D99E" stroke="rgba(20,22,58,.42)" strokeWidth="2" />
+    <path d="M53 30L100 12V60L53 78Z" fill="#D7B978" stroke="rgba(20,22,58,.42)" strokeWidth="2" />
+    <path d="M40 3L58 7L58 73L53 75L48 72L48 28L31 23Z" fill={accent} opacity=".82" />
+    <path d="M9 35L35 43V57L9 49Z" fill="#FBFBFE" stroke="rgba(20,22,58,.24)" strokeWidth="1.5" />
+    <path d="M15 40L29 44M15 44L32 49" stroke={NAVY} strokeWidth="2" strokeLinecap="round" opacity=".65" />
+  </g>
+);
+
 const Cover: React.FC = () => {
   ensurePostLoaded();
   return (
@@ -39,21 +50,16 @@ const Cover: React.FC = () => {
             <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
             <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
             <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
-            <g fill="#F3D99E" stroke="rgba(251,251,254,.9)" strokeWidth="3" strokeLinejoin="round">
-              <path d="M219 128H302V170H219Z"/><path d="M315 119H391V170H315Z"/>
-              <path d="M493 126H569V170H493Z"/><path d="M580 116H650V170H580Z"/>
-              <path d="M205 202H276V244H205Z"/><path d="M289 195H379V244H289Z"/>
-              <path d="M405 199H478V244H405Z"/><path d="M500 195H573V244H500Z"/><path d="M587 203H660V244H587Z"/>
-            </g>
-            <g stroke="#168E9A" strokeWidth="2" strokeDasharray="5 7" opacity=".9">
-              <path d="M254 75V112"/><path d="M430 75V111"/><path d="M606 75V108"/>
-            </g>
-            <g fontFamily={SANS} fontWeight="700" textAnchor="middle">
-              <circle cx="254" cy="49" r="27" fill="#F3D99E"/><text x="254" y="56" fontSize="18" fill="#14163A">01</text>
-              <circle cx="430" cy="49" r="27" fill="#70D3DA"/><text x="430" y="56" fontSize="18" fill="#14163A">02</text>
-              <circle cx="606" cy="49" r="27" fill="#F3D99E"/><text x="606" y="56" fontSize="18" fill="#14163A">03</text>
-            </g>
-            <path d="M383 177H487" stroke="#70D3DA" strokeWidth="4" strokeDasharray="8 8" />
+            <Carton x={210} y={104} scale={0.72} />
+            <Carton x={290} y={109} scale={0.72} accent="#E5A75E" />
+            <Carton x={502} y={108} scale={0.72} accent="#168E9A" />
+            <Carton x={581} y={102} scale={0.72} accent="#E5A75E" />
+            <Carton x={198} y={181} scale={0.72} accent="#E5A75E" />
+            <Carton x={282} y={178} scale={0.72} />
+            <Carton x={367} y={181} scale={0.72} accent="#E5A75E" />
+            <Carton x={452} y={178} scale={0.72} />
+            <Carton x={537} y={181} scale={0.72} accent="#E5A75E" />
+            <Carton x={618} y={178} scale={0.72} />
           </svg>
         </div>
         <Foot tone="product" label="Norte Estoque" />
