@@ -5,10 +5,10 @@ import {renderStill, selectComposition} from '@remotion/renderer';
 
 const output = path.resolve('conteudo ntb/02-carrosseis/Norte Estoque - Referencias de capa');
 const options = [
-  {id: 'NorteEstoqueCapaBalanca', filename: '01 - Balanca da divergencia.png'},
-  {id: 'NorteEstoqueCapaMapa', filename: '02 - Mapa de localizacao.png'},
-  {id: 'NorteEstoqueCapaEtiqueta', filename: '03 - Etiqueta desconectada.png'},
-  {id: 'NorteEstoqueCapaMedidor', filename: '04 - Medidor de conferencia.png'},
+  {id: 'NorteEstoqueCapaBalanca', filename: '01 - Caderno com rasuras.png'},
+  {id: 'NorteEstoqueCapaMapa', filename: '02 - Mapa rabiscado.png'},
+  {id: 'NorteEstoqueCapaEtiqueta', filename: '03 - Anotacao que nao bate.png'},
+  {id: 'NorteEstoqueCapaMedidor', filename: '04 - Tres sinais no dia a dia.png'},
 ];
 
 await mkdir(output, {recursive: true});

@@ -27,93 +27,104 @@ const RefFrame: React.FC<{name: string; children: React.ReactNode}> = ({name, ch
   );
 };
 
-const Balanca: React.FC = () => (
-  <RefFrame name="Balança">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Balança comparando registro e estoque físico">
-      <path d="M454 64V306M385 306H523L490 280H418L385 306Z" fill="rgba(20,22,58,.32)" stroke={STROKE} strokeWidth="8" strokeLinejoin="round" />
-      <path d="M212 113L696 163" stroke={STROKE} strokeWidth="11" strokeLinecap="round" />
-      <circle cx="454" cy="138" r="17" fill={CREAM} stroke={STROKE} strokeWidth="5" />
-      <path d="M260 118V222M648 158V222" stroke="rgba(251,251,254,.8)" strokeWidth="5" />
-      <path d="M172 222H348C339 259 310 282 260 282C210 282 181 259 172 222Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M559 222H737C728 259 699 282 648 282C598 282 568 259 559 222Z" fill="rgba(243,217,158,.18)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <g transform="translate(221 174) rotate(-4 38 26)">
-        <rect width="78" height="58" rx="7" fill="#FBFBFE" />
-        <path d="M13 16H64M13 27H57M13 38H43" stroke="#168E9A" strokeWidth="4" strokeLinecap="round" />
+const Caderno: React.FC = () => (
+  <RefFrame name="Caderno com rasuras">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Caderno de estoque com quantidades rasuradas e divergentes">
+      <g transform="rotate(-3 454 194)">
+        <rect x="196" y="48" width="516" height="278" rx="18" fill="#FBFBFE" />
+        <path d="M454 49V326" stroke="#D5D8E2" strokeWidth="4" />
+        <path d="M232 106H417M232 145H417M232 184H417M232 223H417M232 262H417M491 106H676M491 145H676M491 184H676M491 223H676M491 262H676" stroke="#D5D8E2" strokeWidth="3" />
+        <path d="M242 79H350M501 79H610" stroke="#168E9A" strokeWidth="7" strokeLinecap="round" />
+        <text x="253" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">farinha</text>
+        <text x="366" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">12</text>
+        <path d="M360 119L401 140M360 141L401 119" stroke="#E57655" strokeWidth="5" strokeLinecap="round" />
+        <text x="253" y="176" fill="#14163A" fontFamily="monospace" fontSize="27">óleo</text>
+        <text x="367" y="176" fill="#168E9A" fontFamily="monospace" fontSize="27">8?</text>
+        <text x="505" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">leite</text>
+        <text x="617" y="137" fill="#14163A" fontFamily="monospace" fontSize="27">6</text>
+        <path d="M605 122L646 145" stroke="#E57655" strokeWidth="5" strokeLinecap="round" />
+        <text x="505" y="176" fill="#168E9A" fontFamily="monospace" fontSize="27">?</text>
+        <path d="M520 210C550 193 584 204 614 194" stroke="#E57655" strokeWidth="5" strokeLinecap="round" strokeDasharray="4 11" />
+        <path d="M620 272L655 236" stroke="#C49B55" strokeWidth="13" strokeLinecap="round" />
+        <path d="M613 279L626 266" stroke="#14163A" strokeWidth="13" strokeLinecap="round" />
       </g>
-      <g transform="translate(608 169)">
-        <path d="M0 16L31 0L77 11L46 28Z" fill="#F8E8C1" stroke="#8D6D3D" strokeWidth="2.5" />
-        <path d="M0 16L46 28V73L0 59Z" fill={CREAM} stroke="#8D6D3D" strokeWidth="2.5" />
-        <path d="M46 28L77 11V58L46 73Z" fill="#C9A762" stroke="#8D6D3D" strokeWidth="2.5" />
-      </g>
-      <path d="M111 335H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    </svg>
-  </RefFrame>
-);
-
-const Mapa: React.FC = () => (
-  <RefFrame name="Mapa de localização">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa de estoque com rota entre locais">
-      <path d="M110 74H798V310H110Z" fill="rgba(20,22,58,.12)" stroke="rgba(251,251,254,.7)" strokeWidth="3" />
-      <path d="M344 74V310M570 74V310M110 192H344M570 192H798" stroke="rgba(251,251,254,.62)" strokeWidth="3" />
-      <path d="M140 100H315M140 126H315M140 152H315M140 219H315M140 245H315M140 271H315" stroke="rgba(251,251,254,.28)" strokeWidth="11" strokeLinecap="round" />
-      <path d="M600 100H767M600 126H767M600 152H767M600 219H767M600 245H767M600 271H767" stroke="rgba(251,251,254,.28)" strokeWidth="11" strokeLinecap="round" />
-      <path d="M225 126H430V244H674V126H718" stroke={TEAL} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 18" />
-      <g transform="translate(194 86)">
-        <path d="M31 0C13.9 0 0 13.9 0 31C0 54 31 83 31 83S62 54 62 31C62 13.9 48.1 0 31 0Z" fill={CREAM} stroke={WHITE} strokeWidth="4" />
-        <circle cx="31" cy="31" r="10" fill="#168E9A" />
-      </g>
-      <g transform="translate(684 84)">
-        <path d="M31 0C13.9 0 0 13.9 0 31C0 54 31 83 31 83S62 54 62 31C62 13.9 48.1 0 31 0Z" fill={TEAL} stroke={WHITE} strokeWidth="4" />
-        <circle cx="31" cy="31" r="10" fill="#168E9A" />
-      </g>
-    </svg>
-  </RefFrame>
-);
-
-const Etiqueta: React.FC = () => (
-  <RefFrame name="Etiqueta desconectada">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Etiqueta de produto desconectada do registro">
-      <path d="M145 228H345" stroke={STROKE} strokeWidth="7" strokeLinecap="round" />
-      <path d="M563 228H763" stroke={STROKE} strokeWidth="7" strokeLinecap="round" />
-      <path d="M345 228H389M520 228H563" stroke={TEAL} strokeWidth="7" strokeLinecap="round" strokeDasharray="3 16" />
-      <circle cx="454" cy="228" r="13" fill={CREAM} />
-      <path d="M214 86H344L399 141V306H214V86Z" fill="#FBFBFE" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M344 86V142H399" fill="#E4E7EC" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <circle cx="255" cy="126" r="8" fill="#168E9A" />
-      <path d="M245 178H356M245 201H335M245 224H350" stroke="#168E9A" strokeWidth="5" strokeLinecap="round" />
-      <path d="M249 264V287M260 264V287M272 264V287M283 264V287M301 264V287M310 264V287M325 264V287M337 264V287M350 264V287" stroke={NAVY} strokeWidth="4" />
-      <g transform="translate(564 102)">
-        <path d="M45 17H83V48C83 66 112 76 122 102V212H6V102C16 76 45 66 45 48Z" fill={CREAM} stroke="#8D6D3D" strokeWidth="5" />
-        <path d="M39 7H89V24H39Z" fill={TEAL} stroke="#8D6D3D" strokeWidth="4" />
-        <path d="M22 127H106V169H22Z" fill="#FBFBFE" />
-        <path d="M36 139H91M36 152H83" stroke="#168E9A" strokeWidth="5" strokeLinecap="round" />
-      </g>
-      <path d="M111 338H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
-    </svg>
-  </RefFrame>
-);
-
-const Medidor: React.FC = () => (
-  <RefFrame name="Medidor de conferência">
-    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Medidor visual mostrando diferença entre registro e conferência">
-      <path d="M208 289A246 246 0 0 1 700 289" stroke="rgba(251,251,254,.28)" strokeWidth="26" strokeLinecap="round" />
-      <path d="M208 289A246 246 0 0 1 480 50" stroke={TEAL} strokeWidth="26" strokeLinecap="round" />
-      <path d="M208 289A246 246 0 0 1 574 73" stroke={CREAM} strokeWidth="8" strokeLinecap="round" strokeDasharray="3 18" />
-      <g stroke={STROKE} strokeWidth="5" strokeLinecap="round">
-        <path d="M214 259L185 249"/><path d="M260 162L236 144"/><path d="M343 92L332 62"/>
-        <path d="M454 67V34"/><path d="M565 92L576 62"/><path d="M648 162L672 144"/><path d="M694 259L723 249"/>
-      </g>
-      <path d="M454 269L326 151" stroke={WHITE} strokeWidth="12" strokeLinecap="round" />
-      <path d="M454 269L590 163" stroke={CREAM} strokeWidth="9" strokeLinecap="round" />
-      <circle cx="454" cy="269" r="29" fill="#FBFBFE" stroke={TEAL} strokeWidth="9" />
-      <circle cx="454" cy="269" r="9" fill="#168E9A" />
-      <path d="M375 325H533" stroke="rgba(251,251,254,.72)" strokeWidth="9" strokeLinecap="round" />
       <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
     </svg>
   </RefFrame>
 );
 
-export const NorteEstoqueCapaBalanca = Balanca;
+const Mapa: React.FC = () => (
+  <RefFrame name="Mapa rabiscado">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa de estoque desenhado à mão com localização incerta">
+      <path d="M153 86L338 61L370 181L172 191Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M370 181L338 61L553 79L544 194Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M544 194L553 79L748 92L733 208Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M172 191L370 181L386 304L183 289Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M370 181L544 194L552 315L386 304Z" fill="rgba(251,251,254,.08)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M544 194L733 208L719 307L552 315Z" fill="rgba(251,251,254,.12)" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M205 115L279 103M205 133L258 126M412 110L487 117M589 115L686 124M216 231L312 237M418 236L507 246M578 249L680 258" stroke="rgba(251,251,254,.4)" strokeWidth="8" strokeLinecap="round" />
+      <path d="M251 121C325 149 290 205 445 220C592 235 673 185 650 142C627 99 536 148 583 208C608 241 683 257 708 270" stroke={TEAL} strokeWidth="8" strokeLinecap="round" strokeDasharray="2 18" />
+      <path d="M636 122L678 164M678 122L636 164" stroke={CREAM} strokeWidth="8" strokeLinecap="round" />
+      <circle cx="251" cy="121" r="16" fill={CREAM} stroke={WHITE} strokeWidth="5" />
+      <circle cx="708" cy="270" r="16" fill={TEAL} stroke={WHITE} strokeWidth="5" />
+      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
+    </svg>
+  </RefFrame>
+);
+
+const Etiqueta: React.FC = () => (
+  <RefFrame name="Anotação que não bate">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Produto com etiqueta manual marcada com quantidade divergente">
+      <path d="M196 310H714" stroke="rgba(251,251,254,.32)" strokeWidth="3" />
+      <g transform="translate(303 69)">
+        <path d="M123 20H229V80C229 106 269 120 282 158V260H70V158C84 120 123 106 123 80Z" fill={CREAM} stroke="#8D6D3D" strokeWidth="6" />
+        <path d="M111 3H240V33H111Z" fill={TEAL} stroke="#8D6D3D" strokeWidth="5" />
+        <path d="M100 174H252V235H100Z" fill="#FBFBFE" />
+        <path d="M120 193H230M120 215H207" stroke="#168E9A" strokeWidth="6" strokeLinecap="round" />
+      </g>
+      <path d="M304 119L250 146L280 208L340 178Z" fill="#FBFBFE" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
+      <circle cx="281" cy="151" r="7" fill="#168E9A" />
+      <text x="292" y="177" fill="#14163A" fontFamily="monospace" fontSize="25">24</text>
+      <path d="M289 157L334 184" stroke="#E57655" strokeWidth="6" strokeLinecap="round" />
+      <text x="303" y="205" fill="#168E9A" fontFamily="monospace" fontSize="24">9</text>
+      <path d="M575 149H720M604 171H710" stroke={TEAL} strokeWidth="7" strokeLinecap="round" strokeDasharray="3 16" />
+      <circle cx="742" cy="160" r="29" fill="#E57655" />
+      <path d="M742 144V163M742 176V177" stroke={WHITE} strokeWidth="6" strokeLinecap="round" />
+      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
+    </svg>
+  </RefFrame>
+);
+
+const TresSinais: React.FC = () => (
+  <RefFrame name="Três sinais no dia a dia">
+    <svg width="908" height="390" viewBox="0 0 908 390" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Três sinais de improviso: ruptura, divergência e validade esquecida">
+      <path d="M168 299H740" stroke={STROKE} strokeWidth="7" strokeLinecap="round" />
+      <path d="M310 114V299M598 114V299" stroke="rgba(251,251,254,.36)" strokeWidth="3" strokeDasharray="3 12" />
+      <g transform="translate(184 102)">
+        <path d="M10 158H104M31 143V85C31 63 48 46 70 46C92 46 109 63 109 85V143" stroke={WHITE} strokeWidth="8" strokeLinecap="round" />
+        <path d="M49 46V27H90V46" stroke={WHITE} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M49 99H91" stroke={TEAL} strokeWidth="10" strokeLinecap="round" />
+        <path d="M41 120L56 135M56 120L41 135" stroke={CREAM} strokeWidth="7" strokeLinecap="round" />
+      </g>
+      <g transform="translate(365 118)">
+        <path d="M0 0H138V152H0Z" fill="#FBFBFE" />
+        <path d="M22 35H112M22 70H112M22 105H80" stroke="#D5D8E2" strokeWidth="5" strokeLinecap="round" />
+        <path d="M22 35H83" stroke="#168E9A" strokeWidth="7" strokeLinecap="round" />
+        <path d="M95 56L120 82M120 56L95 82" stroke="#E57655" strokeWidth="8" strokeLinecap="round" />
+        <path d="M24 128L47 105" stroke="#C49B55" strokeWidth="10" strokeLinecap="round" />
+      </g>
+      <g transform="translate(624 106)">
+        <circle cx="56" cy="93" r="67" stroke={WHITE} strokeWidth="8" />
+        <path d="M56 48V94L88 112" stroke={CREAM} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M43 14H69" stroke={TEAL} strokeWidth="9" strokeLinecap="round" />
+        <path d="M119 34L137 16" stroke={TEAL} strokeWidth="8" strokeLinecap="round" />
+      </g>
+      <path d="M111 350H797" stroke="rgba(251,251,254,.28)" strokeWidth="2" />
+    </svg>
+  </RefFrame>
+);
+export const NorteEstoqueCapaBalanca = Caderno;
 export const NorteEstoqueCapaMapa = Mapa;
 export const NorteEstoqueCapaEtiqueta = Etiqueta;
-export const NorteEstoqueCapaMedidor = Medidor;
+export const NorteEstoqueCapaMedidor = TresSinais;
+
