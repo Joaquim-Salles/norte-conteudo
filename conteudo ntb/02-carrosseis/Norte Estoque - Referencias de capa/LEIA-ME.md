@@ -1,8 +1,14 @@
 # Referências visuais para a capa do Norte Estoque
 
-A headline promete três sinais, então todas as alternativas mostram os mesmos três problemas identificáveis: falta inesperada, quantidade registrada diferente da contagem física e validade esquecida. Cada opção muda a composição visual, não o conceito. São referências; a capa atual permanece intacta.
+Quatro composições diferentes para a headline **“3 sinais de que seu estoque está no improviso”**, usando somente os sinais que aparecem neste carrossel:
 
-1. **Três sinais em linha** — os três pictogramas ficam explícitos e nomeados.
-2. **Caderno com três alertas** — os sinais aparecem como registros marcados numa folha de conferência.
-3. **Evidências na prateleira** — um espaço vazio, contagem divergente e alerta de validade numa única cena compacta.
-4. **Diagnóstico em triângulo** — os três sinais se conectam ao estoque como origem comum.
+- Você só confia no saldo depois de contar tudo de novo.
+- A contagem é adiada até virar um mutirão.
+- O produto muda de local, mas o registro não acompanha.
+
+1. **Os três sinais** — mostra as três situações lado a lado com chamadas explícitas.
+2. **Conferência no papel** — apresenta os sinais como alertas numa folha de rotina.
+3. **Mapa dos três sinais** — organiza saldo, contagem e mudança de local como áreas de uma operação.
+4. **Rotina acumulada** — cena de trabalho com saldo duvidoso, conferência pendente e item em outro local.
+
+São referências para escolher; não alteram a capa do post.
