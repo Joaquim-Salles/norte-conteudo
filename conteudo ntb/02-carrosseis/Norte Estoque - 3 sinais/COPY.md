@@ -1,10 +1,12 @@
-# Copy do carrossel | 3 sinais de que seu estoque está no improviso
+# Copy do carrossel | 3 sinais de improviso no estoque
 
 ## Slide 1 | Capa
 
-**3 sinais de que seu estoque está no improviso**
+**3 SINAIS DE IMPROVISO**
 
-Quando a informação não acompanha a rotina, conferir e decidir fica mais difícil.
+**O improviso no estoque trava sua operação**
+
+Saldo duvidoso, contagem adiada e movimentação sem registro
 
 ## Slide 2 | Saldo que não inspira confiança
 

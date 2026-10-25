@@ -4,7 +4,7 @@ Carrossel educativo para negócios que controlam produtos e movimentações de e
 
 ## Sequência
 
-1. Capa: três sinais de que o estoque está no improviso.
+1. Capa: o improviso no estoque trava a operação, apresentado por três sinais concretos.
 2. O saldo anotado só inspira confiança depois de uma nova contagem.
 3. A conferência é adiada e o inventário acumula.
 4. Produtos mudam de local sem o registro acompanhar.

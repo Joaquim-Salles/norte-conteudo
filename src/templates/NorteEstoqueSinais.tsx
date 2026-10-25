@@ -43,9 +43,9 @@ const Cover: React.FC = () => {
         <Background tone="product" id="ne-sinais-cover" />
         <Img src={LOGO_ESTOQUE} style={{position: 'absolute', left: PAD, top: 76, height: 86, width: 'auto'}} />
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
-        <Eyebrow tone="product" top={340}>CONTROLE DE ESTOQUE</Eyebrow>
-        <Title tone="product" top={398} size={67}>3 sinais de que seu estoque está no improviso</Title>
-        <Support tone="product" top={590} width={870} size={30}>Quando a informação não acompanha a rotina, conferir e decidir fica mais difícil.</Support>
+        <Eyebrow tone="product" top={340}>3 SINAIS DE IMPROVISO</Eyebrow>
+        <Title tone="product" top={398} size={67}>O improviso no estoque trava sua operação</Title>
+        <Support tone="product" top={590} width={870} size={30}>Saldo duvidoso, contagem adiada e movimentação sem registro</Support>
         <div data-illustration="stock-signal-triptych" style={{position: 'absolute', left: 86, top: 770, width: 908, height: 390}}>
           <NorteEstoqueSignalsIllustration />
         </div>
