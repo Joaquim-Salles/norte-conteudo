@@ -47,6 +47,7 @@ const Cover: React.FC = () => {
         <Support tone="product" top={590} width={870} size={30}>Quando a informação não acompanha a rotina, conferir e decidir fica mais difícil.</Support>
         <div data-illustration="stock-signal-shelf" style={{position: 'absolute', left: 110, top: 790, width: 860, height: 350}}>
           <svg width="860" height="350" viewBox="0 0 860 350" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Prateleira de estoque com três sinais de atenção">
+            <g transform="translate(-77.4 -31.5) scale(1.18)">
             <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
             <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
             <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
@@ -57,6 +58,7 @@ const Cover: React.FC = () => {
             <Carton x={308} y={177} scale={0.72} />
             <Carton x={428} y={177} scale={0.72} />
             <Carton x={548} y={177} scale={0.72} />
+            </g>
           </svg>
         </div>
         <Foot tone="product" label="Norte Estoque" />

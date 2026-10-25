@@ -39,6 +39,7 @@ test('the cover uses clear, dimensional cartons without unexplained number marke
   assert.match(template, /<Carton x=/);
   assert.match(template, /Carton x=\{202\} y=\{96\}/);
   assert.match(template, /Carton x=\{188\} y=\{177\}/);
+  assert.match(template, /translate\(-77\.4 -31\.5\) scale\(1\.18\)/);
   assert.doesNotMatch(template, /fill=\{accent\}|accent="#E5A75E"/);
   assert.doesNotMatch(template, /const StockItem|data-item=/);
   assert.doesNotMatch(template, /<text\b/);
