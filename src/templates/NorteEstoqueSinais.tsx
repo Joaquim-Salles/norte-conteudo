@@ -50,13 +50,13 @@ const Cover: React.FC = () => {
             <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
             <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
             <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
-            <Carton x={202} y={82} scale={0.78} />
-            <Carton x={372} y={88} scale={0.78} />
-            <Carton x={540} y={82} scale={0.78} />
-            <Carton x={188} y={158} scale={0.72} />
-            <Carton x={308} y={162} scale={0.72} />
-            <Carton x={428} y={158} scale={0.72} />
-            <Carton x={548} y={162} scale={0.72} />
+            <Carton x={202} y={96} scale={0.78} />
+            <Carton x={372} y={96} scale={0.78} />
+            <Carton x={540} y={96} scale={0.78} />
+            <Carton x={188} y={177} scale={0.72} />
+            <Carton x={308} y={177} scale={0.72} />
+            <Carton x={428} y={177} scale={0.72} />
+            <Carton x={548} y={177} scale={0.72} />
           </svg>
         </div>
         <Foot tone="product" label="Norte Estoque" />
