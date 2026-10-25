@@ -62,6 +62,17 @@ import {
   NorteEstoqueQR07,
 } from './templates/NorteEstoqueCarousel';
 import {
+  NorteEstoqueSinais01,
+  NorteEstoqueSinais02,
+  NorteEstoqueSinais03,
+  NorteEstoqueSinais03Animada,
+  NorteEstoqueSinais04,
+  NorteEstoqueSinais04Animada,
+  NorteEstoqueSinais05,
+  NorteEstoqueSinais06,
+  NorteEstoqueSinais07,
+} from './templates/NorteEstoqueSinais';
+import {
   AntesDepoisAntes,
   AntesDepoisPonte,
   AntesDepoisDepois,
@@ -301,6 +312,17 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="NorteEstoqueQRAnimada03" component={NorteEstoqueQR03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada04" component={NorteEstoqueQR04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
       <Composition id="NorteEstoqueQRAnimada06" component={NorteEstoqueQR06Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+
+      {/* Norte Estoque — diagnóstico de sinais de controle improvisado. */}
+      <Still id="NorteEstoqueSinais01" component={NorteEstoqueSinais01} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais02" component={NorteEstoqueSinais02} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais03" component={NorteEstoqueSinais03} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais04" component={NorteEstoqueSinais04} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais05" component={NorteEstoqueSinais05} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais06" component={NorteEstoqueSinais06} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Still id="NorteEstoqueSinais07" component={NorteEstoqueSinais07} width={FEED_WIDTH} height={FEED_HEIGHT} />
+      <Composition id="NorteEstoqueSinaisAnimada03" component={NorteEstoqueSinais03Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
+      <Composition id="NorteEstoqueSinaisAnimada04" component={NorteEstoqueSinais04Animada} width={FEED_WIDTH} height={FEED_HEIGHT} fps={30} durationInFrames={90} />
 
       {/* Norte Vendas para barracas de praia */}
       <Still id="NorteVendasBarraca01" component={NorteVendasBarraca01} width={FEED_WIDTH} height={FEED_HEIGHT} />
