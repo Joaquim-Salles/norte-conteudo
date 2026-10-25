@@ -45,7 +45,7 @@ const Cover: React.FC = () => {
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
         <Eyebrow tone="product" top={340}>ALERTA DE ESTOQUE</Eyebrow>
         <Title tone="product" top={398} size={58}>Seu estoque está no improviso? 3 sinais que entregam isso</Title>
-        <Support tone="product" top={565} width={870} size={30}>Saldo duvidoso, contagem adiada e movimentação sem registro</Support>
+        <Support tone="product" top={565} width={870} size={30}>Saldo incerto, contagem sempre adiada e movimentações sem registro são sinais de um controle difícil de confiar no dia a dia</Support>
         <div data-illustration="stock-signal-triptych" style={{position: 'absolute', left: 86, top: 770, width: 908, height: 390}}>
           <NorteEstoqueSignalsIllustration />
         </div>
@@ -56,7 +56,7 @@ const Cover: React.FC = () => {
 };
 
 const SinalSaldo: React.FC = () => (
-  <Slide n={2} tone="light" eyebrow="SINAL 01 · SALDO" title="Você só confia no saldo depois de contar tudo de novo" support="Se o registro nunca parece suficiente, cada consulta vira uma nova conferência." supportTop={470}>
+  <Slide n={2} tone="light" eyebrow="SINAL 01 · SALDO" title="Você só confia no saldo depois de contar tudo de novo" support="Quando cada consulta termina em uma nova contagem, o saldo registrado deixa de apoiar decisões sobre o que usar, comprar ou repor." supportTop={470}>
     <div data-illustration="record-vs-physical-stock" style={{position: 'absolute', left: 86, top: 630, width: 908, height: 490, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
       <div style={{width: 370, height: 390, boxSizing: 'border-box', padding: 30, borderRadius: 22, background: '#FBFBFE', border: '2px solid rgba(20,22,58,.12)', boxShadow: '0 18px 34px rgba(20,22,58,.08)'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 14, color: NAVY}}><ClipboardList size={31} /><span style={{fontFamily: SANS, fontSize: 18, fontWeight: 700, letterSpacing: 1.5}}>SALDO REGISTRADO</span></div>
@@ -77,7 +77,7 @@ const SinalSaldo: React.FC = () => (
 const ContagemScene: React.FC<{f?: number}> = ({f}) => {
   const pages = [0, 1, 2].map((i) => f === undefined ? 1 : interpolate(f, [15 + i * 8, 30 + i * 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease}));
   return (
-    <Slide n={3} tone="dark" eyebrow="SINAL 02 · CONFERÊNCIA" title="A contagem é adiada até virar um mutirão" support="Sem uma rotina simples para acompanhar o que já foi conferido, o inventário acumula." supportTop={455}>
+    <Slide n={3} tone="dark" eyebrow="SINAL 02 · CONFERÊNCIA" title="A contagem é adiada até virar um mutirão" support="Quando a conferência é sempre empurrada para depois, os itens pendentes se acumulam e o inventário vira um mutirão difícil de encaixar na rotina." supportTop={455}>
       <div data-illustration="postponed-stock-count" style={{position: 'absolute', left: 106, top: 625, width: 868, height: 495}}>
         <div style={{position: 'absolute', left: 8, top: 25, width: 320, height: 370, boxSizing: 'border-box', padding: 26, borderRadius: 20, background: 'rgba(251,251,254,.1)', border: '1px solid rgba(251,251,254,.2)'}}>
           <div style={{display: 'flex', alignItems: 'center', gap: 14, color: WHITE}}><CalendarDays size={32} /><span style={{fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 1.5}}>CONFERÊNCIA</span></div>
@@ -105,7 +105,7 @@ const MovimentacaoScene: React.FC<{f?: number}> = ({f}) => {
   const boxX = 250 + progress * 426;
   const boxY = 225 - Math.sin(progress * Math.PI) * 42;
   return (
-    <Slide n={4} tone="product" eyebrow="SINAL 03 · MOVIMENTAÇÃO" title="O produto muda de local, mas o registro não acompanha" titleSize={60} support="Sem anotar a transferência, fica mais difícil saber onde está cada item." supportTop={430}>
+    <Slide n={4} tone="product" eyebrow="SINAL 03 · MOVIMENTAÇÃO" title="O produto muda de local, mas o registro não acompanha" titleSize={60} support="Sem registrar a transferência quando ela acontece, a localização fica desatualizada e a equipe pode procurar o produto no endereço antigo." supportTop={430}>
       <div data-illustration="unrecorded-stock-transfer" style={{position: 'absolute', left: 87, top: 625, width: 906, height: 495}}>
         <div style={{position: 'absolute', left: 0, top: 38, width: 300, height: 350, boxSizing: 'border-box', padding: 25, borderRadius: 20, background: 'rgba(20,22,58,.25)', border: '1px solid rgba(251,251,254,.33)'}}>
           <div style={{display: 'flex', gap: 12, alignItems: 'center', color: WHITE}}><MapPin size={27} /><span style={{fontFamily: SANS, fontWeight: 700, fontSize: 17, letterSpacing: 1.3}}>LOCAL DE ORIGEM</span></div>
@@ -129,7 +129,7 @@ const SinalMovimentacao: React.FC = () => <MovimentacaoScene />;
 const SinalMovimentacaoAnimada: React.FC = () => <MovimentacaoScene f={useCurrentFrame()} />;
 
 const DecisaoScene: React.FC = () => (
-  <Slide n={5} tone="dark" eyebrow="QUANDO O CONTROLE ATRASA" title="A reposição vira tentativa e erro" support="Com informações desatualizadas, a equipe pode precisar conferir de novo antes de decidir o que repor ou localizar." supportTop={455}>
+  <Slide n={5} tone="dark" eyebrow="QUANDO O CONTROLE ATRASA" title="A reposição vira tentativa e erro" support="Com saldo e localização pouco confiáveis, cada decisão começa com uma nova busca: o que precisa de reposição e onde está o produto?" supportTop={455}>
     <div data-illustration="replenishment-decision-path" style={{position: 'absolute', left: 100, top: 690, width: 880, height: 385, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
       <div style={{width: 260, textAlign: 'center', color: WHITE}}>
         <Package size={74} strokeWidth={1.4} color="#F3D99E" />
@@ -150,7 +150,7 @@ const DecisaoScene: React.FC = () => (
 );
 
 const CaminhoScene: React.FC = () => (
-    <Slide n={6} tone="light" eyebrow="UM CONTROLE QUE ACOMPANHA A ROTINA" title="O estoque precisa acompanhar o que acontece na operação" titleSize={60} support="O Norte Estoque ajuda a registrar inventários, identificar produtos e acompanhar movimentações entre locais." supportTop={430}>
+    <Slide n={6} tone="light" eyebrow="UM CONTROLE QUE ACOMPANHA A ROTINA" title="O estoque precisa acompanhar o que acontece na operação" titleSize={60} support="O Norte Estoque reúne inventários, identificação de produtos e movimentações entre locais, para que a equipe acompanhe o que acontece no estoque." supportTop={430}>
     <div data-illustration="inventory-screen-in-laptop" style={{position: 'absolute', left: 100, top: 650, width: 880, height: 500, filter: 'drop-shadow(0 24px 26px rgba(20,22,58,.18))'}}>
       <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 440, padding: 13, boxSizing: 'border-box', borderRadius: 20, background: '#17182D', border: '2px solid rgba(20,22,58,.2)'}}>
         <div style={{height: '100%', borderRadius: 9, overflow: 'hidden', background: '#F7F8FC'}}><Img src={TELA_INVENTARIO} style={{display: 'block', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left top'}} /></div>
@@ -169,12 +169,12 @@ const Fechamento: React.FC = () => {
         <Img src={LOGO_ESTOQUE} style={{position: 'absolute', left: PAD, top: 82, height: 92, width: 'auto'}} />
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('dark')}}>07/07</span>
         <Eyebrow tone="dark" top={405}>NORTE ESTOQUE</Eyebrow>
-        <Title tone="dark" top={470} size={76}>Mais clareza para cuidar da operação</Title>
-        <Support tone="dark" top={655} width={850} size={30}>Conheça o Norte Estoque e dê um norte ao seu negócio.</Support>
+        <Title tone="dark" top={470} size={76}>Dê um norte ao controle do seu estoque</Title>
+        <Support tone="dark" top={655} width={850} size={30}>Com o Norte Estoque, organize inventários, identifique produtos e acompanhe movimentações entre locais com mais clareza para a sua equipe.</Support>
         <div style={{position: 'absolute', left: PAD, right: PAD, top: 860, height: 1, background: 'rgba(251,251,254,.2)'}} />
         <div style={{position: 'absolute', left: PAD, right: PAD, top: 910, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 21, letterSpacing: 2, textTransform: 'uppercase', color: WHITE}}>Acesse o link da bio</span>
-          <span style={{background: '#FBFBFE', color: NAVY, fontFamily: SANS, fontWeight: 700, fontSize: 24, padding: '21px 30px', borderRadius: 999}}>Dê um norte →</span>
+          <span style={{background: '#FBFBFE', color: NAVY, fontFamily: SANS, fontWeight: 700, fontSize: 24, padding: '21px 30px', borderRadius: 999}}>Conheça o Norte Estoque →</span>
         </div>
         <div style={{position: 'absolute', right: 104, bottom: 166, color: 'rgba(251,251,254,.12)', transform: 'rotate(-8deg)'}}><Boxes size={174} strokeWidth={1.1} /></div>
         <Foot tone="dark" last label="Norte Estoque" />
