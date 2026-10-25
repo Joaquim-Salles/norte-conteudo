@@ -3,6 +3,7 @@ import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
 import {ArrowRight, Boxes, CalendarDays, Check, CircleHelp, ClipboardList, MapPin, Package} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {Background, Eyebrow, Foot, NAVY, PAD, Produto, Support, Title, Top, WHITE, ease, kit, mute} from '../lib/NortePost';
+import {NorteEstoqueSignalsIllustration} from '../lib/NorteEstoqueSignalsIllustration';
 
 const LOGO_ESTOQUE = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
 const TELA_INVENTARIO = kit('08-recursos/telas-oficiais/estoque/d-inventario.png');
@@ -45,31 +46,8 @@ const Cover: React.FC = () => {
         <Eyebrow tone="product" top={340}>CONTROLE DE ESTOQUE</Eyebrow>
         <Title tone="product" top={398} size={67}>3 sinais de que seu estoque está no improviso</Title>
         <Support tone="product" top={590} width={870} size={30}>Quando a informação não acompanha a rotina, conferir e decidir fica mais difícil.</Support>
-        <div data-illustration="stock-signal-shelf" style={{position: 'absolute', left: 110, top: 790, width: 860, height: 350}}>
-          <svg width="860" height="350" viewBox="0 0 860 350" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Prateleira de estoque com três sinais de atenção">
-            <g transform="translate(-43 -17.5) scale(1.1)">
-            <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
-            <path d="M177 91V275M683 91V275" stroke="rgba(251,251,254,.86)" strokeWidth="10" strokeLinecap="round" />
-            <path d="M177 161H683L695 169H189Z" fill="#FBFBFE" />
-            <path d="M189 169H695V180H189Z" fill="#C9D3DC" />
-            <path d="M177 231H683L695 239H189Z" fill="#FBFBFE" />
-            <path d="M189 239H695V250H189Z" fill="#C9D3DC" />
-            <path d="M177 188L198 169M683 188L662 169M177 258L198 239M683 258L662 239" stroke="rgba(251,251,254,.62)" strokeWidth="6" strokeLinecap="round" />
-            <path d="M156 277H198M662 277H704" stroke="rgba(251,251,254,.72)" strokeWidth="8" strokeLinecap="round" />
-            <Carton x={198} y={114} scale={0.46} />
-            <Carton x={278} y={114} scale={0.46} />
-            <Carton x={358} y={114} scale={0.46} />
-            <Carton x={438} y={114} scale={0.46} />
-            <Carton x={518} y={114} scale={0.46} />
-            <Carton x={598} y={114} scale={0.46} />
-            <Carton x={198} y={184} scale={0.46} />
-            <Carton x={278} y={184} scale={0.46} />
-            <Carton x={358} y={184} scale={0.46} />
-            <Carton x={438} y={184} scale={0.46} />
-            <Carton x={518} y={184} scale={0.46} />
-            <Carton x={598} y={184} scale={0.46} />
-            </g>
-          </svg>
+        <div data-illustration="stock-signal-triptych" style={{position: 'absolute', left: 86, top: 770, width: 908, height: 390}}>
+          <NorteEstoqueSignalsIllustration />
         </div>
         <Foot tone="product" label="Norte Estoque" />
       </AbsoluteFill>
@@ -214,3 +192,4 @@ export const NorteEstoqueSinais04Animada = SinalMovimentacaoAnimada;
 export const NorteEstoqueSinais05 = DecisaoScene;
 export const NorteEstoqueSinais06 = CaminhoScene;
 export const NorteEstoqueSinais07 = Fechamento;
+
