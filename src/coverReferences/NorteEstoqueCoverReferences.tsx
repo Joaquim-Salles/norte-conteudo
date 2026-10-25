@@ -82,11 +82,13 @@ const Etiqueta: React.FC = () => (
         <path d="M100 174H252V235H100Z" fill="#FBFBFE" />
         <path d="M120 193H230M120 215H207" stroke="#168E9A" strokeWidth="6" strokeLinecap="round" />
       </g>
-      <path d="M304 119L250 146L280 208L340 178Z" fill="#FBFBFE" stroke={STROKE} strokeWidth="5" strokeLinejoin="round" />
-      <circle cx="281" cy="151" r="7" fill="#168E9A" />
-      <text x="292" y="177" fill="#14163A" fontFamily="monospace" fontSize="25">24</text>
-      <path d="M289 157L334 184" stroke="#E57655" strokeWidth="6" strokeLinecap="round" />
-      <text x="303" y="205" fill="#168E9A" fontFamily="monospace" fontSize="24">9</text>
+      <g transform="rotate(-24 310 166)">
+        <rect x="258" y="120" width="112" height="92" rx="7" fill="#FBFBFE" stroke={STROKE} strokeWidth="5" />
+        <circle cx="276" cy="140" r="7" fill="#168E9A" />
+        <text x="293" y="161" fill="#14163A" fontFamily="monospace" fontSize="25">24</text>
+        <path d="M289 148L337 148" stroke="#E57655" strokeWidth="6" strokeLinecap="round" />
+        <text x="293" y="190" fill="#168E9A" fontFamily="monospace" fontSize="24">9</text>
+      </g>
       <path d="M575 149H720M604 171H710" stroke={TEAL} strokeWidth="7" strokeLinecap="round" strokeDasharray="3 16" />
       <circle cx="742" cy="160" r="29" fill="#E57655" />
       <path d="M742 144V163M742 176V177" stroke={WHITE} strokeWidth="6" strokeLinecap="round" />
