@@ -18,9 +18,9 @@ const RefFrame: React.FC<{name: string; children: React.ReactNode}> = ({name, ch
         <Background tone="product" id={textureId} />
         <Img src={LOGO_ESTOQUE} style={{position: 'absolute', left: PAD, top: 76, height: 86, width: 'auto'}} />
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
-        <Eyebrow tone="product" top={340}>3 SINAIS DE IMPROVISO</Eyebrow>
-        <Title tone="product" top={398} size={67}>O improviso no estoque trava sua operação</Title>
-        <Support tone="product" top={590} width={870} size={30}>Saldo duvidoso, contagem adiada e movimentação sem registro</Support>
+        <Eyebrow tone="product" top={340}>ALERTA DE ESTOQUE</Eyebrow>
+        <Title tone="product" top={398} size={58}>Seu estoque está no improviso? 3 sinais que entregam isso</Title>
+        <Support tone="product" top={565} width={870} size={30}>Saldo duvidoso, contagem adiada e movimentação sem registro</Support>
         <div style={{position: 'absolute', left: 86, top: 770, width: 908, height: 390}}>{children}</div>
         <div style={{position: 'absolute', left: PAD, bottom: 64, fontFamily: SANS, fontWeight: 700, fontSize: 20, letterSpacing: 2.4, textTransform: 'uppercase', color: mute('product')}}>Referência visual · {name}</div>
       </AbsoluteFill>

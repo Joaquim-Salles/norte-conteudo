@@ -2,9 +2,9 @@
 
 ## Slide 1 | Capa
 
-**3 SINAIS DE IMPROVISO**
+**ALERTA DE ESTOQUE**
 
-**O improviso no estoque trava sua operação**
+**Seu estoque está no improviso? 3 sinais que entregam isso**
 
 Saldo duvidoso, contagem adiada e movimentação sem registro
 
