@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {ArrowRight, Boxes, CalendarDays, Check, CircleHelp, ClipboardList, MapPin, Package, RefreshCw} from 'lucide-react';
+import {ArrowRight, Boxes, CalendarDays, Check, CircleHelp, ClipboardList, MapPin, Package} from 'lucide-react';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 import {Background, Eyebrow, Foot, NAVY, PAD, Produto, Support, Title, Top, WHITE, ease, kit, mute} from '../lib/NortePost';
 
@@ -34,17 +34,27 @@ const Cover: React.FC = () => {
         <Eyebrow tone="product" top={340}>CONTROLE DE ESTOQUE</Eyebrow>
         <Title tone="product" top={398} size={67}>3 sinais de que seu estoque está no improviso</Title>
         <Support tone="product" top={590} width={870} size={30}>Quando a informação não acompanha a rotina, conferir e decidir fica mais difícil.</Support>
-        <div data-illustration="stock-overview" style={{position: 'absolute', left: 110, top: 795, width: 860, height: 330, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-          <div style={{width: 320, height: 250, boxSizing: 'border-box', padding: 26, borderRadius: 22, background: 'rgba(251,251,254,.12)', border: '1px solid rgba(251,251,254,.23)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-            <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 2, color: 'rgba(251,251,254,.78)'}}>CONTROLE</div>
-            {[0, 1, 2].map((i) => <div key={i} style={{display: 'flex', alignItems: 'center', gap: 16}}><span style={{width: 16, height: 16, borderRadius: 99, background: '#70D3DA'}} /><PaperLine width={180} color="rgba(251,251,254,.6)" /></div>)}
-          </div>
-          <div style={{display: 'grid', placeItems: 'center', color: 'rgba(251,251,254,.78)'}}><RefreshCw size={54} strokeWidth={1.7} /></div>
-          <div style={{width: 320, height: 250, boxSizing: 'border-box', padding: 26, borderRadius: 22, background: 'rgba(20,22,58,.30)', border: '1px solid rgba(251,251,254,.23)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-            <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 18, letterSpacing: 2, color: 'rgba(251,251,254,.78)'}}>ESTOQUE FÍSICO</div>
-            <div style={{display: 'flex', gap: 18, justifyContent: 'center', color: '#F3D99E'}}><Package size={68} strokeWidth={1.5} /><Boxes size={68} strokeWidth={1.5} /></div>
-            <div style={{display: 'flex', gap: 12}}><PaperLine width={110} color="rgba(251,251,254,.5)" /><PaperLine width={95} color="rgba(251,251,254,.28)" /></div>
-          </div>
+        <div data-illustration="stock-signal-shelf" style={{position: 'absolute', left: 110, top: 790, width: 860, height: 350}}>
+          <svg width="860" height="350" viewBox="0 0 860 350" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Prateleira de estoque com três sinais de atenção">
+            <path d="M74 310H786" stroke="rgba(251,251,254,.25)" strokeWidth="2" />
+            <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
+            <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
+            <g fill="#F3D99E" stroke="rgba(251,251,254,.9)" strokeWidth="3" strokeLinejoin="round">
+              <path d="M219 128H302V170H219Z"/><path d="M315 119H391V170H315Z"/>
+              <path d="M493 126H569V170H493Z"/><path d="M580 116H650V170H580Z"/>
+              <path d="M205 202H276V244H205Z"/><path d="M289 195H379V244H289Z"/>
+              <path d="M405 199H478V244H405Z"/><path d="M500 195H573V244H500Z"/><path d="M587 203H660V244H587Z"/>
+            </g>
+            <g stroke="#168E9A" strokeWidth="2" strokeDasharray="5 7" opacity=".9">
+              <path d="M254 75V112"/><path d="M430 75V111"/><path d="M606 75V108"/>
+            </g>
+            <g fontFamily={SANS} fontWeight="700" textAnchor="middle">
+              <circle cx="254" cy="49" r="27" fill="#F3D99E"/><text x="254" y="56" fontSize="18" fill="#14163A">01</text>
+              <circle cx="430" cy="49" r="27" fill="#70D3DA"/><text x="430" y="56" fontSize="18" fill="#14163A">02</text>
+              <circle cx="606" cy="49" r="27" fill="#F3D99E"/><text x="606" y="56" fontSize="18" fill="#14163A">03</text>
+            </g>
+            <path d="M383 177H487" stroke="#70D3DA" strokeWidth="4" strokeDasharray="8 8" />
+          </svg>
         </div>
         <Foot tone="product" label="Norte Estoque" />
       </AbsoluteFill>
@@ -127,18 +137,21 @@ const SinalMovimentacaoAnimada: React.FC = () => <MovimentacaoScene f={useCurren
 
 const DecisaoScene: React.FC = () => (
   <Slide n={5} tone="dark" eyebrow="QUANDO O CONTROLE ATRASA" title="A reposição vira tentativa e erro" support="Com informações desatualizadas, a equipe pode precisar conferir de novo antes de decidir o que repor ou localizar." supportTop={455}>
-    <div data-illustration="stock-decisions" style={{position: 'absolute', left: 100, top: 635, width: 880, height: 475, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-      <div style={{width: 345, height: 360, borderRadius: 18, padding: 25, boxSizing: 'border-box', background: 'rgba(251,251,254,.1)', border: '1px solid rgba(251,251,254,.19)'}}>
-        <div style={{fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 1.3, color: WHITE}}>DÚVIDAS NA ROTINA</div>
-        {[['O que conferir?', ClipboardList], ['Onde está?', MapPin], ['O que repor?', Package]].map(([label, Icon]) => <div key={label as string} style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 31, color: 'rgba(251,251,254,.84)'}}><Icon size={29} /><span style={{fontFamily: SANS, fontSize: 20}}>{label as string}</span></div>)}
+    <div data-illustration="replenishment-decision-path" style={{position: 'absolute', left: 100, top: 690, width: 880, height: 385, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+      <div style={{width: 260, textAlign: 'center', color: WHITE}}>
+        <Package size={74} strokeWidth={1.4} color="#F3D99E" />
+        <div style={{marginTop: 22, fontFamily: SANS, fontSize: 31, lineHeight: 1.1, fontWeight: 800, letterSpacing: 1}}>O QUE<br />REPOR?</div>
+        <div style={{margin: '20px auto 0', width: 150, height: 3, background: 'rgba(243,217,158,.68)'}} />
       </div>
-      <div style={{width: 370, height: 360, position: 'relative', borderRadius: 18, padding: 25, boxSizing: 'border-box', background: 'rgba(20,22,58,.3)', border: '1px solid rgba(251,251,254,.19)'}}>
-        <div style={{fontFamily: SANS, fontSize: 17, fontWeight: 700, letterSpacing: 1.3, color: 'rgba(251,251,254,.7)'}}>INFORMAÇÃO A CONFERIR</div>
-        <div style={{position: 'absolute', left: 25, right: 25, top: 82, height: 210, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14}}>
-          {[0, 1, 2, 3].map((i) => <div key={i} style={{borderRadius: 13, background: 'rgba(251,251,254,.09)', display: 'grid', placeItems: 'center', color: i === 3 ? '#F3D99E' : 'rgba(251,251,254,.7)'}}>{i === 3 ? <CircleHelp size={43} /> : <Package size={39} />}</div>)}
-        </div>
+      <div style={{position: 'relative', display: 'grid', placeItems: 'center', width: 170, height: 170, color: '#70D3DA'}}>
+        <div style={{position: 'absolute', inset: 0, border: '2px solid rgba(112,211,218,.5)', borderRadius: '50%'}} />
+        <CircleHelp size={92} strokeWidth={1.35} />
       </div>
-      <div style={{position: 'absolute', left: 382, top: 156, color: '#F3D99E'}}><ArrowRight size={55} /></div>
+      <div style={{width: 260, textAlign: 'center', color: WHITE}}>
+        <MapPin size={74} strokeWidth={1.4} color="#70D3DA" />
+        <div style={{marginTop: 22, fontFamily: SANS, fontSize: 31, lineHeight: 1.1, fontWeight: 800, letterSpacing: 1}}>ONDE<br />ESTÁ?</div>
+        <div style={{margin: '20px auto 0', width: 150, height: 3, background: 'rgba(112,211,218,.68)'}} />
+      </div>
     </div>
   </Slide>
 );

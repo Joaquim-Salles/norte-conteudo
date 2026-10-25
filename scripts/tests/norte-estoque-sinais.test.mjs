@@ -24,6 +24,14 @@ test('the post copy covers the three approved stock-control symptoms for a broad
   assert.doesNotMatch(copy, /barraca de praia|restaurante/i);
 });
 
+test('the cover and replenishment slide use distinct visual compositions instead of repeating card panels', () => {
+  const template = readFileSync(path.resolve('src/templates/NorteEstoqueSinais.tsx'), 'utf8');
+  assert.match(template, /data-illustration="stock-signal-shelf"/);
+  assert.doesNotMatch(template, /data-illustration="stock-overview"/);
+  assert.match(template, /data-illustration="replenishment-decision-path"/);
+  assert.doesNotMatch(template, /DÚVIDAS NA ROTINA/);
+});
+
 test('the carousel description adds context instead of repeating the three slide headlines', () => {
   const caption = readFileSync(path.join(carouselPath, 'LEGENDA.md'), 'utf8');
   assert.match(caption, /Dê um norte ao seu negócio/i);
