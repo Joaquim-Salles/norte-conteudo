@@ -23,12 +23,11 @@ const Slide: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: s
 
 const PaperLine: React.FC<{width: number; color?: string}> = ({width, color = 'rgba(20,22,58,.18)'}) => <div style={{height: 8, width, borderRadius: 5, background: color}} />;
 
-const Carton: React.FC<{x: number; y: number; scale?: number; accent?: string}> = ({x, y, scale = 1, accent = '#168E9A'}) => (
+const Carton: React.FC<{x: number; y: number; scale?: number}> = ({x, y, scale = 1}) => (
   <g data-carton="shipping-box" transform={`translate(${x} ${y}) scale(${scale})`} strokeLinejoin="round" strokeLinecap="round">
     <path d="M2 22L42 2L112 18L68 43Z" fill="#F8E8C1" stroke="#8D6D3D" strokeWidth="2.5" />
     <path d="M2 22L68 43V103L2 79Z" fill="#E8C983" stroke="#8D6D3D" strokeWidth="2.5" />
     <path d="M68 43L112 18V79L68 103Z" fill="#C9A762" stroke="#8D6D3D" strokeWidth="2.5" />
-    <path d="M46 4L65 8L65 100L58 98L53 96L53 39L36 34Z" fill={accent} opacity=".88" />
     <path d="M12 47L54 60V85L12 70Z" fill="#FBFBFE" stroke="rgba(20,22,58,.32)" strokeWidth="1.7" />
     <path d="M20 53L46 61M20 59L47 67M20 65L37 70" stroke={NAVY} strokeWidth="2.5" opacity=".78" />
     <path d="M74 52L101 37M74 62L101 47M74 72L101 57" stroke="rgba(251,251,254,.36)" strokeWidth="2" />
@@ -52,11 +51,11 @@ const Cover: React.FC = () => {
             <path d="M177 104V302M683 104V302M177 177H683M177 251H683" stroke="rgba(251,251,254,.78)" strokeWidth="9" strokeLinecap="round" />
             <path d="M188 184H672M188 258H672" stroke="rgba(251,251,254,.32)" strokeWidth="2" />
             <Carton x={202} y={82} scale={0.78} />
-            <Carton x={372} y={88} scale={0.78} accent="#E5A75E" />
+            <Carton x={372} y={88} scale={0.78} />
             <Carton x={540} y={82} scale={0.78} />
-            <Carton x={188} y={158} scale={0.72} accent="#E5A75E" />
+            <Carton x={188} y={158} scale={0.72} />
             <Carton x={308} y={162} scale={0.72} />
-            <Carton x={428} y={158} scale={0.72} accent="#E5A75E" />
+            <Carton x={428} y={158} scale={0.72} />
             <Carton x={548} y={162} scale={0.72} />
           </svg>
         </div>

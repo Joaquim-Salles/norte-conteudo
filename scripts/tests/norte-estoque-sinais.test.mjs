@@ -37,6 +37,7 @@ test('the cover uses clear, dimensional cartons without unexplained number marke
   assert.match(template, /const Carton/);
   assert.match(template, /data-carton="shipping-box"/);
   assert.match(template, /<Carton x=/);
+  assert.doesNotMatch(template, /fill=\{accent\}|accent="#E5A75E"/);
   assert.doesNotMatch(template, /const StockItem|data-item=/);
   assert.doesNotMatch(template, /<text\b/);
 });
