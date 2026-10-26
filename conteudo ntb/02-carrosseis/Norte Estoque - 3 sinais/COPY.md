@@ -2,9 +2,9 @@
 
 ## Slide 1 | Capa
 
-**3 SINAIS DE ALERTA**
+**ALERTA DE ESTOQUE**
 
-**Seu estoque está no improviso?**
+**3 sinais de improviso no estoque**
 
 Saldo incerto, contagem sempre adiada e movimentações sem registro são sinais de um controle difícil de confiar no dia a dia
 

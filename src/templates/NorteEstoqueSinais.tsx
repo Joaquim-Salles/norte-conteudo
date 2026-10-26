@@ -43,8 +43,8 @@ const Cover: React.FC = () => {
         <Background tone="product" id="ne-sinais-cover" />
         <Img src={LOGO_ESTOQUE} style={{position: 'absolute', left: PAD, top: 76, height: 86, width: 'auto'}} />
         <span style={{position: 'absolute', right: PAD, top: 96, fontFamily: MONO, fontSize: 22, color: mute('product')}}>01/07</span>
-        <Eyebrow tone="product" top={340}>3 SINAIS DE ALERTA</Eyebrow>
-        <Title tone="product" top={398} size={82}>Seu estoque está no improviso?</Title>
+        <Eyebrow tone="product" top={340}>ALERTA DE ESTOQUE</Eyebrow>
+        <Title tone="product" top={398} size={82}>3 sinais de improviso no estoque</Title>
         <Support tone="product" top={590} width={870} size={30}>Saldo incerto, contagem sempre adiada e movimentações sem registro são sinais de um controle difícil de confiar no dia a dia</Support>
         <div data-illustration="stock-signal-triptych" style={{position: 'absolute', left: 86, top: 770, width: 908, height: 390}}>
           <NorteEstoqueSignalsIllustration />
