@@ -1,7 +1,7 @@
-# Norte Estoque — planilha no controle do estoque
+# Norte Estoque — da planilha ao controle do estoque
 
-Prévia visual inicial do carrossel de conscientização sobre os limites de organizar o estoque em planilhas.
+Prévia visual do carrossel que começa pelos atritos de organizar o estoque em planilhas e depois mostra recursos do Norte Estoque em cenas de inventário, identificação e transferência.
 
 Os textos visíveis são rascunhos de composição. A copy será fechada em etapa posterior.
 
-O carrossel usa cenas estáticas para variar a leitura e duas animações curtas, nos slides 3 e 5. Os elementos visuais tratam as planilhas de forma conceitual e não exibem dados reais.
+O carrossel tem nove slides e três animações curtas nos slides 3, 5 e 7. A capa usa uma imagem fotográfica criada para esta peça; os elementos de planilha e dados não representam dados reais.

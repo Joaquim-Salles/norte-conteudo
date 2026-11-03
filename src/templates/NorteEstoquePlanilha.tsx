@@ -1,18 +1,20 @@
 import React from 'react';
-import {AbsoluteFill, Composition, Img, interpolate, registerRoot, Still, useCurrentFrame} from 'remotion';
-import {ArrowDown, ArrowRight, Boxes, CalendarClock, Check, ClipboardList, FileSpreadsheet, MapPin, Package, Search, TriangleAlert} from 'lucide-react';
+import {AbsoluteFill, Composition, Img, interpolate, registerRoot, staticFile, Still, useCurrentFrame} from 'remotion';
+import {ArrowRight, Boxes, CalendarClock, Check, ClipboardList, FileSpreadsheet, MapPin, Package, QrCode, Search} from 'lucide-react';
 import {Background, Eyebrow, Foot, NAVY, PAD, Produto, Support, Title, Top, WHITE, ease, kit, mute} from '../lib/NortePost';
 import {ensurePostLoaded, FONT_POST as SANS, FONT_POST_MONO as MONO} from '../lib/fonts';
 
 const LOGO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_branco_transparente.png');
+const TELA_RESUMO = kit('08-recursos/telas-oficiais/estoque/d-home.png');
 const W = 1080;
 const H = 1350;
+const COVER_BG = staticFile('norte-estoque-planilha-cover.png');
 
 const Shell: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: string; title: string; support: string; titleSize?: number; supportTop?: number; children: React.ReactNode}> = ({n, tone, eyebrow, title, support, titleSize = 72, supportTop = 466, children}) => (
   <Produto id="estoque">
     <AbsoluteFill>
       <Background tone={tone} id={`planilha-${n}`} />
-      <Top n={n} total={7} tone={tone} />
+      <Top n={n} total={9} tone={tone} />
       <Eyebrow tone={tone} top={190}>{eyebrow}</Eyebrow>
       <Title tone={tone} top={250} size={titleSize}>{title}</Title>
       <Support tone={tone} top={supportTop} width={890} size={28}>{support}</Support>
@@ -22,23 +24,16 @@ const Shell: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: s
   </Produto>
 );
 
-const Spreadsheet: React.FC<{x?: number; y?: number; scale?: number; faded?: boolean}> = ({x=0,y=0,scale=1,faded=false}) => (
-  <g transform={`translate(${x} ${y}) scale(${scale})`} opacity={faded?.45:1}>
-    <rect width="620" height="390" rx="18" fill="#FBFBFE" />
-    <rect width="620" height="58" rx="18" fill="#E8EAF3" />
-    <rect y="42" width="620" height="16" fill="#E8EAF3" />
-    <circle cx="30" cy="29" r="7" fill="#168E9A"/><circle cx="54" cy="29" r="7" fill="#B9BCEB"/><circle cx="78" cy="29" r="7" fill="#D8D9E6"/>
-    {[0,1,2,3,4].map((i)=><line key={`v${i}`} x1={150+i*94} y1="58" x2={150+i*94} y2="390" stroke="#D9DBE7" strokeWidth="2"/>)}
-    {[0,1,2,3,4,5,6].map((i)=><g key={`r${i}`}><line x1="0" y1={105+i*40} x2="620" y2={105+i*40} stroke="#D9DBE7" strokeWidth="2"/><rect x="19" y={76+i*40} width={62+(i%3)*18} height="9" rx="4" fill="#AFB3C7"/><rect x="170" y={76+i*40} width={40+(i%2)*24} height="9" rx="4" fill={i===3?'#168E9A':'#AFB3C7'}/><rect x="274" y={76+i*40} width={54+(i%2)*18} height="9" rx="4" fill="#D0D2DF"/><rect x="378" y={76+i*40} width={42+(i%3)*15} height="9" rx="4" fill="#D0D2DF"/><rect x="476" y={76+i*40} width="92" height="9" rx="4" fill="#D0D2DF"/></g>)}
-    <rect x="154" y="170" width="94" height="40" fill="rgba(22,142,154,.12)" stroke="#168E9A" strokeWidth="3"/>
-  </g>
-);
-
 const Cover: React.FC = () => {
   ensurePostLoaded();
-  return <Produto id="estoque"><AbsoluteFill><Background tone="product" id="planilha-cover"/><Img src={LOGO} style={{position:'absolute',left:PAD,top:76,height:82,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:mute('product')}}>01/07</span>
-    <Eyebrow tone="product" top={305}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={365} size={82}>Sua planilha acompanha o ritmo do estoque?</Title><Support tone="product" top={575} width={860} size={30}>Uma visão visual do que acontece quando as atualizações manuais tentam acompanhar a operação.</Support>
-    <div style={{position:'absolute',left:115,top:760,width:850,height:410,transform:'rotate(-3deg)',filter:'drop-shadow(0 26px 28px rgba(10,20,45,.28))'}}><svg viewBox="0 0 680 430" width="100%" height="100%"><Spreadsheet x={30} y={15} scale={1.0}/><path d="M95 344h490" stroke="#F0CF8B" strokeWidth="12" strokeLinecap="round"/><path d="M128 371h405" stroke="rgba(251,251,254,.55)" strokeWidth="4" strokeLinecap="round"/><circle cx="557" cy="343" r="33" fill="#F0CF8B"/><TriangleAlert x={536} y={322} size={42} color={NAVY}/></svg></div><Foot tone="product" label="Norte Estoque"/></AbsoluteFill></Produto>;
+  return <Produto id="estoque"><AbsoluteFill>
+    <Img src={COVER_BG} style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center'}}/>
+    <AbsoluteFill style={{background:'linear-gradient(180deg,rgba(20,22,58,.82) 0%,rgba(20,22,58,.38) 38%,rgba(20,22,58,.14) 64%,rgba(20,22,58,.87) 100%)'}}/>
+    <AbsoluteFill style={{background:'radial-gradient(ellipse 88% 28% at 50% 100%,rgba(22,142,154,.55),transparent 78%),linear-gradient(105deg,rgba(22,142,154,.16),transparent 48%)'}}/>
+    <Img src={LOGO} style={{position:'absolute',left:PAD,top:76,height:82,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:WHITE}}>01/09</span>
+    <Eyebrow tone="product" top={318}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={382} size={80}>Sua planilha acompanha o ritmo do estoque?</Title><Support tone="product" top={590} width={860} size={30}>Uma visão do que acontece quando as atualizações manuais tentam acompanhar a operação.</Support>
+    <Foot tone="product" label="Norte Estoque"/>
+  </AbsoluteFill></Produto>;
 };
 
 const Versions: React.FC = () => <Shell n={2} tone="light" eyebrow="ARQUIVOS EM PARALELO" title="Qual versão tem o saldo certo?" support="Cópias, abas e atualizações diferentes podem deixar a equipe sem uma referência comum.">
@@ -73,25 +68,61 @@ const Reconcile: React.FC = () => <Shell n={4} tone="product" eyebrow="CONFERÊN
   </div>
 </Shell>;
 
-const FindItem: React.FC<{frame?:number}> = ({frame}) => {
-  const p=frame===undefined?1:interpolate(frame,[10,48],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp',easing:ease});
-  return <Shell n={5} tone="light" eyebrow="BUSCA E REPOSIÇÃO" title="A dúvida vira mais uma tarefa" support="Sem uma visão confiável, localizar e decidir o que fazer exige novas checagens.">
-    <div style={{position:'absolute',left:130,top:700,width:820,height:410}}>
-      <div style={{position:'absolute',left:0,top:25,width:310,height:310,borderRadius:18,background:'#E6E9F1',padding:24,boxSizing:'border-box'}}><div style={{fontFamily:SANS,fontWeight:700,color:NAVY,fontSize:17,letterSpacing:1.2}}>PROCURAR PRODUTO</div><div style={{marginTop:26,display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>{[0,1,2,3].map(i=><div key={i} style={{height:90,borderRadius:12,background:i===2?'rgba(22,142,154,.15)':'#D3D7E2',display:'grid',placeItems:'center',color:i===2?'#168E9A':'#9197AA'}}><Package size={39}/></div>)}</div></div>
-      <svg style={{position:'absolute',left:340,top:90}} width="190" height="160" viewBox="0 0 190 160"><path d="M8 82 C55 10 122 145 180 72" fill="none" stroke="#168E9A" strokeWidth="5" strokeDasharray="8 10"/><circle cx={25+155*p} cy={78-7*Math.sin(p*Math.PI)} r="17" fill="#E7BD72" stroke={NAVY} strokeWidth="3"/></svg>
-      <div style={{position:'absolute',right:0,top:48,width:270,height:270,borderRadius:135,border:'3px solid #168E9A',display:'grid',placeItems:'center',color:'#168E9A'}}><MapPin size={110} strokeWidth={1.35}/><div style={{position:'absolute',bottom:25,fontFamily:SANS,fontSize:17,fontWeight:700,letterSpacing:1.3,color:NAVY}}>LOCAL?</div></div>
+const QrGrid: React.FC = () => {
+  const cells=Array.from({length:441},(_,i)=>({r:Math.floor(i/21),c:i%21})).filter(({r,c})=>{
+    const finder=(x:number,y:number)=>r>=y&&r<y+7&&c>=x&&c<x+7;
+    if(finder(0,0)||finder(14,0)||finder(0,14)) return false;
+    return ((r*7+c*11+r*c)%5)<2;
+  });
+  const finder=(x:number,y:number)=><g transform={`translate(${x} ${y})`}><rect width="7" height="7" fill={NAVY}/><rect x="1" y="1" width="5" height="5" fill="white"/><rect x="2" y="2" width="3" height="3" fill={NAVY}/></g>;
+  return <svg viewBox="-1 -1 23 23" width="100%" height="100%" shapeRendering="crispEdges"><rect x="-1" y="-1" width="23" height="23" fill="white"/>{cells.map(({r,c})=><rect key={`${r}-${c}`} x={c} y={r} width="1" height="1" fill={NAVY}/>)}{finder(0,0)}{finder(14,0)}{finder(0,14)}</svg>;
+};
+
+const QrScan: React.FC<{frame?:number}> = ({frame}) => {
+  const p=frame===undefined?1:interpolate(frame,[8,58],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp',easing:ease});
+  return <Shell n={5} tone="product" eyebrow="INVENTÁRIO COM QR CODE" title="Conte o produto no próprio estoque" support="A leitura do QR Code leva a equipe direto ao inventário para registrar a contagem.">
+    <div style={{position:'absolute',left:118,top:695,width:844,height:455,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+      <div style={{position:'relative',width:370,height:350,borderRadius:20,background:'linear-gradient(140deg,#F5E6C4,#DABF87)',boxShadow:'0 24px 38px rgba(8,14,40,.3)',padding:26,boxSizing:'border-box',border:'1px solid rgba(255,255,255,.7)'}}>
+        <div style={{height:26,width:180,background:'rgba(20,22,58,.16)',borderRadius:6}}/><div style={{position:'absolute',left:100,top:78,width:166,height:212,background:'#F7F8FC',borderRadius:12,boxShadow:'0 12px 28px rgba(20,22,58,.2)',padding:16,boxSizing:'border-box'}}><div style={{height:124,width:124,margin:'0 auto'}}><QrGrid/></div><div style={{marginTop:12,textAlign:'center',fontFamily:MONO,fontSize:12,fontWeight:700,color:NAVY,letterSpacing:1}}>ITEM DE ESTOQUE</div></div>
+        <div style={{position:'absolute',left:28,right:28,bottom:26,height:14,background:'rgba(20,22,58,.14)',borderRadius:8}}/><div style={{position:'absolute',top:65,left:78,width:210,height:235,border:`3px solid rgba(251,251,254,${.2+.75*p})`,borderRadius:12}}/>
+      </div>
+      <div style={{position:'relative',width:270,height:400,borderRadius:36,background:'#11142F',border:'5px solid #323858',boxShadow:'0 26px 42px rgba(8,14,40,.35)',padding:14,boxSizing:'border-box'}}>
+        <div style={{position:'absolute',top:8,left:'40%',width:'20%',height:10,borderRadius:10,background:'#252945'}}/><div style={{position:'relative',marginTop:18,height:335,borderRadius:22,overflow:'hidden',background:'linear-gradient(145deg,#193C54,#10142D)',display:'grid',placeItems:'center'}}>
+          <div style={{width:125,height:125,opacity:.72}}><QrGrid/></div><div style={{position:'absolute',left:20,right:20,top:40+240*p,height:3,background:'#73E1E7',boxShadow:'0 0 18px #73E1E7'}}/><div style={{position:'absolute',inset:35,border:`2px solid rgba(115,225,231,${.45+.5*p})`,borderRadius:14}}/>
+          {p>.85&&<div style={{position:'absolute',right:18,bottom:18,width:44,height:44,borderRadius:22,background:'#168E9A',display:'grid',placeItems:'center',color:WHITE}}><Check size={27}/></div>}
+        </div>
+      </div>
     </div>
   </Shell>;
 };
-const FindItemAnim: React.FC = () => <FindItem frame={useCurrentFrame()}/>;
+const QrScanAnim: React.FC = () => <QrScan frame={useCurrentFrame()}/>;
 
-const Routine: React.FC = () => <Shell n={6} tone="dark" eyebrow="UM FLUXO MAIS CLARO" title="O controle precisa acompanhar a operação" support="Inventário, identificação e movimentações organizados em uma rotina que a equipe consegue acompanhar." titleSize={66} supportTop={430}>
-  <div style={{position:'absolute',left:105,top:700,width:870,height:390,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-    {[{icon:<ClipboardList size={68}/>,label:'INVENTÁRIO'},{icon:<Package size={68}/>,label:'IDENTIFICAÇÃO'},{icon:<MapPin size={68}/>,label:'MOVIMENTAÇÃO'}].map((item,i)=><React.Fragment key={item.label}><div style={{width:245,height:250,borderRadius:20,border:'2px solid rgba(123,216,223,.8)',background:'rgba(22,142,154,.14)',display:'grid',placeItems:'center',alignContent:'center',gap:20,color:'#7BD8DF'}}>{item.icon}<span style={{fontFamily:SANS,fontWeight:700,fontSize:16,letterSpacing:1,color:WHITE}}>{item.label}</span></div>{i<2&&<ArrowRight size={36} color="#7BD8DF"/>}</React.Fragment>)}
+const ProductId: React.FC = () => <Shell n={6} tone="light" eyebrow="IDENTIFICAÇÃO DO PRODUTO" title="Cada item fica mais fácil de reconhecer" support="A identificação acompanha o produto e ajuda a equipe a consultar seus dados no estoque.">
+  <div style={{position:'absolute',left:150,top:705,width:780,height:405,display:'flex',alignItems:'center',justifyContent:'center',gap:70}}>
+    <div style={{width:260,height:300,position:'relative',display:'grid',placeItems:'center'}}><div style={{position:'absolute',bottom:24,width:210,height:42,borderRadius:'50%',background:'rgba(20,22,58,.14)'}}/><div style={{position:'relative',width:158,height:250,borderRadius:'42px 42px 28px 28px',background:'linear-gradient(90deg,#E5C77E,#F2DDAA 42%,#C6A65C)',border:'3px solid #A88A4C',boxShadow:'0 18px 24px rgba(20,22,58,.16)'}}><div style={{position:'absolute',left:48,right:48,top:-19,height:27,borderRadius:'8px 8px 2px 2px',background:'#B59555'}}/><div style={{position:'absolute',left:22,right:22,top:86,height:100,borderRadius:8,background:'#FBFBFE',border:'1px solid #D9DBE7',display:'grid',placeItems:'center',color:NAVY}}><QrCode size={46}/><span style={{fontFamily:MONO,fontSize:9,letterSpacing:1}}>PRODUTO</span></div></div></div>
+    <div style={{width:390,height:330,background:'#FBFBFE',borderRadius:18,border:'1px solid #D9DBE7',boxShadow:'0 24px 36px rgba(20,22,58,.1)',padding:26,boxSizing:'border-box'}}><div style={{fontFamily:SANS,fontWeight:700,fontSize:18,letterSpacing:1.3,color:'#168E9A'}}>IDENTIFICAÇÃO</div><div style={{marginTop:28,display:'grid',gap:22}}>{['PRODUTO','LOTE','VALIDADE'].map((row,i)=><div key={row} style={{borderBottom:'1px solid #D9DBE7',paddingBottom:14}}><div style={{fontFamily:MONO,fontSize:13,letterSpacing:1.4,color:'#686C83'}}>{row}</div><div style={{marginTop:10,height:10,width:[230,170,190][i],borderRadius:5,background:i===0?'#AEB3C4':'#D9DBE7'}}/></div>)}</div></div>
   </div>
 </Shell>;
 
-const Close: React.FC = () => {ensurePostLoaded();return <Produto id="estoque"><AbsoluteFill><Background tone="product" id="planilha-close"/><Img src={LOGO} style={{position:'absolute',left:PAD,top:78,height:84,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:mute('product')}}>07/07</span>
+const TransferScene: React.FC<{frame?:number}> = ({frame}) => {
+  const p=frame===undefined?1:interpolate(frame,[10,62],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp',easing:ease});
+  const x=280+430*p;
+  return <Shell n={7} tone="dark" eyebrow="MOVIMENTAÇÃO REGISTRADA" title="Mudou de local? Registre a transferência" support="A equipe acompanha o produto da origem ao destino dentro do controle do estoque.">
+    <div style={{position:'absolute',left:95,top:715,width:890,height:390}}>
+      {[{x:0,label:'ORIGEM'},{x:590,label:'DESTINO'}].map(({x:sx,label})=><div key={label} style={{position:'absolute',left:sx,top:25,width:290,height:295,borderRadius:18,border:'2px solid rgba(251,251,254,.34)',background:'rgba(251,251,254,.07)',padding:22,boxSizing:'border-box'}}><div style={{display:'flex',gap:12,alignItems:'center',fontFamily:SANS,fontWeight:700,fontSize:16,letterSpacing:1.3,color:'#7BD8DF'}}><MapPin size={26}/>{label}</div><div style={{position:'absolute',left:22,right:22,top:86,height:6,borderRadius:3,background:'rgba(251,251,254,.55)'}}/><div style={{position:'absolute',left:22,right:22,bottom:28,height:7,borderRadius:3,background:'rgba(251,251,254,.55)'}}/><div style={{position:'absolute',left:35,right:35,top:107,bottom:42,display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>{[0,1,2,3].map(i=><div key={i} style={{borderRadius:10,background:'rgba(251,251,254,.08)',display:'grid',placeItems:'center',color:'rgba(251,251,254,.5)'}}><Package size={30}/></div>)}</div></div>)}
+      <svg style={{position:'absolute',left:270,top:124}} width="350" height="130" viewBox="0 0 350 130"><path d="M0 65 H350" stroke="rgba(123,216,223,.48)" strokeWidth="3" strokeDasharray="8 10"/><path d={`M${Math.min(350,p*350)} 65 H350`} stroke="#7BD8DF" strokeWidth="5"/></svg>
+      <div style={{position:'absolute',left:x,top:153,width:64,height:64,transform:'translate(-50%,-50%)',borderRadius:13,background:'#F1D594',display:'grid',placeItems:'center',color:NAVY,boxShadow:'0 12px 18px rgba(0,0,0,.28)'}}><Package size={38}/></div>
+      {p>.88&&<div style={{position:'absolute',right:24,bottom:-4,display:'flex',alignItems:'center',gap:10,color:'#7BD8DF',fontFamily:SANS,fontWeight:700,fontSize:15,letterSpacing:1.4}}><Check size={22}/>TRANSFERÊNCIA REGISTRADA</div>}
+    </div>
+  </Shell>;
+};
+const TransferAnim: React.FC = () => <TransferScene frame={useCurrentFrame()}/>;
+
+const ProductScreen: React.FC = () => <Shell n={8} tone="light" eyebrow="VISÃO GERAL DO ESTOQUE" title="Saiba o que pede atenção" support="Acompanhe produtos, alertas e tarefas da operação em um só lugar, sem depender de várias planilhas.">
+  <div style={{position:'absolute',left:105,top:695,width:870,height:445,background:'#F7F8FC',borderRadius:18,border:'9px solid #17182D',boxShadow:'0 30px 50px rgba(20,22,58,.2)',overflow:'hidden'}}><Img src={TELA_RESUMO} style={{display:'block',width:'100%',height:'100%',objectFit:'cover',objectPosition:'left top'}}/></div>
+</Shell>;
+
+const Close: React.FC = () => {ensurePostLoaded();return <Produto id="estoque"><AbsoluteFill><Background tone="product" id="planilha-close"/><Img src={LOGO} style={{position:'absolute',left:PAD,top:78,height:84,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:mute('product')}}>09/09</span>
   <Eyebrow tone="product" top={350}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={420} size={78}>Mais clareza para cuidar do estoque</Title><Support tone="product" top={630} width={860} size={30}>Conheça um jeito de acompanhar os produtos e as movimentações da sua operação.</Support>
   <div style={{position:'absolute',left:PAD,right:PAD,top:850,height:1,background:'rgba(251,251,254,.28)'}}/><div style={{position:'absolute',left:PAD,right:PAD,top:910,display:'flex',alignItems:'center',justifyContent:'space-between',fontFamily:SANS,fontWeight:700,fontSize:21,letterSpacing:1.6,color:WHITE}}><span>ACESSE O LINK DA BIO</span><span style={{background:WHITE,color:NAVY,borderRadius:999,padding:'20px 26px'}}>NORTE ESTOQUE →</span></div>
   <div style={{position:'absolute',right:130,bottom:185,color:'rgba(251,251,254,.13)'}}><Boxes size={170} strokeWidth={1.1}/></div><Foot tone="product" last label="Norte Estoque"/></AbsoluteFill></Produto>;};
@@ -102,10 +133,13 @@ export const PlanilhaRoot: React.FC = () => <>
   <Still id="Planilha03" component={Delayed} width={W} height={H}/>
   <Composition id="Planilha03Animada" component={DelayedAnim} width={W} height={H} fps={30} durationInFrames={90}/>
   <Still id="Planilha04" component={Reconcile} width={W} height={H}/>
-  <Still id="Planilha05" component={FindItem} width={W} height={H}/>
-  <Composition id="Planilha05Animada" component={FindItemAnim} width={W} height={H} fps={30} durationInFrames={90}/>
-  <Still id="Planilha06" component={Routine} width={W} height={H}/>
-  <Still id="Planilha07" component={Close} width={W} height={H}/>
+  <Still id="Planilha05" component={QrScan} width={W} height={H}/>
+  <Composition id="Planilha05Animada" component={QrScanAnim} width={W} height={H} fps={30} durationInFrames={90}/>
+  <Still id="Planilha06" component={ProductId} width={W} height={H}/>
+  <Still id="Planilha07" component={TransferScene} width={W} height={H}/>
+  <Composition id="Planilha07Animada" component={TransferAnim} width={W} height={H} fps={30} durationInFrames={90}/>
+  <Still id="Planilha08" component={ProductScreen} width={W} height={H}/>
+  <Still id="Planilha09" component={Close} width={W} height={H}/>
 </>;
 
 registerRoot(PlanilhaRoot);
