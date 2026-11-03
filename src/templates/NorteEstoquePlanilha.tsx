@@ -80,7 +80,7 @@ const QrGrid: React.FC = () => {
 
 const QrScan: React.FC<{frame?:number}> = ({frame}) => {
   const p=frame===undefined?1:interpolate(frame,[8,58],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp',easing:ease});
-  return <Shell n={5} tone="product" eyebrow="INVENTÁRIO COM QR CODE" title="Conte o produto no próprio estoque" support="A leitura do QR Code leva a equipe direto ao inventário para registrar a contagem.">
+  return <Shell n={6} tone="product" eyebrow="INVENTÁRIO COM QR CODE" title="Conte o produto no próprio estoque" support="A leitura do QR Code leva a equipe direto ao inventário para registrar a contagem.">
     <div style={{position:'absolute',left:118,top:695,width:844,height:455,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
       <div style={{position:'relative',width:370,height:350,borderRadius:20,background:'linear-gradient(140deg,#F5E6C4,#DABF87)',boxShadow:'0 24px 38px rgba(8,14,40,.3)',padding:26,boxSizing:'border-box',border:'1px solid rgba(255,255,255,.7)'}}>
         <div style={{height:26,width:180,background:'rgba(20,22,58,.16)',borderRadius:6}}/><div style={{position:'absolute',left:100,top:78,width:166,height:212,background:'#F7F8FC',borderRadius:12,boxShadow:'0 12px 28px rgba(20,22,58,.2)',padding:16,boxSizing:'border-box'}}><div style={{height:124,width:124,margin:'0 auto'}}><QrGrid/></div><div style={{marginTop:12,textAlign:'center',fontFamily:MONO,fontSize:12,fontWeight:700,color:NAVY,letterSpacing:1}}>ITEM DE ESTOQUE</div></div>
@@ -97,7 +97,7 @@ const QrScan: React.FC<{frame?:number}> = ({frame}) => {
 };
 const QrScanAnim: React.FC = () => <QrScan frame={useCurrentFrame()}/>;
 
-const ProductId: React.FC = () => <Shell n={6} tone="light" eyebrow="IDENTIFICAÇÃO DO PRODUTO" title="Cada item fica mais fácil de reconhecer" support="A identificação acompanha o produto e ajuda a equipe a consultar seus dados no estoque.">
+const ProductId: React.FC = () => <Shell n={7} tone="light" eyebrow="IDENTIFICAÇÃO DO PRODUTO" title="Cada item fica mais fácil de reconhecer" support="A identificação acompanha o produto e ajuda a equipe a consultar seus dados no estoque.">
   <div style={{position:'absolute',left:150,top:705,width:780,height:405,display:'flex',alignItems:'center',justifyContent:'center',gap:70}}>
     <div style={{width:260,height:300,position:'relative',display:'grid',placeItems:'center'}}><div style={{position:'absolute',bottom:24,width:210,height:42,borderRadius:'50%',background:'rgba(20,22,58,.14)'}}/><div style={{position:'relative',width:158,height:250,borderRadius:'42px 42px 28px 28px',background:'linear-gradient(90deg,#E5C77E,#F2DDAA 42%,#C6A65C)',border:'3px solid #A88A4C',boxShadow:'0 18px 24px rgba(20,22,58,.16)'}}><div style={{position:'absolute',left:48,right:48,top:-19,height:27,borderRadius:'8px 8px 2px 2px',background:'#B59555'}}/><div style={{position:'absolute',left:22,right:22,top:86,height:100,borderRadius:8,background:'#FBFBFE',border:'1px solid #D9DBE7',display:'grid',placeItems:'center',color:NAVY}}><QrCode size={46}/><span style={{fontFamily:MONO,fontSize:9,letterSpacing:1}}>PRODUTO</span></div></div></div>
     <div style={{width:390,height:330,background:'#FBFBFE',borderRadius:18,border:'1px solid #D9DBE7',boxShadow:'0 24px 36px rgba(20,22,58,.1)',padding:26,boxSizing:'border-box'}}><div style={{fontFamily:SANS,fontWeight:700,fontSize:18,letterSpacing:1.3,color:'#168E9A'}}>IDENTIFICAÇÃO</div><div style={{marginTop:28,display:'grid',gap:22}}>{['PRODUTO','LOTE','VALIDADE'].map((row,i)=><div key={row} style={{borderBottom:'1px solid #D9DBE7',paddingBottom:14}}><div style={{fontFamily:MONO,fontSize:13,letterSpacing:1.4,color:'#686C83'}}>{row}</div><div style={{marginTop:10,height:10,width:[230,170,190][i],borderRadius:5,background:i===0?'#AEB3C4':'#D9DBE7'}}/></div>)}</div></div>
@@ -107,7 +107,7 @@ const ProductId: React.FC = () => <Shell n={6} tone="light" eyebrow="IDENTIFICA�
 const TransferScene: React.FC<{frame?:number}> = ({frame}) => {
   const p=frame===undefined?1:interpolate(frame,[10,62],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp',easing:ease});
   const x=280+430*p;
-  return <Shell n={7} tone="dark" eyebrow="MOVIMENTAÇÃO REGISTRADA" title="Mudou de local? Registre a transferência" support="A equipe acompanha o produto da origem ao destino dentro do controle do estoque.">
+  return <Shell n={8} tone="dark" eyebrow="MOVIMENTAÇÃO REGISTRADA" title="Mudou de local? Registre a transferência" support="A equipe acompanha o produto da origem ao destino dentro do controle do estoque.">
     <div style={{position:'absolute',left:95,top:715,width:890,height:390}}>
       {[{x:0,label:'ORIGEM'},{x:590,label:'DESTINO'}].map(({x:sx,label})=><div key={label} style={{position:'absolute',left:sx,top:25,width:290,height:295,borderRadius:18,border:'2px solid rgba(251,251,254,.34)',background:'rgba(251,251,254,.07)',padding:22,boxSizing:'border-box'}}><div style={{display:'flex',gap:12,alignItems:'center',fontFamily:SANS,fontWeight:700,fontSize:16,letterSpacing:1.3,color:'#7BD8DF'}}><MapPin size={26}/>{label}</div><div style={{position:'absolute',left:22,right:22,top:86,height:6,borderRadius:3,background:'rgba(251,251,254,.55)'}}/><div style={{position:'absolute',left:22,right:22,bottom:28,height:7,borderRadius:3,background:'rgba(251,251,254,.55)'}}/><div style={{position:'absolute',left:35,right:35,top:107,bottom:42,display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>{[0,1,2,3].map(i=><div key={i} style={{borderRadius:10,background:'rgba(251,251,254,.08)',display:'grid',placeItems:'center',color:'rgba(251,251,254,.5)'}}><Package size={30}/></div>)}</div></div>)}
       <svg style={{position:'absolute',left:270,top:124}} width="350" height="130" viewBox="0 0 350 130"><path d="M0 65 H350" stroke="rgba(123,216,223,.48)" strokeWidth="3" strokeDasharray="8 10"/><path d={`M${Math.min(350,p*350)} 65 H350`} stroke="#7BD8DF" strokeWidth="5"/></svg>
@@ -118,7 +118,7 @@ const TransferScene: React.FC<{frame?:number}> = ({frame}) => {
 };
 const TransferAnim: React.FC = () => <TransferScene frame={useCurrentFrame()}/>;
 
-const ProductScreen: React.FC = () => <Shell n={8} tone="light" eyebrow="VISÃO GERAL DO ESTOQUE" title="Saiba o que pede atenção" support="Acompanhe produtos, alertas e tarefas da operação em um só lugar, sem depender de várias planilhas.">
+const ProductScreen: React.FC = () => <Shell n={5} tone="light" eyebrow="PLANILHA DÁ LUGAR AO NORTE ESTOQUE" title="Inventário e movimentações em um só fluxo" titleSize={64} support="O painel do Norte Estoque reúne inventários, transferências e alertas em uma visão única da operação.">
   <div style={{position:'absolute',left:105,top:695,width:870,height:445,background:'#F7F8FC',borderRadius:18,border:'9px solid #17182D',boxShadow:'0 30px 50px rgba(20,22,58,.2)',overflow:'hidden'}}><Img src={TELA_RESUMO} style={{display:'block',width:'100%',height:'100%',objectFit:'cover',objectPosition:'left top'}}/></div>
 </Shell>;
 
@@ -133,12 +133,12 @@ export const PlanilhaRoot: React.FC = () => <>
   <Still id="Planilha03" component={Delayed} width={W} height={H}/>
   <Composition id="Planilha03Animada" component={DelayedAnim} width={W} height={H} fps={30} durationInFrames={90}/>
   <Still id="Planilha04" component={Reconcile} width={W} height={H}/>
-  <Still id="Planilha05" component={QrScan} width={W} height={H}/>
-  <Composition id="Planilha05Animada" component={QrScanAnim} width={W} height={H} fps={30} durationInFrames={90}/>
-  <Still id="Planilha06" component={ProductId} width={W} height={H}/>
-  <Still id="Planilha07" component={TransferScene} width={W} height={H}/>
-  <Composition id="Planilha07Animada" component={TransferAnim} width={W} height={H} fps={30} durationInFrames={90}/>
-  <Still id="Planilha08" component={ProductScreen} width={W} height={H}/>
+  <Still id="Planilha05" component={ProductScreen} width={W} height={H}/>
+  <Still id="Planilha06" component={QrScan} width={W} height={H}/>
+  <Composition id="Planilha06Animada" component={QrScanAnim} width={W} height={H} fps={30} durationInFrames={90}/>
+  <Still id="Planilha07" component={ProductId} width={W} height={H}/>
+  <Still id="Planilha08" component={TransferScene} width={W} height={H}/>
+  <Composition id="Planilha08Animada" component={TransferAnim} width={W} height={H} fps={30} durationInFrames={90}/>
   <Still id="Planilha09" component={Close} width={W} height={H}/>
 </>;
 

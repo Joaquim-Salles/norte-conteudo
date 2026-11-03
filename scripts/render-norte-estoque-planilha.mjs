@@ -8,10 +8,10 @@ const slides = [
   {n:2,title:'Versoes diferentes',still:'Planilha02'},
   {n:3,title:'Atualizacao adiada',still:'Planilha03',video:'Planilha03Animada'},
   {n:4,title:'Conferencia manual',still:'Planilha04'},
-  {n:5,title:'Inventario com QR Code',still:'Planilha05',video:'Planilha05Animada'},
-  {n:6,title:'Produto identificado',still:'Planilha06'},
-  {n:7,title:'Transferencia registrada',still:'Planilha07',video:'Planilha07Animada'},
-  {n:8,title:'Acompanhamento do estoque',still:'Planilha08'},
+  {n:5,title:'Norte Estoque',still:'Planilha05'},
+  {n:6,title:'Inventario com QR Code',still:'Planilha06',video:'Planilha06Animada'},
+  {n:7,title:'Produto identificado',still:'Planilha07'},
+  {n:8,title:'Transferencia registrada',still:'Planilha08',video:'Planilha08Animada'},
   {n:9,title:'Fechamento',still:'Planilha09'},
 ];
 const serveUrl = await bundle({entryPoint:path.resolve('src/templates/NorteEstoquePlanilha.tsx')});
