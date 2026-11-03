@@ -8,7 +8,7 @@ const LOGO = kit('01-logos/norte-estoque/horizontal/norte-estoque_horizontal_bra
 const TELA_RESUMO = kit('08-recursos/telas-oficiais/estoque/d-home.png');
 const W = 1080;
 const H = 1350;
-const COVER_BG = staticFile('norte-estoque-planilha-cover.png');
+const COVER_BG = staticFile('norte-estoque-planilha-cover-v2.png');
 
 const Shell: React.FC<{n: number; tone: 'dark' | 'light' | 'product'; eyebrow: string; title: string; support: string; titleSize?: number; supportTop?: number; children: React.ReactNode}> = ({n, tone, eyebrow, title, support, titleSize = 72, supportTop = 466, children}) => (
   <Produto id="estoque">
@@ -28,7 +28,7 @@ const Cover: React.FC = () => {
   ensurePostLoaded();
   return <Produto id="estoque"><AbsoluteFill>
     <Img src={COVER_BG} style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center'}}/>
-    <AbsoluteFill style={{background:'linear-gradient(180deg,rgba(20,22,58,.82) 0%,rgba(20,22,58,.38) 38%,rgba(20,22,58,.14) 64%,rgba(20,22,58,.87) 100%)'}}/>
+    <AbsoluteFill style={{background:'linear-gradient(180deg,rgba(20,22,58,.82) 0%,rgba(20,22,58,.62) 30%,rgba(20,22,58,.48) 48%,rgba(20,22,58,.18) 68%,rgba(20,22,58,.87) 100%)'}}/>
     <AbsoluteFill style={{background:'radial-gradient(ellipse 88% 28% at 50% 100%,rgba(22,142,154,.55),transparent 78%),linear-gradient(105deg,rgba(22,142,154,.16),transparent 48%)'}}/>
     <Img src={LOGO} style={{position:'absolute',left:PAD,top:76,height:82,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:WHITE}}>01/09</span>
     <Eyebrow tone="product" top={318}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={382} size={80}>Sua planilha acompanha o ritmo do estoque?</Title><Support tone="product" top={590} width={860} size={30}>Uma visão do que acontece quando as atualizações manuais tentam acompanhar a operação.</Support>
