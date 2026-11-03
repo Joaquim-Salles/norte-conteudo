@@ -31,7 +31,7 @@ const Cover: React.FC = () => {
     <AbsoluteFill style={{background:'linear-gradient(180deg,rgba(20,22,58,.82) 0%,rgba(20,22,58,.62) 30%,rgba(20,22,58,.48) 48%,rgba(20,22,58,.18) 68%,rgba(20,22,58,.87) 100%)'}}/>
     <AbsoluteFill style={{background:'radial-gradient(ellipse 88% 28% at 50% 100%,rgba(22,142,154,.55),transparent 78%),linear-gradient(105deg,rgba(22,142,154,.16),transparent 48%)'}}/>
     <Img src={LOGO} style={{position:'absolute',left:PAD,top:76,height:82,width:'auto'}}/><span style={{position:'absolute',right:PAD,top:96,fontFamily:MONO,fontSize:22,color:WHITE}}>01/09</span>
-    <Eyebrow tone="product" top={318}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={382} size={80}>Sua planilha acompanha o ritmo do estoque?</Title><Support tone="product" top={590} width={860} size={30}>Uma visão do que acontece quando as atualizações manuais tentam acompanhar a operação.</Support>
+    <Eyebrow tone="product" top={318}>NORTE ESTOQUE</Eyebrow><Title tone="product" top={378} size={72}>Até quando sua equipe vai conferir o estoque na planilha?</Title><Support tone="product" top={630} width={860} size={30}>Uma visão do que acontece quando as atualizações manuais tentam acompanhar a operação.</Support>
     <Foot tone="product" label="Norte Estoque"/>
   </AbsoluteFill></Produto>;
 };
